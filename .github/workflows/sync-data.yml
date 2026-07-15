@@ -64,7 +64,5 @@ jobs:
             gh issue create --repo "$GITHUB_REPOSITORY" \
               --title "資料同步失敗 $(TZ=Asia/Taipei date +%F)" \
               --label sync-failure \
-              --body "Google Sheet 同步 workflow 失敗,請查看執行紀錄:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
-
-常見原因與處理方式見 RUNBOOK.md 的「同步失敗怎麼辦」。"
+              --body "Google Sheet 同步 workflow 失敗,請查看執行紀錄:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID —— 常見原因與處理方式見 RUNBOOK.md 的「同步失敗怎麼辦」。"
           fi
