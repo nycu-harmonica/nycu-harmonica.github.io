@@ -32,7 +32,7 @@
    ```
 5. 回到步驟 2 的頁面按 **Verify**。
 6. 網站 repo → **Settings → Pages → Custom domain** 填 `harmonica.nycu.club`,等 HTTPS 憑證簽發完成後勾選 **Enforce HTTPS**。
-7. 完成後,原 `https://nycu-harmonica.github.io/harmonica.nycu.club/` 會自動導向新網域;deploy workflow 不需修改(baseURL 自動切換)。
+7. 完成後,原 `https://nycu-harmonica.github.io/` 會自動導向新網域;deploy workflow 不需修改(baseURL 自動切換)。
 
 ## 寄給 SDC 的信件範本
 
