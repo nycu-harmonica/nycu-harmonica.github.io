@@ -2,24 +2,45 @@
   {
     "icon": "instagram",
     "key": "instagram",
-    "label": "Instagram(帳號待更新)",
+    "label": "Instagram @nycu_harmonica",
     "order": 10,
-    "show_in": [
-      "footer",
-      "about"
-    ],
-    "url": "https://www.instagram.com/"
-  },
-  {
-    "icon": "email",
-    "key": "email",
-    "label": "聯絡信箱(待更新)",
-    "order": 20,
     "show_in": [
       "footer",
       "about",
       "join"
     ],
-    "url": "mailto:harmonica@example.nycu.club"
+    "url": "https://www.instagram.com/nycu_harmonica/"
+  },
+  {
+    "icon": "facebook",
+    "key": "facebook",
+    "label": "Facebook 粉絲專頁",
+    "order": 20,
+    "show_in": [
+      "footer",
+      "about"
+    ],
+    "url": "https://www.facebook.com/nycubmhc/"
+  },
+  {
+    "icon": "youtube",
+    "key": "youtube",
+    "label": "YouTube 頻道",
+    "order": 30,
+    "show_in": [
+      "footer",
+      "about"
+    ],
+    "url": "https://www.youtube.com/channel/UClIoDAYl9-jVnBpC4nFtHGw"
+  },
+  {
+    "icon": "link",
+    "key": "observe",
+    "label": "臺灣口琴觀測站(本社維運)",
+    "order": 40,
+    "show_in": [
+      "about"
+    ],
+    "url": "https://harmonica.observe.tw/"
   }
 ]

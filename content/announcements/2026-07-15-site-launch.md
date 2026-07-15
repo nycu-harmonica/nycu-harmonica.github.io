@@ -1,7 +1,7 @@
 {
   "date": "2026-07-15",
   "generated": true,
-  "pinned": true,
+  "pinned": false,
   "slug": "2026-07-15-site-launch",
   "title": "竹韻口琴社官方網站上線"
 }

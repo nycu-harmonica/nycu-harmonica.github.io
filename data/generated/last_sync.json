@@ -1,25 +1,25 @@
 {
   "tabs": {
     "announcements": {
-      "hash": "sha256:38efc3e2cee764e1c95f335bcad6d0ad0d4515d2cef0e340face55dc724688b0",
+      "hash": "sha256:17e484ff4f15ff3162198ffb6fd6b929f73fd8da0b36476b7e1216f6fd4054c7",
       "rows": 2
     },
     "featured_events": {
-      "hash": "sha256:41ad8ea030d899e4e49cb2002ef5a771b7d009f330a60321add349cd49389289",
-      "rows": 3
+      "hash": "sha256:d10ec282a7b8c878352ee26edce2fd6e6b2c692dbc2db8b8fcbef77316ea992e",
+      "rows": 1
     },
     "gallery_albums": {
       "hash": "sha256:d8f1ef22c16ad966de076fc9b8233eae7fcd66b44e45b4b2ca88ac913c5e04cd",
       "rows": 2
     },
     "links": {
-      "hash": "sha256:395fc79b65894c9c49138ed09b0ab5c43a2d0396cc24c1add4294d6fd4ede5f6",
-      "rows": 2
+      "hash": "sha256:2e08bf8e4f8acb1aadf140000c606ed98534974b5a2fa6ef030840c9eefdaa23",
+      "rows": 4
     },
     "officers": {
       "hash": "sha256:37776364720cb5439d00c506184950d65ae2e368698a65b61118654c83ead131",
       "rows": 4
     }
   },
-  "updated_at": "2026-07-15T20:41:27+08:00"
+  "updated_at": "2026-07-16T00:06:45+08:00"
 }

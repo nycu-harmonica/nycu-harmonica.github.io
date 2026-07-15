@@ -1,3 +1,5 @@
 key,label,url,icon,order,show_in
-instagram,Instagram(帳號待更新),https://www.instagram.com/,instagram,10,"footer,about"
-email,聯絡信箱(待更新),mailto:harmonica@example.nycu.club,email,20,"footer,about,join"
+instagram,Instagram @nycu_harmonica,https://www.instagram.com/nycu_harmonica/,instagram,10,"footer,about,join"
+facebook,Facebook 粉絲專頁,https://www.facebook.com/nycubmhc/,facebook,20,"footer,about"
+youtube,YouTube 頻道,https://www.youtube.com/channel/UClIoDAYl9-jVnBpC4nFtHGw,youtube,30,"footer,about"
+observe,臺灣口琴觀測站(本社維運),https://harmonica.observe.tw/,link,40,"about"
