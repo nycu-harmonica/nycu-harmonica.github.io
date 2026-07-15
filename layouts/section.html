@@ -1,0 +1,21 @@
+{{ define "main" }}
+<div class="container section">
+  <header class="page-head">
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+  </header>
+  {{ $pages := .RegularPages }}
+  {{ $pinned := where $pages "Params.pinned" true }}
+  {{ $rest := where $pages "Params.pinned" "!=" true }}
+  {{ $ordered := append $rest $pinned }}
+  {{ $paginator := .Paginate $ordered }}
+  {{ if $paginator.Pages }}
+  <div class="card-grid">
+    {{ range $paginator.Pages }}{{ partial "announcement-card.html" . }}{{ end }}
+  </div>
+  {{ template "_internal/pagination.html" . }}
+  {{ else }}
+  <div class="placeholder-card"><p>目前沒有內容。</p></div>
+  {{ end }}
+</div>
+{{ end }}

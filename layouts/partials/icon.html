@@ -1,0 +1,15 @@
+{{- /* 小型 inline SVG 圖示。用法:partial "icon.html" (dict "name" "instagram") */ -}}
+{{- $n := .name | default "link" -}}
+{{- if eq $n "instagram" -}}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.3" fill="currentColor"/></svg>
+{{- else if eq $n "facebook" -}}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8h2.5l.5-3h-3V3.5c0-.9.3-1.5 1.6-1.5H17V-.3A20 20 0 0 0 14.6 0C12.1 0 10.5 1.5 10.5 4.3V5H8v3h2.5v8H14V8z" transform="translate(1.5 4)"/></svg>
+{{- else if eq $n "youtube" -}}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M10 9.5v5l5-2.5z"/></svg>
+{{- else if eq $n "email" -}}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m3.5 6.5 8.5 7 8.5-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+{{- else if eq $n "line" -}}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 10.5h.01M12 10.5h.01M17 10.5h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M7 14.5c1.4 1 3 1.5 5 1.5s3.6-.5 5-1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+{{- else -}}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 13.5a4 4 0 0 0 5.7 0l3.3-3.3a4 4 0 1 0-5.7-5.7l-1.6 1.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13.5 10.5a4 4 0 0 0-5.7 0l-3.3 3.3a4 4 0 1 0 5.7 5.7l1.6-1.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+{{- end -}}

@@ -1,0 +1,25 @@
+[
+  {
+    "icon": "instagram",
+    "key": "instagram",
+    "label": "Instagram(帳號待更新)",
+    "order": 10,
+    "show_in": [
+      "footer",
+      "about"
+    ],
+    "url": "https://www.instagram.com/"
+  },
+  {
+    "icon": "email",
+    "key": "email",
+    "label": "聯絡信箱(待更新)",
+    "order": 20,
+    "show_in": [
+      "footer",
+      "about",
+      "join"
+    ],
+    "url": "mailto:harmonica@example.nycu.club"
+  }
+]

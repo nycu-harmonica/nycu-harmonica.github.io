@@ -1,0 +1,70 @@
+# 定期從社團共用 Google Sheet 同步資料
+#
+# - 排程避開整點(GitHub 建議),台北時間約 08:41 / 14:41 / 20:41 / 02:41
+# - 也可在 Actions 頁面手動觸發(Run workflow)
+# - 只有資料真的變更時才 commit;每次同步時間記錄在 commit message 與此 workflow 的執行紀錄
+# - 注意:GITHUB_TOKEN 的 push 不會自動觸發 deploy workflow(GitHub 防遞迴),
+#   所以最後用 `gh workflow run` 手動觸發部署。
+name: Sync data from Google Sheet
+
+on:
+  schedule:
+    - cron: '41 0,6,12,18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+  issues: write
+
+concurrency:
+  group: sync-data
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Self-test sync script
+        run: python3 scripts/test_sync_sheet.py
+
+      - name: Sync from Google Sheet
+        run: python3 scripts/sync_sheet.py --strict
+
+      - name: Commit & push if changed
+        id: commit
+        run: |
+          git add static/data data/generated content/announcements content/gallery
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore(data): sheet sync $(TZ=Asia/Taipei date +%FT%R%z)"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger deploy
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main --repo "$GITHUB_REPOSITORY"
+
+      - name: Open issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label sync-failure --state open --json number --jq '.[0].number // empty')
+          if [ -z "$existing" ]; then
+            gh issue create --repo "$GITHUB_REPOSITORY" \
+              --title "資料同步失敗 $(TZ=Asia/Taipei date +%F)" \
+              --label sync-failure \
+              --body "Google Sheet 同步 workflow 失敗,請查看執行紀錄:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+
+常見原因與處理方式見 RUNBOOK.md 的「同步失敗怎麼辦」。"
+          fi

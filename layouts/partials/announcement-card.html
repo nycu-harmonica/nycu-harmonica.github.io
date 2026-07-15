@@ -1,0 +1,11 @@
+{{- /* 公告卡片。context = 公告 page */ -}}
+<article class="card announcement-card">
+  <div class="card-body">
+    <p class="card-date">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time>
+      {{ if .Params.pinned }}<span class="badge badge-pin">置頂</span>{{ end }}
+    </p>
+    <h3 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <p class="card-summary">{{ .Summary | plainify | truncate 80 }}</p>
+  </div>
+</article>

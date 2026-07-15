@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="container section">
+  <article class="prose announcement-single">
+    <p class="card-date">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time>
+      {{ if .Params.pinned }}<span class="badge badge-pin">置頂</span>{{ end }}
+    </p>
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{ with .Params.link }}
+    <p><a class="btn" href="{{ . }}" target="_blank" rel="noopener">相關連結</a></p>
+    {{ end }}
+    <p class="back-link"><a href="{{ "/announcements/" | relURL }}">← 回公告列表</a></p>
+  </article>
+</div>
+{{ end }}

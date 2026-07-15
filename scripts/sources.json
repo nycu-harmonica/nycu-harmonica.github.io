@@ -1,0 +1,11 @@
+{
+  "comment": "社團共用 Google Sheet 的資料來源設定。sheet_id 為 REPLACE_WITH_SHEET_ID 時,同步腳本會自動使用 static/data/ 內的 CSV 快照(離線模式)。建立 Sheet 後,把每個工作表(tab)的 gid 填入(開啟該工作表時網址結尾的 #gid=數字)。",
+  "sheet_id": "REPLACE_WITH_SHEET_ID",
+  "tabs": {
+    "announcements": { "gid": "0" },
+    "featured_events": { "gid": "REPLACE" },
+    "officers": { "gid": "REPLACE" },
+    "gallery_albums": { "gid": "REPLACE" },
+    "links": { "gid": "REPLACE" }
+  }
+}

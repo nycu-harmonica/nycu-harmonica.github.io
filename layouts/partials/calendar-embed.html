@@ -1,0 +1,18 @@
+{{- /* 公開 Google Calendar 內嵌。calendarId 未設定時顯示占位卡,版面不會壞 */ -}}
+{{- $cid := .Site.Params.calendarId -}}
+{{- if $cid -}}
+<div class="calendar-embed">
+  <iframe
+    src="https://calendar.google.com/calendar/embed?src={{ $cid | urlquery }}&ctz=Asia%2FTaipei&hl=zh_TW&mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTz=0&showTab=1&wkst=1"
+    title="竹韻口琴社行事曆"
+    loading="lazy"
+    frameborder="0"
+    scrolling="no"></iframe>
+</div>
+<p class="calendar-note">行事曆可切換「議程/月」檢視;手機建議使用議程模式。</p>
+{{- else -}}
+<div class="placeholder-card">
+  <p><strong>社團行事曆建置中</strong></p>
+  <p>公開 Google Calendar 尚未連結,近期活動請先參考下方精選與<a href="{{ "/announcements/" | relURL }}">公告</a>。</p>
+</div>
+{{- end -}}

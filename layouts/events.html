@@ -1,0 +1,32 @@
+{{ define "main" }}
+<div class="container section">
+  <header class="page-head">
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+  </header>
+
+  <section class="section-sub">
+    <h2>精選活動</h2>
+    {{ $today := now.Format "2006-01-02" }}
+    {{ $events := site.Data.generated.featured_events | default (slice) }}
+    {{ $upcoming := slice }}
+    {{ $past := slice }}
+    {{ range $events }}
+      {{ $endDate := .end | default .start }}
+      {{ if ge $endDate $today }}{{ $upcoming = $upcoming | append . }}{{ else }}{{ $past = $past | append . }}{{ end }}
+    {{ end }}
+    {{ if $upcoming }}
+    <div class="card-grid">
+      {{ range $upcoming }}{{ partial "event-card.html" . }}{{ end }}
+    </div>
+    {{ else }}
+    <div class="placeholder-card"><p>近期沒有精選活動,完整時程請見下方行事曆。</p></div>
+    {{ end }}
+  </section>
+
+  <section class="section-sub">
+    <h2>社團行事曆</h2>
+    {{ partial "calendar-embed.html" . }}
+  </section>
+</div>
+{{ end }}

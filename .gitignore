@@ -1,0 +1,11 @@
+# Hugo build 輸出與快取
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store

@@ -1,0 +1,39 @@
+{{ define "main" }}
+<div class="container section">
+  <article class="prose">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+  </article>
+
+  <section class="section-sub" id="officers">
+    <h2>幹部團隊</h2>
+    {{ $officers := site.Data.generated.officers | default (slice) }}
+    {{ if $officers }}
+    <div class="officer-grid">
+      {{ range $officers }}{{ partial "officer-card.html" . }}{{ end }}
+    </div>
+    {{ else }}
+    <div class="placeholder-card"><p>幹部資料更新中。</p></div>
+    {{ end }}
+  </section>
+
+  <section class="section-sub" id="join">
+    <h2>聯絡與社群</h2>
+    {{ $links := site.Data.generated.links | default (slice) }}
+    {{ $aboutLinks := slice }}
+    {{ range $links }}
+      {{ $show := .show_in | default (slice) }}
+      {{ if or (eq (len $show) 0) (in $show "about") }}{{ $aboutLinks = $aboutLinks | append . }}{{ end }}
+    {{ end }}
+    {{ if $aboutLinks }}
+    <ul class="link-list">
+      {{ range $aboutLinks }}
+      <li><a href="{{ .url }}" target="_blank" rel="noopener">{{ partial "icon.html" (dict "name" (.icon | default "link")) }}<span>{{ .label }}</span></a></li>
+      {{ end }}
+    </ul>
+    {{ else }}
+    <div class="placeholder-card"><p>社群連結更新中。</p></div>
+    {{ end }}
+  </section>
+</div>
+{{ end }}

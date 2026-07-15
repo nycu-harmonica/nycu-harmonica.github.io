@@ -1,0 +1,71 @@
+{{ define "main" }}
+<section class="hero">
+  <div class="container">
+    <h1>竹韻口琴社</h1>
+    <p class="hero-subtitle">國立陽明交通大學・用一把口琴,吹出屬於你的旋律</p>
+    <div class="hero-actions">
+      {{ with .Site.Params.joinFormUrl }}
+      <a class="btn btn-primary" href="{{ . }}" target="_blank" rel="noopener">加入我們</a>
+      {{ else }}
+      <a class="btn btn-primary" href="{{ "/about/#join" | relURL }}">加入我們</a>
+      {{ end }}
+      <a class="btn" href="{{ "/events/" | relURL }}">近期活動</a>
+    </div>
+  </div>
+</section>
+
+<section class="section container">
+  <div class="prose home-intro">
+    {{ .Content }}
+  </div>
+</section>
+
+<section class="section container">
+  <div class="section-head">
+    <h2>近期公告</h2>
+    <a class="more-link" href="{{ "/announcements/" | relURL }}">全部公告 →</a>
+  </div>
+  {{ $ann := where (where .Site.RegularPages "Section" "announcements") "Draft" false }}
+  {{ $pinned := where $ann "Params.pinned" true }}
+  {{ $rest := where $ann "Params.pinned" "!=" true }}
+  {{ $list := first 3 (append $rest $pinned) }}
+  {{ if $list }}
+  <div class="card-grid">
+    {{ range $list }}{{ partial "announcement-card.html" . }}{{ end }}
+  </div>
+  {{ else }}
+  <div class="placeholder-card"><p>目前沒有公告。</p></div>
+  {{ end }}
+</section>
+
+<section class="section container">
+  <div class="section-head">
+    <h2>近期活動</h2>
+    <a class="more-link" href="{{ "/events/" | relURL }}">活動頁與行事曆 →</a>
+  </div>
+  {{ $today := now.Format "2006-01-02" }}
+  {{ $events := site.Data.generated.featured_events | default (slice) }}
+  {{ $upcoming := slice }}
+  {{ range $events }}
+    {{ $endDate := .end | default .start }}
+    {{ if ge $endDate $today }}{{ $upcoming = $upcoming | append . }}{{ end }}
+  {{ end }}
+  {{ if $upcoming }}
+  <div class="card-grid">
+    {{ range first 3 $upcoming }}{{ partial "event-card.html" . }}{{ end }}
+  </div>
+  {{ else }}
+  <div class="placeholder-card"><p>近期沒有精選活動,完整時程請見<a href="{{ "/events/" | relURL }}">活動頁</a>。</p></div>
+  {{ end }}
+</section>
+
+<section class="section container join-banner" id="join">
+  <h2>想學口琴嗎?</h2>
+  <p>不需要任何音樂基礎,社課從零開始教。歡迎陽明交大同學加入竹韻口琴社!</p>
+  {{ with .Site.Params.joinFormUrl }}
+  <a class="btn btn-primary" href="{{ . }}" target="_blank" rel="noopener">填寫入社表單</a>
+  {{ else }}
+  <a class="btn btn-primary" href="{{ "/about/" | relURL }}">聯絡我們</a>
+  {{ end }}
+</section>
+{{ end }}

@@ -1,0 +1,29 @@
+{{ define "main" }}
+<div class="container section">
+  <header class="page-head">
+    <p class="card-date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time></p>
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+  </header>
+  {{ $images := .Resources.ByType "image" }}
+  {{ if $images }}
+  <div class="photo-grid">
+    {{ range $images }}
+    {{ $thumb := .Fill "600x400 webp q80 Smart" }}
+    {{ $full := .Resize "1600x webp q85" }}
+    <a class="photo-item js-lightbox" href="{{ $full.RelPermalink }}" data-full="{{ $full.RelPermalink }}">
+      <img src="{{ $thumb.RelPermalink }}" width="600" height="400" loading="lazy" alt="{{ $.Title }}照片">
+    </a>
+    {{ end }}
+  </div>
+  {{ else }}
+  <div class="placeholder-card"><p>這本相簿的照片還在整理中。</p></div>
+  {{ end }}
+  <p class="back-link"><a href="{{ "/gallery/" | relURL }}">← 回相簿列表</a></p>
+</div>
+
+<dialog id="lightbox" class="lightbox" aria-label="照片檢視">
+  <button id="lightbox-close" class="lightbox-close" aria-label="關閉">✕</button>
+  <img id="lightbox-img" src="" alt="放大照片">
+</dialog>
+{{ end }}

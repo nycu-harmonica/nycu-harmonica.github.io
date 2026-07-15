@@ -1,0 +1,21 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-links">
+      {{ $links := site.Data.generated.links | default (slice) }}
+      {{ range $links }}
+        {{ $show := .show_in | default (slice) }}
+        {{ if or (eq (len $show) 0) (in $show "footer") }}
+        <a href="{{ .url }}" rel="me noopener" target="_blank">{{ partial "icon.html" (dict "name" (.icon | default "link")) }}<span>{{ .label }}</span></a>
+        {{ end }}
+      {{ end }}
+    </div>
+    <p class="footer-meta">
+      © {{ now.Format "2006" }} 國立陽明交通大學竹韻口琴社
+      ・<a href="{{ "/site-guide/" | relURL }}">網站維護說明</a>
+      ・<a href="{{ "/announcements/index.xml" | relURL }}">公告 RSS</a>
+    </p>
+    {{ with site.Data.generated.last_sync }}
+    <p class="footer-meta footer-sync">資料更新:{{ .updated_at }}</p>
+    {{ end }}
+  </div>
+</footer>

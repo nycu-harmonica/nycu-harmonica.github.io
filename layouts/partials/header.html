@@ -1,0 +1,26 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="{{ "/" | relURL }}">
+      <span class="brand-mark" aria-hidden="true">🎵</span>
+      <span class="brand-name">竹韻口琴社</span>
+    </a>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="開啟選單">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主選單">
+      <ul>
+        {{ $current := . }}
+        {{ range .Site.Menus.main }}
+        <li>
+          <a href="{{ .URL | relURL }}"
+             {{ if or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) }}class="active" aria-current="page"{{ end }}>
+            {{ .Name }}
+          </a>
+        </li>
+        {{ end }}
+      </ul>
+    </nav>
+  </div>
+</header>
