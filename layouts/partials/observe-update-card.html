@@ -1,0 +1,9 @@
+<article class="card observe-update-card">
+  <div class="card-body">
+    <p class="card-date">
+      <time datetime="{{ replace .posted_at_local " " "T" }}:00+08:00">{{ .posted_at_local }}</time>
+    </p>
+    <h3 class="card-title"><a href="{{ .link }}" target="_blank" rel="noopener noreferrer">{{ .title }}</a></h3>
+    <p class="card-summary">{{ .source }}・{{ .platform }}</p>
+  </div>
+</article>

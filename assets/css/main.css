@@ -292,6 +292,9 @@ a:hover { text-decoration: underline; }
 
 /* ---------- 首頁 ---------- */
 .home-intro { max-width: 62rem; margin: 0 auto; text-align: center; }
+.section-source-note { margin: -0.35rem 0 1rem; color: var(--ink-soft); }
+.observe-update-card .card-title a::after { content: " ↗"; font-size: 0.85em; }
+.observe-updated { margin: 0.75rem 0 0; font-size: 0.82rem; color: var(--ink-soft); }
 .join-banner {
   text-align: center;
   background: var(--green-100);
@@ -415,6 +418,21 @@ a:hover { text-decoration: underline; }
 .calendar-embed iframe { width: 100%; height: 620px; border: 0; display: block; }
 @media (max-width: 640px) { .calendar-embed iframe { height: 480px; } }
 .calendar-note { font-size: 0.85rem; color: var(--ink-soft); }
+.calendar-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+.calendar-meta .calendar-note { margin: 0.75rem 0 0; }
+.calendar-meta .more-link { margin-top: 0.75rem; }
+
+@media (max-width: 639px) {
+  .section-head { align-items: flex-start; flex-direction: column; gap: 0.25rem; }
+  .section-head h2 { margin-bottom: 0; }
+  .more-link { white-space: normal; }
+}
 
 /* ---------- 內文 ---------- */
 .prose h1 { color: var(--green-900); }

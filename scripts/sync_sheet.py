@@ -55,7 +55,7 @@ DISPLAY_TEXT_FIELDS = {
 CJK_RANGE = "\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff"
 CJK_LEFT_CONTEXT = CJK_RANGE + "）】」』》〉"
 CJK_RIGHT_CONTEXT = CJK_RANGE + "（【「『《〈"
-HALF_PUNCTUATION = {",": "，", ":": "：", ";": "；", "!": "！", "?": "？", "|": "｜"}
+HALF_PUNCTUATION = {",": "，", ":": "：", ";": "；", "!": "！", "?": "？", "|": "｜", "~": "～"}
 MARKDOWN_CODE_RE = re.compile(r"(`+)(.*?)(\1)", re.DOTALL)
 
 # 表頭別名:Sheet 可用中文表頭,一律轉為正規英文欄名
@@ -144,8 +144,8 @@ def normalize_display_text(text: str) -> str:
     )
     masked = parentheses.sub(lambda match: f"（{match.group(0)[1:-1]}）", masked)
     adjacent = re.compile(
-        rf"(?<=[{CJK_LEFT_CONTEXT}])[,;:!?|]|"
-        rf"[,;:!?|](?=[{CJK_RIGHT_CONTEXT}])"
+        rf"(?<=[{CJK_LEFT_CONTEXT}])[,;:!?|~]|"
+        rf"[,;:!?|~](?=[{CJK_RIGHT_CONTEXT}])"
     )
     masked = adjacent.sub(lambda match: HALF_PUNCTUATION[match.group(0)], masked)
     for index, value in enumerate(protected):

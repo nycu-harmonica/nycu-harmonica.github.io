@@ -49,6 +49,7 @@ def test_display_text_normalizes_punctuation_after_chinese_delimiters():
     assert ss.normalize_display_text("中文(API)!") == "中文（API）！"
     assert ss.normalize_display_text("「中文」!") == "「中文」！"
     assert ss.normalize_display_text("?【中文】") == "？【中文】"
+    assert ss.normalize_display_text("中文~更新") == "中文～更新"
     assert ss.normalize_display_text("API (v2)!") == "API (v2)!"
     assert ss.normalize_display_text("`中文(API)!`") == "`中文(API)!`"
     assert ss.normalize_display_text("[中文](https://example.com/a_(b)!?x=1)") == "[中文](https://example.com/a_(b)!?x=1)"
@@ -56,8 +57,8 @@ def test_display_text_normalizes_punctuation_after_chinese_delimiters():
 
 def test_typography_checker_matches_chinese_delimiter_context():
     parser = ct.VisibleTextParser()
-    parser.feed("<p>中文（API）!</p><p>「中文」!</p><p>API (v2)!</p><code>中文!</code>")
-    assert [text for _line, text in parser.issues] == ["中文（API）!", "「中文」!"]
+    parser.feed("<p>中文（API）!</p><p>「中文」!</p><p>中文~更新</p><p>API (v2)!</p><code>中文!</code>")
+    assert [text for _line, text in parser.issues] == ["中文（API）!", "「中文」!", "中文~更新"]
 
 
 def test_snapshot_normalizes_only_display_fields():

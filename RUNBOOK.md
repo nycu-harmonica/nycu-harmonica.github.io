@@ -2,7 +2,7 @@
 
 這份文件寫給**不需要程式背景**的社團幹部:如何更新網站內容、誰該有哪些權限、出問題怎麼辦。
 
-網站長期維護模式 = 社團共用 Google Sheet + 公開 Google Calendar + 核准公開的相簿照片。
+網站長期維護模式＝社團共用 Google Sheet＋公開 Google Calendar＋臺灣口琴觀測站公開動態＋核准公開的相簿照片。
 
 > **目前狀態:**公開 Calendar 與正式公開 Google Sheet 均已連結。試算表編輯網址只留在幹部交接資料,網站與公開文件不提供編輯入口。
 
@@ -22,10 +22,17 @@
 
 刪掉一列,網站上該公告就會消失(歷史版本仍可從 GitHub 找回)。
 
-## 2. 活動時程與精選
+首頁不以社團公告作為主要更新區；首頁的「竹韻近期動態」由臺灣口琴觀測站整理自竹韻公開社群，並連回原始貼文。社團自行發布的公告仍會保留在公告頁。
+
+訪客開啟首頁時，瀏覽器會直接讀取觀測站的竹韻專用公開 API，因此新貼文不需要重新部署官網。若 API 暫時無法使用，首頁會安靜地保留網站內建的上次同步資料，不影響其他內容。
+
+`Sync public site data` 不會為觀測站貼文建立自動 commit。只有需要更新網站內建備援資料時，才由網站管理員手動執行 `python3 scripts/sync_observe.py`，檢查後 commit。
+
+## 2. 活動時程
 
 - **所有活動**加進社團的公開 Google Calendar(活動頁的行事曆直接顯示它)。
-- 想在**首頁露出**的活動,另外在 `featured_events` 工作表加一列(title、start 必填)。活動結束日過後會自動從首頁消失,不用手動刪。
+- 首頁與活動頁會直接顯示同一份完整行事曆，不需要另外維護精選活動。
+- `featured_events` 工作表只為相容舊資料保留，網站不會顯示。
 
 ## 3. 更新幹部名單/社群連結
 
@@ -50,7 +57,7 @@
 ## 5. 手動觸發同步(急件)
 
 1. 開啟 GitHub repo → **Actions** 頁籤
-2. 左側選 **Sync data from Google Sheet** → 右側 **Run workflow** → 綠色按鈕
+2. 左側選 **Sync public site data** → 右側 **Run workflow** → 綠色按鈕
 3. 約 2–3 分鐘後網站更新(接著會自動跑 **Deploy to GitHub Pages**)
 
 若 workflow 摘要未顯示 `public Google Sheet`,或頁尾不是「Google Sheet 公開資料」,請先查看 workflow 錯誤,不要把快照誤認為最新線上資料。

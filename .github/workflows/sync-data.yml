@@ -1,11 +1,11 @@
-# 定期從社團共用 Google Sheet 同步資料
+# 定期同步社團共用 Google Sheet；觀測站竹韻動態由首頁瀏覽器即時讀取
 #
 # - 排程避開整點(GitHub 建議),台北時間約 08:41 / 14:41 / 20:41 / 02:41
 # - 也可在 Actions 頁面手動觸發(Run workflow)
 # - 只有資料真的變更時才 commit;每次同步時間記錄在 commit message 與此 workflow 的執行紀錄
 # - 注意:GITHUB_TOKEN 的 push 不會自動觸發 deploy workflow(GitHub 防遞迴),
 #   所以最後用 `gh workflow run` 手動觸發部署。
-name: Sync data from Google Sheet
+name: Sync public site data
 
 on:
   schedule:
@@ -30,6 +30,7 @@ jobs:
       - name: Self-test sync script
         run: |
           python3 scripts/test_sync_sheet.py
+          python3 scripts/test_sync_observe.py
           python3 scripts/check_public_content.py
 
       - name: Report configured data source
@@ -55,7 +56,7 @@ jobs:
           else
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore(data): sheet sync $(TZ=Asia/Taipei date +%FT%R%z)"
+            git commit -m "chore(data): public data sync $(TZ=Asia/Taipei date +%FT%R%z)"
             git push
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
@@ -76,5 +77,5 @@ jobs:
             gh issue create --repo "$GITHUB_REPOSITORY" \
               --title "資料同步失敗 $(TZ=Asia/Taipei date +%F)" \
               --label sync-failure \
-              --body "Google Sheet 同步 workflow 失敗,請查看執行紀錄:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID —— 常見原因與處理方式見 RUNBOOK.md 的「同步失敗怎麼辦」。"
+              --body "公開資料同步 workflow 失敗，請查看執行紀錄：$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID —— 常見原因與處理方式見 RUNBOOK.md 的「同步失敗怎麼辦」。"
           fi

@@ -16,7 +16,7 @@ CJK = "\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff"
 CJK_LEFT_CONTEXT = CJK + "）】」』》〉"
 CJK_RIGHT_CONTEXT = CJK + "（【「『《〈"
 HALF_WIDTH = re.compile(
-    rf"(?<=[{CJK_LEFT_CONTEXT}])[,;:!?|]|[,;:!?|](?=[{CJK_RIGHT_CONTEXT}])|"
+    rf"(?<=[{CJK_LEFT_CONTEXT}])[,;:!?|~]|[,;:!?|~](?=[{CJK_RIGHT_CONTEXT}])|"
     rf"(?<=[{CJK}])\([^()\n]*\)|\([^()\n]*[{CJK}][^()\n]*\)|\([^()\n]*\)(?=[{CJK}])"
 )
 IGNORED_TAGS = {"script", "style", "code", "pre", "svg"}

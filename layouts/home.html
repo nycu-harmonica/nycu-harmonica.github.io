@@ -31,41 +31,30 @@
 
 <section class="section container">
   <div class="section-head">
-    <h2>近期公告</h2>
-    <a class="more-link" href="{{ "/announcements/" | relURL }}">全部公告 →</a>
+    <h2>竹韻近期動態</h2>
+    <a class="more-link" href="https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/" target="_blank" rel="noopener noreferrer">前往觀測站來源頁 →</a>
   </div>
-  {{ $ann := where (where .Site.RegularPages "Section" "announcements") "Draft" false }}
-  {{ $pinned := where $ann "Params.pinned" true }}
-  {{ $rest := where $ann "Params.pinned" "!=" true }}
-  {{ $list := first 3 (append $rest $pinned) }}
-  {{ if $list }}
-  <div class="card-grid">
-    {{ range $list }}{{ partial "announcement-card.html" . }}{{ end }}
+  <p class="section-source-note">由臺灣口琴觀測站整理自竹韻公開社群；內容以原始貼文為準。</p>
+  {{ $observe := site.Data.generated.observe_updates }}
+  <div class="card-grid" id="observe-updates-grid" data-observe-mode="fallback">
+    {{ if and $observe $observe.items }}
+    {{ range $observe.items }}{{ partial "observe-update-card.html" . }}{{ end }}
+    {{ else }}
+    <div class="placeholder-card"><p>目前沒有可顯示的竹韻近期動態。</p></div>
+    {{ end }}
   </div>
-  {{ else }}
-  <div class="placeholder-card"><p>目前沒有公告。</p></div>
-  {{ end }}
+  <p class="observe-updated" id="observe-updates-status" data-observe-mode="fallback" aria-live="polite">
+    {{- if $observe -}}上次同步資料：{{ time.Format "2006-01-02 15:04" (time.In "Asia/Taipei" (time.AsTime $observe.source_generated_at)) }}（Asia/Taipei）{{- else -}}目前顯示網站內建的備援資料。{{- end -}}
+  </p>
+  <noscript><p class="observe-updated">目前顯示網站內建的備援資料。</p></noscript>
 </section>
 
 <section class="section container">
   <div class="section-head">
-    <h2>近期活動</h2>
-    <a class="more-link" href="{{ "/events/" | relURL }}">活動頁與行事曆 →</a>
+    <h2>社團活動行事曆</h2>
+    <a class="more-link" href="{{ "/events/" | relURL }}">完整活動頁 →</a>
   </div>
-  {{ $today := now.Format "2006-01-02" }}
-  {{ $events := site.Data.generated.featured_events | default (slice) }}
-  {{ $upcoming := slice }}
-  {{ range $events }}
-    {{ $endDate := .end | default .start }}
-    {{ if ge $endDate $today }}{{ $upcoming = $upcoming | append . }}{{ end }}
-  {{ end }}
-  {{ if $upcoming }}
-  <div class="card-grid">
-    {{ range first 3 $upcoming }}{{ partial "event-card.html" . }}{{ end }}
-  </div>
-  {{ else }}
-  <div class="placeholder-card"><p>近期沒有精選活動，完整時程請見<a href="{{ "/events/" | relURL }}">活動頁</a>。</p></div>
-  {{ end }}
+  {{ partial "calendar-embed.html" . }}
 </section>
 
 <section class="section container join-banner" id="join">
