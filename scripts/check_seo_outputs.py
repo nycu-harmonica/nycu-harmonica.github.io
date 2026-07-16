@@ -8,6 +8,7 @@ import email.utils
 from html.parser import HTMLParser
 import io
 from pathlib import Path
+import re
 import subprocess
 import xml.etree.ElementTree as ET
 
@@ -38,6 +39,7 @@ def canonical_from_html(path: Path) -> str:
 
 BASE_URL = canonical_from_html(PUBLIC / "index.html")
 assert BASE_URL.endswith("/"), f"Home canonical URL must end with /: {BASE_URL}"
+ENTITY_REFERENCE_RE = re.compile(r"&(?:lt|gt|amp|quot|apos|#\d+|#x[0-9a-f]+);", re.IGNORECASE)
 
 
 def parse_xml(relative_path: str) -> ET.Element:
@@ -60,7 +62,12 @@ def check_rss(relative_path: str) -> None:
     assert root.tag == "rss" and channel is not None, f"Invalid RSS structure: {relative_path}"
     require_official_url(channel.findtext("link"), relative_path)
     atom_link = channel.find("{http://www.w3.org/2005/Atom}link")
-    require_official_url(atom_link.get("href") if atom_link is not None else None, relative_path)
+    atom_href = require_official_url(
+        atom_link.get("href") if atom_link is not None else None, relative_path
+    )
+    assert atom_href == f"{BASE_URL}{relative_path}", (
+        f"RSS self URL mismatch in {relative_path}: {atom_href}"
+    )
     if relative_path == "index.xml":
         assert (channel.findtext("title") or "").endswith("公開內容"), "Home RSS title is inaccurate"
         assert channel.findtext("description") == "竹韻口琴社公告與相簿更新", "Home RSS description is inaccurate"
@@ -73,6 +80,11 @@ def check_rss(relative_path: str) -> None:
         assert item.findtext("guid") == url, f"RSS guid/link mismatch: {url}"
         published = email.utils.parsedate_to_datetime(item.findtext("pubDate") or "")
         assert published.year > 1, f"RSS contains an invalid publication date: {url}"
+        description = item.findtext("description") or ""
+        assert description.strip(), f"RSS item has an empty description: {url}"
+        assert not ENTITY_REFERENCE_RE.search(description), (
+            f"RSS item description contains a double-escaped entity: {url}"
+        )
         urls.append(url)
     assert len(urls) == len(set(urls)), f"RSS contains duplicate items: {relative_path}"
 
