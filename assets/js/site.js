@@ -3,10 +3,30 @@
   var toggle = document.getElementById('nav-toggle');
   var nav = document.getElementById('site-nav');
   if (toggle && nav) {
-    toggle.addEventListener('click', function () {
-      var open = nav.classList.toggle('open');
+    var desktopMedia = window.matchMedia('(min-width: 768px)');
+
+    function setNavOpen(open, returnFocus) {
+      nav.classList.toggle('open', open);
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
+      if (returnFocus) toggle.focus();
+    }
+
+    toggle.addEventListener('click', function () {
+      setNavOpen(!nav.classList.contains('open'), false);
     });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && !desktopMedia.matches && nav.classList.contains('open')) {
+        setNavOpen(false, true);
+      }
+    });
+
+    function resetNavOnDesktop(event) {
+      if (event.matches) setNavOpen(false, false);
+    }
+
+    desktopMedia.addEventListener('change', resetNavOnDesktop);
   }
 
   var box = document.getElementById('lightbox');
