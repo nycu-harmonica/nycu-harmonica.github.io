@@ -36,6 +36,12 @@ img { max-width: 100%; display: block; }
 a { color: var(--green-700); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+:where(a, button):focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--green-900);
+}
+
 .container {
   max-width: 1080px;
   margin: 0 auto;
@@ -195,9 +201,9 @@ a:hover { text-decoration: underline; }
 .btn-primary {
   background: var(--amber-500);
   border-color: var(--amber-500);
-  color: #fff;
+  color: var(--ink);
 }
-.btn-primary:hover { background: #b57a24; border-color: #b57a24; }
+.btn-primary:hover { background: #e1a73d; border-color: #e1a73d; color: var(--ink); }
 .btn-small { padding: 0.3rem 0.9rem; font-size: 0.9rem; }
 .hero .btn-primary { background: #fff; border-color: #fff; color: var(--green-900); }
 .hero .btn-primary:hover { background: var(--green-100); border-color: var(--green-100); }
@@ -254,7 +260,7 @@ a:hover { text-decoration: underline; }
   margin-left: 0.4rem;
   vertical-align: 1px;
 }
-.badge-pin { background: var(--amber-500); color: #fff; }
+.badge-pin { background: var(--amber-500); color: var(--ink); }
 
 /* 活動卡片 */
 .event-card { align-items: stretch; }

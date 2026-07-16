@@ -16,6 +16,7 @@
       a.addEventListener('click', function (e) {
         e.preventDefault();
         img.src = a.dataset.full || a.href;
+        img.alt = a.getAttribute('aria-label') || '放大照片';
         box.showModal();
       });
     });
@@ -24,6 +25,9 @@
     });
     var close = document.getElementById('lightbox-close');
     if (close) close.addEventListener('click', function () { box.close(); });
-    box.addEventListener('close', function () { img.src = ''; });
+    box.addEventListener('close', function () {
+      img.src = '';
+      img.alt = '';
+    });
   }
 })();
