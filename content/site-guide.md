@@ -9,15 +9,15 @@ description: 本網站的公開資料來源與更新方式說明。
 
 | 內容 | 來源 | 更新方式 |
 |------|------|----------|
-| 公告與精選活動 | repo 內公開 CSV 快照 | 正式公開 Google Sheet 尚待設定 |
+| 公告與精選活動 | 公開 Google Sheet | 幹部編輯試算表 |
 | 活動完整時程 | 公開 Google Calendar | 幹部編輯行事曆 |
-| 幹部名單 | repo 內公開 CSV 快照 | 只顯示核准公開的職稱與姓名 |
-| 相簿 | repo 內核准照片與公開 CSV 快照 | 幹部提供照片,由網站管理員整理上傳 |
-| 社群連結 | repo 內公開 CSV 快照 | 只放官方公開入口 |
+| 幹部名單 | 公開 Google Sheet | 只顯示核准公開的職稱與姓名 |
+| 相簿 | repo 內核准照片 + 公開 Google Sheet 索引 | 幹部提供照片,由網站管理員整理上傳 |
+| 社群連結 | 公開 Google Sheet | 只放官方公開入口 |
 
 ## 更新頻率
 
-GitHub Actions 每日檢查資料四次。目前只驗證 repo 快照;正式公開 Google Sheet 完成設定後,才會在有內容變更時自動同步與重新部署。
+GitHub Actions 每日同步公開 Google Sheet 四次;有內容變更時才提交快照並重新部署。完整活動時程直接來自公開 Google Calendar。
 
 ## 資料快照
 

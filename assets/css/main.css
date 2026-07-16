@@ -1,19 +1,19 @@
 /* 竹韻口琴社官網樣式 — mobile-first,無框架 */
 
 :root {
-  --green-900: #1d3b2a;
-  --green-700: #2e5d40;
-  --green-600: #3a7351;
-  --green-100: #e8f1ea;
-  --green-50: #f4f8f5;
-  --amber-500: #c98a2d;
-  --ink: #22302a;
-  --ink-soft: #5b6a62;
-  --line: #d8e2da;
-  --bg: #fdfdfb;
+  --green-900: #104f64;
+  --green-700: #176b84;
+  --green-600: #1c7490;
+  --green-100: #dceff3;
+  --green-50: #f1f8fa;
+  --amber-500: #d59a32;
+  --ink: #18343d;
+  --ink-soft: #586c73;
+  --line: #c9dde2;
+  --bg: #f8fbfc;
   --card-bg: #ffffff;
-  --radius: 12px;
-  --shadow: 0 1px 3px rgba(29, 59, 42, 0.08), 0 4px 14px rgba(29, 59, 42, 0.06);
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(16, 79, 100, 0.08), 0 4px 14px rgba(16, 79, 100, 0.06);
   --font-sans: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
 }
 
@@ -77,7 +77,12 @@ a:hover { text-decoration: underline; }
   font-size: 1.15rem;
 }
 .brand:hover { text-decoration: none; }
-.brand-mark { font-size: 1.3rem; }
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+}
 
 .nav-toggle {
   display: flex;
@@ -110,7 +115,7 @@ a:hover { text-decoration: underline; }
 }
 .site-nav a {
   display: block;
-  color: #e8f1ea;
+  color: #dceff3;
   padding: 0.55rem 0.25rem;
   border-radius: 6px;
   font-weight: 500;
@@ -128,28 +133,58 @@ a:hover { text-decoration: underline; }
 
 /* ---------- Hero ---------- */
 .hero {
-  background: linear-gradient(160deg, var(--green-900) 0%, var(--green-600) 100%);
+  background-color: #1c7490;
+  background-image: url("/images/bamboo-hero-mark.webp");
+  background-repeat: no-repeat;
+  background-position: center 1rem;
+  background-size: min(78vw, 310px);
   color: #fff;
-  padding: 3.5rem 0;
+  padding: calc(min(78vw, 310px) + 2rem) 0 2.5rem;
   text-align: center;
+}
+.hero-copy { max-width: 34rem; margin: 0 auto; }
+.hero-kicker {
+  margin: 0 0 0.65rem;
+  color: #dceff3;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.4;
 }
 .hero h1 {
   margin: 0 0 0.5rem;
-  font-size: clamp(2rem, 6vw, 3rem);
-  letter-spacing: 0.12em;
+  font-size: 2.5rem;
+  line-height: 1.15;
+  letter-spacing: 0;
 }
 .hero-subtitle {
   margin: 0 0 1.75rem;
-  font-size: clamp(1rem, 3vw, 1.2rem);
-  color: #d9e8dd;
+  font-size: 1.05rem;
+  color: #eaf6f8;
 }
 .hero-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+@media (min-width: 768px) {
+  .hero {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    padding: 4rem 0;
+    text-align: left;
+    background-position: calc(50% + 285px) center;
+    background-size: 520px;
+  }
+  .hero-copy { max-width: 44%; margin: 0; }
+  .hero-kicker { font-size: 0.82rem; }
+  .hero h1 { font-size: 3.75rem; }
+  .hero-subtitle { font-size: 1.15rem; }
+  .hero-actions { justify-content: flex-start; }
+}
 
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-block;
   padding: 0.6rem 1.4rem;
-  border-radius: 999px;
+  border-radius: 6px;
   border: 1.5px solid var(--green-700);
   color: var(--green-700);
   background: var(--card-bg);
@@ -164,6 +199,10 @@ a:hover { text-decoration: underline; }
 }
 .btn-primary:hover { background: #b57a24; border-color: #b57a24; }
 .btn-small { padding: 0.3rem 0.9rem; font-size: 0.9rem; }
+.hero .btn-primary { background: #fff; border-color: #fff; color: var(--green-900); }
+.hero .btn-primary:hover { background: var(--green-100); border-color: var(--green-100); }
+.hero .btn:not(.btn-primary) { background: transparent; border-color: #fff; color: #fff; }
+.hero .btn:not(.btn-primary):hover { background: rgba(255, 255, 255, 0.12); }
 
 /* ---------- Sections ---------- */
 .section { padding: 2.25rem 1rem; }
@@ -311,7 +350,7 @@ a:hover { text-decoration: underline; }
   max-width: 94vw;
   max-height: 94vh;
 }
-.lightbox::backdrop { background: rgba(10, 20, 14, 0.85); }
+.lightbox::backdrop { background: rgba(8, 34, 43, 0.88); }
 .lightbox img { max-width: 94vw; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
 .lightbox-close {
   position: fixed;

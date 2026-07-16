@@ -1,15 +1,24 @@
 {{ define "main" }}
+{{ $joinURL := "/about/#join" | relURL }}
+{{ $joinLabel := "加入我們" }}
+{{ $joinExternal := false }}
+{{ range site.Data.generated.links | default (slice) }}
+  {{ if eq .key "discord" }}
+    {{ $joinURL = .url }}
+    {{ $joinLabel = "加入 Discord" }}
+    {{ $joinExternal = true }}
+  {{ end }}
+{{ end }}
 <section class="hero">
   <div class="container">
-    <h1>竹韻口琴社</h1>
-    <p class="hero-subtitle">國立陽明交通大學・用一把口琴,吹出屬於你的旋律</p>
-    <div class="hero-actions">
-      {{ with .Site.Params.joinFormUrl }}
-      <a class="btn btn-primary" href="{{ . }}" target="_blank" rel="noopener">加入我們</a>
-      {{ else }}
-      <a class="btn btn-primary" href="{{ "/about/#join" | relURL }}">加入我們</a>
-      {{ end }}
-      <a class="btn" href="{{ "/events/" | relURL }}">近期活動</a>
+    <div class="hero-copy">
+      <p class="hero-kicker">NYCU BAMBOO MELODY HARMONICA CLUB</p>
+      <h1>竹韻口琴社</h1>
+      <p class="hero-subtitle">用一把口琴,吹出屬於你的旋律</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
+        <a class="btn" href="{{ "/events/" | relURL }}">近期活動</a>
+      </div>
     </div>
   </div>
 </section>
@@ -62,10 +71,6 @@
 <section class="section container join-banner" id="join">
   <h2>想學口琴嗎?</h2>
   <p>不需要任何音樂基礎,社課從零開始教。歡迎陽明交大同學加入竹韻口琴社!</p>
-  {{ with .Site.Params.joinFormUrl }}
-  <a class="btn btn-primary" href="{{ . }}" target="_blank" rel="noopener">填寫入社表單</a>
-  {{ else }}
-  <a class="btn btn-primary" href="{{ "/about/" | relURL }}">聯絡我們</a>
-  {{ end }}
+  <a class="btn btn-primary" href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
 </section>
 {{ end }}

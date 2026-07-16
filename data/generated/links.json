@@ -23,6 +23,18 @@
     "url": "https://www.facebook.com/nycubmhc/"
   },
   {
+    "icon": "link",
+    "key": "discord",
+    "label": "Discord 社群",
+    "order": 25,
+    "show_in": [
+      "footer",
+      "about",
+      "join"
+    ],
+    "url": "https://discord.gg/uEQDCbnY8P"
+  },
+  {
     "icon": "youtube",
     "key": "youtube",
     "label": "YouTube 頻道",

@@ -4,7 +4,7 @@
 
 網站長期維護模式 = 社團共用 Google Sheet + 公開 Google Calendar + 核准公開的相簿照片。
 
-> **目前狀態:**公開 Calendar 已連結,Google Sheet 尚未設定。現階段公告、精選活動、幹部與連結使用 repo CSV 快照;下列試算表操作需等 `scripts/sources.json` 填入正式 Sheet ID/gid 後才會生效。
+> **目前狀態:**公開 Calendar 與正式公開 Google Sheet 均已連結。試算表編輯網址只留在幹部交接資料,網站與公開文件不提供編輯入口。
 
 ## 1. 發公告
 
@@ -53,7 +53,7 @@
 2. 左側選 **Sync data from Google Sheet** → 右側 **Run workflow** → 綠色按鈕
 3. 約 2–3 分鐘後網站更新(接著會自動跑 **Deploy to GitHub Pages**)
 
-若 workflow 摘要顯示 `repo CSV snapshot`,代表正式 Sheet 尚未設定;這次執行只會驗證快照,不會抓取線上資料。
+若 workflow 摘要未顯示 `public Google Sheet`,或頁尾不是「Google Sheet 公開資料」,請先查看 workflow 錯誤,不要把快照誤認為最新線上資料。
 
 ## 6. 同步失敗怎麼辦
 
