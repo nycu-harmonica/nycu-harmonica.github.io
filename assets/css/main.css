@@ -179,7 +179,8 @@ a:hover { text-decoration: underline; }
     background-position: calc(50% + 285px) center;
     background-size: 520px;
   }
-  .hero-copy { max-width: 44%; margin: 0; }
+  .hero > .container { width: 100%; }
+  .hero-copy { width: clamp(22rem, 48%, 32rem); max-width: none; margin: 0; }
   .hero-kicker { font-size: 0.82rem; }
   .hero h1 { font-size: 3.75rem; }
   .hero-subtitle { font-size: 1.15rem; }
@@ -290,7 +291,7 @@ a:hover { text-decoration: underline; }
 .placeholder-card p { margin: 0.25rem 0; }
 
 /* ---------- 首頁 ---------- */
-.home-intro { max-width: 56rem; margin: 0 auto; text-align: center; }
+.home-intro { max-width: 62rem; margin: 0 auto; text-align: center; }
 .join-banner {
   text-align: center;
   background: var(--green-100);
