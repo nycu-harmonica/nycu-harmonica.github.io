@@ -48,7 +48,7 @@
   {
     "icon": "link",
     "key": "observe",
-    "label": "臺灣口琴觀測站(本社維運)",
+    "label": "臺灣口琴觀測站（本社維運）",
     "order": 40,
     "show_in": [
       "about"

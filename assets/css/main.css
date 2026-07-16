@@ -290,7 +290,7 @@ a:hover { text-decoration: underline; }
 .placeholder-card p { margin: 0.25rem 0; }
 
 /* ---------- 首頁 ---------- */
-.home-intro { max-width: 46rem; margin: 0 auto; text-align: center; }
+.home-intro { max-width: 56rem; margin: 0 auto; text-align: center; }
 .join-banner {
   text-align: center;
   background: var(--green-100);

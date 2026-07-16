@@ -2,7 +2,7 @@
   "source_mode": "google_sheet",
   "tabs": {
     "announcements": {
-      "hash": "sha256:145fb1141862f44d3bc95310892f44851da97e9ab815d9039a6b7e8181021160",
+      "hash": "sha256:e2e29b428c330ff6efccdd62e705bde1e3e51524d9c5a2747c272f623006775a",
       "rows": 2
     },
     "featured_events": {
@@ -10,11 +10,11 @@
       "rows": 0
     },
     "gallery_albums": {
-      "hash": "sha256:30bdf6f7bb5b2b0ed955d22cfa251ede091956e659bfe0b0ab04d492550361be",
+      "hash": "sha256:fc126a079840967441c61cd4192221f615aaccc3000adcd1ec58d56f1c2c4ae9",
       "rows": 2
     },
     "links": {
-      "hash": "sha256:0efd900af2fe33b4dde288b55206bc985a8e614997c37346debb110f7d42dd0e",
+      "hash": "sha256:df179ffccb73efd8ccc495524cf877681b250911e252151b8b416ada426f6081",
       "rows": 5
     },
     "officers": {
@@ -22,5 +22,5 @@
       "rows": 4
     }
   },
-  "updated_at": "2026-07-16T16:23:16+08:00"
+  "updated_at": "2026-07-16T18:04:07+08:00"
 }

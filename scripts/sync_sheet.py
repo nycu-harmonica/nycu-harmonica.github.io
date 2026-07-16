@@ -48,6 +48,15 @@ DRAFT_WORDS = {"draft", "草稿", "hidden", "隱藏"}
 PUBLISHED_WORDS = {"", "published", "發布", "公開"}
 ICON_ENUM = {"instagram", "facebook", "youtube", "email", "line", "link"}
 SHOW_IN_ENUM = {"footer", "about", "join"}
+DISPLAY_TEXT_FIELDS = {
+    "title", "content", "time_text", "location", "summary",
+    "role", "name", "description", "label",
+}
+CJK_RANGE = "\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff"
+CJK_LEFT_CONTEXT = CJK_RANGE + "）】」』》〉"
+CJK_RIGHT_CONTEXT = CJK_RANGE + "（【「『《〈"
+HALF_PUNCTUATION = {",": "，", ":": "：", ";": "；", "!": "！", "?": "？", "|": "｜"}
+MARKDOWN_CODE_RE = re.compile(r"(`+)(.*?)(\1)", re.DOTALL)
 
 # 表頭別名:Sheet 可用中文表頭,一律轉為正規英文欄名
 HEADER_ALIASES = {
@@ -88,14 +97,72 @@ def normalize_newlines(text: str) -> str:
     return text.replace("\r\n", "\n").replace("\r", "\n")
 
 
+def _protect_markdown_destinations(text: str, protected: list[str]) -> str:
+    """Mask Markdown link destinations, including balanced parentheses."""
+    parts: list[str] = []
+    position = 0
+    for match in re.finditer(r"\]\(", text):
+        opening = match.end() - 1
+        if opening < position:
+            continue
+        depth = 1
+        cursor = opening + 1
+        while cursor < len(text) and depth:
+            if text[cursor] == "\\":
+                cursor += 2
+                continue
+            if text[cursor] == "(":
+                depth += 1
+            elif text[cursor] == ")":
+                depth -= 1
+            cursor += 1
+        if depth:
+            continue
+        token = f"\ue000{len(protected)}\ue001"
+        protected.append(text[opening:cursor])
+        parts.extend((text[position:opening], token))
+        position = cursor
+    parts.append(text[position:])
+    return "".join(parts)
+
+
+def normalize_display_text(text: str) -> str:
+    """Use full-width punctuation in Chinese prose without touching Markdown code or URLs."""
+    protected: list[str] = []
+
+    def protect_code(match: re.Match) -> str:
+        token = f"\ue000{len(protected)}\ue001"
+        protected.append(match.group(0))
+        return token
+
+    masked = MARKDOWN_CODE_RE.sub(protect_code, text)
+    masked = _protect_markdown_destinations(masked, protected)
+    parentheses = re.compile(
+        rf"(?<=[{CJK_RANGE}])\([^()\n]*\)|"
+        rf"\([^()\n]*[{CJK_RANGE}][^()\n]*\)|"
+        rf"\([^()\n]*\)(?=[{CJK_RANGE}])"
+    )
+    masked = parentheses.sub(lambda match: f"（{match.group(0)[1:-1]}）", masked)
+    adjacent = re.compile(
+        rf"(?<=[{CJK_LEFT_CONTEXT}])[,;:!?|]|"
+        rf"[,;:!?|](?=[{CJK_RIGHT_CONTEXT}])"
+    )
+    masked = adjacent.sub(lambda match: HALF_PUNCTUATION[match.group(0)], masked)
+    for index, value in enumerate(protected):
+        masked = masked.replace(f"\ue000{index}\ue001", value)
+    return masked
+
+
 def content_hash(text: str) -> str:
     return hashlib.sha256(normalize_newlines(text).encode("utf-8")).hexdigest()
 
 
 def write_if_changed(path: Path, content: str) -> bool:
     """寫檔;內容相同則不動。回傳是否有變更。"""
-    if path.exists() and path.read_text(encoding="utf-8") == content:
-        return False
+    if path.exists():
+        with path.open("r", encoding="utf-8", newline="") as existing:
+            if existing.read() == content:
+                return False
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
     return True
@@ -109,6 +176,10 @@ def dump_json(obj) -> str:
 
 def v_text(value: str, _row=None) -> str:
     return value.strip()
+
+
+def v_display_text(value: str, _row=None) -> str:
+    return normalize_display_text(value.strip())
 
 
 def v_slug(value: str, _row=None) -> str:
@@ -181,8 +252,8 @@ TAB_SPECS = {
         "fields": [
             ("slug", True, v_slug),
             ("date", True, v_date),
-            ("title", True, v_text),
-            ("content", True, v_text),
+            ("title", True, v_display_text),
+            ("content", True, v_display_text),
             ("pinned", False, v_bool),
             ("link", False, v_url),
             ("status", False, v_text),
@@ -191,12 +262,12 @@ TAB_SPECS = {
     "featured_events": {
         "unique": None,
         "fields": [
-            ("title", True, v_text),
+            ("title", True, v_display_text),
             ("start", True, v_date),
             ("end", False, v_date),
-            ("time_text", False, v_text),
-            ("location", False, v_text),
-            ("summary", False, v_text),
+            ("time_text", False, v_display_text),
+            ("location", False, v_display_text),
+            ("summary", False, v_display_text),
             ("link", False, v_url),
             ("status", False, v_text),
         ],
@@ -205,8 +276,8 @@ TAB_SPECS = {
         "unique": None,
         "fields": [
             ("order", True, v_int),
-            ("role", True, v_text),
-            ("name", True, v_text),
+            ("role", True, v_display_text),
+            ("name", True, v_display_text),
             ("status", False, v_text),
         ],
     },
@@ -214,9 +285,9 @@ TAB_SPECS = {
         "unique": "slug",
         "fields": [
             ("slug", True, v_slug),
-            ("title", True, v_text),
+            ("title", True, v_display_text),
             ("date", True, v_date),
-            ("description", False, v_text),
+            ("description", False, v_display_text),
             ("cover", False, v_filename),
             ("status", False, v_text),
         ],
@@ -225,7 +296,7 @@ TAB_SPECS = {
         "unique": "key",
         "fields": [
             ("key", True, v_slug),
-            ("label", True, v_text),
+            ("label", True, v_display_text),
             ("url", True, v_url),
             ("icon", False, v_icon),
             ("order", False, v_int),
@@ -264,6 +335,27 @@ def parse_rows(csv_text: str) -> ParsedRows:
         if any(v for v in row.values()):
             rows.append(row)
     return ParsedRows(rows, normalized_field_names)
+
+
+def normalize_snapshot_csv(csv_text: str) -> str:
+    """Normalize display fields while preserving the CSV schema and structural values."""
+    reader = csv.DictReader(io.StringIO(normalize_newlines(csv_text)))
+    if not reader.fieldnames:
+        return csv_text
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=reader.fieldnames, lineterminator="\n")
+    writer.writeheader()
+    normalized_headers = {header: normalize_header(header) for header in reader.fieldnames}
+    display_changed = False
+    for row in reader:
+        normalized = dict(row)
+        for header, field_name in normalized_headers.items():
+            if field_name in DISPLAY_TEXT_FIELDS and normalized.get(header) is not None:
+                value = normalize_display_text(normalized[header])
+                display_changed = display_changed or value != normalized[header]
+                normalized[header] = value
+        writer.writerow(normalized)
+    return output.getvalue() if display_changed else csv_text
 
 
 def validate_rows(tab: str, rows: list[dict]) -> tuple[list[dict], list[str]]:
@@ -467,7 +559,11 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
                 fetch_failures.append(tab)
                 csv_text = None
             else:
-                if write_if_changed(snapshot_path, normalize_newlines(csv_text)):
+                normalized_source = normalize_newlines(csv_text)
+                snapshot_text = normalize_snapshot_csv(normalized_source)
+                if snapshot_text != normalized_source:
+                    csv_text = snapshot_text
+                if write_if_changed(snapshot_path, snapshot_text):
                     log("info", f"{tab}: 快照已更新")
 
         if csv_text is None:

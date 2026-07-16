@@ -12,17 +12,17 @@ description: 本網站的公開資料來源與更新方式說明。
 | 公告與精選活動 | 公開 Google Sheet | 幹部編輯試算表 |
 | 活動完整時程 | 公開 Google Calendar | 幹部編輯行事曆 |
 | 幹部名單 | 公開 Google Sheet | 只顯示核准公開的職稱與姓名 |
-| 相簿 | repo 內核准照片 + 公開 Google Sheet 索引 | 幹部提供照片,由網站管理員整理上傳 |
+| 相簿 | repo 內核准照片 + 公開 Google Sheet 索引 | 幹部提供照片，由網站管理員整理上傳 |
 | 社群連結 | 公開 Google Sheet | 只放官方公開入口 |
 
 ## 更新頻率
 
-GitHub Actions 每日同步公開 Google Sheet 四次;有內容變更時才提交快照並重新部署。完整活動時程直接來自公開 Google Calendar。
+GitHub Actions 每日同步公開 Google Sheet 四次；有內容變更時才提交快照並重新部署。完整活動時程直接來自公開 Google Calendar。
 
 ## 資料快照
 
-公開 CSV 快照隨網站原始碼保存,可從版本紀錄回復。頁尾會區分「Repo 資料快照」與「Google Sheet 資料」,時間不代表內部資料或 Google Sheet 的最後編輯時間。
+公開 CSV 快照隨網站原始碼保存，可從版本紀錄回復。頁尾會區分「Repo 資料快照」與「Google Sheet 資料」，時間不代表內部資料或 Google Sheet 的最後編輯時間。
 
 ## 問題回報
 
-若發現網站內容錯誤或連結失效,請透過[關於我們](/about/)頁面的聯絡方式告知幹部。
+若發現網站內容錯誤或連結失效，請透過[關於我們](/about/)頁面的聯絡方式告知幹部。

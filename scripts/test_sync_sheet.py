@@ -11,6 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import sync_sheet as ss  # noqa: E402
+import check_typography as ct  # noqa: E402
 
 
 def test_header_aliases_chinese():
@@ -23,6 +24,73 @@ def test_header_case_and_space_insensitive():
     csv_text = " Slug ,DATE,Title,Content\nabc-def,2026-07-01,t,c\n"
     rows = ss.parse_rows(csv_text)
     assert rows[0]["slug"] == "abc-def" and rows[0]["date"] == "2026-07-01", rows
+
+
+def test_display_text_uses_full_width_chinese_punctuation_safely():
+    csv_text = (
+        "slug,date,title,content,link\n"
+        'test-row,2026-07-16,招生!歡迎,"時間:19:30;地點:教室。'
+        '請看[公告,說明](https://example.com/a_(b),c?x=1;2)。'
+        '`API: run(a,b)`、`中文,測試`、中文(API) 與 API (v2), U.S.A.",'
+        '"https://example.com/a,b?x=1;2"\n'
+    )
+    valid, errors = ss.validate_rows("announcements", ss.parse_rows(csv_text))
+    assert errors == []
+    row = valid[0]
+    assert row["title"] == "招生！歡迎"
+    assert "時間：19:30；地點：教室" in row["content"]
+    assert "[公告，說明](https://example.com/a_(b),c?x=1;2)" in row["content"]
+    assert "`API: run(a,b)`、`中文,測試`、中文（API） 與 API (v2), U.S.A." in row["content"]
+    assert row["date"] == "2026-07-16"
+    assert row["link"] == "https://example.com/a,b?x=1;2"
+
+
+def test_display_text_normalizes_punctuation_after_chinese_delimiters():
+    assert ss.normalize_display_text("中文(API)!") == "中文（API）！"
+    assert ss.normalize_display_text("「中文」!") == "「中文」！"
+    assert ss.normalize_display_text("?【中文】") == "？【中文】"
+    assert ss.normalize_display_text("API (v2)!") == "API (v2)!"
+    assert ss.normalize_display_text("`中文(API)!`") == "`中文(API)!`"
+    assert ss.normalize_display_text("[中文](https://example.com/a_(b)!?x=1)") == "[中文](https://example.com/a_(b)!?x=1)"
+
+
+def test_typography_checker_matches_chinese_delimiter_context():
+    parser = ct.VisibleTextParser()
+    parser.feed("<p>中文（API）!</p><p>「中文」!</p><p>API (v2)!</p><code>中文!</code>")
+    assert [text for _line, text in parser.issues] == ["中文（API）!", "「中文」!"]
+
+
+def test_snapshot_normalizes_only_display_fields():
+    csv_text = (
+        "key,label,url,icon,order,show_in\n"
+        'observe,觀測站(本社維運),"https://example.com/a,b?x=1;2",link,40,"footer,about"\n'
+    )
+    snapshot = ss.normalize_snapshot_csv(csv_text)
+    assert "觀測站（本社維運）" in snapshot
+    assert "https://example.com/a,b?x=1;2" in snapshot
+    assert ss.normalize_snapshot_csv(snapshot) == snapshot
+    valid, errors = ss.validate_rows("links", ss.parse_rows(snapshot))
+    assert errors == []
+    assert valid[0]["key"] == "observe"
+    assert valid[0]["order"] == 40
+    assert valid[0]["show_in"] == ["footer", "about"]
+
+
+def test_snapshot_without_display_changes_is_byte_stable():
+    csv_text = (
+        'key,label,url,icon,order,show_in\r\n'
+        'instagram,"Instagram, official",https://example.com/,instagram,10,"footer,about"'
+    )
+    assert ss.normalize_snapshot_csv(csv_text) == csv_text
+
+
+def test_write_if_changed_compares_line_endings_exactly():
+    with tempfile.TemporaryDirectory() as td:
+        path = Path(td) / "snapshot.csv"
+        path.write_bytes(b"header\r\nvalue")
+        assert ss.write_if_changed(path, "header\nvalue") is True
+        assert path.read_bytes() == b"header\nvalue"
+        assert ss.write_if_changed(path, "header\nvalue") is False
 
 
 def test_required_missing_skips_row():
