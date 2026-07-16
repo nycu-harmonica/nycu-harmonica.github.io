@@ -28,9 +28,21 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Self-test sync script
-        run: python3 scripts/test_sync_sheet.py
+        run: |
+          python3 scripts/test_sync_sheet.py
+          python3 scripts/check_public_content.py
 
-      - name: Sync from Google Sheet
+      - name: Report configured data source
+        run: |
+          sheet_id=$(jq -r '.sheet_id // ""' scripts/sources.json)
+          if [[ -z "$sheet_id" || "$sheet_id" == REPLACE* ]]; then
+            echo "### Data source: repo CSV snapshot" >> "$GITHUB_STEP_SUMMARY"
+            echo "The public Google Sheet is not configured yet; this run does not claim a live Sheet sync." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Data source: public Google Sheet" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Refresh public data
         run: python3 scripts/sync_sheet.py --strict
 
       - name: Commit & push if changed

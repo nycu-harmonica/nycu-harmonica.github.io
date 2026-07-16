@@ -18,7 +18,7 @@ Hugo 所需的內容與資料檔,並更新 repo 內的 CSV 快照(fallback)。
     data/generated/<tab>.json            featured_events / officers / links / gallery_albums
     content/announcements/<slug>.md      公告頁(全部重建;_index.md 與手寫檔保留)
     content/gallery/<slug>/index.md      相簿頁 front matter(照片另由目錄管理)
-    data/generated/last_sync.json        僅在任何輸出有變更時更新
+    data/generated/last_sync.json        輸出或來源模式有變更時更新
 """
 
 from __future__ import annotations
@@ -55,9 +55,8 @@ HEADER_ALIASES = {
     "置頂": "pinned", "連結": "link", "狀態": "status",
     "開始日期": "start", "結束日期": "end", "時間": "time_text",
     "地點": "location", "簡介": "summary",
-    "排序": "order", "職稱": "role", "姓名": "name", "系級": "dept_year",
-    "信箱": "email", "照片": "photo",
-    "說明": "description", "封面": "cover", "雲端資料夾": "drive_folder_id",
+    "排序": "order", "職稱": "role", "姓名": "name",
+    "說明": "description", "封面": "cover",
     "名稱": "label", "網址": "url", "圖示": "icon", "顯示位置": "show_in",
     "key": "key",
 }
@@ -69,6 +68,14 @@ class RowError(Exception):
 
 class TableError(Exception):
     """表級錯誤(缺欄位/唯一鍵重複):整個 tab 視為失敗,沿用舊快照。"""
+
+
+class ParsedRows(list):
+    """CSV rows that retain normalized headers even when the table is empty."""
+
+    def __init__(self, values: list[dict], field_names: list[str]):
+        super().__init__(values)
+        self.field_names = field_names
 
 
 # ---------------------------------------------------------------- 基礎工具
@@ -200,9 +207,6 @@ TAB_SPECS = {
             ("order", True, v_int),
             ("role", True, v_text),
             ("name", True, v_text),
-            ("dept_year", False, v_text),
-            ("email", False, v_text),
-            ("photo", False, v_filename),
             ("status", False, v_text),
         ],
     },
@@ -214,7 +218,6 @@ TAB_SPECS = {
             ("date", True, v_date),
             ("description", False, v_text),
             ("cover", False, v_filename),
-            ("drive_folder_id", False, v_text),
             ("status", False, v_text),
         ],
     },
@@ -240,21 +243,27 @@ def normalize_header(name: str) -> str:
     return HEADER_ALIASES.get(name, HEADER_ALIASES.get(key, key))
 
 
-def parse_rows(csv_text: str) -> list[dict]:
+def parse_rows(csv_text: str) -> ParsedRows:
     reader = csv.DictReader(io.StringIO(normalize_newlines(csv_text)))
     if not reader.fieldnames:
-        return []
+        return ParsedRows([], [])
     header_map = {h: normalize_header(h) for h in reader.fieldnames}
+    normalized_field_names = list(header_map.values())
     rows = []
     for raw in reader:
         row = {}
+        extra_column_count = 0
         for k, v in raw.items():
             if k is None:
+                values = v if isinstance(v, list) else [v]
+                extra_column_count += len(values)
                 continue
             row[header_map.get(k, k)] = (v or "").strip()
+        if extra_column_count:
+            row["__extra_columns__"] = extra_column_count
         if any(v for v in row.values()):
             rows.append(row)
-    return rows
+    return ParsedRows(rows, normalized_field_names)
 
 
 def validate_rows(tab: str, rows: list[dict]) -> tuple[list[dict], list[str]]:
@@ -263,14 +272,18 @@ def validate_rows(tab: str, rows: list[dict]) -> tuple[list[dict], list[str]]:
     field_names = [f[0] for f in spec["fields"]]
     required = [f[0] for f in spec["fields"] if f[1]]
 
-    if rows:
-        present = set(rows[0].keys())
-        missing_cols = [c for c in required if c not in present]
-        if missing_cols:
-            raise TableError(f"{tab}: 缺少必要欄位 {missing_cols}(表頭:{sorted(present)})")
+    present = set(getattr(rows, "field_names", rows[0].keys() if rows else []))
+    missing_cols = [c for c in required if c not in present]
+    if missing_cols:
+        raise TableError(f"{tab}: 缺少必要欄位 {missing_cols}(表頭:{sorted(present)})")
+    unexpected_cols = sorted(c for c in present if c not in field_names and not c.startswith("__"))
+    if unexpected_cols:
+        raise TableError(f"{tab}: 不允許的公開欄位 {unexpected_cols}")
 
     valid, errors, seen_unique = [], [], set()
     for i, row in enumerate(rows, start=2):  # Sheet 列號(含表頭)
+        if row.get("__extra_columns__"):
+            raise TableError(f"{tab}: 第 {i} 列有多餘欄位,請檢查未加引號的逗號")
         status = row.get("status", "").strip().lower()
         if status in DRAFT_WORDS:
             continue
@@ -387,8 +400,6 @@ def emit_gallery(rows: list[dict], gallery_dir: Path) -> bool:
         }
         if r.get("cover"):
             fm["cover"] = r["cover"]
-        if r.get("drive_folder_id"):
-            fm["drive_folder_id"] = r["drive_folder_id"]
         body = (r.get("description", "").strip() + "\n") if r.get("description") else ""
         text = front_matter(fm) + "\n\n" + body
         if write_if_changed(album_dir / "index.md", text):
@@ -427,6 +438,8 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
     fetch_failures: list[str] = []
     validation_errors: list[str] = []
     tab_stats: dict[str, dict] = {}
+    online_tabs = 0
+    snapshot_tabs = 0
 
     for tab in TAB_SPECS:
         if only and tab not in only:
@@ -464,6 +477,9 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
                 validation_errors.append(msg)
                 continue
             csv_text = snapshot_path.read_text(encoding="utf-8")
+            snapshot_tabs += 1
+        else:
+            online_tabs += 1
 
         try:
             rows, errors = validate_rows(tab, parse_rows(csv_text))
@@ -499,10 +515,25 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
         any_changed = any_changed or changed
         log("info", f"{tab}: {len(rows)} 筆有效資料{'(有變更)' if changed else ''}")
 
-    if any_changed:
+    if online_tabs and snapshot_tabs:
+        source_mode = "mixed_fallback"
+    elif online_tabs:
+        source_mode = "google_sheet"
+    else:
+        source_mode = "repo_snapshot"
+
+    last_sync_path = generated_dir / "last_sync.json"
+    previous_source_mode = ""
+    if last_sync_path.exists():
+        try:
+            previous_source_mode = json.loads(last_sync_path.read_text(encoding="utf-8")).get("source_mode", "")
+        except (OSError, json.JSONDecodeError):
+            pass
+
+    if any_changed or previous_source_mode != source_mode:
         now = datetime.now(TAIPEI).replace(microsecond=0)
-        last_sync = {"updated_at": now.isoformat(), "tabs": tab_stats}
-        write_if_changed(generated_dir / "last_sync.json", dump_json(last_sync))
+        last_sync = {"updated_at": now.isoformat(), "source_mode": source_mode, "tabs": tab_stats}
+        write_if_changed(last_sync_path, dump_json(last_sync))
         log("info", f"輸出有變更,last_sync.json 已更新:{now.isoformat()}")
     else:
         log("info", "所有輸出無變更(不更新 last_sync.json)")

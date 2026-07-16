@@ -2,7 +2,9 @@
 
 這份文件寫給**不需要程式背景**的社團幹部:如何更新網站內容、誰該有哪些權限、出問題怎麼辦。
 
-網站內容 = 社團共用 Google Sheet + 公開 Google Calendar + 相簿照片。改好資料後,網站**每天自動更新四次**(約 08:41、14:41、20:41、02:41);急件見「手動觸發同步」。
+網站長期維護模式 = 社團共用 Google Sheet + 公開 Google Calendar + 核准公開的相簿照片。
+
+> **目前狀態:**公開 Calendar 已連結,Google Sheet 尚未設定。現階段公告、精選活動、幹部與連結使用 repo CSV 快照;下列試算表操作需等 `scripts/sources.json` 填入正式 Sheet ID/gid 後才會生效。
 
 ## 1. 發公告
 
@@ -27,8 +29,8 @@
 
 ## 3. 更新幹部名單/社群連結
 
-- `officers` 工作表:order(排序,小的在前)、role(職稱)、name 必填。照片先把檔案交給網站管理員放進 repo 的 `assets/images/officers/`,再於 photo 欄填檔名。
-- `links` 工作表:Instagram、信箱等。icon 可填 `instagram / facebook / youtube / email / line / link`。
+- `officers` 工作表只接受 order(排序)、role(職稱)、name(經核准的公開姓名)、status。不可加入 email、系級或其他個資。
+- `links` 工作表只放官方公開入口。icon 可填 `instagram / facebook / youtube / email / line / link`,不得填個人聯絡資料。
 
 ## 4. 新增相簿
 
@@ -50,6 +52,8 @@
 1. 開啟 GitHub repo → **Actions** 頁籤
 2. 左側選 **Sync data from Google Sheet** → 右側 **Run workflow** → 綠色按鈕
 3. 約 2–3 分鐘後網站更新(接著會自動跑 **Deploy to GitHub Pages**)
+
+若 workflow 摘要顯示 `repo CSV snapshot`,代表正式 Sheet 尚未設定;這次執行只會驗證快照,不會抓取線上資料。
 
 ## 6. 同步失敗怎麼辦
 

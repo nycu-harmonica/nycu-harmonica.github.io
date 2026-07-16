@@ -15,20 +15,21 @@
    |---|---|
    | `announcements` | `slug,date,title,content,pinned,link,status` |
    | `featured_events` | `title,start,end,time_text,location,summary,link,status` |
-   | `officers` | `order,role,name,dept_year,email,photo,status` |
-   | `gallery_albums` | `slug,title,date,description,cover,drive_folder_id,status` |
+   | `officers` | `order,role,name,status` |
+   | `gallery_albums` | `slug,title,date,description,cover,status` |
    | `links` | `key,label,url,icon,order,show_in` |
 
-   起手內容可直接複製 repo 內 `static/data/*.csv`(範例資料)。
+   起手內容可直接複製 repo 內 `static/data/*.csv`。這份 Sheet 本身會公開唯讀,不可加入幹部內部欄位、會員個資或私有連結。
 3. 共用設定:「知道連結的任何人」=**檢視者**(這是同步能運作的關鍵;不要開放編輯)。
 4. 把現任幹部(至少 2 位)加為**編輯者**。
 5. 取得識別碼填入 repo 的 `scripts/sources.json`:
    - `sheet_id`:試算表網址 `https://docs.google.com/spreadsheets/d/<這一段>/edit` 
    - 各工作表 `gid`:點該工作表時網址結尾 `#gid=<數字>`
-6. (選填)把試算表編輯網址填入 `hugo.toml` 的 `sheetEditUrl`。
-7. 完成後到 GitHub Actions 手動跑一次 **Sync data from Google Sheet** 驗證。
+6. 完成後到 GitHub Actions 手動跑一次 **Sync data from Google Sheet** 驗證。
 
 ## 2. 活動行事曆(Google Calendar)
+
+網站目前已連結經核准的 Bamboo 公開 Calendar。若未來更換日曆,依下列方式交接:
 
 1. 以社團帳號建立日曆,命名如「竹韻口琴社活動」。
 2. 設定 → 「存取權限」→ 勾選**公開提供**,詳細程度選「顯示所有活動詳細資料」。
@@ -51,7 +52,7 @@
    - 產生金鑰(JSON)。**金鑰絕不放進 repo**
 4. 把 service account 的 email 以**檢視者**加入該 Shared Drive(或僅「網站相簿」資料夾)。
 5. GitHub repo → Settings → Secrets and variables → Actions → 新增 secret `GDRIVE_SA_KEY`,值為金鑰 JSON 全文。
-6. 在 `gallery_albums` 工作表為每本相簿填 `drive_folder_id`(開啟該資料夾時網址的最後一段)。
+6. 把「相簿 slug → 核准的精確子資料夾 ID」映射存入 GitHub Actions secret `GALLERY_FOLDER_MAP`,不可放入公開 Sheet 或 repo。
 7. 補完 `scripts/fetch_gallery_drive.py` 的下載實作(介面與行為已在該檔案開頭定義;僅用唯讀 scope `drive.readonly`),並在 `sync-data.yml` 加一個步驟呼叫它。
 
 > 在完成以上設定前,`fetch_gallery_drive.py` 執行時會自動跳過,不影響既有流程。

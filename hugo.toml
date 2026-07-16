@@ -1,7 +1,7 @@
 # 陽明交大竹韻口琴社官方網站
 # 正式網域:https://harmonica.nycu.club/
-# 注意:GitHub Actions 部署時會以 --baseURL 覆蓋此值(DNS 生效前為 *.github.io 網址),
-#       本機 hugo server 也會自動改用 localhost。此處為正式網域的最終值。
+# GitHub Actions 也會明確使用此正式網域，避免 Pages 回傳的 github.io base URL
+# 汙染 canonical、Open Graph、RSS 與 sitemap。
 baseURL = "https://harmonica.nycu.club/"
 title = "陽明交大竹韻口琴社"
 languageCode = "zh-TW"
@@ -32,9 +32,8 @@ unsafe = false
 
 [params]
 description = "國立陽明交通大學竹韻口琴社官方網站——口琴教學、演出、社課與活動資訊。"
-# 以下三個值建好對應資源後填入(見 docs/google-setup.md 與 RUNBOOK.md)
-calendarId = ""    # 公開 Google Calendar 的日曆 ID,如 xxxx@group.calendar.google.com
-sheetEditUrl = ""  # 社團資料 Google Sheet 的編輯網址(僅顯示於維護說明頁)
+# 現有 Bamboo 公開 Calendar 已由 Sky 核准用於網站完整活動時程。
+calendarId = "bmhc1968@gmail.com"
 joinFormUrl = ""   # 入社報名表單網址(首頁「加入我們」按鈕;留空則顯示聯絡方式)
 
 [[menus.main]]

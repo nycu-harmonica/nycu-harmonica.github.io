@@ -1,10 +1,8 @@
 # 建置並部署到 GitHub Pages(官方 Actions 流程,不用第三方 action)
 #
-# baseURL 說明:
-#   - 使用 actions/configure-pages 自動判斷網址:
-#     - 尚未設定自訂網域時 → https://<org>.github.io/<repo>/
-#     - 在 repo Settings → Pages 設定 harmonica.nycu.club 後 → https://harmonica.nycu.club/
-#   - 因此切換自訂網域「不需要」改這個檔案。
+# 正式網址固定為 https://harmonica.nycu.club/。
+# Pages 的 base_url 在自訂網域已生效時仍可能回傳 github.io 網址，因此不可拿來
+# 產生 canonical、Open Graph、RSS 或 sitemap URL。
 name: Deploy to GitHub Pages
 
 on:
@@ -49,7 +47,9 @@ jobs:
       - name: Build
         env:
           HUGO_ENVIRONMENT: production
-        run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+        run: |
+          python3 scripts/check_public_content.py
+          hugo --gc --minify --baseURL "https://harmonica.nycu.club/"
 
       - uses: actions/upload-pages-artifact@v3
         with:

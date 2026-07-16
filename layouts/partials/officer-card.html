@@ -1,17 +1,6 @@
 {{- /* 幹部卡片。context = officers.json 中的一筆 dict */ -}}
 <article class="officer-card">
-  {{ $photo := "" }}
-  {{ with .photo }}{{ $photo = printf "images/officers/%s" . }}{{ end }}
-  {{ $img := "" }}
-  {{ if $photo }}{{ $img = resources.Get $photo }}{{ end }}
-  {{ if $img }}
-    {{ $thumb := $img.Fill "320x320 webp q80 Center" }}
-    <img class="officer-photo" src="{{ $thumb.RelPermalink }}" width="160" height="160" loading="lazy" alt="{{ .name }}">
-  {{ else }}
-    <div class="officer-photo officer-photo-placeholder" aria-hidden="true">{{ substr .name 0 1 }}</div>
-  {{ end }}
+  <div class="officer-photo officer-photo-placeholder" aria-hidden="true">{{ substr .name 0 1 }}</div>
   <h3 class="officer-name">{{ .name }}</h3>
   <p class="officer-role">{{ .role }}</p>
-  {{ with .dept_year }}<p class="officer-dept">{{ . }}</p>{{ end }}
-  {{ with .email }}<p class="officer-email"><a href="mailto:{{ . }}">{{ . }}</a></p>{{ end }}
 </article>

@@ -1,15 +1,16 @@
 {
+  "source_mode": "repo_snapshot",
   "tabs": {
     "announcements": {
-      "hash": "sha256:17e484ff4f15ff3162198ffb6fd6b929f73fd8da0b36476b7e1216f6fd4054c7",
+      "hash": "sha256:dc83758b0188a135d1827632105a6983d4ab055f0ff552145db7fc77d759ce13",
       "rows": 2
     },
     "featured_events": {
-      "hash": "sha256:d10ec282a7b8c878352ee26edce2fd6e6b2c692dbc2db8b8fcbef77316ea992e",
-      "rows": 1
+      "hash": "sha256:64c7aea37ca4cd47f30ecdfd4e07d3e87ab9a5431d0f22a1d0b90b070cbbcb31",
+      "rows": 0
     },
     "gallery_albums": {
-      "hash": "sha256:d8f1ef22c16ad966de076fc9b8233eae7fcd66b44e45b4b2ca88ac913c5e04cd",
+      "hash": "sha256:b170c804fc32c0aba8c4613d30284d72f8d0e8b9c83e3226d29c04c6ab127098",
       "rows": 2
     },
     "links": {
@@ -17,9 +18,9 @@
       "rows": 4
     },
     "officers": {
-      "hash": "sha256:37776364720cb5439d00c506184950d65ae2e368698a65b61118654c83ead131",
-      "rows": 4
+      "hash": "sha256:a0d34829c09aea785b501bd57d0e461ed379d40eb3d6480e5b7349acbb1e8e6e",
+      "rows": 0
     }
   },
-  "updated_at": "2026-07-16T00:06:45+08:00"
+  "updated_at": "2026-07-16T14:10:16+08:00"
 }

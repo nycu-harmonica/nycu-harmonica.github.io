@@ -12,4 +12,4 @@ menu_note: 社團介紹、幹部、聯絡方式
 
 **社課時間與地點**:復社後首學期的社課資訊將於[公告](/announcements/)與 [Instagram](https://www.instagram.com/nycu_harmonica/) 公布。
 
-> 本頁幹部與聯絡資料由社團共用 Google Sheet 管理,更新方式見[網站維護說明](/site-guide/)。
+> 幹部區只會顯示經核准公開的職稱與姓名;正式名單尚未提供時維持「資料更新中」。

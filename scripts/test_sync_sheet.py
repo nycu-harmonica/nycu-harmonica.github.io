@@ -89,6 +89,33 @@ def test_missing_required_column_is_table_error():
         pass
 
 
+def test_unexpected_public_column_is_table_error():
+    csv_text = "order,role,name,email\n10,社長,測試幹部,private@example.com\n"
+    try:
+        ss.validate_rows("officers", ss.parse_rows(csv_text))
+        assert False, "公開幹部資料不可接受 email 欄位"
+    except ss.TableError as e:
+        assert "不允許的公開欄位" in str(e)
+
+
+def test_unexpected_empty_public_column_is_table_error():
+    csv_text = "order,role,name,email\n"
+    try:
+        ss.validate_rows("officers", ss.parse_rows(csv_text))
+        assert False, "空資料表仍須驗證公開表頭"
+    except ss.TableError as e:
+        assert "不允許的公開欄位" in str(e)
+
+
+def test_unquoted_comma_extra_column_is_table_error():
+    csv_text = "slug,title,date,description,cover,status\nalbum-one,相簿,2026-07-01,說明,多餘內容,,\n"
+    try:
+        ss.validate_rows("gallery_albums", ss.parse_rows(csv_text))
+        assert False, "未加引號的逗號不可被靜默忽略"
+    except ss.TableError as e:
+        assert "多餘欄位" in str(e)
+
+
 def test_end_before_start_rejected():
     csv_text = "title,start,end\n活動,2026-07-10,2026-07-01\n"
     valid, errors = ss.validate_rows("featured_events", ss.parse_rows(csv_text))

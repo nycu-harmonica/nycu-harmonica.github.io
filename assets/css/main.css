@@ -358,8 +358,6 @@ a:hover { text-decoration: underline; }
 }
 .officer-name { margin: 0; font-size: 1.05rem; }
 .officer-role { margin: 0.1rem 0; color: var(--green-700); font-weight: 600; font-size: 0.92rem; }
-.officer-dept, .officer-email { margin: 0.1rem 0; font-size: 0.85rem; color: var(--ink-soft); }
-.officer-email a { word-break: break-all; }
 
 /* ---------- 行事曆 ---------- */
 .calendar-embed {
