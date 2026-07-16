@@ -39,10 +39,18 @@ def canonical_from_html(path: Path) -> str:
 BASE_URL = canonical_from_html(PUBLIC / "index.html")
 assert BASE_URL.endswith("/"), f"Home canonical URL must end with /: {BASE_URL}"
 RSS_METADATA = {
-    "index.xml": ("陽明交大竹韻口琴社公開內容", "竹韻口琴社公告與相簿更新"),
-    "announcements/index.xml": ("公告｜陽明交大竹韻口琴社", "竹韻口琴社最新公告與消息。"),
+    "index.xml": ("陽明交大竹韻口琴社相簿更新", "竹韻口琴社相簿更新"),
     "gallery/index.xml": ("相簿｜陽明交大竹韻口琴社", "竹韻口琴社活動照片。"),
 }
+RETIRED_OUTPUTS = {
+    "announcements/index.html",
+    "announcements/index.xml",
+    "announcements/2026-06-26-club-revival/index.html",
+    "announcements/2026-07-15-site-launch/index.html",
+    "events/index.html",
+    "events/index.xml",
+}
+RETIRED_PATHS = ("/announcements/", "/events/")
 
 
 def parse_xml(relative_path: str) -> ET.Element:
@@ -104,6 +112,21 @@ def check_rss(relative_path: str) -> None:
         require_html_description(item.findtext("description") or "", url)
         urls.append(url)
     assert len(urls) == len(set(urls)), f"RSS contains duplicate items: {relative_path}"
+    if relative_path == "index.xml":
+        assert all(url.startswith(f"{BASE_URL}gallery/") for url in urls), (
+            "Home RSS must contain only remaining gallery content"
+        )
+
+
+def check_retired_routes() -> None:
+    for relative_path in RETIRED_OUTPUTS:
+        assert not (PUBLIC / relative_path).exists(), f"Retired route was built: {relative_path}"
+    for html_path in PUBLIC.rglob("*.html"):
+        text = html_path.read_text(encoding="utf-8")
+        for retired_path in RETIRED_PATHS:
+            assert retired_path not in text, (
+                f"Internal link points to retired route {retired_path}: {html_path.relative_to(PUBLIC)}"
+            )
 
 
 def published_urls() -> set[str]:
@@ -141,6 +164,7 @@ def check_robots() -> None:
 
 
 def main() -> None:
+    check_retired_routes()
     for relative_path in RSS_METADATA:
         check_rss(relative_path)
     check_sitemap()

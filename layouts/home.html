@@ -17,7 +17,7 @@
       <p class="hero-subtitle">用一把口琴，吹出屬於你的旋律</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
-        <a class="btn" href="{{ "/events/" | relURL }}">近期活動</a>
+        <a class="btn" href="#calendar">社團行事曆</a>
       </div>
     </div>
   </div>
@@ -29,7 +29,7 @@
   </div>
 </section>
 
-<section class="section container">
+<section class="section container" id="updates">
   <div class="section-head">
     <h2>竹韻近期動態</h2>
     <a class="more-link" href="https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/" target="_blank" rel="noopener noreferrer">前往觀測站來源頁 →</a>
@@ -49,10 +49,9 @@
   <noscript><p class="observe-updated">目前顯示網站內建的備援資料。</p></noscript>
 </section>
 
-<section class="section container">
+<section class="section container" id="calendar">
   <div class="section-head">
     <h2>社團活動行事曆</h2>
-    <a class="more-link" href="{{ "/events/" | relURL }}">完整活動頁 →</a>
   </div>
   {{ partial "calendar-embed.html" . }}
 </section>

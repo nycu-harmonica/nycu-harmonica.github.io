@@ -11,9 +11,9 @@
 {{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ site.Title }}公開內容</title>
+    <title>{{ site.Title }}相簿更新</title>
     <link>{{ site.Home.Permalink }}</link>
-    <description>竹韻口琴社公告與相簿更新</description>
+    <description>竹韻口琴社相簿更新</description>
     <generator>Hugo</generator>
     <language>{{ site.Language.LanguageCode }}</language>
     {{- with index $pages 0 }}

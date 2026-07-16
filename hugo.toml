@@ -41,21 +41,11 @@ pageRef = "/"
 weight = 10
 
 [[menus.main]]
-name = "公告"
-pageRef = "/announcements"
-weight = 20
-
-[[menus.main]]
-name = "活動"
-pageRef = "/events"
-weight = 30
-
-[[menus.main]]
 name = "相簿"
 pageRef = "/gallery"
-weight = 40
+weight = 20
 
 [[menus.main]]
 name = "關於我們"
 pageRef = "/about"
-weight = 50
+weight = 30

@@ -15,34 +15,27 @@ import check_typography as ct  # noqa: E402
 
 
 def test_header_aliases_chinese():
-    csv_text = "代號,日期,標題,內文\nabc-def,2026-07-01,測試,內容文字\n"
+    csv_text = "代號,日期,標題,說明\nabc-def,2026-07-01,測試,內容文字\n"
     rows = ss.parse_rows(csv_text)
-    assert rows == [{"slug": "abc-def", "date": "2026-07-01", "title": "測試", "content": "內容文字"}], rows
+    assert rows == [{"slug": "abc-def", "date": "2026-07-01", "title": "測試", "description": "內容文字"}], rows
 
 
 def test_header_case_and_space_insensitive():
-    csv_text = " Slug ,DATE,Title,Content\nabc-def,2026-07-01,t,c\n"
+    csv_text = " Slug ,DATE,Title,Description\nabc-def,2026-07-01,t,c\n"
     rows = ss.parse_rows(csv_text)
     assert rows[0]["slug"] == "abc-def" and rows[0]["date"] == "2026-07-01", rows
 
 
 def test_display_text_uses_full_width_chinese_punctuation_safely():
-    csv_text = (
-        "slug,date,title,content,link\n"
-        'test-row,2026-07-16,招生!歡迎,"時間:19:30;地點:教室。'
-        '請看[公告,說明](https://example.com/a_(b),c?x=1;2)。'
-        '`API: run(a,b)`、`中文,測試`、中文(API) 與 API (v2), U.S.A.",'
-        '"https://example.com/a,b?x=1;2"\n'
+    text = (
+        "招生!歡迎。時間:19:30;地點:教室。"
+        "請看[相簿,說明](https://example.com/a_(b),c?x=1;2)。"
+        "`API: run(a,b)`、`中文,測試`、中文(API) 與 API (v2), U.S.A."
     )
-    valid, errors = ss.validate_rows("announcements", ss.parse_rows(csv_text))
-    assert errors == []
-    row = valid[0]
-    assert row["title"] == "招生！歡迎"
-    assert "時間：19:30；地點：教室" in row["content"]
-    assert "[公告，說明](https://example.com/a_(b),c?x=1;2)" in row["content"]
-    assert "`API: run(a,b)`、`中文,測試`、中文（API） 與 API (v2), U.S.A." in row["content"]
-    assert row["date"] == "2026-07-16"
-    assert row["link"] == "https://example.com/a,b?x=1;2"
+    normalized = ss.normalize_display_text(text)
+    assert normalized.startswith("招生！歡迎。時間：19:30；地點：教室")
+    assert "[相簿，說明](https://example.com/a_(b),c?x=1;2)" in normalized
+    assert "`API: run(a,b)`、`中文,測試`、中文（API） 與 API (v2), U.S.A." in normalized
 
 
 def test_display_text_normalizes_punctuation_after_chinese_delimiters():
@@ -95,64 +88,52 @@ def test_write_if_changed_compares_line_endings_exactly():
 
 
 def test_required_missing_skips_row():
-    csv_text = "slug,date,title,content\nok-row,2026-07-01,標題,內容\nbad-row,,沒日期,內容\n"
-    valid, errors = ss.validate_rows("announcements", ss.parse_rows(csv_text))
+    csv_text = "slug,date,title\nok-row,2026-07-01,標題\nbad-row,,沒日期\n"
+    valid, errors = ss.validate_rows("gallery_albums", ss.parse_rows(csv_text))
     assert len(valid) == 1 and valid[0]["slug"] == "ok-row"
     assert len(errors) == 1 and "date" in errors[0]
 
 
 def test_bad_formats_rejected():
     for field_csv, tab in [
-        ("slug,date,title,content\nBAD_SLUG!,2026-07-01,t,c\n", "announcements"),
-        ("slug,date,title,content\nok-row,2026-13-40,t,c\n", "announcements"),
+        ("slug,date,title\nBAD_SLUG!,2026-07-01,t\n", "gallery_albums"),
+        ("slug,date,title\nok-row,2026-13-40,t\n", "gallery_albums"),
         ("key,label,url\nok-key,名稱,http://insecure.example\n", "links"),
     ]:
         valid, errors = ss.validate_rows(tab, ss.parse_rows(field_csv))
         assert valid == [] and len(errors) == 1, (tab, valid, errors)
 
 
-def test_bool_variants():
-    for word, expect in [("TRUE", True), ("是", True), ("1", True), ("否", False), ("", False), ("N", False)]:
-        if word == "":
-            continue  # 空值走「未填」路徑
-        assert ss.v_bool(word) is expect, (word, expect)
-    try:
-        ss.v_bool("maybe")
-        assert False, "應拒絕 maybe"
-    except ss.RowError:
-        pass
-
-
 def test_status_draft_filtered():
     csv_text = (
-        "slug,date,title,content,status\n"
-        "show-row,2026-07-01,顯示,內容,\n"
-        "hide-row,2026-07-02,隱藏,內容,draft\n"
-        "hide-tw,2026-07-03,隱藏中,內容,草稿\n"
+        "slug,date,title,status\n"
+        "show-row,2026-07-01,顯示,\n"
+        "hide-row,2026-07-02,隱藏,draft\n"
+        "hide-tw,2026-07-03,隱藏中,草稿\n"
     )
-    valid, errors = ss.validate_rows("announcements", ss.parse_rows(csv_text))
+    valid, errors = ss.validate_rows("gallery_albums", ss.parse_rows(csv_text))
     assert [r["slug"] for r in valid] == ["show-row"] and errors == []
 
 
 def test_unknown_status_is_error():
-    csv_text = "slug,date,title,content,status\nrow-a,2026-07-01,t,c,banana\n"
-    valid, errors = ss.validate_rows("announcements", ss.parse_rows(csv_text))
+    csv_text = "slug,date,title,status\nrow-a,2026-07-01,t,banana\n"
+    valid, errors = ss.validate_rows("gallery_albums", ss.parse_rows(csv_text))
     assert valid == [] and "banana" in errors[0]
 
 
 def test_duplicate_slug_is_table_error():
-    csv_text = "slug,date,title,content\ndup-row,2026-07-01,t,c\ndup-row,2026-07-02,t2,c2\n"
+    csv_text = "slug,date,title\ndup-row,2026-07-01,t\ndup-row,2026-07-02,t2\n"
     try:
-        ss.validate_rows("announcements", ss.parse_rows(csv_text))
+        ss.validate_rows("gallery_albums", ss.parse_rows(csv_text))
         assert False, "應 raise TableError"
     except ss.TableError:
         pass
 
 
 def test_missing_required_column_is_table_error():
-    csv_text = "slug,title,content\nrow-a,t,c\n"
+    csv_text = "slug,title\nrow-a,t\n"
     try:
-        ss.validate_rows("announcements", ss.parse_rows(csv_text))
+        ss.validate_rows("gallery_albums", ss.parse_rows(csv_text))
         assert False, "應 raise TableError"
     except ss.TableError:
         pass
@@ -185,41 +166,10 @@ def test_unquoted_comma_extra_column_is_table_error():
         assert "多餘欄位" in str(e)
 
 
-def test_end_before_start_rejected():
-    csv_text = "title,start,end\n活動,2026-07-10,2026-07-01\n"
-    valid, errors = ss.validate_rows("featured_events", ss.parse_rows(csv_text))
-    assert valid == [] and "早於" in errors[0]
-
-
 def test_show_in_parsing():
     csv_text = "key,label,url,show_in\nig-link,IG,https://example.com,\"footer, about\"\n"
     valid, errors = ss.validate_rows("links", ss.parse_rows(csv_text))
     assert valid[0]["show_in"] == ["footer", "about"] and errors == []
-
-
-def test_emit_announcements_deterministic_and_rebuild():
-    rows = [
-        {"slug": "row-b", "date": "2026-07-02", "title": "B", "content": "b 內容", "pinned": True},
-        {"slug": "row-a", "date": "2026-07-01", "title": "A", "content": "a 內容"},
-    ]
-    with tempfile.TemporaryDirectory() as td:
-        d = Path(td) / "announcements"
-        d.mkdir()
-        (d / "_index.md").write_text("---\ntitle: 公告\n---\n", encoding="utf-8")
-        (d / "manual.md").write_text("---\ntitle: 手寫\n---\n手寫內容\n", encoding="utf-8")
-        (d / "stale.md").write_text('{\n  "generated": true\n}\n\n舊生成檔\n', encoding="utf-8")
-
-        changed1 = ss.emit_announcements(rows, d)
-        assert changed1 is True
-        assert (d / "row-a.md").exists() and (d / "row-b.md").exists()
-        assert (d / "_index.md").exists(), "_index.md 必須保留"
-        assert (d / "manual.md").exists(), "手寫檔必須保留"
-        assert not (d / "stale.md").exists(), "過期生成檔必須刪除"
-
-        snapshot = {p.name: p.read_text(encoding="utf-8") for p in d.glob("*.md")}
-        changed2 = ss.emit_announcements(rows, d)
-        assert changed2 is False, "相同資料重跑不得有變更"
-        assert snapshot == {p.name: p.read_text(encoding="utf-8") for p in d.glob("*.md")}
 
 
 def test_emit_gallery_removes_generated_only():

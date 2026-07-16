@@ -2,8 +2,6 @@
   "comment": "竹韻口琴社網站公開 Google Sheet。所有 tab 均為公開唯讀資料來源;strict CI 不會發布部分同步結果。",
   "sheet_id": "19facgxayMMiYSz1gNmoQRtkY_EjLTYiRyyTa6KfYWic",
   "tabs": {
-    "announcements": { "gid": "595980168" },
-    "featured_events": { "gid": "869056058" },
     "officers": { "gid": "531284051" },
     "gallery_albums": { "gid": "282266098" },
     "links": { "gid": "1378930118" }

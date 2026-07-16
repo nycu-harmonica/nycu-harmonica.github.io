@@ -49,7 +49,7 @@ jobs:
       - name: Commit & push if changed
         id: commit
         run: |
-          git add static/data data/generated content/announcements content/gallery
+          git add static/data data/generated content/gallery
           if git diff --cached --quiet; then
             echo "No data changes."
             echo "changed=false" >> "$GITHUB_OUTPUT"

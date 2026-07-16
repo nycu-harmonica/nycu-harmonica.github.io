@@ -10,13 +10,12 @@ Hugo 所需的內容與資料檔,並更新 repo 內的 CSV 快照(fallback)。
     python3 scripts/sync_sheet.py              # 線上同步,失敗自動改用快照
     python3 scripts/sync_sheet.py --offline    # 不連網,直接用 static/data/ 快照重建
     python3 scripts/sync_sheet.py --strict     # CI 用:抓取失敗或驗證錯誤時 exit 1
-    python3 scripts/sync_sheet.py --only announcements,links
+    python3 scripts/sync_sheet.py --only officers,links
     python3 scripts/sync_sheet.py --root <repo 根目錄>
 
 輸出:
     static/data/<tab>.csv                CSV 快照(僅線上抓取成功且驗證通過時覆寫)
-    data/generated/<tab>.json            featured_events / officers / links / gallery_albums
-    content/announcements/<slug>.md      公告頁(全部重建;_index.md 與手寫檔保留)
+    data/generated/<tab>.json            officers / links / gallery_albums
     content/gallery/<slug>/index.md      相簿頁 front matter(照片另由目錄管理)
     data/generated/last_sync.json        輸出或來源模式有變更時更新
 """
@@ -42,16 +41,11 @@ GENERATED_MARK = '"generated": true'
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{2,60}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
-TRUE_WORDS = {"true", "1", "y", "yes", "是", "v"}
-FALSE_WORDS = {"false", "0", "n", "no", "否", ""}
 DRAFT_WORDS = {"draft", "草稿", "hidden", "隱藏"}
 PUBLISHED_WORDS = {"", "published", "發布", "公開"}
 ICON_ENUM = {"instagram", "facebook", "youtube", "email", "line", "link"}
 SHOW_IN_ENUM = {"footer", "about", "join"}
-DISPLAY_TEXT_FIELDS = {
-    "title", "content", "time_text", "location", "summary",
-    "role", "name", "description", "label",
-}
+DISPLAY_TEXT_FIELDS = {"title", "role", "name", "description", "label"}
 CJK_RANGE = "\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff"
 CJK_LEFT_CONTEXT = CJK_RANGE + "）】」』》〉"
 CJK_RIGHT_CONTEXT = CJK_RANGE + "（【「『《〈"
@@ -60,10 +54,7 @@ MARKDOWN_CODE_RE = re.compile(r"(`+)(.*?)(\1)", re.DOTALL)
 
 # 表頭別名:Sheet 可用中文表頭,一律轉為正規英文欄名
 HEADER_ALIASES = {
-    "代號": "slug", "日期": "date", "標題": "title", "內文": "content",
-    "置頂": "pinned", "連結": "link", "狀態": "status",
-    "開始日期": "start", "結束日期": "end", "時間": "time_text",
-    "地點": "location", "簡介": "summary",
+    "代號": "slug", "日期": "date", "標題": "title", "狀態": "status",
     "排序": "order", "職稱": "role", "姓名": "name",
     "說明": "description", "封面": "cover",
     "名稱": "label", "網址": "url", "圖示": "icon", "顯示位置": "show_in",
@@ -207,15 +198,6 @@ def v_url(value: str, _row=None) -> str:
     return value
 
 
-def v_bool(value: str, _row=None) -> bool:
-    v = value.strip().lower()
-    if v in TRUE_WORDS:
-        return True
-    if v in FALSE_WORDS:
-        return False
-    raise RowError(f"布林值無法解析:{value!r}(可用 TRUE/FALSE/是/否/Y/N/1/0)")
-
-
 def v_int(value: str, _row=None) -> int:
     try:
         return int(value.strip())
@@ -247,31 +229,6 @@ def v_filename(value: str, _row=None) -> str:
 
 # 每個 tab 的欄位規格:(欄名, 必填, 驗證函式)
 TAB_SPECS = {
-    "announcements": {
-        "unique": "slug",
-        "fields": [
-            ("slug", True, v_slug),
-            ("date", True, v_date),
-            ("title", True, v_display_text),
-            ("content", True, v_display_text),
-            ("pinned", False, v_bool),
-            ("link", False, v_url),
-            ("status", False, v_text),
-        ],
-    },
-    "featured_events": {
-        "unique": None,
-        "fields": [
-            ("title", True, v_display_text),
-            ("start", True, v_date),
-            ("end", False, v_date),
-            ("time_text", False, v_display_text),
-            ("location", False, v_display_text),
-            ("summary", False, v_display_text),
-            ("link", False, v_url),
-            ("status", False, v_text),
-        ],
-    },
     "officers": {
         "unique": None,
         "fields": [
@@ -393,8 +350,6 @@ def validate_rows(tab: str, rows: list[dict]) -> tuple[list[dict], list[str]]:
                 out[name] = validator(raw_val, row)
             except RowError as e:
                 row_errs.append(str(e))
-        if not row_errs and "start" in out and "end" in out and out["end"] < out["start"]:
-            row_errs.append(f"end({out['end']})早於 start({out['start']})")
         if row_errs:
             errors.append(f"{tab} 第 {i} 列:{';'.join(row_errs)},已跳過")
             continue
@@ -446,35 +401,6 @@ def is_generated_file(path: Path) -> bool:
         return GENERATED_MARK in path.read_text(encoding="utf-8")
     except OSError:
         return False
-
-
-def emit_announcements(rows: list[dict], content_dir: Path) -> bool:
-    changed = False
-    desired = {}
-    for r in rows:
-        fm = {
-            "title": r["title"],
-            "date": r["date"],
-            "slug": r["slug"],
-            "pinned": r.get("pinned", False),
-            "generated": True,
-        }
-        if r.get("link"):
-            fm["link"] = r["link"]
-        body = r["content"].strip() + "\n"
-        desired[f"{r['slug']}.md"] = front_matter(fm) + "\n\n" + body
-    content_dir.mkdir(parents=True, exist_ok=True)
-    for old in sorted(content_dir.glob("*.md")):
-        if old.name == "_index.md" or old.name in desired:
-            continue
-        if is_generated_file(old):
-            old.unlink()
-            log("info", f"移除已下架公告:{old.name}")
-            changed = True
-    for name, text in sorted(desired.items()):
-        if write_if_changed(content_dir / name, text):
-            changed = True
-    return changed
 
 
 def emit_gallery(rows: list[dict], gallery_dir: Path) -> bool:
@@ -588,16 +514,10 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
             log("warn", e)
         validation_errors.extend(errors)
 
-        if tab == "announcements":
-            rows.sort(key=lambda r: (r["date"], r["slug"]), reverse=True)
-            changed = emit_announcements(rows, root / "content" / "announcements")
-        elif tab == "gallery_albums":
+        if tab == "gallery_albums":
             rows.sort(key=lambda r: (r["date"], r["slug"]), reverse=True)
             changed = emit_gallery(rows, root / "content" / "gallery")
             changed = emit_json(rows, generated_dir / "gallery_albums.json") or changed
-        elif tab == "featured_events":
-            rows.sort(key=lambda r: (r["start"], r["title"]))
-            changed = emit_json(rows, generated_dir / "featured_events.json")
         elif tab == "officers":
             rows.sort(key=lambda r: (r["order"], r["name"]))
             changed = emit_json(rows, generated_dir / "officers.json")
@@ -620,13 +540,16 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
 
     last_sync_path = generated_dir / "last_sync.json"
     previous_source_mode = ""
+    previous_tabs = None
     if last_sync_path.exists():
         try:
-            previous_source_mode = json.loads(last_sync_path.read_text(encoding="utf-8")).get("source_mode", "")
+            previous_sync = json.loads(last_sync_path.read_text(encoding="utf-8"))
+            previous_source_mode = previous_sync.get("source_mode", "")
+            previous_tabs = previous_sync.get("tabs")
         except (OSError, json.JSONDecodeError):
             pass
 
-    if any_changed or previous_source_mode != source_mode:
+    if any_changed or previous_source_mode != source_mode or previous_tabs != tab_stats:
         now = datetime.now(TAIPEI).replace(microsecond=0)
         last_sync = {"updated_at": now.isoformat(), "source_mode": source_mode, "tabs": tab_stats}
         write_if_changed(last_sync_path, dump_json(last_sync))

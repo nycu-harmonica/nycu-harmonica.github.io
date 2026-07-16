@@ -11,12 +11,10 @@
 ## 1. 資料試算表(Google Sheet)
 
 1. 以社團帳號建立試算表,命名如「竹韻口琴社網站資料」。
-2. 建立五個工作表(分頁),名稱與表頭如下(表頭也可用中文別名,見 README):
+2. 建立三個工作表（分頁），名稱與表頭如下（表頭也可用中文別名，見 README）：
 
    | 工作表 | 表頭(第 1 列) |
    |---|---|
-   | `announcements` | `slug,date,title,content,pinned,link,status` |
-   | `featured_events` | `title,start,end,time_text,location,summary,link,status` |
    | `officers` | `order,role,name,status` |
    | `gallery_albums` | `slug,title,date,description,cover,status` |
    | `links` | `key,label,url,icon,order,show_in` |
@@ -27,7 +25,7 @@
 5. 取得識別碼填入 repo 的 `scripts/sources.json`:
    - `sheet_id`:試算表網址 `https://docs.google.com/spreadsheets/d/<這一段>/edit` 
    - 各工作表 `gid`:點該工作表時網址結尾 `#gid=<數字>`
-6. 完成後到 GitHub Actions 手動跑一次 **Sync data from Google Sheet** 驗證。
+6. 完成後到 GitHub Actions 手動跑一次 **Sync public site data** 驗證。
 
 ## 2. 活動行事曆(Google Calendar)
 
@@ -36,7 +34,7 @@
 1. 以社團帳號建立日曆,命名如「竹韻口琴社活動」。
 2. 設定 → 「存取權限」→ 勾選**公開提供**,詳細程度選「顯示所有活動詳細資料」。
 3. 設定 → 「整合日曆」→ 複製**日曆 ID**(形如 `xxxx@group.calendar.google.com`)。
-4. 填入 repo `hugo.toml` 的 `calendarId`,commit 後活動頁即顯示行事曆。
+4. 填入 repo `hugo.toml` 的 `calendarId`，commit 後首頁即顯示行事曆。
 5. 把現任幹部(至少 2 位)加為「變更活動」權限。
 
 ## 3. 相簿照片(現行做法)

@@ -10,6 +10,6 @@ menu_note: 社團介紹、幹部、聯絡方式
 
 竹韻口琴社的前身成立於交通大學時期，累積了成果發表、口琴營與巡演等豐富的活動紀錄（可見[相簿](/gallery/)）。社團其後一度停止運作，在許多琴友與同學的努力下，於 **2026 年 6 月正式復社**，目前正積極籌備社課與招生，持續招募琴友與新社員。
 
-**社課時間與地點**：復社後首學期的社課資訊將於[公告](/announcements/)與 [Instagram](https://www.instagram.com/nycu_harmonica/) 公布。
+**社課時間與地點**：復社後首學期的社課資訊將於 [Instagram](https://www.instagram.com/nycu_harmonica/) 公布。
 
 > 幹部區只顯示經核准公開的職稱與姓名，不公開 email、系級或其他個人資料。

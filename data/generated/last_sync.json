@@ -1,14 +1,6 @@
 {
   "source_mode": "google_sheet",
   "tabs": {
-    "announcements": {
-      "hash": "sha256:e2e29b428c330ff6efccdd62e705bde1e3e51524d9c5a2747c272f623006775a",
-      "rows": 2
-    },
-    "featured_events": {
-      "hash": "sha256:379d0c63daf350b4432bf2287f6d65603049f790385b78c792bbe43bc89db26e",
-      "rows": 0
-    },
     "gallery_albums": {
       "hash": "sha256:fc126a079840967441c61cd4192221f615aaccc3000adcd1ec58d56f1c2c4ae9",
       "rows": 2
@@ -22,5 +14,5 @@
       "rows": 4
     }
   },
-  "updated_at": "2026-07-16T18:04:07+08:00"
+  "updated_at": "2026-07-17T00:42:30+08:00"
 }
