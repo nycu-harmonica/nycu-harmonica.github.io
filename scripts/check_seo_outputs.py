@@ -8,7 +8,6 @@ import email.utils
 from html.parser import HTMLParser
 import io
 from pathlib import Path
-import re
 import subprocess
 import xml.etree.ElementTree as ET
 
@@ -39,7 +38,11 @@ def canonical_from_html(path: Path) -> str:
 
 BASE_URL = canonical_from_html(PUBLIC / "index.html")
 assert BASE_URL.endswith("/"), f"Home canonical URL must end with /: {BASE_URL}"
-ENTITY_REFERENCE_RE = re.compile(r"&(?:lt|gt|amp|quot|apos|#\d+|#x[0-9a-f]+);", re.IGNORECASE)
+RSS_METADATA = {
+    "index.xml": ("陽明交大竹韻口琴社公開內容", "竹韻口琴社公告與相簿更新"),
+    "announcements/index.xml": ("公告｜陽明交大竹韻口琴社", "竹韻口琴社最新公告與消息。"),
+    "gallery/index.xml": ("相簿｜陽明交大竹韻口琴社", "竹韻口琴社活動照片。"),
+}
 
 
 def parse_xml(relative_path: str) -> ET.Element:
@@ -56,6 +59,17 @@ def require_official_url(url: str | None, source: str) -> str:
     return url
 
 
+def require_html_description(description: str, source: str) -> None:
+    assert description.strip(), f"RSS item has an empty description: {source}"
+    try:
+        fragment = ET.fromstring(f"<root>{description}</root>")
+    except ET.ParseError as exc:
+        raise AssertionError(f"RSS item description is invalid HTML: {source}: {exc}") from exc
+    assert any(isinstance(element.tag, str) for element in fragment), (
+        f"RSS item description has no HTML element and may be double-escaped: {source}"
+    )
+
+
 def check_rss(relative_path: str) -> None:
     root = parse_xml(relative_path)
     channel = root.find("channel")
@@ -65,12 +79,19 @@ def check_rss(relative_path: str) -> None:
     atom_href = require_official_url(
         atom_link.get("href") if atom_link is not None else None, relative_path
     )
+    assert atom_link is not None
+    assert atom_link.get("rel") == "self", f"RSS Atom link must use rel=self: {relative_path}"
+    assert atom_link.get("type") == "application/rss+xml", (
+        f"RSS Atom link has an invalid media type: {relative_path}"
+    )
     assert atom_href == f"{BASE_URL}{relative_path}", (
         f"RSS self URL mismatch in {relative_path}: {atom_href}"
     )
-    if relative_path == "index.xml":
-        assert (channel.findtext("title") or "").endswith("公開內容"), "Home RSS title is inaccurate"
-        assert channel.findtext("description") == "竹韻口琴社公告與相簿更新", "Home RSS description is inaccurate"
+    expected_title, expected_description = RSS_METADATA[relative_path]
+    assert channel.findtext("title") == expected_title, f"RSS title is inaccurate: {relative_path}"
+    assert channel.findtext("description") == expected_description, (
+        f"RSS description is inaccurate: {relative_path}"
+    )
     items = channel.findall("item")
     assert items, f"RSS has no items: {relative_path}"
 
@@ -80,11 +101,7 @@ def check_rss(relative_path: str) -> None:
         assert item.findtext("guid") == url, f"RSS guid/link mismatch: {url}"
         published = email.utils.parsedate_to_datetime(item.findtext("pubDate") or "")
         assert published.year > 1, f"RSS contains an invalid publication date: {url}"
-        description = item.findtext("description") or ""
-        assert description.strip(), f"RSS item has an empty description: {url}"
-        assert not ENTITY_REFERENCE_RE.search(description), (
-            f"RSS item description contains a double-escaped entity: {url}"
-        )
+        require_html_description(item.findtext("description") or "", url)
         urls.append(url)
     assert len(urls) == len(set(urls)), f"RSS contains duplicate items: {relative_path}"
 
@@ -124,8 +141,8 @@ def check_robots() -> None:
 
 
 def main() -> None:
-    check_rss("index.xml")
-    check_rss("announcements/index.xml")
+    for relative_path in RSS_METADATA:
+        check_rss(relative_path)
     check_sitemap()
     check_robots()
     print("SEO output check passed.")
