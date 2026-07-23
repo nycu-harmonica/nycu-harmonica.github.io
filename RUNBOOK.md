@@ -6,6 +6,14 @@
 
 > **目前狀態:**公開 Calendar 與正式公開 Google Sheet 均已連結。試算表編輯網址只留在幹部交接資料,網站與公開文件不提供編輯入口。
 
+## 0. 「詢問竹韻」公開問答
+
+- 官網本身仍完全部署在 GitHub Pages。問答服務離線時，只會顯示暫時無法回答；其他頁面、Sheet、Calendar 和相簿不受影響。
+- 問答只讀已核准的公開網站內容與公開 Sheet，不會讀取 `shared/`、`private/`、Discord、Gmail、Drive 或社員個資。
+- 不要在問答視窗輸入學號、電話或私人聯絡資料。
+- 若回答內容不正確，先以官網、公開 Calendar 或 Instagram 為準，並由網站管理員檢查 `club.nycu.harmonica.website-agent` 與 `website` Hermes profile。
+- 緊急停用時，把 `hugo.toml` 的 `params.websiteAgent.enabled` 設為 `false` 後部署；網站其他功能仍會正常運作。
+
 ## 1. 竹韻近期動態
 
 首頁的「竹韻近期動態」由臺灣口琴觀測站整理自竹韻公開社群，並連回原始貼文。官網不另設公告頁，幹部不需要維護公告工作表。
@@ -23,6 +31,8 @@
 
 - `officers` 工作表只接受 order(排序)、role(職稱)、name(經核准的公開姓名)、status。不可加入 email、系級或其他個資。
 - `links` 工作表只放官方公開入口。icon 可填 `instagram / facebook / youtube / email / line / link`,不得填個人聯絡資料。
+- 儲存 Sheet 後不需要執行 GitHub Action 或等待部署。新開網站會立即讀取最新公開資料；已開啟的頁面最慢約 60 秒更新。
+- 網站會等三個工作表全部讀取且驗證成功才一次換成新資料。編輯到一半、表頭錯誤或 Google 暫時失效時,訪客會繼續看到 last-good 備援,不會看到半套內容。
 
 ## 4. 新增相簿
 
@@ -39,13 +49,15 @@
 
 > 未來若建好社團 Shared Drive 與自動同步(見 docs/google-setup.md),步驟 2 會簡化成「把照片丟進指定雲端資料夾」。
 
-## 5. 手動觸發同步(急件)
+## 5. 手動更新 last-good 備援
 
-1. 開啟 GitHub repo → **Actions** 頁籤
-2. 左側選 **Sync public site data** → 右側 **Run workflow** → 綠色按鈕
-3. 約 2–3 分鐘後網站更新(接著會自動跑 **Deploy to GitHub Pages**)
+日常 Sheet 更新不需要做這一步。只有網站管理員想把目前 Sheet 內容保存成 Google 失效時的 repo 備援時才執行:
 
-若 workflow 摘要未顯示 `public Google Sheet`,或頁尾不是「Google Sheet 公開資料」,請先查看 workflow 錯誤,不要把快照誤認為最新線上資料。
+1. 開啟 GitHub repo → **Actions** 頁籤。
+2. 左側選 **Refresh public data fallback** → 右側 **Run workflow** → 綠色按鈕。
+3. 有內容變更時會 commit 並重新部署,把目前內容保存為新的 last-good fallback。
+
+正常開啟網站後,頁尾應在數秒內從「Repo 資料備援」變成「Google Sheet 即時讀取」並顯示讀取時間。若沒有變化,先檢查 Sheet 是否仍維持「知道連結的任何人:檢視者」。
 
 ## 6. 同步失敗怎麼辦
 
@@ -60,7 +72,7 @@
 
 修好後重跑「手動觸發同步」,成功後把 issue 關閉。
 
-**排程停擺**:GitHub 對 60 天沒有任何 commit 的 repo 會自動停用排程。若收到「scheduled workflow disabled」通知,到 Actions 頁點該 workflow 的 **Enable workflow** 即可。
+即時讀取沒有 GitHub 排程,因此不受 GitHub 60 天停用 scheduled workflow 的限制。
 
 ## 7. 內容出錯想回復
 

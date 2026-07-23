@@ -16,7 +16,7 @@
       <h1>竹韻口琴社</h1>
       <p class="hero-subtitle">用一把口琴，吹出屬於你的旋律</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
+        <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
         <a class="btn" href="#calendar">社團行事曆</a>
       </div>
     </div>
@@ -59,6 +59,6 @@
 <section class="section container join-banner" id="join">
   <h2>想學口琴嗎？</h2>
   <p>不需要任何音樂基礎，社課從零開始教。歡迎陽明交大同學加入竹韻口琴社！</p>
-  <a class="btn btn-primary" href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
+  <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
 </section>
 {{ end }}

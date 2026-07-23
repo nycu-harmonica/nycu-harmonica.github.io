@@ -1,13 +1,13 @@
 {{ define "main" }}
-<div class="container section">
+<div class="container section" data-sheet-album-page="{{ path.Base (strings.TrimSuffix "/" .RelPermalink) }}">
   <header class="page-head">
-    <p class="card-date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time></p>
-    <h1>{{ .Title }}</h1>
-    {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+    <p class="card-date"><time data-sheet-album-page-date datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time></p>
+    <h1 data-sheet-album-page-title>{{ .Title }}</h1>
+    <div class="prose" data-sheet-album-page-description>{{ with .Content }}{{ . }}{{ end }}</div>
   </header>
   {{ $images := .Resources.ByType "image" }}
   {{ if $images }}
-  <div class="photo-grid">
+  <div class="photo-grid" data-sheet-album-photos>
     {{ range $index, $image := $images }}
     {{ $thumb := $image.Fill "600x400 webp q80 Smart" }}
     {{ $full := $image.Resize "1600x webp q85" }}

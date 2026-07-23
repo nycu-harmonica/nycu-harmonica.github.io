@@ -1,0 +1,75 @@
+model:
+  default: gpt-5.6-luna
+  provider: custom:ai-kot-gg-luna
+  base_url: ""
+  max_tokens: 250
+
+custom_providers:
+  - name: ai-kot-gg-luna
+    base_url: https://ai.kot.gg
+    key_env: AI_KOT_GG_API_KEY
+    api_mode: codex_responses
+    model: gpt-5.6-luna
+  - name: ollama-qwen35-local
+    base_url: http://127.0.0.1:11434/v1
+    key_env: OLLAMA_API_KEY
+    api_mode: chat_completions
+    model: qwen3.5:9b
+    context_length: 8192
+    extra_body:
+      think: false
+
+fallback_providers:
+  - provider: custom
+    model: qwen3.5:9b
+    base_url: http://127.0.0.1:11434/v1
+    api_key: ollama
+    api_mode: chat_completions
+
+# Explicitly empty capability surface. no_mcp prevents globally configured MCP
+# servers from being inherited by this public-facing profile.
+platform_toolsets:
+  cli:
+    - no_mcp
+  api_server:
+    - no_mcp
+
+agent:
+  max_turns: 1
+  api_max_retries: 1
+  task_completion_guidance: false
+  environment_probe: false
+  coding_context: "off"
+  reasoning_effort: none
+  disabled_toolsets:
+    - web
+    - browser
+    - terminal
+    - file
+    - code_execution
+    - vision
+    - video
+    - image_gen
+    - video_gen
+    - x_search
+    - tts
+    - skills
+    - todo
+    - memory
+    - context_engine
+    - session_search
+    - clarify
+    - delegation
+    - cronjob
+    - homeassistant
+    - spotify
+    - discord
+    - discord_admin
+    - yuanbao
+    - computer_use
+
+gateway:
+  strict: true
+  trust_recent_files: false
+  api_server:
+    max_concurrent_runs: 1

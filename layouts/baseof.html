@@ -10,7 +10,25 @@
     {{ block "main" . }}{{ end }}
   </main>
   {{ partial "footer.html" . }}
+  {{ with site.Params.websiteAgent }}{{ if .enabled }}
+  {{ partial "website-agent.html" . }}
+  {{ $deepChat := resources.Get "vendor/deep-chat/deepChat.bundle.js" | fingerprint }}
+  <script id="website-agent-config" type="application/json">{{ dict "endpoint" .endpoint "componentUrl" $deepChat.RelPermalink "maxQuestionChars" (.maxQuestionChars | default 500) | jsonify | safeJS }}</script>
+  {{ with resources.Get "js/website-agent.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+  {{ end }}
+  {{ end }}{{ end }}
+  {{ $sheetSource := readFile "scripts/sources.json" | transform.Unmarshal }}
+  <script id="sheet-live-config" type="application/json">{{ dict "sheetId" $sheetSource.sheet_id "tabs" $sheetSource.tabs "refreshMs" 60000 | jsonify | safeJS }}</script>
+  <div id="sheet-live-icon-templates" hidden aria-hidden="true">
+    {{ range slice "instagram" "facebook" "youtube" "email" "line" "link" }}
+    <span data-sheet-icon="{{ . }}">{{ partial "icon.html" (dict "name" .) }}</span>
+    {{ end }}
+  </div>
   {{ with resources.Get "js/site.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+  {{ end }}
+  {{ with resources.Get "js/sheet-live.js" | minify | fingerprint }}
   <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
   {{ end }}
   {{ if .IsHome }}{{ with resources.Get "js/observe-updates.js" | minify | fingerprint }}

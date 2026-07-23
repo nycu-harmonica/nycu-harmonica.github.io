@@ -1,11 +1,11 @@
 <footer class="site-footer">
   <div class="container footer-inner">
-    <div class="footer-links">
+    <div class="footer-links" data-sheet-links="footer">
       {{ $links := site.Data.generated.links | default (slice) }}
       {{ range $links }}
         {{ $show := .show_in | default (slice) }}
         {{ if or (eq (len $show) 0) (in $show "footer") }}
-        <a href="{{ .url }}" rel="me noopener" target="_blank">{{ partial "icon.html" (dict "name" (.icon | default "link")) }}<span>{{ .label }}</span></a>
+        <a data-sheet-link-key="{{ .key }}" href="{{ .url }}" rel="me noopener" target="_blank">{{ partial "icon.html" (dict "name" (.icon | default "link")) }}<span>{{ .label }}</span></a>
         {{ end }}
       {{ end }}
     </div>
@@ -15,10 +15,7 @@
       ・<a href="{{ "/index.xml" | relURL }}">網站 RSS</a>
     </p>
     {{ with site.Data.generated.last_sync }}
-    {{ $sourceLabel := "Repo 資料快照" }}
-    {{ if eq .source_mode "google_sheet" }}{{ $sourceLabel = "Google Sheet 公開資料" }}{{ end }}
-    {{ if eq .source_mode "mixed_fallback" }}{{ $sourceLabel = "部分來源使用 Repo 快照" }}{{ end }}
-    <p class="footer-meta footer-sync">{{ $sourceLabel }}：{{ time.Format "2006-01-02 15:04" .updated_at }}（Asia/Taipei）</p>
+    <p class="footer-meta footer-sync" id="sheet-live-status" data-sheet-mode="fallback" aria-live="polite">Repo 資料備援：{{ time.Format "2006-01-02 15:04" .updated_at }}（Asia/Taipei）</p>
     {{ end }}
   </div>
 </footer>

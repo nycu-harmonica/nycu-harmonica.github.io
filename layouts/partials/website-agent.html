@@ -1,0 +1,35 @@
+<button class="website-agent-launch" id="website-agent-launch" type="button" aria-haspopup="dialog" aria-controls="website-agent-dialog">
+  詢問竹韻
+</button>
+
+<dialog class="website-agent-dialog" id="website-agent-dialog" aria-labelledby="website-agent-title">
+  <div class="website-agent-shell">
+    <header class="website-agent-header">
+      <div>
+        <h2 id="website-agent-title">詢問竹韻</h2>
+        <p>公開資料問答</p>
+      </div>
+      <form method="dialog">
+        <button class="website-agent-close" type="submit" aria-label="關閉問答" title="關閉">×</button>
+      </form>
+    </header>
+
+    <div class="website-agent-suggestions" id="website-agent-suggestions" aria-label="常見問題">
+      <button type="button" data-agent-question="我要怎麼加入竹韻口琴社？">如何加入？</button>
+      <button type="button" data-agent-question="社課的時間和地點在哪裡？">社課資訊</button>
+      <button type="button" data-agent-question="最近有什麼活動？">最近活動</button>
+    </div>
+
+    <div class="website-agent-chat-stage">
+      <p class="website-agent-loading" id="website-agent-loading" role="status">正在載入問答介面...</p>
+      <deep-chat id="website-agent-chat" aria-label="竹韻公開資料問答" hidden></deep-chat>
+    </div>
+
+    <div class="website-agent-sources" id="website-agent-sources" aria-live="polite" hidden></div>
+
+    <div class="website-agent-footer">
+      <p>請勿輸入學號、電話或其他個人資料。</p>
+      <button id="website-agent-clear" type="button">清除對話</button>
+    </div>
+  </div>
+</dialog>

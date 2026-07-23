@@ -25,7 +25,7 @@
 5. 取得識別碼填入 repo 的 `scripts/sources.json`:
    - `sheet_id`:試算表網址 `https://docs.google.com/spreadsheets/d/<這一段>/edit` 
    - 各工作表 `gid`:點該工作表時網址結尾 `#gid=<數字>`
-6. 完成後到 GitHub Actions 手動跑一次 **Sync public site data** 驗證。
+6. 完成後開啟正式網站,確認頁尾在數秒內顯示「Google Sheet 即時讀取」。需要建立新的 repo 備援時,再到 GitHub Actions 手動跑一次 **Refresh public data fallback**。
 
 ## 2. 活動行事曆(Google Calendar)
 

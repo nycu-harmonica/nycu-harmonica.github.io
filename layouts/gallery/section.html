@@ -6,28 +6,29 @@
   </header>
   {{ $albums := .RegularPages.ByDate.Reverse }}
   {{ if $albums }}
-  <div class="album-grid">
+  <div class="album-grid" data-sheet-gallery>
     {{ range $albums }}
-    <a class="album-card" href="{{ .RelPermalink }}">
+    <a class="album-card" data-sheet-album="{{ path.Base (strings.TrimSuffix "/" .RelPermalink) }}" href="{{ .RelPermalink }}">
       {{ $imgs := .Resources.ByType "image" }}
       {{ $img := .Resources.GetMatch (.Params.cover | default "__none__") }}
       {{ if and (not $img) $imgs }}{{ $img = index $imgs 0 }}{{ end }}
       {{ if $img }}
         {{ $thumb := $img.Fill "640x420 webp q80 Smart" }}
-        <img src="{{ $thumb.RelPermalink }}" width="640" height="420" loading="lazy" alt="{{ .Title }}封面照片">
+        <img data-sheet-album-cover src="{{ $thumb.RelPermalink }}" width="640" height="420" loading="lazy" alt="{{ .Title }}封面照片">
+        {{ range $imgs }}<span data-sheet-cover-option="{{ .Name }}" data-sheet-cover-url="{{ .RelPermalink }}" hidden></span>{{ end }}
       {{ else }}
         <div class="album-cover-placeholder" aria-hidden="true">🎶</div>
       {{ end }}
       <div class="album-card-body">
-        <h2 class="album-title">{{ .Title }}</h2>
-        <p class="card-date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time>
+        <h2 class="album-title" data-sheet-album-title>{{ .Title }}</h2>
+        <p class="card-date"><time data-sheet-album-date datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time>
           ・{{ len (.Resources.ByType "image") }} 張照片</p>
       </div>
     </a>
     {{ end }}
   </div>
   {{ else }}
-  <div class="placeholder-card"><p>相簿建置中，敬請期待！</p></div>
+  <div class="placeholder-card" data-sheet-gallery><p>相簿建置中，敬請期待！</p></div>
   {{ end }}
 </div>
 {{ end }}

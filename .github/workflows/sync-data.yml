@@ -1,15 +1,13 @@
-# 定期同步社團共用 Google Sheet；觀測站竹韻動態由首頁瀏覽器即時讀取
+# 手動更新 repo 內的 Google Sheet 備援快照；正式頁面由瀏覽器即時讀取
 #
-# - 排程避開整點(GitHub 建議),台北時間約 08:41 / 14:41 / 20:41 / 02:41
-# - 也可在 Actions 頁面手動觸發(Run workflow)
+# - 不設排程；日常 Sheet 更新不需要執行這個 workflow
+# - 網站管理員需要更新 last-good fallback 時才手動觸發
 # - 只有資料真的變更時才 commit;每次同步時間記錄在 commit message 與此 workflow 的執行紀錄
 # - 注意:GITHUB_TOKEN 的 push 不會自動觸發 deploy workflow(GitHub 防遞迴),
 #   所以最後用 `gh workflow run` 手動觸發部署。
-name: Sync public site data
+name: Refresh public data fallback
 
 on:
-  schedule:
-    - cron: '41 0,6,12,18 * * *'
   workflow_dispatch:
 
 permissions:
@@ -31,6 +29,7 @@ jobs:
         run: |
           python3 scripts/test_sync_sheet.py
           python3 scripts/test_sync_observe.py
+          node scripts/test_sheet_live.js
           python3 scripts/check_public_content.py
 
       - name: Report configured data source

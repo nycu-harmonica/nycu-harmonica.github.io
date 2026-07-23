@@ -9,11 +9,11 @@
     <h2>幹部團隊</h2>
     {{ $officers := site.Data.generated.officers | default (slice) }}
     {{ if $officers }}
-    <div class="officer-grid">
+    <div class="officer-grid" data-sheet-officers>
       {{ range $officers }}{{ partial "officer-card.html" . }}{{ end }}
     </div>
     {{ else }}
-    <div class="placeholder-card"><p>幹部資料更新中。</p></div>
+    <div class="placeholder-card" data-sheet-officers><p>幹部資料更新中。</p></div>
     {{ end }}
   </section>
 
@@ -26,13 +26,13 @@
       {{ if or (eq (len $show) 0) (in $show "about") }}{{ $aboutLinks = $aboutLinks | append . }}{{ end }}
     {{ end }}
     {{ if $aboutLinks }}
-    <ul class="link-list">
+    <ul class="link-list" data-sheet-links="about">
       {{ range $aboutLinks }}
-      <li><a href="{{ .url }}" target="_blank" rel="noopener">{{ partial "icon.html" (dict "name" (.icon | default "link")) }}<span>{{ .label }}</span></a></li>
+      <li><a data-sheet-link-key="{{ .key }}" href="{{ .url }}" target="_blank" rel="noopener">{{ partial "icon.html" (dict "name" (.icon | default "link")) }}<span>{{ .label }}</span></a></li>
       {{ end }}
     </ul>
     {{ else }}
-    <div class="placeholder-card"><p>社群連結更新中。</p></div>
+    <div class="placeholder-card" data-sheet-links="about"><p>社群連結更新中。</p></div>
     {{ end }}
   </section>
 </div>
