@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 import tempfile
 import unittest
 from unittest import mock
 
-from server import KnowledgeBase, RequestLimiter, normalise_history
+from server import KnowledgeBase, RequestLimiter, TAIPEI, normalise_history, parse_calendar_events
 
 
 class RequestLimiterTests(unittest.TestCase):
@@ -59,7 +60,12 @@ class KnowledgeBaseTests(unittest.TestCase):
                 json.dumps([{"role": "社長", "name": "Sky"}]), encoding="utf-8"
             )
             (root / "data/generated/links.json").write_text(
-                json.dumps([{"label": "Instagram", "url": "https://example.com/"}]),
+                json.dumps(
+                    [
+                        {"key": "instagram", "label": "Instagram", "url": "https://example.com/instagram"},
+                        {"key": "discord", "label": "Discord", "url": "https://example.com/discord"},
+                    ]
+                ),
                 encoding="utf-8",
             )
             (root / "scripts/sources.json").write_text(
@@ -67,12 +73,74 @@ class KnowledgeBaseTests(unittest.TestCase):
                 encoding="utf-8",
             )
             knowledge = KnowledgeBase(root)
-            with mock.patch.object(knowledge, "_fetch_sheet_rows", side_effect=OSError("offline")):
+            events = [
+                {
+                    "summary": "社團博覽會",
+                    "location": "光復校區",
+                    "start": datetime(2026, 9, 9, 17, 30, tzinfo=TAIPEI),
+                    "end": datetime(2026, 9, 9, 22, 0, tzinfo=TAIPEI),
+                    "all_day": False,
+                }
+            ]
+            with mock.patch.object(knowledge, "_fetch_sheet_rows", side_effect=OSError("offline")), mock.patch.object(
+                knowledge, "_fetch_calendar_events", return_value=events
+            ):
                 context = knowledge.get()
             self.assertIn("公開首頁", context)
             self.assertIn("社長：Sky", context)
-            self.assertIn("Instagram：https://example.com/", context)
+            self.assertIn("Instagram：https://example.com/instagram", context)
+            self.assertIn("9/9 17:30–22:00「社團博覽會」（地點：光復校區）", context)
             self.assertNotIn("private", context)
+
+            join_answer = knowledge.quick_answer("我要怎麼加入竹韻口琴社？")
+            self.assertIsNotNone(join_answer)
+            self.assertIn("Discord", join_answer[0])
+            self.assertEqual(join_answer[1][0]["url"], "https://example.com/discord")
+            class_answer = knowledge.quick_answer("社課的時間和地點在哪裡？")
+            self.assertIn("尚未公布固定社課時間與地點", class_answer[0])
+            event_answer = knowledge.quick_answer("最近有什麼活動？")
+            self.assertIn("社團博覽會", event_answer[0])
+
+    def test_calendar_parser_filters_admin_and_old_events(self) -> None:
+        ics = """BEGIN:VCALENDAR
+BEGIN:VEVENT
+DTSTART:20260909T093000Z
+DTEND:20260909T140000Z
+LOCATION:光復校區
+STATUS:CONFIRMED
+SUMMARY:社團博覽會\\, 快閃表演
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=Asia/Taipei:20260729T220000
+DTEND;TZID=Asia/Taipei:20260729T230000
+STATUS:CONFIRMED
+SUMMARY:竹韻口琴社 幹部定期會議
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20240101
+DTEND;VALUE=DATE:20240102
+STATUS:CONFIRMED
+SUMMARY:過期活動
+END:VEVENT
+END:VCALENDAR
+"""
+        events = parse_calendar_events(ics, now=datetime(2026, 7, 24, 12, tzinfo=TAIPEI))
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]["summary"], "社團博覽會, 快閃表演")
+        self.assertEqual(events[0]["start"], datetime(2026, 9, 9, 17, 30, tzinfo=TAIPEI))
+
+    def test_calendar_parser_recognizes_midnight_span_as_all_day(self) -> None:
+        ics = """BEGIN:VCALENDAR
+BEGIN:VEVENT
+DTSTART:20260806T160000Z
+DTEND:20260809T160000Z
+STATUS:CONFIRMED
+SUMMARY:THMF 臺灣口琴音樂節
+END:VEVENT
+END:VCALENDAR
+"""
+        events = parse_calendar_events(ics, now=datetime(2026, 7, 24, 12, tzinfo=TAIPEI))
+        self.assertTrue(events[0]["all_day"])
 
 
 class ProfileConfigTests(unittest.TestCase):

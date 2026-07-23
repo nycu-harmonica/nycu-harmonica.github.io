@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections import defaultdict, deque
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import logging
@@ -21,6 +21,7 @@ import threading
 import time
 from typing import Any
 from urllib import error, parse, request
+from zoneinfo import ZoneInfo
 
 
 LOG = logging.getLogger("bamboo-website-agent")
@@ -31,6 +32,9 @@ MAX_HISTORY_CHARS = 1300
 MAX_ANSWER_CHARS = 1400
 MAX_CONTEXT_CHARS = 10_000
 DEFAULT_SITE_URL = "https://harmonica.nycu.club/"
+CALENDAR_ICS_URL = "https://calendar.google.com/calendar/ical/bmhc1968%40gmail.com/public/basic.ics"
+TAIPEI = ZoneInfo("Asia/Taipei")
+VISITOR_EVENT_EXCLUDES = ("幹部", "截止", "確認", "預備期", "彩排")
 
 
 @dataclass(frozen=True)
@@ -139,6 +143,103 @@ def normalise_history(value: Any) -> list[dict[str, str]]:
     return messages
 
 
+def _unescape_ics_text(value: str) -> str:
+    return (
+        value.replace("\\n", " ")
+        .replace("\\N", " ")
+        .replace("\\,", ",")
+        .replace("\\;", ";")
+        .replace("\\\\", "\\")
+        .strip()
+    )
+
+
+def _parse_ics_datetime(property_name: str, value: str) -> tuple[datetime, bool]:
+    params = property_name.split(";")[1:]
+    if "VALUE=DATE" in params:
+        return datetime.strptime(value, "%Y%m%d").replace(tzinfo=TAIPEI), True
+    if value.endswith("Z"):
+        parsed = datetime.strptime(value, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
+        return parsed.astimezone(TAIPEI), False
+    parsed = datetime.strptime(value, "%Y%m%dT%H%M%S")
+    return parsed.replace(tzinfo=TAIPEI), False
+
+
+def parse_calendar_events(ics_text: str, now: datetime | None = None) -> list[dict[str, Any]]:
+    """Parse only the public Calendar fields needed for visitor-facing answers."""
+    unfolded: list[str] = []
+    for raw_line in ics_text.replace("\r\n", "\n").split("\n"):
+        if raw_line.startswith((" ", "\t")) and unfolded:
+            unfolded[-1] += raw_line[1:]
+        else:
+            unfolded.append(raw_line)
+
+    current = (now or datetime.now(TAIPEI)).astimezone(TAIPEI)
+    cutoff = current - timedelta(days=1)
+    events: list[dict[str, Any]] = []
+    block: dict[str, tuple[str, str]] | None = None
+    for line in unfolded:
+        if line == "BEGIN:VEVENT":
+            block = {}
+            continue
+        if line == "END:VEVENT":
+            if block is not None:
+                try:
+                    start_name, start_value = block["DTSTART"]
+                    end_name, end_value = block.get("DTEND", block["DTSTART"])
+                    start, all_day = _parse_ics_datetime(start_name, start_value)
+                    end, _ = _parse_ics_datetime(end_name, end_value)
+                    all_day = all_day or (
+                        start.time().isoformat() == "00:00:00"
+                        and end.time().isoformat() == "00:00:00"
+                        and end - start >= timedelta(days=1)
+                    )
+                    summary = _unescape_ics_text(block.get("SUMMARY", ("", ""))[1])
+                    location = _unescape_ics_text(block.get("LOCATION", ("", ""))[1])
+                    status = block.get("STATUS", ("", "CONFIRMED"))[1]
+                except (KeyError, ValueError):
+                    block = None
+                    continue
+                if (
+                    status == "CONFIRMED"
+                    and summary
+                    and end >= cutoff
+                    and not any(word in summary for word in VISITOR_EVENT_EXCLUDES)
+                ):
+                    events.append(
+                        {
+                            "summary": summary[:160],
+                            "location": location[:220],
+                            "start": start,
+                            "end": end,
+                            "all_day": all_day,
+                        }
+                    )
+            block = None
+            continue
+        if block is None or ":" not in line:
+            continue
+        name, value = line.split(":", 1)
+        key = name.split(";", 1)[0]
+        if key in {"DTSTART", "DTEND", "SUMMARY", "LOCATION", "STATUS"}:
+            block[key] = (name, value)
+    return sorted(events, key=lambda event: event["start"])[:8]
+
+
+def format_public_event(event: dict[str, Any]) -> str:
+    start: datetime = event["start"]
+    end: datetime = event["end"]
+    if event["all_day"]:
+        final_day = (end - timedelta(days=1)).date()
+        when = f"{start.month}/{start.day}（全天）"
+        if final_day > start.date():
+            when = f"{start.month}/{start.day} 至 {final_day.month}/{final_day.day}（全天）"
+    else:
+        when = f"{start.month}/{start.day} {start:%H:%M}–{end:%H:%M}"
+    location = event.get("location") or "地點待公告"
+    return f"{when}「{event['summary']}」（地點：{location}）"
+
+
 class KnowledgeBase:
     """Build a small context using public site files and public Sheet tabs."""
 
@@ -159,6 +260,8 @@ class KnowledgeBase:
         self._value = ""
         self._expires_at = 0.0
         self._lock = threading.Lock()
+        self._events: list[dict[str, Any]] = []
+        self._links: dict[str, dict[str, Any]] = {}
 
     def get(self) -> str:
         now = time.monotonic()
@@ -246,6 +349,53 @@ class KnowledgeBase:
             LOG.warning("public Sheet %s unavailable; using repo fallback: %s", tab, exc)
             return self._fallback_json(fallback_file)
 
+    def _fetch_calendar_events(self) -> list[dict[str, Any]]:
+        req = request.Request(CALENDAR_ICS_URL, headers={"User-Agent": "BambooWebsiteAgent/1.0"})
+        with request.urlopen(req, timeout=8) as response:
+            raw = response.read(1_000_001)
+        if len(raw) > 1_000_000:
+            raise ValueError("public Calendar response too large")
+        return parse_calendar_events(raw.decode("utf-8"))
+
+    def _source(self, key: str, fallback_label: str, fallback_url: str) -> dict[str, str]:
+        link = self._links.get(key, {})
+        url = str(link.get("url", ""))
+        return {
+            "label": str(link.get("label") or fallback_label),
+            "url": url if url.startswith("https://") else fallback_url,
+        }
+
+    def quick_answer(self, question: str) -> tuple[str, list[dict[str, str]]] | None:
+        self.get()
+        compact = re.sub(r"\s+", "", question)
+        instagram = self._source(
+            "instagram", "Instagram @nycu_harmonica", "https://www.instagram.com/nycu_harmonica/"
+        )
+        discord = self._source("discord", "Discord 社群", "https://discord.gg/uEQDCbnY8P")
+        calendar = {"label": "社團公開行事曆", "url": DEFAULT_SITE_URL + "#calendar"}
+
+        if any(word in compact for word in ("加入", "入社", "新生", "社員")):
+            return (
+                "可以直接點下方「Discord 社群」加入竹韻；零基礎也歡迎。"
+                "加入後可收到招生、社課與活動的第一手消息，公開公告也會同步在 Instagram。",
+                [discord, instagram],
+            )
+        if "社課" in compact and any(word in compact for word in ("時間", "地點", "哪裡", "何時")):
+            return (
+                "目前尚未公布固定社課時間與地點，這是目前公開資料的真實狀態。"
+                "建議先加入下方 Discord 社群；正式社課公告會同步在 Instagram 與官網行事曆。",
+                [discord, instagram, calendar],
+            )
+        if "活動" in compact and any(word in compact for word in ("最近", "近期", "什麼", "哪些", "有沒有")):
+            if self._events:
+                lines = "；".join(format_public_event(event) for event in self._events[:4])
+                return (
+                    "接下來已公開的活動包括：" + lines + "。時間地點若有異動，以公開行事曆為準。",
+                    [calendar],
+                )
+            return ("目前無法讀取近期活動清單，請直接查看下方社團公開行事曆。", [calendar])
+        return None
+
     def _build(self) -> str:
         sections = [
             "【社團與網站介紹】\n" + self._read_public_text("content/_index.md"),
@@ -262,6 +412,7 @@ class KnowledgeBase:
             sections.append("【公開幹部名單】\n" + "\n".join(officer_lines))
 
         links = self._public_rows("links", "links.json")
+        self._links = {str(row.get("key", "")): row for row in links if row.get("key")}
         link_lines = [
             f"- {str(row.get('label', '')).strip()}：{str(row.get('url', '')).strip()}"
             for row in links[:30]
@@ -269,6 +420,16 @@ class KnowledgeBase:
         ]
         if link_lines:
             sections.append("【官方公開連結】\n" + "\n".join(link_lines))
+
+        try:
+            self._events = self._fetch_calendar_events()
+        except Exception as exc:
+            LOG.warning("public Calendar unavailable; keeping cached events: %s", exc)
+        if self._events:
+            sections.append(
+                "【近期公開活動】\n"
+                + "\n".join(f"- {format_public_event(event)}" for event in self._events)
+            )
 
         sections.append(
             "【固定入口】\n"
@@ -465,6 +626,12 @@ class WebsiteAgentHandler(BaseHTTPRequestHandler):
                 400,
                 {"error": "invalid_question", "message": "問題需介於 1 到 500 個字之間。"},
             )
+            return
+        quick_answer = self.server.knowledge.quick_answer(question)
+        if quick_answer is not None:
+            answer, sources = quick_answer
+            LOG.info("public-data shortcut completed in %.2fs", time.monotonic() - started)
+            self._send_json(200, {"answer": answer, "sources": sources})
             return
         if not self.server.inference_lock.acquire(blocking=False):
             self._send_json(

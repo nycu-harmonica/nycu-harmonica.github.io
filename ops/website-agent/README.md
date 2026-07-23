@@ -14,9 +14,11 @@ GitHub Pages -> public facade /ask -> localhost Hermes API -> ai.kot.gg gpt-5.6-
 - Hermes API 只監聽 `127.0.0.1:8643`，bearer key 不會傳給瀏覽器。
 - 公開 facade 只監聽 `127.0.0.1:8788`，只提供 `POST /ask` 與 `GET /health`。
 - facade 只讀官網 repo 中的公開頁面、公開 Google Sheet 及 repo last-good fallback。
+- facade 也會讀取公開 Google Calendar 的 ICS，只保留活動名稱、日期時間與地點；不把活動描述或行政細節送進模型。
 - 不讀 `shared/`、`private/`、Discord、Gmail、Drive、Hermes 記憶或任何 OAuth/token 檔案。
 - 每題最多 500 字、回答最多 250 tokens；單 IP 與全站每日都有上限。
 - 前端使用 vendored Deep Chat 2.5.0 Web Component（MIT），只在訪客開啟問答時載入；最多帶入最近 4 則短訊息，不使用瀏覽器儲存。
+- 「如何加入／社課時間地點／近期活動」由公開資料直接產生回答，不呼叫模型；其他問題才轉給 Hermes，並帶入相同的近期公開活動摘要。
 
 ## 安裝與啟動
 
