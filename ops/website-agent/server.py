@@ -236,8 +236,17 @@ def format_public_event(event: dict[str, Any]) -> str:
             when = f"{start.month}/{start.day} 至 {final_day.month}/{final_day.day}（全天）"
     else:
         when = f"{start.month}/{start.day} {start:%H:%M}–{end:%H:%M}"
-    location = event.get("location") or "地點待公告"
-    return f"{when}「{event['summary']}」（地點：{location}）"
+    summary = str(event["summary"]).replace("｜", "：")
+    location = str(event.get("location") or "待公告").replace("｜", "、")
+    return f"{when}｜{summary}｜地點：{location}"
+
+
+def format_public_event_list(events: list[dict[str, Any]]) -> str:
+    blocks = []
+    for event in events:
+        when, summary, location = format_public_event(event).split("｜", 2)
+        blocks.append(f"• {when}\n  {summary}\n  {location}")
+    return "\n\n".join(blocks)
 
 
 class KnowledgeBase:
@@ -388,9 +397,10 @@ class KnowledgeBase:
             )
         if "活動" in compact and any(word in compact for word in ("最近", "近期", "什麼", "哪些", "有沒有")):
             if self._events:
-                lines = "；".join(format_public_event(event) for event in self._events[:4])
                 return (
-                    "接下來已公開的活動包括：" + lines + "。時間地點若有異動，以公開行事曆為準。",
+                    "接下來有這些公開活動：\n\n"
+                    + format_public_event_list(self._events[:4])
+                    + "\n\n時間與地點若有異動，以公開行事曆為準。",
                     [calendar],
                 )
             return ("目前無法讀取近期活動清單，請直接查看下方社團公開行事曆。", [calendar])

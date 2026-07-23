@@ -89,7 +89,7 @@ class KnowledgeBaseTests(unittest.TestCase):
             self.assertIn("公開首頁", context)
             self.assertIn("社長：Sky", context)
             self.assertIn("Instagram：https://example.com/instagram", context)
-            self.assertIn("9/9 17:30–22:00「社團博覽會」（地點：光復校區）", context)
+            self.assertIn("9/9 17:30–22:00｜社團博覽會｜地點：光復校區", context)
             self.assertNotIn("private", context)
 
             join_answer = knowledge.quick_answer("我要怎麼加入竹韻口琴社？")
@@ -99,7 +99,7 @@ class KnowledgeBaseTests(unittest.TestCase):
             class_answer = knowledge.quick_answer("社課的時間和地點在哪裡？")
             self.assertIn("尚未公布固定社課時間與地點", class_answer[0])
             event_answer = knowledge.quick_answer("最近有什麼活動？")
-            self.assertIn("社團博覽會", event_answer[0])
+            self.assertIn("• 9/9 17:30–22:00\n  社團博覽會\n  地點：光復校區", event_answer[0])
 
     def test_calendar_parser_filters_admin_and_old_events(self) -> None:
         ics = """BEGIN:VCALENDAR
