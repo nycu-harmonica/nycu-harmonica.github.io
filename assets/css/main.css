@@ -295,8 +295,9 @@ a:hover { text-decoration: underline; }
 }
 .observe-update-media img {
   width: 100%;
-  /* 貼文圖片長寬比差異很大,統一裁切成固定比例才不會讓卡片高度參差。 */
-  aspect-ratio: 4 / 3;
+  /* 貼文圖片長寬比差異很大,統一裁切才不會讓卡片高度參差;
+     社群貼文多為 1:1 或直式,方形比橫幅少切掉一大塊海報內容。 */
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   height: auto;
 }
