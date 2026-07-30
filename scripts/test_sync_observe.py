@@ -58,6 +58,44 @@ def test_normalizes_minimal_safe_fields_and_taipei_time():
     assert "excerpt" not in json.dumps(snapshot, ensure_ascii=False)
 
 
+def test_keeps_only_observe_hosted_images_and_round_trips_snapshot():
+    cached = valid_item(
+        image={"url": "https://harmonica.observe.tw/assets/feed-images/ok.webp", "width": 1440, "height": 1920}
+    )
+    snapshot = so.snapshot_from_payload(payload([cached]), updated_at=NOW)
+    assert snapshot["items"][0]["image"] == {
+        "url": "https://harmonica.observe.tw/assets/feed-images/ok.webp",
+        "width": 1440,
+        "height": 1920,
+    }
+    # 帶 image 的 snapshot 仍須通過 last-good 驗證,否則之後每次同步都會判定成毀損。
+    assert so.validate_existing_snapshot(snapshot)
+
+    for unsafe in (
+        {"url": "https://scontent.cdninstagram.com/v/expiring.jpg"},
+        {"url": "http://harmonica.observe.tw/assets/feed-images/ok.webp"},
+        {"url": "https://harmonica.observe.tw.evil.example/assets/x.webp"},
+        {"url": "https://harmonica.observe.tw/source/198/"},
+        "not-an-object",
+    ):
+        item = so.snapshot_from_payload(payload([valid_item(image=unsafe)]), updated_at=NOW)["items"][0]
+        assert "image" not in item, unsafe
+
+    # 尺寸不完整時仍保留圖片,只是不輸出 width/height。
+    partial = so.snapshot_from_payload(
+        payload([valid_item(image={"url": "https://harmonica.observe.tw/assets/feed-images/ok.webp", "width": 0})]),
+        updated_at=NOW,
+    )
+    assert partial["items"][0]["image"] == {"url": "https://harmonica.observe.tw/assets/feed-images/ok.webp"}
+    assert so.validate_existing_snapshot(partial)
+
+
+def test_snapshot_with_unknown_item_key_is_rejected():
+    snapshot = so.snapshot_from_payload(payload([valid_item()]), updated_at=NOW)
+    snapshot["items"][0]["tracking"] = "should-not-be-here"
+    assert not so.validate_existing_snapshot(snapshot)
+
+
 def test_rejects_foreign_or_invalid_source_metadata():
     mutations = [
         {"schemaVersion": 2},

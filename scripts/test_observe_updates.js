@@ -144,6 +144,46 @@ async function testTimeoutKeepsFallback() {
   assert.deepEqual(view.grid.children, [view.fallback]);
 }
 
+async function testRendersObserveHostedImageAndRejectsForeignOnes() {
+  const image = { url: 'https://harmonica.observe.tw/assets/feed-images/ok.webp', width: 1440, height: 1920 };
+  const view = fixture();
+  await observe.refreshObserveUpdates({
+    document: view.document, grid: view.grid, status: view.status,
+    fetchImpl: async () => response(payload([item({ image })]))
+  });
+  const card = view.grid.children[0];
+  const media = card.children[0];
+  assert.equal(media.className, 'observe-update-media');
+  // 圖片連到原始貼文,但對輔助技術隱藏,避免與下方標題連結重複朗讀。
+  assert.equal(media.attributes.href, 'https://example.com/post/1');
+  assert.equal(media.attributes['aria-hidden'], 'true');
+  const img = media.children[0];
+  assert.equal(img.attributes.src, image.url);
+  assert.equal(img.attributes.alt, '');
+  assert.equal(img.attributes.loading, 'lazy');
+  assert.equal(img.attributes.referrerpolicy, 'no-referrer');
+  assert.equal(img.attributes.width, '1440');
+  assert.equal(img.attributes.height, '1920');
+  assert.equal(card.children[1].className, 'card-body');
+
+  for (const unsafe of [
+    { url: 'https://scontent.cdninstagram.com/v/expiring.jpg' },
+    { url: 'http://harmonica.observe.tw/assets/feed-images/ok.webp' },
+    { url: 'https://harmonica.observe.tw.evil.example/assets/x.webp' },
+    { url: 'https://harmonica.observe.tw/source/198/' },
+    'not-an-object'
+  ]) {
+    const rejected = fixture();
+    await observe.refreshObserveUpdates({
+      document: rejected.document, grid: rejected.grid, status: rejected.status,
+      fetchImpl: async () => response(payload([item({ image: unsafe })]))
+    });
+    const only = rejected.grid.children[0];
+    assert.equal(only.children.length, 1, JSON.stringify(unsafe));
+    assert.equal(only.children[0].className, 'card-body', JSON.stringify(unsafe));
+  }
+}
+
 function testNoRemoteInnerHtmlSink() {
   const source = fs.readFileSync(path.join(__dirname, '../assets/js/observe-updates.js'), 'utf8');
   assert.equal(source.includes('innerHTML'), false);
@@ -157,6 +197,7 @@ async function main() {
     testHttpFailureKeepsFallback,
     testActualBodyLimitAndMalformedJsonKeepFallback,
     testTimeoutKeepsFallback,
+    testRendersObserveHostedImageAndRejectsForeignOnes,
     testNoRemoteInnerHtmlSink
   ];
   for (const test of tests) {

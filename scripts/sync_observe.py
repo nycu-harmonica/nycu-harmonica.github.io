@@ -26,6 +26,9 @@ MAX_ITEMS = 3
 MAX_TITLE_LENGTH = 140
 TAIPEI = timezone(timedelta(hours=8))
 ITEM_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
+OBSERVE_ASSET_PREFIX = "https://harmonica.observe.tw/assets/"
+REQUIRED_ITEM_KEYS = frozenset({"id", "title", "source", "platform", "posted_at_local", "link"})
+OPTIONAL_ITEM_KEYS = frozenset({"image"})
 
 
 class ObserveSyncError(Exception):
@@ -92,6 +95,22 @@ def validate_source(value: object) -> dict:
     return expected_source()
 
 
+def normalize_image(value: object) -> dict | None:
+    """只接受觀測站自己快取的圖片,平台原始 CDN 網址會過期也會外流訪客請求。"""
+    if not isinstance(value, dict):
+        return None
+    url = valid_https_url(value.get("url"))
+    if not url or not url.startswith(OBSERVE_ASSET_PREFIX):
+        return None
+    image: dict = {"url": url}
+    width = value.get("width")
+    height = value.get("height")
+    if type(width) is int and type(height) is int and width > 0 and height > 0:
+        image["width"] = width
+        image["height"] = height
+    return image
+
+
 def normalize_item(row: object) -> dict[str, str] | None:
     if not isinstance(row, dict) or row.get("sourceName") != SOURCE_NAME:
         return None
@@ -108,7 +127,7 @@ def normalize_item(row: object) -> dict[str, str] | None:
         return None
     if not all((title, source, platform, link)):
         return None
-    return {
+    item = {
         "id": item_id,
         "title": title,
         "source": source,
@@ -116,6 +135,10 @@ def normalize_item(row: object) -> dict[str, str] | None:
         "posted_at_local": published.astimezone(TAIPEI).strftime("%Y-%m-%d %H:%M"),
         "link": link,
     }
+    image = normalize_image(row.get("image"))
+    if image:
+        item["image"] = image
+    return item
 
 
 def snapshot_from_payload(payload: object, *, updated_at: datetime) -> dict:
@@ -171,9 +194,10 @@ def validate_existing_snapshot(value: object) -> bool:
     seen_ids: set[str] = set()
     seen_links: set[str] = set()
     for item in items:
-        if not isinstance(item, dict) or set(item) != {
-            "id", "title", "source", "platform", "posted_at_local", "link"
-        }:
+        if not isinstance(item, dict):
+            return False
+        keys = set(item)
+        if not REQUIRED_ITEM_KEYS <= keys or keys - REQUIRED_ITEM_KEYS - OPTIONAL_ITEM_KEYS:
             return False
         item_id = str(item.get("id") or "")
         link = str(item.get("link") or "")
@@ -186,6 +210,7 @@ def validate_existing_snapshot(value: object) -> bool:
             "platform": item.get("platform"),
             "publishedAt": str(item.get("posted_at_local") or "").replace(" ", "T") + ":00+08:00",
             "url": link,
+            "image": item.get("image"),
         }
         if normalize_item(probe) != item:
             return False

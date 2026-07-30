@@ -1,4 +1,13 @@
 <article class="card observe-update-card">
+  {{ with .image }}
+  {{/* 只信任觀測站自己快取的圖片,與前端 observe-updates.js 的判斷一致。 */}}
+  {{ if hasPrefix .url "https://harmonica.observe.tw/assets/" }}
+  <a class="observe-update-media" href="{{ $.link }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+    <img src="{{ .url }}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+      {{- with .width }} width="{{ . }}"{{ end }}{{ with .height }} height="{{ . }}"{{ end }}>
+  </a>
+  {{ end }}
+  {{ end }}
   <div class="card-body">
     <p class="card-date">
       <time datetime="{{ replace .posted_at_local " " "T" }}:00+08:00">{{ .posted_at_local }}</time>

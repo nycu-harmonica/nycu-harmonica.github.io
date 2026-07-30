@@ -3,6 +3,7 @@
   'use strict';
 
   var API_URL = 'https://harmonica.observe.tw/api/source/198.json';
+  var OBSERVE_ASSET_PREFIX = 'https://harmonica.observe.tw/assets/';
   var SOURCE_URL = 'https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/';
   var SOURCE_ID = 198;
   var SOURCE_SLUG = 'bamboo-melody-harmonica-club';
@@ -86,6 +87,21 @@
     return { id: SOURCE_ID, slug: SOURCE_SLUG, name: SOURCE_NAME, pageUrl: SOURCE_URL };
   }
 
+  // 只接受觀測站自己快取的圖片;平台原始 CDN 網址會過期,也會把訪客請求送去第三方。
+  function normalizeImage(value) {
+    if (!value || typeof value !== 'object') return null;
+    var url = validHttpsUrl(value.url);
+    if (!url || url.indexOf(OBSERVE_ASSET_PREFIX) !== 0) return null;
+    var width = Number(value.width);
+    var height = Number(value.height);
+    var image = { url: url };
+    if (Number.isInteger(width) && width > 0 && Number.isInteger(height) && height > 0) {
+      image.width = width;
+      image.height = height;
+    }
+    return image;
+  }
+
   function normalizeItem(row) {
     if (!row || typeof row !== 'object' || row.sourceName !== SOURCE_NAME) return null;
     var id = String(row.id || '').trim();
@@ -102,6 +118,7 @@
       url: url,
       sourceName: source,
       platform: platform,
+      image: normalizeImage(row.image),
       publishedAt: row.publishedAt,
       postedAtLocal: formatTaipei(published)
     };
@@ -132,6 +149,27 @@
   function createUpdateCard(doc, item) {
     var article = doc.createElement('article');
     article.className = 'card observe-update-card';
+    if (item.image) {
+      var figure = doc.createElement('a');
+      figure.className = 'observe-update-media';
+      figure.setAttribute('href', item.url);
+      figure.setAttribute('target', '_blank');
+      figure.setAttribute('rel', 'noopener noreferrer');
+      figure.setAttribute('tabindex', '-1');
+      figure.setAttribute('aria-hidden', 'true');
+      var picture = doc.createElement('img');
+      picture.setAttribute('src', item.image.url);
+      picture.setAttribute('alt', '');
+      picture.setAttribute('loading', 'lazy');
+      picture.setAttribute('decoding', 'async');
+      picture.setAttribute('referrerpolicy', 'no-referrer');
+      if (item.image.width) {
+        picture.setAttribute('width', String(item.image.width));
+        picture.setAttribute('height', String(item.image.height));
+      }
+      figure.append(picture);
+      article.append(figure);
+    }
     var body = doc.createElement('div');
     body.className = 'card-body';
     var dateLine = doc.createElement('p');

@@ -286,7 +286,20 @@ a:hover { text-decoration: underline; }
 /* ---------- 首頁 ---------- */
 .home-intro { max-width: 62rem; margin: 0 auto; text-align: center; }
 .section-source-note { margin: -0.35rem 0 1rem; color: var(--ink-soft); }
+.observe-update-card { flex-direction: column; }
 .observe-update-card .card-title a::after { content: " ↗"; font-size: 0.85em; }
+.observe-update-media {
+  display: block;
+  background: var(--green-50);
+  border-bottom: 1px solid var(--line);
+}
+.observe-update-media img {
+  width: 100%;
+  /* 貼文圖片長寬比差異很大,統一裁切成固定比例才不會讓卡片高度參差。 */
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  height: auto;
+}
 .observe-updated { margin: 0.75rem 0 0; font-size: 0.82rem; color: var(--ink-soft); }
 .join-banner {
   text-align: center;
