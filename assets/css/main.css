@@ -81,6 +81,9 @@ a:hover { text-decoration: underline; }
 .header-inner {
   display: flex;
   align-items: center;
+  /* 手機選單展開後會換到第二行;flex-start 避免預設的 stretch
+     重新分配行高,害品牌與漢堡鈕在開合之間上下跳動。 */
+  align-content: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
   min-height: 3.5rem;
@@ -90,6 +93,8 @@ a:hover { text-decoration: underline; }
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  /* 由品牌撐出固定列高,選單展開時第一行仍維持 3.5rem。 */
+  min-height: 3.5rem;
   color: #fff;
   font-weight: 700;
   font-size: 1.15rem;
@@ -129,7 +134,8 @@ a:hover { text-decoration: underline; }
 .site-nav ul {
   list-style: none;
   margin: 0;
-  padding: 0.25rem 0 0.75rem;
+  padding: 0.5rem 0 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 .site-nav a {
   display: block;
@@ -144,7 +150,7 @@ a:hover { text-decoration: underline; }
 @media (min-width: 768px) {
   .nav-toggle { display: none; }
   .site-nav { display: block; flex-basis: auto; }
-  .site-nav ul { display: flex; gap: 0.25rem; padding: 0; }
+  .site-nav ul { display: flex; gap: 0.25rem; padding: 0; border-top: 0; }
   .site-nav a { padding: 0.5rem 0.8rem; }
   .site-nav a.active { background: rgba(255, 255, 255, 0.12); }
 }
@@ -290,6 +296,7 @@ a:hover { text-decoration: underline; }
   max-width: 1048px;
 }
 .join-banner h2 { color: var(--green-900); margin-top: 0; }
+.join-banner-contact { margin: 1rem 0 0; font-size: 0.9rem; color: var(--ink-soft); }
 
 /* ---------- 公開問答 ---------- */
 .website-agent-launch {
@@ -603,6 +610,56 @@ a:hover { text-decoration: underline; }
 
 .link-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
 .link-list a { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 500; }
+
+/* ---------- 聯絡我們 ---------- */
+.contact-primary {
+  background: var(--green-50);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.contact-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--green-700);
+}
+.contact-email { margin: 0.3rem 0 0; font-size: 1.25rem; font-weight: 700; word-break: break-all; }
+.contact-note { margin: 0.4rem 0 0; font-size: 0.9rem; color: var(--ink-soft); }
+
+.contact-routes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) { .contact-routes { grid-template-columns: repeat(3, 1fr); } }
+.contact-routes > li {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+.contact-routes h3 { margin: 0 0 0.4rem; font-size: 1.05rem; color: var(--green-900); }
+.contact-routes p { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
+.contact-routes .contact-route-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  /* auto 讓三張卡片高度不一時,行動呼籲仍對齊卡片底部 */
+  margin: auto 0 0;
+  padding-top: 0.7rem;
+  font-weight: 500;
+}
+.contact-social-head { margin: 2rem 0 0.75rem; font-size: 1.05rem; color: var(--green-900); }
 
 .icon { width: 1.1em; height: 1.1em; vertical-align: -0.15em; flex: none; }
 

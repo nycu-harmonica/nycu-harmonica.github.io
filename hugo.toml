@@ -34,6 +34,8 @@ unsafe = false
 description = "國立陽明交通大學竹韻口琴社官方網站——口琴教學、演出、社課與活動資訊。"
 # 現有 Bamboo 公開 Calendar 已由 Sky 核准用於網站完整活動時程。
 calendarId = "bmhc1968@gmail.com"
+# 對外公開的社團聯絡信箱(與行事曆同一個 Google 帳號,已因行事曆嵌入而公開)。
+contactEmail = "bmhc1968@gmail.com"
 
 [params.websiteAgent]
 enabled = true

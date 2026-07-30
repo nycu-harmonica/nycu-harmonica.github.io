@@ -89,7 +89,7 @@ def main() -> None:
     shutil.copyfile(here / "system-prompt.txt", RUNTIME / "system-prompt.txt")
     if PUBLIC_SNAPSHOT.exists():
         shutil.rmtree(PUBLIC_SNAPSHOT)
-    for relative in ("content/_index.md", "content/about.md", "scripts/sources.json"):
+    for relative in ("content/_index.md", "content/about.md", "hugo.toml", "scripts/sources.json"):
         destination = PUBLIC_SNAPSHOT / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(site_root / relative, destination)

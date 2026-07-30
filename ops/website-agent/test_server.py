@@ -72,6 +72,9 @@ class KnowledgeBaseTests(unittest.TestCase):
                 json.dumps({"sheet_id": "public", "tabs": {"officers": {"gid": "1"}, "links": {"gid": "2"}}}),
                 encoding="utf-8",
             )
+            (root / "hugo.toml").write_text(
+                '[params]\ncontactEmail = "club@example.com"\n', encoding="utf-8"
+            )
             knowledge = KnowledgeBase(root)
             events = [
                 {
@@ -90,7 +93,13 @@ class KnowledgeBaseTests(unittest.TestCase):
             self.assertIn("社長：Sky", context)
             self.assertIn("Instagram：https://example.com/instagram", context)
             self.assertIn("9/9 17:30–22:00｜社團博覽會｜地點：光復校區", context)
+            self.assertIn("club@example.com", context)
             self.assertNotIn("private", context)
+
+            contact_answer = knowledge.quick_answer("請問你們的聯絡信箱是什麼？")
+            self.assertIsNotNone(contact_answer)
+            self.assertIn("club@example.com", contact_answer[0])
+            self.assertEqual(contact_answer[1][0]["url"], "https://harmonica.nycu.club/about/#join")
 
             join_answer = knowledge.quick_answer("我要怎麼加入竹韻口琴社？")
             self.assertIsNotNone(join_answer)

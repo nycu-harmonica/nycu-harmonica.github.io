@@ -19,6 +19,7 @@ from pathlib import Path
 import re
 import threading
 import time
+import tomllib
 from typing import Any
 from urllib import error, parse, request
 from zoneinfo import ZoneInfo
@@ -366,6 +367,17 @@ class KnowledgeBase:
             raise ValueError("public Calendar response too large")
         return parse_calendar_events(raw.decode("utf-8"))
 
+    def _contact_email(self) -> str:
+        """對外聯絡信箱的唯一來源是 hugo.toml,與網站顯示的位址保持一致。"""
+        try:
+            with (self.site_root / "hugo.toml").open("rb") as handle:
+                config = tomllib.load(handle)
+        except Exception as exc:
+            LOG.warning("hugo.toml unavailable; contact email omitted: %s", exc)
+            return ""
+        email = str(config.get("params", {}).get("contactEmail", "")).strip()
+        return email if "@" in email else ""
+
     def _source(self, key: str, fallback_label: str, fallback_url: str) -> dict[str, str]:
         link = self._links.get(key, {})
         url = str(link.get("url", ""))
@@ -382,6 +394,20 @@ class KnowledgeBase:
         )
         discord = self._source("discord", "Discord 社群", "https://discord.gg/uEQDCbnY8P")
         calendar = {"label": "社團公開行事曆", "url": DEFAULT_SITE_URL + "#calendar"}
+        contact = {"label": "聯絡我們", "url": DEFAULT_SITE_URL + "about/#join"}
+
+        email = self._contact_email()
+        if email and any(
+            word in compact
+            for word in ("email", "Email", "信箱", "電子郵件", "寄信", "聯絡", "聯繫", "窗口", "找誰")
+        ):
+            return (
+                f"社團公開信箱是 {email}，幹部都收得到，不確定該找誰就寄這裡。\n\n"
+                "・想入社或詢問社課：私訊 Instagram 或加入 Discord 最快。\n"
+                "・捐贈樂器、贊助社團：來信說明即可，官網「支持竹韻」有詳細說明。\n"
+                "・演出邀約與跨校交流：來信並附上日期、地點與活動性質。",
+                [contact, instagram, discord],
+            )
 
         if any(word in compact for word in ("加入", "入社", "新生", "社員")):
             return (
@@ -411,6 +437,13 @@ class KnowledgeBase:
             "【社團與網站介紹】\n" + self._read_public_text("content/_index.md"),
             "【關於竹韻】\n" + self._read_public_text("content/about.md"),
         ]
+
+        email = self._contact_email()
+        if email:
+            sections.append(
+                "【社團公開聯絡信箱】\n"
+                f"- {email}（官網「關於我們」的聯絡我們區塊，幹部共同收信）"
+            )
 
         officers = self._public_rows("officers", "officers.json")
         officer_lines = [

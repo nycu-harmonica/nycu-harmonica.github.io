@@ -18,13 +18,56 @@
   </section>
 
   <section class="section-sub" id="join">
-    <h2>聯絡與社群</h2>
+    <h2>聯絡我們</h2>
     {{ $links := site.Data.generated.links | default (slice) }}
     {{ $aboutLinks := slice }}
     {{ range $links }}
       {{ $show := .show_in | default (slice) }}
       {{ if or (eq (len $show) 0) (in $show "about") }}{{ $aboutLinks = $aboutLinks | append . }}{{ end }}
     {{ end }}
+
+    {{/* 分流卡片引用的管道網址取自公開 Sheet 的 last-good 快照,找不到時整段連結略過。 */}}
+    {{ $instagram := "" }}{{ $discord := "" }}
+    {{ range $links }}
+      {{ if eq .key "instagram" }}{{ $instagram = .url }}{{ end }}
+      {{ if eq .key "discord" }}{{ $discord = .url }}{{ end }}
+    {{ end }}
+
+    {{ with site.Params.contactEmail }}
+    <div class="contact-primary">
+      <p class="contact-label">{{ partial "icon.html" (dict "name" "email") }}<span>社團信箱</span></p>
+      <p class="contact-email"><a href="mailto:{{ . }}">{{ . }}</a></p>
+      <p class="contact-note">不確定該找誰的話，寄到這個信箱就對了。</p>
+    </div>
+    {{ end }}
+
+    <ul class="contact-routes">
+      <li>
+        <h3>想入社、想問社課</h3>
+        <p>社課時間、地點與入社方式會先在 Instagram 公布，直接私訊或加入 Discord 問最快，零基礎也歡迎。</p>
+        <p class="contact-route-links">
+          {{ with $instagram }}<a href="{{ . }}" target="_blank" rel="noopener">Instagram 私訊</a>{{ end }}
+          {{ with $discord }}<a href="{{ . }}" target="_blank" rel="noopener">Discord 社群</a>{{ end }}
+        </p>
+      </li>
+      <li>
+        <h3>捐贈樂器、贊助社團</h3>
+        <p>想捐閒置口琴或贊助經費，歡迎先來信說明；細節可參考上方的<a href="#support">支持竹韻</a>。</p>
+        <p class="contact-route-links">
+          {{ with site.Params.contactEmail }}<a href="mailto:{{ . }}?subject={{ "樂器捐贈／贊助洽詢" | urlquery }}">寫信給我們</a>{{ end }}
+          {{ with $instagram }}<a href="{{ . }}" target="_blank" rel="noopener">Instagram 私訊</a>{{ end }}
+        </p>
+      </li>
+      <li>
+        <h3>演出邀約、跨校交流、媒體採訪</h3>
+        <p>校內外演出、聯合成發、與其他口琴社的交流合作，請來信並附上日期、地點與活動性質，我們會盡快回覆。</p>
+        <p class="contact-route-links">
+          {{ with site.Params.contactEmail }}<a href="mailto:{{ . }}?subject={{ "演出邀約／合作洽詢" | urlquery }}">寫信給我們</a>{{ end }}
+        </p>
+      </li>
+    </ul>
+
+    <h3 class="contact-social-head">社群連結</h3>
     {{ if $aboutLinks }}
     <ul class="link-list" data-sheet-links="about">
       {{ range $aboutLinks }}
