@@ -546,40 +546,6 @@ a:hover { text-decoration: underline; }
   cursor: pointer;
 }
 
-/* ---------- 幹部 ---------- */
-.officer-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
-}
-@media (min-width: 640px) { .officer-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 960px) { .officer-grid { grid-template-columns: repeat(4, 1fr); } }
-
-.officer-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 1.25rem 1rem;
-  text-align: center;
-}
-.officer-photo {
-  width: 96px; height: 96px;
-  border-radius: 999px;
-  object-fit: cover;
-  margin: 0 auto 0.6rem;
-}
-.officer-photo-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--green-100);
-  color: var(--green-700);
-  font-size: 2rem;
-  font-weight: 700;
-}
-.officer-name { margin: 0; font-size: 1.05rem; }
-.officer-role { margin: 0.1rem 0; color: var(--green-700); font-weight: 600; font-size: 0.92rem; }
-
 /* ---------- 行事曆 ---------- */
 .calendar-embed {
   border: 1px solid var(--line);

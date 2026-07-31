@@ -3,11 +3,11 @@
 國立陽明交通大學竹韻口琴社官網:<https://harmonica.nycu.club/>。
 
 - 靜態網站:[Hugo](https://gohugo.io/)(extended)+ GitHub Pages,無付費服務依賴
-- 目前內容來源：瀏覽器即時讀取公開 Google Sheet（幹部、相簿資訊與連結）＋公開 Google Calendar（首頁完整活動時程）＋臺灣口琴觀測站公開 API（首頁竹韻公開社群動態）＋ repo 內核准照片
+- 目前內容來源：瀏覽器即時讀取公開 Google Sheet（相簿資訊與連結）＋公開 Google Calendar（首頁完整活動時程）＋臺灣口琴觀測站公開 API（首頁竹韻公開社群動態）＋ repo 內核准照片
 - repo 內公開 CSV 是 last-good 快照,供 Sheet 暫時無法讀取或瀏覽器停用 JavaScript 時 fallback
 - 「詢問竹韻」介面仍由 GitHub Pages 靜態提供；只有送出問題時才呼叫隔離的公開問答 endpoint
 
-> **正式 Google Sheet 已於 2026-07-16 接通。** 幹部日常更新幹部、相簿資訊與連結時不需要修改 repo。
+> **正式 Google Sheet 已於 2026-07-16 接通。** 幹部日常更新相簿資訊與連結時不需要修改 repo。
 
 ## 本機預覽
 
@@ -49,7 +49,6 @@ Google Sheet 不需 API key。前端透過 Google Visualization JSONP 讀取公�
 
 | 工作表 | 欄位(*=必填) | 用途 |
 |---|---|---|
-| `officers` | order*、role*、name*、status | 僅含核准公開的職稱與姓名 |
 | `gallery_albums` | slug*、title*、date*、description、cover、status | 相簿資訊 |
 | `links` | key*、label*、url*、icon、order、show_in | 社群/聯絡連結 |
 

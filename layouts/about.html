@@ -5,18 +5,6 @@
     {{ .Content }}
   </article>
 
-  <section class="section-sub" id="officers">
-    <h2>幹部團隊</h2>
-    {{ $officers := site.Data.generated.officers | default (slice) }}
-    {{ if $officers }}
-    <div class="officer-grid" data-sheet-officers>
-      {{ range $officers }}{{ partial "officer-card.html" . }}{{ end }}
-    </div>
-    {{ else }}
-    <div class="placeholder-card" data-sheet-officers><p>幹部資料更新中。</p></div>
-    {{ end }}
-  </section>
-
   <section class="section-sub" id="join">
     <h2>聯絡我們</h2>
     {{ $links := site.Data.generated.links | default (slice) }}

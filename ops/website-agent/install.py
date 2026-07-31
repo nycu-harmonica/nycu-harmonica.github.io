@@ -95,7 +95,7 @@ def main() -> None:
         shutil.copyfile(site_root / relative, destination)
     generated = PUBLIC_SNAPSHOT / "data/generated"
     generated.mkdir(parents=True, exist_ok=True)
-    for filename in ("officers.json", "links.json"):
+    for filename in ("links.json",):
         shutil.copyfile(site_root / "data/generated" / filename, generated / filename)
 
     key_file = PROFILE / ".website-api-key"

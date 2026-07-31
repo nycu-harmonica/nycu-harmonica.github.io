@@ -56,9 +56,6 @@ class KnowledgeBaseTests(unittest.TestCase):
             (root / "scripts").mkdir()
             (root / "content/_index.md").write_text("---\ntitle: Home\n---\n公開首頁", encoding="utf-8")
             (root / "content/about.md").write_text("公開介紹", encoding="utf-8")
-            (root / "data/generated/officers.json").write_text(
-                json.dumps([{"role": "社長", "name": "Sky"}]), encoding="utf-8"
-            )
             (root / "data/generated/links.json").write_text(
                 json.dumps(
                     [
@@ -69,7 +66,7 @@ class KnowledgeBaseTests(unittest.TestCase):
                 encoding="utf-8",
             )
             (root / "scripts/sources.json").write_text(
-                json.dumps({"sheet_id": "public", "tabs": {"officers": {"gid": "1"}, "links": {"gid": "2"}}}),
+                json.dumps({"sheet_id": "public", "tabs": {"links": {"gid": "2"}}}),
                 encoding="utf-8",
             )
             (root / "hugo.toml").write_text(
@@ -90,10 +87,11 @@ class KnowledgeBaseTests(unittest.TestCase):
             ):
                 context = knowledge.get()
             self.assertIn("公開首頁", context)
-            self.assertIn("社長：Sky", context)
             self.assertIn("Instagram：https://example.com/instagram", context)
             self.assertIn("9/9 17:30–22:00｜社團博覽會｜地點：光復校區", context)
             self.assertIn("club@example.com", context)
+            # 幹部姓名已從官網下架,公開問答的 context 也不得再帶入名單。
+            self.assertNotIn("【公開幹部名單】", context)
             self.assertNotIn("private", context)
 
             contact_answer = knowledge.quick_answer("請問你們的聯絡信箱是什麼？")

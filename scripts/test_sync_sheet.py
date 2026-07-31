@@ -140,18 +140,18 @@ def test_missing_required_column_is_table_error():
 
 
 def test_unexpected_public_column_is_table_error():
-    csv_text = "order,role,name,email\n10,社長,測試幹部,private@example.com\n"
+    csv_text = "key,label,url,email\ndiscord,Discord,https://example.com/,private@example.com\n"
     try:
-        ss.validate_rows("officers", ss.parse_rows(csv_text))
-        assert False, "公開幹部資料不可接受 email 欄位"
+        ss.validate_rows("links", ss.parse_rows(csv_text))
+        assert False, "公開連結資料不可接受 email 欄位"
     except ss.TableError as e:
         assert "不允許的公開欄位" in str(e)
 
 
 def test_unexpected_empty_public_column_is_table_error():
-    csv_text = "order,role,name,email\n"
+    csv_text = "key,label,url,email\n"
     try:
-        ss.validate_rows("officers", ss.parse_rows(csv_text))
+        ss.validate_rows("links", ss.parse_rows(csv_text))
         assert False, "空資料表仍須驗證公開表頭"
     except ss.TableError as e:
         assert "不允許的公開欄位" in str(e)

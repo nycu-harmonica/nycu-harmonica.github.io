@@ -11,11 +11,10 @@
 ## 1. 資料試算表(Google Sheet)
 
 1. 以社團帳號建立試算表,命名如「竹韻口琴社網站資料」。
-2. 建立三個工作表（分頁），名稱與表頭如下（表頭也可用中文別名，見 README）：
+2. 建立兩個工作表（分頁），名稱與表頭如下（表頭也可用中文別名，見 README）：
 
    | 工作表 | 表頭(第 1 列) |
    |---|---|
-   | `officers` | `order,role,name,status` |
    | `gallery_albums` | `slug,title,date,description,cover,status` |
    | `links` | `key,label,url,icon,order,show_in` |
 

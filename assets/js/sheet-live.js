@@ -2,7 +2,7 @@
 (function (global) {
   'use strict';
 
-  var TAB_NAMES = ['officers', 'gallery_albums', 'links'];
+  var TAB_NAMES = ['gallery_albums', 'links'];
   var DRAFT_WORDS = new Set(['draft', '草稿', 'hidden', '隱藏']);
   var PUBLISHED_WORDS = new Set(['', 'published', '發布', '公開']);
   var ICONS = new Set(['instagram', 'facebook', 'youtube', 'email', 'line', 'link']);
@@ -21,11 +21,6 @@
     '顯示位置': 'show_in', 'key': 'key'
   };
   var SPECS = {
-    officers: {
-      required: ['order', 'role', 'name'],
-      allowed: ['order', 'role', 'name', 'status'],
-      unique: null
-    },
     gallery_albums: {
       required: ['slug', 'title', 'date'],
       allowed: ['slug', 'title', 'date', 'description', 'cover', 'status'],
@@ -141,11 +136,8 @@
   function normalizeRow(tab, row) {
     var status = String(row.status || '').trim().toLowerCase();
     if (DRAFT_WORDS.has(status)) return null;
-    if ((tab === 'officers' || tab === 'gallery_albums') && !PUBLISHED_WORDS.has(status)) {
+    if (tab === 'gallery_albums' && !PUBLISHED_WORDS.has(status)) {
       throw new Error('狀態值無法辨識');
-    }
-    if (tab === 'officers') {
-      return { order: integer(row.order, true), role: boundedText(row.role, 'role'), name: boundedText(row.name, 'name') };
     }
     if (tab === 'gallery_albums') {
       var slug = String(row.slug || '').trim().toLowerCase();
@@ -204,7 +196,6 @@
         throw new Error(tab + ' 第 ' + (index + 2) + ' 列：' + error.message);
       }
     }).filter(Boolean);
-    if (tab === 'officers') rows.sort(function (a, b) { return a.order - b.order; });
     if (tab === 'gallery_albums') rows.sort(function (a, b) { return b.date.localeCompare(a.date); });
     if (tab === 'links') rows.sort(function (a, b) { return (a.order == null ? 9999 : a.order) - (b.order == null ? 9999 : b.order); });
     return rows;
@@ -270,23 +261,6 @@
     return source ? source.cloneNode(true) : null;
   }
 
-  function createOfficer(doc, row) {
-    var article = doc.createElement('article');
-    article.className = 'officer-card';
-    var photo = doc.createElement('div');
-    photo.className = 'officer-photo officer-photo-placeholder';
-    photo.setAttribute('aria-hidden', 'true');
-    photo.textContent = Array.from(row.name)[0] || '';
-    var name = doc.createElement('h3');
-    name.className = 'officer-name';
-    name.textContent = row.name;
-    var role = doc.createElement('p');
-    role.className = 'officer-role';
-    role.textContent = row.role;
-    article.append(photo, name, role);
-    return article;
-  }
-
   function createPlaceholder(doc, text) {
     var box = doc.createElement('div');
     box.className = 'placeholder-card';
@@ -294,14 +268,6 @@
     paragraph.textContent = text;
     box.append(paragraph);
     return box;
-  }
-
-  function renderOfficers(doc, officers) {
-    var container = doc.querySelector('[data-sheet-officers]');
-    if (!container) return;
-    container.className = 'officer-grid';
-    var items = officers.length ? officers.map(function (row) { return createOfficer(doc, row); }) : [createPlaceholder(doc, '幹部資料更新中。')];
-    container.replaceChildren.apply(container, items);
   }
 
   function includeLink(row, location) {
@@ -423,7 +389,6 @@
   }
 
   function renderLiveData(doc, data, fetchedAt) {
-    renderOfficers(doc, data.officers);
     renderLinks(doc, data.links);
     renderGallery(doc, data.gallery_albums);
     renderAlbumPage(doc, data.gallery_albums);

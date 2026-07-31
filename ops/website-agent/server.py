@@ -445,15 +445,6 @@ class KnowledgeBase:
                 f"- {email}（官網「關於我們」的聯絡我們區塊，幹部共同收信）"
             )
 
-        officers = self._public_rows("officers", "officers.json")
-        officer_lines = [
-            f"- {str(row.get('role', '')).strip()}：{str(row.get('name', '')).strip()}"
-            for row in officers[:30]
-            if row.get("role") and row.get("name")
-        ]
-        if officer_lines:
-            sections.append("【公開幹部名單】\n" + "\n".join(officer_lines))
-
         links = self._public_rows("links", "links.json")
         self._links = {str(row.get("key", "")): row for row in links if row.get("key")}
         link_lines = [

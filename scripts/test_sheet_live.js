@@ -16,10 +16,6 @@ function payload(headers, rows) {
 
 function fixtures() {
   return {
-    officers: payload(
-      ['order', 'role', 'name', 'status'],
-      [['20', '副社長', '凱鈞', 'published'], ['10', '社長', '軾凱', '公開'], ['30', '行政', '草稿姓名', 'draft']]
-    ),
     gallery_albums: payload(
       ['slug', 'title', 'date', 'description', 'cover', 'status'],
       [
@@ -39,10 +35,8 @@ function fixtures() {
 
 function testNormalizeAndSort() {
   const data = fixtures();
-  const officers = sheetLive.normalizeTab('officers', data.officers);
   const albums = sheetLive.normalizeTab('gallery_albums', data.gallery_albums);
   const links = sheetLive.normalizeTab('links', data.links);
-  assert.deepEqual(officers.map((row) => row.name), ['軾凱', '凱鈞']);
   assert.deepEqual(albums.map((row) => row.slug), ['newer-album', 'older-album']);
   assert.equal(albums[0].description, '活動紀錄，社員合照。');
   assert.deepEqual(links.map((row) => row.key), ['discord', 'facebook']);
@@ -50,10 +44,10 @@ function testNormalizeAndSort() {
 
 function testChineseHeaders() {
   const value = payload(
-    ['排序', '職稱', '姓名', '狀態'],
-    [['10', '社長', '軾凱', '發布']]
+    ['代號', '標題', '日期', '說明', '狀態'],
+    [['spring-concert', '春季成發', '2026-04-12', '成果發表', '發布']]
   );
-  assert.equal(sheetLive.normalizeTab('officers', value)[0].role, '社長');
+  assert.equal(sheetLive.normalizeTab('gallery_albums', value)[0].title, '春季成發');
 }
 
 function testInvalidTablesAreRejected() {
@@ -62,25 +56,25 @@ function testInvalidTablesAreRejected() {
     ['links', payload(['key', 'label', 'url'], [['discord', 'Discord', 'javascript:alert(1)']])],
     ['links', payload(['key', 'label', 'url'], [['discord', 'A', 'https://example.com/a'], ['discord', 'B', 'https://example.com/b']])],
     ['gallery_albums', payload(['slug', 'title', 'date'], [['bad-album', '標題', '2026-02-30']])],
-    ['officers', payload(['order', 'role', 'name'], [['ten', '社長', '軾凱']])],
-    ['officers', payload(['order', 'role', 'name'], [['10', '社長', '<script>']])]
+    ['gallery_albums', payload(['slug', 'title', 'date'], [['bad-album', '<script>', '2026-04-12']])],
+    ['links', payload(['key', 'label', 'url'], [['discord', 'Discord', 'https://example.com/'], ['discord', 'Dup', 'https://example.com/b']])]
   ];
   invalid.forEach(([tab, value]) => assert.throws(() => sheetLive.normalizeTab(tab, value), Error));
 }
 
 function testUnnamedExtraColumnIsRejected() {
-  const value = payload(['order', 'role', 'name', ''], [['10', '社長', '軾凱', '不應公開']]);
-  assert.throws(() => sheetLive.normalizeTab('officers', value), /未命名欄位/);
+  const value = payload(['key', 'label', 'url', ''], [['discord', 'Discord', 'https://example.com/', '不應公開']]);
+  assert.throws(() => sheetLive.normalizeTab('links', value), /未命名欄位/);
 }
 
 function testGvizUrl() {
   const config = {
     sheetId: '19facgxayMMiYSz1gNmoQRtkY_EjLTYiRyyTa6KfYWic',
-    tabs: { officers: { gid: '531284051' } }
+    tabs: { links: { gid: '1378930118' } }
   };
-  const url = new URL(sheetLive.buildGvizUrl(config, 'officers', '__callback_123', 42));
+  const url = new URL(sheetLive.buildGvizUrl(config, 'links', '__callback_123', 42));
   assert.equal(url.origin, 'https://docs.google.com');
-  assert.equal(url.searchParams.get('gid'), '531284051');
+  assert.equal(url.searchParams.get('gid'), '1378930118');
   assert.equal(url.searchParams.get('tqx'), 'out:json;responseHandler:__callback_123');
   assert.equal(url.searchParams.get('_'), '42');
 }
@@ -98,7 +92,7 @@ async function testAtomicRefresh() {
   });
   assert.equal(success, true);
   assert.equal(renders, 1);
-  assert.equal(renderedData.officers[0].name, '軾凱');
+  assert.equal(renderedData.links[0].key, 'discord');
 
   const broken = Object.assign({}, values, {
     links: payload(['key', 'label', 'url'], [['discord', 'Discord', 'http://insecure.example.com/']])

@@ -10,12 +10,12 @@ Hugo 所需的內容與資料檔,並更新 repo 內的 CSV 快照(fallback)。
     python3 scripts/sync_sheet.py              # 線上同步,失敗自動改用快照
     python3 scripts/sync_sheet.py --offline    # 不連網,直接用 static/data/ 快照重建
     python3 scripts/sync_sheet.py --strict     # CI 用:抓取失敗或驗證錯誤時 exit 1
-    python3 scripts/sync_sheet.py --only officers,links
+    python3 scripts/sync_sheet.py --only links
     python3 scripts/sync_sheet.py --root <repo 根目錄>
 
 輸出:
     static/data/<tab>.csv                CSV 快照(僅線上抓取成功且驗證通過時覆寫)
-    data/generated/<tab>.json            officers / links / gallery_albums
+    data/generated/<tab>.json            links / gallery_albums
     content/gallery/<slug>/index.md      相簿頁 front matter(照片另由目錄管理)
     data/generated/last_sync.json        輸出或來源模式有變更時更新
 """
@@ -229,15 +229,6 @@ def v_filename(value: str, _row=None) -> str:
 
 # 每個 tab 的欄位規格:(欄名, 必填, 驗證函式)
 TAB_SPECS = {
-    "officers": {
-        "unique": None,
-        "fields": [
-            ("order", True, v_int),
-            ("role", True, v_display_text),
-            ("name", True, v_display_text),
-            ("status", False, v_text),
-        ],
-    },
     "gallery_albums": {
         "unique": "slug",
         "fields": [
@@ -518,9 +509,6 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
             rows.sort(key=lambda r: (r["date"], r["slug"]), reverse=True)
             changed = emit_gallery(rows, root / "content" / "gallery")
             changed = emit_json(rows, generated_dir / "gallery_albums.json") or changed
-        elif tab == "officers":
-            rows.sort(key=lambda r: (r["order"], r["name"]))
-            changed = emit_json(rows, generated_dir / "officers.json")
         elif tab == "links":
             rows.sort(key=lambda r: (r.get("order", 999), r["key"]))
             changed = emit_json(rows, generated_dir / "links.json")
