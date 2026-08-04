@@ -53,6 +53,11 @@ pageRef = "/gallery"
 weight = 20
 
 [[menus.main]]
+name = "編年史"
+pageRef = "/chronology"
+weight = 25
+
+[[menus.main]]
 name = "關於我們"
 pageRef = "/about"
 weight = 30

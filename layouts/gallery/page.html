@@ -3,7 +3,20 @@
   <header class="page-head">
     <p class="card-date"><time data-sheet-album-page-date datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time></p>
     <h1 data-sheet-album-page-title>{{ .Title }}</h1>
-    <div class="prose" data-sheet-album-page-description>{{ with .Content }}{{ . }}{{ end }}</div>
+    <div class="prose">
+      <div data-sheet-album-page-description>{{ with .Content }}{{ . }}{{ end }}</div>
+      {{ with .Params.sources }}
+      <aside class="source-notes" aria-label="原始來源">
+        <h2>原始來源</h2>
+        <p>本頁圖片為公開來源的索引縮圖；完整內容請以原始頁面為準。</p>
+        <ul>
+          {{ range . }}
+          <li><a href="{{ .url }}" target="_blank" rel="noopener">{{ .label }}</a></li>
+          {{ end }}
+        </ul>
+      </aside>
+      {{ end }}
+    </div>
   </header>
   {{ $images := .Resources.ByType "image" }}
   {{ if $images }}

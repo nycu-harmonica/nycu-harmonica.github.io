@@ -40,7 +40,7 @@ BASE_URL = canonical_from_html(PUBLIC / "index.html")
 assert BASE_URL.endswith("/"), f"Home canonical URL must end with /: {BASE_URL}"
 RSS_METADATA = {
     "index.xml": ("陽明交大竹韻口琴社相簿更新", "竹韻口琴社相簿更新"),
-    "gallery/index.xml": ("相簿｜陽明交大竹韻口琴社", "竹韻口琴社活動照片。"),
+    "gallery/index.xml": ("相簿｜陽明交大竹韻口琴社", "竹韻口琴社活動照片與歷史影音索引。"),
 }
 RETIRED_OUTPUTS = {
     "announcements/index.html",

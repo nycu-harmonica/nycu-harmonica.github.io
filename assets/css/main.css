@@ -585,6 +585,17 @@ a:hover { text-decoration: underline; }
 .prose table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
 .prose th, .prose td { border: 1px solid var(--line); padding: 0.45rem 0.7rem; text-align: left; }
 .prose th { background: var(--green-50); }
+.source-notes {
+  margin-top: 1.5rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--amber-500);
+  border-radius: var(--radius);
+  background: var(--green-50);
+}
+.source-notes h2 { margin-top: 0; font-size: 1.15rem; }
+.source-notes p { margin-bottom: 0.55rem; color: var(--ink-soft); font-size: 0.9rem; }
+.source-notes ul { margin: 0; padding-left: 1.25rem; }
 
 .back-link { margin-top: 2rem; }
 
