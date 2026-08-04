@@ -38,10 +38,10 @@ function fixtures() {
       ]
     ),
     chronology_events: payload(
-      ['id', 'sort_date', 'date_label', 'category', 'tags', 'title', 'description', 'source_label', 'source_url', 'evidence', 'status'],
+      ['id', 'sort_date', 'date_label', 'category', 'tags', 'statement', 'source_label', 'source_url', 'evidence', 'status'],
       [
-        ['later-event', '2026-07-01', '2026/07/01', '活動', '活動|演出', '後來的事件', '公開活動說明', '公開行事曆', 'https://example.com/later', 'A1', ''],
-        ['early-event', '1968-04-08', '1968/04/08', '創社', '社史|人物', '早期事件', '公開社史說明', '官方說明', 'https://example.com/early', 'A1', '']
+        ['later-event', '2026-07-01', '2026/07/01', '活動', '活動|演出', '2026 年舉辦公開活動。', '公開行事曆', 'https://example.com/later', 'A1', ''],
+        ['early-event', '1968-04-08', '1968/04/08', '創社', '社史|人物', '竹韻口琴社成立。', '官方說明', 'https://example.com/early', 'A1', '']
       ]
     )
   };
@@ -57,6 +57,7 @@ function testNormalizeAndSort() {
   assert.deepEqual(links.map((row) => row.key), ['discord', 'facebook']);
   assert.deepEqual(chronology.map((row) => row.id), ['early-event', 'later-event']);
   assert.equal(chronology[0].tags, '社史|人物');
+  assert.equal(chronology[0].statement, '竹韻口琴社成立。');
 }
 
 function testChineseHeaders() {
@@ -69,8 +70,8 @@ function testChineseHeaders() {
 
 function testGvizColumnLabels() {
   const value = payloadWithColumnLabels(
-    ['id', 'sort_date', 'date_label', 'category', 'title', 'description', 'source_label', 'source_url'],
-    [['labeled-event', '1968-04-08', '1968/04/08', '創社', '事件', '說明', '來源', 'https://example.com/']]
+    ['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'],
+    [['labeled-event', '1968-04-08', '1968/04/08', '創社', '竹韻口琴社成立。', '來源', 'https://example.com/']]
   );
   const rows = sheetLive.normalizeTab('chronology_events', value);
   assert.equal(rows[0].id, 'labeled-event');
@@ -85,8 +86,8 @@ function testInvalidTablesAreRejected() {
     ['gallery_albums', payload(['slug', 'title', 'date'], [['bad-album', '標題', '2026-02-30']])],
     ['gallery_albums', payload(['slug', 'title', 'date'], [['bad-album', '<script>', '2026-04-12']])],
     ['links', payload(['key', 'label', 'url'], [['discord', 'Discord', 'https://example.com/'], ['discord', 'Dup', 'https://example.com/b']])]
-    ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'title', 'description', 'source_label', 'source_url'], [['bad-event', '2026-02-30', 'bad', '活動', '標題', '說明', '來源', 'https://example.com/']])]
-    ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'title', 'description', 'source_label', 'source_url'], [['bad-event', '2026-04-12', '2026/04/12', '活動', '<script>', '說明', '來源', 'https://example.com/']])]
+    ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2026-02-30', 'bad', '活動', '敘述', '來源', 'https://example.com/']])]
+    ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2026-04-12', '2026/04/12', '活動', '<script>', '來源', 'https://example.com/']])]
   ];
   invalid.forEach(([tab, value]) => assert.throws(() => sheetLive.normalizeTab(tab, value), Error));
 }

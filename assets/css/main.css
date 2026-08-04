@@ -724,16 +724,16 @@ a:hover { text-decoration: underline; }
   background: var(--green-50);
   color: var(--green-900);
 }
-.chronology-event-body h3 {
-  margin: 0;
-  color: var(--green-900);
-  font-size: 1.12rem;
-  line-height: 1.35;
+.chronology-event-statement {
+  margin: 0.25rem 0 0.45rem;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.65;
 }
-.chronology-event-body > p { margin: 0.45rem 0; }
 .chronology-source {
+  margin: 0;
   color: var(--ink-soft);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
 }
 .chronology-source a { font-weight: 600; }
 

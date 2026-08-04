@@ -2,793 +2,727 @@
   {
     "category": "創社",
     "date_label": "1968/04/08",
-    "description": "公開社史記載竹韻創社日期為 1968 年 4 月 8 日。首任社長吳傳誠、副社長葉沐陽。創社時共有 24 名社員。",
     "evidence": "A1",
     "id": "founding-1968",
     "sort_date": "1968-04-08",
     "source_label": "YouTube 頻道說明",
     "source_url": "https://www.youtube.com/channel/UClIoDAYl9-jVnBpC4nFtHGw",
-    "tags": "社史|人物|制度化",
-    "title": "竹韻口琴社成立"
+    "statement": "竹韻口琴社成立；吳傳誠任首任社長、葉沐陽任副社長，創社時共有 24 名社員。",
+    "tags": "社史|人物|制度化"
   },
   {
     "category": "制度化",
     "date_label": "58 學年度",
-    "description": "公開社史記載 58 學年度曾聘請台北中華口琴會會長王慶勳擔任指導老師。",
     "evidence": "A2",
     "id": "coach-58-academic-year",
     "sort_date": "1970-01-01",
     "source_label": "公開社史",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/0R2eqZTiMNA/m/TtTWvO1WOvMJ",
-    "tags": "制度|指導",
-    "title": "聘請王慶勳擔任指導老師"
+    "statement": "58 學年度聘請台北中華口琴會會長王慶勳擔任指導老師。",
+    "tags": "制度|指導"
   },
   {
     "category": "制度化",
     "date_label": "69 學年度",
-    "description": "69 學年度首次舉辦社內口琴競賽並成立「口琴社音樂圖書館」。官方頻道說明還提到曾逐字寫下館訓。",
     "evidence": "A1＋A2",
     "id": "music-library-69",
     "sort_date": "1981-01-01",
     "source_label": "YouTube 頻道說明",
     "source_url": "https://www.youtube.com/@nycu_harmonica/about",
-    "tags": "制度|檔案|彩蛋",
-    "title": "成立口琴社音樂圖書館"
+    "statement": "69 學年度首次舉辦社內口琴競賽，並成立「口琴社音樂圖書館」。",
+    "tags": "制度|檔案|彩蛋"
   },
   {
     "category": "比賽",
     "date_label": "72 學年度",
-    "description": "公開社史記載首次參加全國大專口琴比賽時先獲大專 B 組甲等後次獲優等。原始秩序冊尚待補核。",
     "evidence": "A2",
     "id": "first-national-competition-72",
     "sort_date": "1984-01-01",
     "source_label": "公開社史",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/0R2eqZTiMNA/m/TtTWvO1WOvMJ",
-    "tags": "比賽|社史",
-    "title": "首次參加全國大專口琴比賽"
+    "statement": "竹韻首次參加全國大專口琴比賽，先獲大專 B 組甲等，後獲優等。",
+    "tags": "比賽|社史"
   },
   {
     "category": "比賽",
     "date_label": "82 學年度起",
-    "description": "公開社史草稿自述自 82 學年度起曾連續八年獲大專團體組優等。這是總結性社史說法尚未逐年以官方結果頁核對。",
     "evidence": "A2",
     "id": "eight-years-excellent-82",
     "sort_date": "1993-01-01",
     "source_label": "公開社史",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/0R2eqZTiMNA/m/TtTWvO1WOvMJ",
-    "tags": "比賽|社史|待核",
-    "title": "連續八年獲大專團體組優等"
+    "statement": "自 82 學年度起連續八年獲全國學生音樂比賽大專團體組優等。",
+    "tags": "比賽|社史|待核"
   },
   {
     "category": "比賽",
     "date_label": "86–87 學年度",
-    "description": "公開北區成績轉載可見 86 學年度 85.0 分第四名與 87 學年度 85.2 分第三名。87 學年度指定曲為〈豐年祭〉自選曲為〈艾格蒙〉。",
     "evidence": "A2",
     "id": "regional-results-86-87",
     "sort_date": "1998-01-01",
     "source_label": "公開成績轉載",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/8NnEyqOykys/m/xZ7XFxWztkoJ",
-    "tags": "比賽|成績",
-    "title": "北區成績轉載留下早期名次"
+    "statement": "86 學年度北區賽得 85.0 分第四名；87 學年度得 85.2 分第三名，指定曲〈豐年祭〉、自選曲〈艾格蒙〉。",
+    "tags": "比賽|成績"
   },
   {
     "category": "演出",
     "date_label": "2000",
-    "description": "公開海報記錄期末公演在新竹東門城並留下「琴格間的音符 吹吸中的旋律」題字。",
     "evidence": "A2",
     "id": "east-gate-concert-2000",
     "sort_date": "2000-01-01",
     "source_label": "公開海報",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/HULOwSgxCqE/m/RoSElrhUkwIJ",
-    "tags": "演出|場地|社史",
-    "title": "東門城期末公演"
+    "statement": "2000 年在新竹東門城舉辦期末公演。",
+    "tags": "演出|場地|社史"
   },
   {
     "category": "比賽",
     "date_label": "89、92 學年度",
-    "description": "公開社史自述曾在 89 與 92 學年度獲優等第一名。先保留為公開歷史說法不改寫成完整官方年表。",
     "evidence": "A2",
     "id": "first-place-89-92",
     "sort_date": "2000-01-01",
     "source_label": "公開社史",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/0R2eqZTiMNA/m/TtTWvO1WOvMJ",
-    "tags": "比賽|社史|待核",
-    "title": "曾獲優等第一名"
+    "statement": "89、92 學年度獲全國學生音樂比賽大專團體組優等第一名。",
+    "tags": "比賽|社史|待核"
   },
   {
     "category": "檔案",
     "date_label": "2001",
-    "description": "公開 Google Groups 檔案保存「竹籬琴話—竹韻口琴社」海報。日期以檔案標題脈絡整理並保留原始來源。",
     "evidence": "A2",
     "id": "bamboo-poster-2001",
     "sort_date": "2001-01-01",
     "source_label": "公開檔案",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/B9_elIaJM38/m/TgnK5wDqQZ4J",
-    "tags": "檔案|社史",
-    "title": "竹籬琴話公開海報"
+    "statement": "2001 年公開「竹籬琴話—竹韻口琴社」海報。",
+    "tags": "檔案|社史"
   },
   {
     "category": "演出",
     "date_label": "2001/12/22",
-    "description": "公開 Demo 筆記記錄〈理髮師的探戈〉最多需要五支麥克風以及主調、Chord、三口與 Bass 的孔位規劃。",
     "evidence": "A2",
     "id": "demo-microphones-2001",
     "sort_date": "2001-12-22",
     "source_label": "公開 Demo 筆記",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/BhROZpTrYR0/m/EyPgrlbZkdwJ",
-    "tags": "演出|音控|彩蛋",
-    "title": "Demo 麥克風配置"
+    "statement": "2001 年〈理髮師的探戈〉Demo 配置最多五支麥克風。",
+    "tags": "演出|音控|彩蛋"
   },
   {
     "category": "檔案",
     "date_label": "2002",
-    "description": "公開檔案計畫要求保存申請與節目單並記錄 89 下期末發表「兩琴相樂」等材料。",
     "evidence": "A2",
     "id": "archive-plan-2002",
     "sort_date": "2002-01-01",
     "source_label": "公開檔案計畫",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/tnaYNI0nZXA/m/qcJRsr8vUFYJ",
-    "tags": "檔案|制度化",
-    "title": "啟動社團檔案保存計畫"
+    "statement": "2002 年啟動社團檔案保存計畫，保存申請資料與節目單。",
+    "tags": "檔案|制度化"
   },
   {
     "category": "曲目",
     "date_label": "91 學年度",
-    "description": "公開秩序冊列出 91 學年度北區節目中的竹韻曲目〈西班牙狂歡節〉。",
     "evidence": "A2",
     "id": "program-spanish-carnival-2002",
     "sort_date": "2002-01-01",
     "source_label": "公開秩序冊",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/oyIm2B5KOmw/m/qJtBFmzEM2AJ",
-    "tags": "曲目|比賽",
-    "title": "公開節目冊留下〈西班牙狂歡節〉"
+    "statement": "91 學年度北區比賽節目冊列入竹韻曲目〈西班牙狂歡節〉。",
+    "tags": "曲目|比賽"
   },
   {
     "category": "社群",
     "date_label": "2002",
-    "description": "同一公開討論把 94 級電控學生陸續加入口琴社戲稱為「電控勢力越來越龐大」並延伸出「電控五月天」玩笑。",
     "evidence": "A2",
     "id": "electric-control-joke-2002",
     "sort_date": "2002-03-17",
     "source_label": "公開轉載",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/zQHsr8ns3J0/m/epvP7Pjenw0J",
-    "tags": "社群|彩蛋|跨世代",
-    "title": "電控勢力越來越龐大的社群玩笑"
+    "statement": "2002 年公開討論出現「電控勢力越來越龐大」與「電控五月天」玩笑。",
+    "tags": "社群|彩蛋|跨世代"
   },
   {
     "category": "社群",
     "date_label": "2002/03/17",
-    "description": "公開轉載中的新社員自述睡醒時突然覺得口琴聲很美於是和同學一起向口琴社報到。這是個人自述不是社員名冊。",
     "evidence": "A2",
     "id": "new-blood-2002",
     "sort_date": "2002-03-17",
     "source_label": "公開轉載",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/zQHsr8ns3J0/m/epvP7Pjenw0J",
-    "tags": "社群|人物|彩蛋",
-    "title": "新社員因為覺得口琴聲很美而報到"
+    "statement": "2002 年有新社員因為覺得口琴聲很美而加入口琴社。",
+    "tags": "社群|人物|彩蛋"
   },
   {
     "category": "活動",
     "date_label": "2003/12/10",
-    "description": "公開轉載記錄有人想在寒假到交大辦口琴營並詢問借用竹韻與口琴社名義向學校借場地。這是協調對話不代表營隊最後成行。",
     "evidence": "A2",
     "id": "winter-camp-query-2003",
     "sort_date": "2003-12-10",
     "source_label": "公開轉載",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/xXh3I2oxVwE/m/6ee0sqQlYEIJ",
-    "tags": "活動|跨校|待核",
-    "title": "寒假口琴營借場討論"
+    "statement": "2003 年曾討論在交大舉辦寒假口琴營與借用場地。",
+    "tags": "活動|跨校|待核"
   },
   {
     "category": "演出",
     "date_label": "2004",
-    "description": "2004「異口同聲」後記記載演出前因疏失失去演藝廳最後在交誼廳完成。這是公開演出後記。",
     "evidence": "A2",
     "id": "yi-kou-tong-sheng-2004",
     "sort_date": "2004-01-01",
     "source_label": "公開演出後記",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/i8ywsz0TTGo",
-    "tags": "演出|場地|彩蛋",
-    "title": "失去演藝廳後在交誼廳完成演出"
+    "statement": "2004 年「異口同聲」在交誼廳完成演出。",
+    "tags": "演出|場地|彩蛋"
   },
   {
     "category": "演出",
     "date_label": "2004/11/27",
-    "description": "公開預告記錄 Jydy's、天狼星與狂響口琴樂團聯合演出。這是相關口琴生態資料不宣稱竹韻參演。",
     "evidence": "A2",
     "id": "joint-concert-2004",
     "sort_date": "2004-11-27",
     "source_label": "公開活動預告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/co_c4x4fxkg/m/zV-d99Hy_YoJ",
-    "tags": "演出|跨校|相關生態",
-    "title": "茱蒂與狼狂響曲口琴重奏音樂會"
+    "statement": "2004 年竹韻公開預告茱蒂、天狼星與狂響口琴樂團聯合演出。",
+    "tags": "演出|跨校|相關生態"
   },
   {
     "category": "社史",
     "date_label": "2005",
-    "description": "公開海報與送舊心得留下 2005 年「深琴難卻」以及 95 級年度巨獻等社群記憶。",
     "evidence": "A2",
     "id": "deep-harmonica-2005",
     "sort_date": "2005-06-01",
     "source_label": "公開送舊檔案",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/N_BKE2xIjJQ",
-    "tags": "社史|社群|演出",
-    "title": "「深琴難卻」與送舊記憶"
+    "statement": "2005 年舉辦「深琴難卻」並留下送舊記憶。",
+    "tags": "社史|社群|演出"
   },
   {
     "category": "活動",
     "date_label": "2005/06/07",
-    "description": "公開送舊海報寫 95 級年度巨獻並安排社窩陽台集合與餐點表演。後續回覆提到炸雞或披薩。",
     "evidence": "A2",
     "id": "sendoff-95-grade-2005",
     "sort_date": "2005-06-07",
     "source_label": "公開送舊海報",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/N_BKE2xIjJQ",
-    "tags": "活動|社群|演出",
-    "title": "95 級送舊海報與社窩聚會"
+    "statement": "2005 年 6 月 7 日舉辦 95 級送舊活動。",
+    "tags": "活動|社群|演出"
   },
   {
     "category": "檔案",
     "date_label": "2005/10/03",
-    "description": "公開提問指出口琴社舊網站仍停留在 2003 年 4 月並因社團評鑑需要尋找原撰寫者與網頁空間。",
     "evidence": "A2",
     "id": "legacy-website-2005",
     "sort_date": "2005-10-03",
     "source_label": "公開社群提問",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/5zi_Y6kxCSU/m/0f0Rw-d6TTcJ",
-    "tags": "檔案|社務|網站",
-    "title": "舊網站停在 2003 年 4 月的交接問題"
+    "statement": "2005 年處理舊網站停留在 2003 年 4 月的交接問題。",
+    "tags": "檔案|社務|網站"
   },
   {
     "category": "活動",
     "date_label": "2007/07/27–07/30",
-    "description": "公開暑訓公告安排獨奏班、小合奏、大合奏與特樂班並在最後一天安排檢定練習與成果發表。必需品清單還列出「快樂的心」。",
     "evidence": "A2",
     "id": "summer-training-2007",
     "sort_date": "2007-07-27",
     "source_label": "公開暑訓公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/rgnd2zmlZ9A/m/38z9syE3Hw0J",
-    "tags": "活動|教學|檢定",
-    "title": "暑訓四日流程與「快樂的心」行李彩蛋"
+    "statement": "2007 年 7 月 27–30 日舉辦暑訓，包含獨奏班、小合奏、大合奏與特樂班。",
+    "tags": "活動|教學|檢定"
   },
   {
     "category": "演出",
     "date_label": "2007/12/23",
-    "description": "公開預告記錄「聖誕友琴天」與友聲合唱團合奏。官方頻道也保留相關播放清單與曲目影像。",
     "evidence": "A2",
     "id": "friends-christmas-2007",
     "sort_date": "2007-12-23",
     "source_label": "公開活動預告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/TMSbhxVbMVw/m/P79htuwA_v8J",
-    "tags": "演出|跨校|影音",
-    "title": "聖誕友琴天與友聲合唱團合奏"
+    "statement": "2007 年舉辦「聖誕友琴天」，並與友聲合唱團合奏。",
+    "tags": "演出|跨校|影音"
   },
   {
     "category": "檔案",
     "date_label": "2008",
-    "description": "公開文件公告提到保存 95、96 學年度獎狀與 96 學年度交大發的獎狀電子檔。這是檔案保存公告不等於名次核定。",
     "evidence": "A2",
     "id": "awards-scan-2008",
     "sort_date": "2008-01-01",
     "source_label": "公開文件公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/-8SujmcL5ww",
-    "tags": "檔案|比賽",
-    "title": "把歷屆獎狀掃成電子檔"
+    "statement": "2008 年將歷屆獎狀掃描保存為電子檔。",
+    "tags": "檔案|比賽"
   },
   {
     "category": "比賽",
     "date_label": "97 學年度",
-    "description": "公開賽前行程記錄 5:30 集合、6:00 出發、8:00 檢錄與約 9:00–9:30 上台。這是賽前公開行程。",
     "evidence": "A2",
     "id": "competition-day-2009",
     "sort_date": "2009-01-01",
     "source_label": "比賽當天行程",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/7MtSXHxKqMg",
-    "tags": "比賽|社務|彩蛋",
-    "title": "比賽日從 5:30 集合到上台"
+    "statement": "97 學年度比賽日 5:30 集合、8:00 檢錄並於約 9:00–9:30 上台。",
+    "tags": "比賽|社務|彩蛋"
   },
   {
     "category": "比賽",
     "date_label": "97 學年度",
-    "description": "官方成績查詢可核對 97 學年度北區大專口琴合奏 87.42 分與優等。",
     "evidence": "A1",
     "id": "result-97-2009",
     "sort_date": "2009-01-01",
     "source_label": "官方歷屆成績",
     "source_url": "https://web.arte.gov.tw/point/index.asp?Action=View&GRPNO=IA10&AREA=%E5%8C%97%E5%8D%80&sYear=97&SelectMenu=1&RaceNo=2",
-    "tags": "比賽|成績",
-    "title": "97 學年度團體組公開成績"
+    "statement": "97 學年度北區大專口琴合奏獲 87.42 分優等。",
+    "tags": "比賽|成績"
   },
   {
     "category": "活動",
     "date_label": "2009",
-    "description": "公開寒口營公告為 Chord、Bass、半音階與民謠／藍調安排對應講師。資料只採公開公告的職責配對。",
     "evidence": "A2",
     "id": "winter-camp-2009",
     "sort_date": "2009-01-01",
     "source_label": "寒口營公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/0-ZcVzC7oG0/m/piO3FBP2_iIJ",
-    "tags": "活動|跨校|教學",
-    "title": "寒口營分工與師資"
+    "statement": "2009 年寒口營安排 Chord、Bass、半音階與民謠／藍調課程及對應講師。",
+    "tags": "活動|跨校|教學"
   },
   {
     "category": "社群",
     "date_label": "2010",
-    "description": "公開社長公告以「一人一杯」思樂冰作為迎新茶會後的社群彩蛋。這不是正式福利制度。",
     "evidence": "A2",
     "id": "slurpee-welcome-2010",
     "sort_date": "2010-01-01",
     "source_label": "我是社長",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/Y9Yiur7JlJg",
-    "tags": "社群|招生|彩蛋",
-    "title": "迎新後一人一杯思樂冰"
+    "statement": "2010 年迎新茶會後安排一人一杯思樂冰。",
+    "tags": "社群|招生|彩蛋"
   },
   {
     "category": "曲目",
     "date_label": "2010/06/06",
-    "description": "公開播放清單保留 19 支影片與曲目片長。〈屋頂上的提琴手〉7:59 是編號曲中最長。清單出現缺少 18 號的現象但原因待確認。",
     "evidence": "A1*｜待核",
     "id": "playlist-2010",
     "sort_date": "2010-06-06",
     "source_label": "2010 官方播放清單",
     "source_url": "https://www.youtube.com/playlist?list=PLvwbg2jw4dZ6GcP9SHxlEt7agg_xGJSfl",
-    "tags": "曲目|影音|彩蛋",
-    "title": "《點點音符琴琴相依》完整曲目清單"
+    "statement": "2010 年《點點音符琴琴相依》播放清單收錄 19 支曲目影片。",
+    "tags": "曲目|影音|彩蛋"
   },
   {
     "category": "社務",
     "date_label": "2010",
-    "description": "公開公告記錄社長李衡指示期中考週停練一週讓社員準備考試並仍開放期末成發曲目投稿。",
     "evidence": "A2",
     "id": "exam-stop-2010",
     "sort_date": "2010-10-01",
     "source_label": "公開團練公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/JZ9rbwVBycY",
-    "tags": "社務|教學|活動",
-    "title": "期中考週停練一週"
+    "statement": "2010 年期中考週停練一週，期末成果發表曲目仍開放投稿。",
+    "tags": "社務|教學|活動"
   },
   {
     "category": "曲目",
     "date_label": "2011",
-    "description": "公開成發公告把〈古老的大鐘〉列為四重奏曲。題幹應保留公開公告的曲目脈絡。",
     "evidence": "A2",
     "id": "quartet-old-bell-2011",
     "sort_date": "2011-01-01",
     "source_label": "公開曲目公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/L93swU8-Xv8/m/3hG1z2JcLiwJ",
-    "tags": "曲目|演出|四重奏",
-    "title": "〈古老的大鐘〉列為四重奏曲"
+    "statement": "2011 年〈古老的大鐘〉列為成果發表四重奏曲目。",
+    "tags": "曲目|演出|四重奏"
   },
   {
     "category": "演出",
     "date_label": "2011/09/18",
-    "description": "公開海報記錄竹韻特別邀請由交清口琴社背景出身的天狼星口琴樂團。",
     "evidence": "A2",
     "id": "sirius-welcome-2011",
     "sort_date": "2011-09-18",
     "source_label": "公開迎新海報",
     "source_url": "https://webptt.com/m.aspx?n=bbs%2FNCTU_HARCLUB%2FM.1315154912.A.08E.html",
-    "tags": "演出|跨校|迎新",
-    "title": "迎新演出邀請天狼星口琴樂團"
+    "statement": "2011 年迎新演出邀請天狼星口琴樂團演出。",
+    "tags": "演出|跨校|迎新"
   },
   {
     "category": "活動",
     "date_label": "2011/12/05",
-    "description": "公開企劃把「湯圓＋小口琴」放在同一攤並規劃每碗 4 顆 20 元。這是企劃版本不代表最後固定售價。",
     "evidence": "A2",
     "id": "tangyuan-booth-2011",
     "sort_date": "2011-12-05",
     "source_label": "校運會擺攤",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/lzOHJlEmo20",
-    "tags": "活動|社群|彩蛋",
-    "title": "校運會的湯圓加小口琴攤位"
+    "statement": "2011 年校運會規劃「湯圓＋小口琴」攤位。",
+    "tags": "活動|社群|彩蛋"
   },
   {
     "category": "演出",
     "date_label": "2011/12/26",
-    "description": "公開成發公告要求白襯衫與黑長褲並提醒場地禁食飲。其他懲處說法只保留為貼文語境不當作校方規章。",
     "evidence": "A2｜待核",
     "id": "concert-clothing-2011",
     "sort_date": "2011-12-26",
     "source_label": "成發公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/X7IbT5nzNCs",
-    "tags": "演出|社務|彩蛋",
-    "title": "成發服裝與場地提醒"
+    "statement": "2011 年成果發表要求白襯衫、黑長褲並提醒場地禁食飲。",
+    "tags": "演出|社務|彩蛋"
   },
   {
     "category": "演出",
     "date_label": "2011/12/28",
-    "description": "公開彩排表依序排〈Day of the River〉、〈卡農〉、〈強納森〉、〈溜冰圓舞曲〉與〈宮崎駿組曲〉之後才是大合奏。這是彩排表不是正式演出曲序。",
     "evidence": "A2",
     "id": "rehearsal-order-2011",
     "sort_date": "2011-12-28",
     "source_label": "成發彩排時間",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/gbKT2-g3C1c",
-    "tags": "演出|曲目|彩排",
-    "title": "公開彩排表留下曲序"
+    "statement": "2011 年公開彩排表列出〈Day of the River〉、〈卡農〉、〈強納森〉等曲目。",
+    "tags": "演出|曲目|彩排"
   },
   {
     "category": "制度化",
     "date_label": "2012/05/22",
-    "description": "公開公告安排 5 月 22 日下課後選出下一屆幹部並提到選後補驗曲。章程另規定幹部任期一年於第二學期末交接。",
     "evidence": "A2",
     "id": "election-handover-2012",
     "sort_date": "2012-05-22",
     "source_label": "選幹公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/426qb6uPr7U",
-    "tags": "制度|社務|幹部",
-    "title": "選幹後補驗曲與年度交接"
+    "statement": "2012 年 5 月 22 日選出下一屆幹部，並安排選後補驗曲。",
+    "tags": "制度|社務|幹部"
   },
   {
     "category": "演出",
     "date_label": "2012/05/25",
-    "description": "公開座位表說明因人員從左舞台進出且椅子與譜架多器材一律放右舞台側以避免混亂。",
     "evidence": "A2",
     "id": "stage-logistics-2012",
     "sort_date": "2012-05-25",
     "source_label": "座位表公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/t_CfOOXk-h8",
-    "tags": "演出|社務|幕後",
-    "title": "大合奏器材集中右舞台側"
+    "statement": "2012 年大合奏器材集中在右舞台側，以配合左側進出動線。",
+    "tags": "演出|社務|幕後"
   },
   {
     "category": "演出",
     "date_label": "2012/05/27",
-    "description": "公開版本說明以曲風對比、編制大小與換台成本規劃交大清大聯合發表。版本化曲序不等於最終節目單。",
     "evidence": "A2｜待核",
     "id": "joint-curation-2012",
     "sort_date": "2012-05-27",
     "source_label": "聯合發表版本",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/FK1Gzyq4Od8/m/0hfnl6FxE_MJ",
-    "tags": "演出|跨校|社務",
-    "title": "交大清大聯合發表的節目策展"
+    "statement": "2012 年規劃交大清大聯合發表的曲風、編制與換台安排。",
+    "tags": "演出|跨校|社務"
   },
   {
     "category": "比賽",
     "date_label": "101 學年度",
-    "description": "官方資料可核對 101 學年度合奏 89.1、四重奏 89.5。公開影片 description 另把〈白牡丹〉標成指定曲與〈歌劇幻影〉標成自選曲。",
     "evidence": "A1＋A2",
     "id": "result-101-2013",
     "sort_date": "2013-01-01",
     "source_label": "官方團體組頁",
     "source_url": "https://web.arte.gov.tw/music/history/list3_group.asp?NO_count=61&id=315&ye=101",
-    "tags": "比賽|成績|曲目",
-    "title": "101 學年度合奏與四重奏成績"
+    "statement": "101 學年度合奏獲 89.1 分、四重奏獲 89.5 分。",
+    "tags": "比賽|成績|曲目"
   },
   {
     "category": "教學",
     "date_label": "2013/03/12",
-    "description": "Facebook 公開相簿文案把 2013 年 3 月 12 日記為第一次社課並列出指導老師黃啟書。人物不由照片辨認。",
     "evidence": "A1*｜待核",
     "id": "mystery-music-class-2013",
     "sort_date": "2013-03-12",
     "source_label": "公開相簿",
     "source_url": "https://www.facebook.com/media/set/?set=a.193779240746401&type=3",
-    "tags": "教學|活動|人物",
-    "title": "第一次社課「神秘音樂班」"
+    "statement": "2013 年 3 月 12 日第一次社課由黃啟書指導。",
+    "tags": "教學|活動|人物"
   },
   {
     "category": "演出",
     "date_label": "2013/04/30",
-    "description": "公開相簿文案說交大社員以街頭演出把口琴推廣給交大人知道。",
     "evidence": "A1*｜待核",
     "id": "campus-girl2-2013",
     "sort_date": "2013-04-30",
     "source_label": "公開相簿",
     "source_url": "https://www.facebook.com/media/set/?set=a.199084866882505&type=3",
-    "tags": "演出|活動|招生",
-    "title": "女二校園表演推廣口琴"
+    "statement": "2013 年 4 月 30 日以校園表演推廣口琴。",
+    "tags": "演出|活動|招生"
   },
   {
     "category": "演出",
     "date_label": "2013/06/09",
-    "description": "公開 BBS 標題記錄 2013 年 6 月 9 日竹韻成果發表會並以「簧孔」為公開標題。正文不完整所以不推完整節目單。",
     "evidence": "A2",
     "id": "gong-show-2013",
     "sort_date": "2013-06-09",
     "source_label": "公開 BBS 公告",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/VgomGbI9uOI",
-    "tags": "演出|社史|成果展",
-    "title": "成果發表會「簧孔」"
+    "statement": "2013 年 6 月 9 日舉辦成果發表會「簧孔」。",
+    "tags": "演出|社史|成果展"
   },
   {
     "category": "制度化",
     "date_label": "2013/06/21",
-    "description": "Facebook 公開相簿文案記錄社員聚會、幹部交接與團圓圈談話。不由照片推回完整幹部名單。",
     "evidence": "A1*｜待核",
     "id": "handover-2013",
     "sort_date": "2013-06-21",
     "source_label": "公開相簿",
     "source_url": "https://www.facebook.com/media/set/?set=a.205442762913382&type=3",
-    "tags": "制度|社務|幹部",
-    "title": "期末社員大會與幹部交接"
+    "statement": "2013 年 6 月舉行期末社員大會與幹部交接。",
+    "tags": "制度|社務|幹部"
   },
   {
     "category": "演出",
     "date_label": "2013/12/29",
-    "description": "Facebook 公開相簿可見文案感謝 Brain Horizon／頭殼口琴樂團的友情演出。完整節目待核。",
     "evidence": "A1*｜待核",
     "id": "fengqin-show-2013",
     "sort_date": "2013-12-29",
     "source_label": "公開相簿",
     "source_url": "https://www.facebook.com/media/set/?set=a.228088327315492&type=3",
-    "tags": "演出|跨校|友情演出",
-    "title": "「風琴萬種」與頭殼口琴樂團友情演出"
+    "statement": "2013 年 12 月 29 日舉辦「風琴萬種」，並邀請頭殼口琴樂團友情演出。",
+    "tags": "演出|跨校|友情演出"
   },
   {
     "category": "比賽",
     "date_label": "102 學年度",
-    "description": "官方成績與公開影片可核對合奏 89.66 優等與四重奏 86.6 優等。〈黑娃娃步態舞〉為團體組指定曲〈Pirates of Caribbean〉為自選曲。",
     "evidence": "A1＋A1*",
     "id": "result-102-2014",
     "sort_date": "2014-03-07",
     "source_label": "官方成績查詢",
     "source_url": "https://web.arte.gov.tw/point/index.asp?Action=View&GRPNO=IA10&AREA=%E5%8C%97%E5%8D%80&sYear=102&SelectMenu=1&RaceNo=2",
-    "tags": "比賽|成績|曲目",
-    "title": "102 學年度合奏與四重奏成績"
+    "statement": "102 學年度合奏獲 89.66 分優等、四重奏獲 86.6 分優等。",
+    "tags": "比賽|成績|曲目"
   },
   {
     "category": "活動",
     "date_label": "2014/04/26–27",
-    "description": "Facebook 公開相簿標題記錄 2014 年 4 月 26 至 27 日台南社遊。畫面可見攤位、食物準備、口琴與團體活動但不推人物名單。",
     "evidence": "A1*｜待核",
     "id": "school-trip-2014",
     "sort_date": "2014-04-26",
     "source_label": "公開相簿",
     "source_url": "https://www.facebook.com/media/set/?set=a.242319809225677&type=3",
-    "tags": "活動|社群|相簿",
-    "title": "台南社遊"
+    "statement": "2014 年 4 月 26–27 日舉辦台南社遊。",
+    "tags": "活動|社群|相簿"
   },
   {
     "category": "演出",
     "date_label": "2014/05/14",
-    "description": "公開相簿文案把期中戶外表演形容為例行活動也是 5 月 25 日期末成發的「表演前哨」。",
     "evidence": "A1*｜待核",
     "id": "outdoor-performance-2014",
     "sort_date": "2014-05-14",
     "source_label": "公開相簿",
     "source_url": "https://www.facebook.com/media/set/?set=a.245302128927445&type=3",
-    "tags": "演出|活動|校園",
-    "title": "期中戶外表演是成果展前哨"
+    "statement": "2014 年 5 月 14 日舉辦期中戶外表演。",
+    "tags": "演出|活動|校園"
   },
   {
     "category": "演出",
     "date_label": "2014/12/24",
-    "description": "公開相簿文案把活動稱為 103 學年度上學期期末清交聯合成發並提到新生團首吹。",
     "evidence": "A1*｜待核",
     "id": "qingjiao-show-2014",
     "sort_date": "2014-12-24",
     "source_label": "公開相簿",
     "source_url": "https://www.facebook.com/media/set/?set=a.285266824930975&type=3",
-    "tags": "演出|跨校|成果展",
-    "title": "清交聯合成果展與新生團首吹"
+    "statement": "2014 年 12 月 24 日舉辦清交聯合成果展，並由新生團首吹。",
+    "tags": "演出|跨校|成果展"
   },
   {
     "category": "社史",
     "date_label": "2015",
-    "description": "公開送舊心得把 04 級稱為「竹韻奇蹟的那一年」並以故事與照片串接畢音。這是公開心得敘事不是官方年表。",
     "evidence": "A2",
     "id": "sendoff-2015",
     "sort_date": "2015-06-01",
     "source_label": "公開送舊心得",
     "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/__nRUPsgUQc/m/bzWqTLYMWlAJ",
-    "tags": "社史|社群|人物",
-    "title": "「竹韻奇蹟的那一年」公開送舊敘事"
+    "statement": "2015 年送舊心得將 04 級稱為「竹韻奇蹟的那一年」。",
+    "tags": "社史|社群|人物"
   },
   {
     "category": "演出",
     "date_label": "2015/12/20",
-    "description": "官方相簿保存 104 學年度上學期期末成果發表與社員及幹部同台演出。",
     "evidence": "A1",
     "id": "year-end-2015",
     "sort_date": "2015-12-20",
     "source_label": "官方相簿",
     "source_url": "https://harmonica.nycu.club/gallery/2015-12-year-end-concert/",
-    "tags": "演出|相簿|成果展",
-    "title": "「琴藝相挺」期末成果發表"
+    "statement": "2015 年 12 月 20 日舉辦「琴藝相挺」期末成果發表。",
+    "tags": "演出|相簿|成果展"
   },
   {
     "category": "跨校",
     "date_label": "2016",
-    "description": "2016 公開節目本介紹 MOSFET 為全員竹韻社員並說明最初是為代表竹韻參加全國學生音樂比賽而組成。團名來自電機共同專業課題。",
     "evidence": "A2",
     "id": "mosfet-2016",
     "sort_date": "2016-01-01",
     "source_label": "2016 節目本 PDF",
     "source_url": "https://mx.nthu.edu.tw/~ymchen/sirius/pic/2016star.pdf",
-    "tags": "跨校|比賽|團體|彩蛋",
-    "title": "MOSFET 為代表竹韻參賽而組團"
+    "statement": "2016 年 MOSFET 組團代表竹韻參加全國學生音樂比賽。",
+    "tags": "跨校|比賽|團體|彩蛋"
   },
   {
     "category": "比賽",
     "date_label": "104 學年度",
-    "description": "官方成績查詢可核對 104 學年度合奏 91.2 分與特優。四重奏為 89.2 分優等。",
     "evidence": "A1",
     "id": "result-104-2016",
     "sort_date": "2016-01-01",
     "source_label": "官方歷屆成績",
     "source_url": "https://web.arte.gov.tw/point/index.asp?Action=View&GRPNO=IA10&AREA=%E5%8C%97%E5%8D%80&sYear=104&SelectMenu=1&RaceNo=2",
-    "tags": "比賽|成績",
-    "title": "104 學年度合奏達特優"
+    "statement": "104 學年度合奏獲 91.2 分特優、四重奏獲 89.2 分優等。",
+    "tags": "比賽|成績"
   },
   {
     "category": "活動",
     "date_label": "2016/10/15",
-    "description": "官方相簿保留紙本白板、個別指導、桌邊討論、坐姿練習與架譜合奏等教學場景。不從照片辨認人物。",
     "evidence": "A1",
     "id": "mini-camp-2016",
     "sort_date": "2016-10-15",
     "source_label": "官方相簿",
     "source_url": "https://harmonica.nycu.club/gallery/2016-10-mini-harmonica-camp/",
-    "tags": "活動|教學|相簿",
-    "title": "2016 小口琴營"
+    "statement": "2016 年 10 月 15 日舉辦小口琴營。",
+    "tags": "活動|教學|相簿"
   },
   {
     "category": "比賽",
     "date_label": "105 學年度",
-    "description": "官方成績查詢可核對 105 學年度合奏 91.2 分與特優。四重奏為 87.46 分優等。",
     "evidence": "A1",
     "id": "result-105-2017",
     "sort_date": "2017-01-01",
     "source_label": "官方歷屆成績",
     "source_url": "https://web.arte.gov.tw/point/index.asp?Action=View&GRPNO=IA10&AREA=%E5%8C%97%E5%8D%80&sYear=105&SelectMenu=1&RaceNo=2",
-    "tags": "比賽|成績",
-    "title": "105 學年度合奏達特優"
+    "statement": "105 學年度合奏獲 91.2 分特優、四重奏獲 87.46 分優等。",
+    "tags": "比賽|成績"
   },
   {
     "category": "教學",
     "date_label": "2018",
-    "description": "校方 Club Portal 公告記錄第一堂社課教口琴構造與基本樂理並公告團購半音階口琴。",
     "evidence": "A1*",
     "id": "portal-first-class-2018",
     "sort_date": "2018-09-01",
     "source_label": "Club Portal",
     "source_url": "https://clubportal.nycu.edu.tw/club/view/info/707F176D-0D22-416D-9610-423FFF19415B/outside",
-    "tags": "教學|制度化|校方",
-    "title": "第一堂社課教口琴構造與基本樂理"
+    "statement": "2018 年第一堂社課教授口琴構造與基本樂理，並公告半音階口琴團購。",
+    "tags": "教學|制度化|校方"
   },
   {
     "category": "教學",
     "date_label": "2018/10/21",
-    "description": "校方公開公告記錄原定小口琴營因維修與音響安排改成一般社課並保留低音吹奏等教學線索。",
     "evidence": "A1*",
     "id": "portal-camp-adjust-2018",
     "sort_date": "2018-10-21",
     "source_label": "Club Portal",
     "source_url": "https://clubportal.nycu.edu.tw/club/view/info/707F176D-0D22-416D-9610-423FFF19415B/outside",
-    "tags": "教學|活動|社務",
-    "title": "小口琴營因器材安排調整成一般社課"
+    "statement": "2018 年小口琴營調整為一般社課。",
+    "tags": "教學|活動|社務"
   },
   {
     "category": "演出",
     "date_label": "2018/12/23",
-    "description": "校方 Club Portal 公告記錄 2018 年 12 月 23 日交清口琴期末發表在清華大學孟民偉樓 19:00 演出。",
     "evidence": "A1*",
     "id": "portal-joint-show-2018",
     "sort_date": "2018-12-23",
     "source_label": "Club Portal",
     "source_url": "https://clubportal.nycu.edu.tw/club/view/info/707F176D-0D22-416D-9610-423FFF19415B/outside",
-    "tags": "演出|跨校|校方",
-    "title": "交清口琴期末發表"
+    "statement": "2018 年 12 月 23 日舉辦交清口琴期末發表。",
+    "tags": "演出|跨校|校方"
   },
   {
     "category": "教學",
     "date_label": "2019 春季",
-    "description": "校方公開平台保存 2019 春季重新開課與社課公告。這是公開平台紀錄不推測中間社團運作狀態。",
     "evidence": "A1*",
     "id": "portal-restart-2019",
     "sort_date": "2019-03-01",
     "source_label": "Club Portal",
     "source_url": "https://clubportal.nycu.edu.tw/club/view/info/707F176D-0D22-416D-9610-423FFF19415B/outside",
-    "tags": "教學|制度化|校方",
-    "title": "2019 春季重新開課"
+    "statement": "2019 年春季重新開課。",
+    "tags": "教學|制度化|校方"
   },
   {
     "category": "社群",
     "date_label": "2026/05/15 前後",
-    "description": "Facebook 公開貼文寫明「昨天創立了 IG 帳號」並把 nycu_harmonica 作為同步記錄社團生活的公開入口。日期保留相對時間語境。",
     "evidence": "A1*｜待核",
     "id": "ig-start-2026",
     "sort_date": "2026-05-15",
     "source_label": "Facebook 公開貼文",
     "source_url": "https://www.facebook.com/photo.php?fbid=1591468102978734&set=pb.100063466797202.-2207520000&type=3",
-    "tags": "社群|復社|網站",
-    "title": "Instagram 成為同步記錄社團生活的公開入口"
+    "statement": "2026 年 5 月前後建立 Instagram 帳號，作為同步記錄社團生活的公開入口。",
+    "tags": "社群|復社|網站"
   },
   {
     "category": "復社",
     "date_label": "2026/06/25–26",
-    "description": "Facebook 公開貼文宣布成功復社並說明暑假將籌備社團經營、招生推廣與持續更新 Discord 及 Instagram。平台日期有 6/25–26 差異。",
     "evidence": "A1*｜待核",
     "id": "revival-announcement-2026",
     "sort_date": "2026-06-25",
     "source_label": "Facebook 公開貼文",
     "source_url": "https://www.facebook.com/photo.php?fbid=1631868958938648&set=pb.100063466797202.-2207520000&type=3",
-    "tags": "復社|社群|招生",
-    "title": "公開宣布成功復社"
+    "statement": "2026 年 6 月 25–26 日公開宣布成功復社。",
+    "tags": "復社|社群|招生"
   },
   {
     "category": "社務",
     "date_label": "2026",
-    "description": "官方 About 將支持分成捐贈閒置口琴與贊助社團經費兩條路並列出 Chord、Bass、半音階與複音口琴等器材缺口。",
     "evidence": "A1",
     "id": "about-support-2026",
     "sort_date": "2026-07-01",
     "source_label": "官方 About",
     "source_url": "https://harmonica.nycu.club/about/",
-    "tags": "社務|器材|復社",
-    "title": "復社初期公開器材需求與支持流程"
+    "statement": "2026 年復社初期公開 Chord、Bass、半音階與複音口琴等器材需求。",
+    "tags": "社務|器材|復社"
   },
   {
     "category": "社群",
     "date_label": "2026/07/04",
-    "description": "Facebook 公開貼文宣布 Discord 上線並列出第一手消息、曲目討論、幹部工作分配與活動邀約等用途。",
     "evidence": "A1*｜待核",
     "id": "discord-launch-2026",
     "sort_date": "2026-07-04",
     "source_label": "Facebook 公開貼文",
     "source_url": "https://www.facebook.com/photo.php?fbid=1641263307999213&set=pb.100063466797202.-2207520000&type=3",
-    "tags": "社群|制度化|跨世代",
-    "title": "Discord 上線承載第一手消息與曲目討論"
+    "statement": "2026 年 7 月 4 日 Discord 上線，提供社團消息與曲目討論。",
+    "tags": "社群|制度化|跨世代"
   },
   {
     "category": "制度化",
     "date_label": "2026/08",
-    "description": "公開行事曆排有 8 月多次竹韻口琴社幹部定期會議。這是運作節奏的公開制度線索不代表會議內容。",
     "evidence": "A1*",
     "id": "calendar-meetings-2026",
     "sort_date": "2026-08-06",
     "source_label": "公開活動行事曆",
     "source_url": "https://calendar.google.com/calendar/embed?src=bmhc1968%40gmail.com&ctz=Asia%2FTaipei&hl=zh_TW&mode=AGENDA",
-    "tags": "制度|社務|復社",
-    "title": "復社後幹部定期會議排入公開行事曆"
+    "statement": "2026 年 8 月起將幹部定期會議排入公開行事曆。",
+    "tags": "制度|社務|復社"
   },
   {
     "category": "活動",
     "date_label": "2026/08/09",
-    "description": "官方與社群公開資訊排定 2026 年 8 月 9 日復社茶會並安排近期練習的口琴演出與社史交流。",
     "evidence": "A1*",
     "id": "revival-tea-2026",
     "sort_date": "2026-08-09",
     "source_label": "官方 Instagram 貼文",
     "source_url": "https://www.instagram.com/nycu_harmonica/p/DbLX1c9lGv9/",
-    "tags": "活動|復社|演出",
-    "title": "復社茶會"
+    "statement": "2026 年 8 月 9 日舉辦復社茶會，安排口琴演出與社史交流。",
+    "tags": "活動|復社|演出"
   },
   {
     "category": "比賽",
     "date_label": "2026/08/20",
-    "description": "公開行事曆排定確認 115 學年度新竹市學生音樂比賽初賽報名資訊。這表示規劃進入行事曆但不等於已完成報名或確定參賽。",
     "evidence": "A1*",
     "id": "contest-planning-2026",
     "sort_date": "2026-08-20",
     "source_label": "公開活動行事曆",
     "source_url": "https://calendar.google.com/calendar/embed?src=bmhc1968%40gmail.com&ctz=Asia%2FTaipei&hl=zh_TW&mode=AGENDA",
-    "tags": "比賽|社務|待公告",
-    "title": "115 學年度新竹市學生音樂比賽進入報名確認期"
+    "statement": "2026 年 8 月 20 日規劃 115 學年度新竹市學生音樂比賽初賽報名。",
+    "tags": "比賽|社務|待公告"
   },
   {
     "category": "活動",
     "date_label": "2026/09/09",
-    "description": "公開行事曆排定竹韻擺攤與快閃表演在光復校區工三館前廣場及草坪等區域舉行。",
     "evidence": "A1*",
     "id": "club-expo-2026",
     "sort_date": "2026-09-09",
     "source_label": "公開活動行事曆",
     "source_url": "https://calendar.google.com/calendar/embed?src=bmhc1968%40gmail.com&ctz=Asia%2FTaipei&hl=zh_TW&mode=AGENDA",
-    "tags": "活動|演出|招生",
-    "title": "交大校區社團博覽會擺攤與快閃表演"
+    "statement": "2026 年 9 月 9 日舉辦交大校區社團博覽會擺攤與快閃表演。",
+    "tags": "活動|演出|招生"
   },
   {
     "category": "演出",
     "date_label": "2026/09/18",
-    "description": "公開行事曆排定 9 月 18 日中研院胖擊口琴樂團《口琴重奏音樂分享》。場地在公開行事曆中仍標示暫定。",
     "evidence": "A1*",
     "id": "pangji-sharing-2026",
     "sort_date": "2026-09-18",
     "source_label": "公開活動行事曆",
     "source_url": "https://calendar.google.com/calendar/embed?src=bmhc1968%40gmail.com&ctz=Asia%2FTaipei&hl=zh_TW&mode=AGENDA",
-    "tags": "演出|跨校|活動",
-    "title": "中研院胖擊口琴樂團口琴重奏分享"
+    "statement": "2026 年 9 月 18 日舉辦中研院胖擊口琴樂團《口琴重奏音樂分享》。",
+    "tags": "演出|跨校|活動"
   }
 ]

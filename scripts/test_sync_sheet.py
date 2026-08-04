@@ -106,20 +106,21 @@ def test_bad_formats_rejected():
 
 def test_chronology_events_validate_and_sort_fields():
     csv_text = (
-        "id,sort_date,date_label,category,tags,title,description,source_label,source_url,evidence,status\n"
-        "event-one,1968-04-08,1968/04/08,創社,社史|人物,成立,公開社史記載成立日期,官方說明,https://example.com/history,A1,\n"
+        "id,sort_date,date_label,category,tags,statement,source_label,source_url,evidence,status\n"
+        "event-one,1968-04-08,1968/04/08,創社,社史|人物,竹韻口琴社成立。,官方說明,https://example.com/history,A1,\n"
     )
     valid, errors = ss.validate_rows("chronology_events", ss.parse_rows(csv_text))
     assert errors == []
     assert valid[0]["id"] == "event-one"
     assert valid[0]["sort_date"] == "1968-04-08"
     assert valid[0]["tags"] == "社史|人物"
+    assert valid[0]["statement"] == "竹韻口琴社成立。"
 
 
 def test_chronology_events_require_source_url():
     csv_text = (
-        "id,sort_date,date_label,category,title,description,source_label,source_url\n"
-        "event-one,1968-04-08,1968/04/08,創社,成立,說明,來源,\n"
+        "id,sort_date,date_label,category,statement,source_label,source_url\n"
+        "event-one,1968-04-08,1968/04/08,創社,竹韻口琴社成立。,來源,\n"
     )
     valid, errors = ss.validate_rows("chronology_events", ss.parse_rows(csv_text))
     assert valid == [] and len(errors) == 1 and "source_url" in errors[0]

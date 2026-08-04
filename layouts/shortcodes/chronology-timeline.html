@@ -32,12 +32,8 @@
               {{ end }}
             {{ end }}
           </div>
-          <h3>{{ .title }}</h3>
-          <p>{{ .description }}</p>
-          <p class="chronology-source">
-            來源：<a href="{{ .source_url }}" target="_blank" rel="noopener">{{ .source_label }}</a>
-            {{ with .evidence }}<span class="chronology-evidence">{{ . }}</span>{{ end }}
-          </p>
+          <p class="chronology-event-statement">{{ .statement }}</p>
+          <p class="chronology-source"><a href="{{ .source_url }}" target="_blank" rel="noopener">{{ .source_label }}</a></p>
         </div>
       </article>
     {{ end }}

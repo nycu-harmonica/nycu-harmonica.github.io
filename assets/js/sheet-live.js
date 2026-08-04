@@ -20,7 +20,8 @@
     '封面': 'cover', '名稱': 'label', '網址': 'url', '圖示': 'icon',
     '顯示位置': 'show_in', 'key': 'key',
     '編號': 'id', '排序日期': 'sort_date', '顯示時間': 'date_label',
-    '分類': 'category', '標籤': 'tags', '來源': 'source_label', '證據': 'evidence'
+    '分類': 'category', '標籤': 'tags', '敘述': 'statement', '一句話': 'statement',
+    '來源': 'source_label', '證據': 'evidence'
   };
   var SPECS = {
     gallery_albums: {
@@ -34,8 +35,8 @@
       unique: 'key'
     },
     chronology_events: {
-      required: ['id', 'sort_date', 'date_label', 'category', 'title', 'description', 'source_label', 'source_url'],
-      allowed: ['id', 'sort_date', 'date_label', 'category', 'tags', 'title', 'description', 'source_label', 'source_url', 'evidence', 'status'],
+      required: ['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'],
+      allowed: ['id', 'sort_date', 'date_label', 'category', 'tags', 'statement', 'source_label', 'source_url', 'evidence', 'status'],
       unique: 'id'
     }
   };
@@ -127,7 +128,7 @@
   }
 
   function boundedText(value, field) {
-    var limits = { name: 80, role: 80, title: 160, description: 1000, label: 160, date_label: 80, category: 60, source_label: 160, evidence: 100 };
+    var limits = { name: 80, role: 80, title: 160, description: 1000, statement: 280, label: 160, date_label: 80, category: 60, source_label: 160, evidence: 100 };
     var text = normalizeDisplayText(value);
     if (!text || text.length > (limits[field] || 200) || /[<>]/.test(text)) {
       throw new Error(field + ' 內容不合法');
@@ -173,8 +174,7 @@
         date_label: boundedText(row.date_label, 'date_label'),
         category: boundedText(row.category, 'category'),
         tags: chronologyTags(row.tags),
-        title: boundedText(row.title, 'title'),
-        description: boundedText(row.description, 'description'),
+        statement: boundedText(row.statement, 'statement'),
         source_label: boundedText(row.source_label, 'source_label'),
         source_url: sourceUrl,
         evidence: row.evidence ? boundedText(row.evidence, 'evidence') : ''
@@ -453,26 +453,18 @@
       tagNode.textContent = tag;
       meta.append(tagNode);
     });
-    var title = doc.createElement('h3');
-    title.textContent = row.title;
-    var description = doc.createElement('p');
-    description.textContent = row.description;
+    var statement = doc.createElement('p');
+    statement.className = 'chronology-event-statement';
+    statement.textContent = row.statement;
     var source = doc.createElement('p');
     source.className = 'chronology-source';
-    source.append(doc.createTextNode('來源：'));
     var anchor = doc.createElement('a');
     anchor.href = row.source_url;
     anchor.target = '_blank';
     anchor.rel = 'noopener';
     anchor.textContent = row.source_label;
     source.append(anchor);
-    if (row.evidence) {
-      var evidence = doc.createElement('span');
-      evidence.className = 'chronology-evidence';
-      evidence.textContent = row.evidence;
-      source.append(evidence);
-    }
-    body.append(meta, title, description, source);
+    body.append(meta, statement, source);
     item.append(timeBox, body);
     return item;
   }

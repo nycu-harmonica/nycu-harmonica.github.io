@@ -2,17 +2,9 @@
   "source_mode": "google_sheet",
   "tabs": {
     "chronology_events": {
-      "hash": "sha256:40d3ec5e361227d63da7ebfa692ccc40ccb9b7b98dfcaf91d9c9ba9395659447",
+      "hash": "sha256:c8fc0af4fe8aec54aa47bf6ea03a05f02494f3172c97b636148513a1b522f75e",
       "rows": 66
-    },
-    "gallery_albums": {
-      "hash": "sha256:7e88b103c9873f9fbcf86cb27c4ca5885ed74de1fc51098eb6cb9585e4e5bc3a",
-      "rows": 3
-    },
-    "links": {
-      "hash": "sha256:df179ffccb73efd8ccc495524cf877681b250911e252151b8b416ada426f6081",
-      "rows": 5
     }
   },
-  "updated_at": "2026-08-04T17:27:47+08:00"
+  "updated_at": "2026-08-04T18:39:13+08:00"
 }

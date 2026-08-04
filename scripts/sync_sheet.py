@@ -47,7 +47,7 @@ ICON_ENUM = {"instagram", "facebook", "youtube", "email", "line", "link"}
 SHOW_IN_ENUM = {"footer", "about", "join"}
 DISPLAY_TEXT_FIELDS = {
     "title", "role", "name", "description", "label", "date_label", "category",
-    "source_label", "evidence",
+    "statement", "source_label", "evidence",
 }
 CJK_RANGE = "\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff"
 CJK_LEFT_CONTEXT = CJK_RANGE + "）】」』》〉"
@@ -63,7 +63,8 @@ HEADER_ALIASES = {
     "名稱": "label", "網址": "url", "圖示": "icon", "顯示位置": "show_in",
     "key": "key",
     "編號": "id", "排序日期": "sort_date", "顯示時間": "date_label",
-    "分類": "category", "標籤": "tags", "來源": "source_label", "證據": "evidence",
+    "分類": "category", "標籤": "tags", "敘述": "statement", "一句話": "statement",
+    "來源": "source_label", "證據": "evidence",
 }
 
 
@@ -279,8 +280,7 @@ TAB_SPECS = {
             ("date_label", True, v_display_text),
             ("category", True, v_display_text),
             ("tags", False, v_tags),
-            ("title", True, v_display_text),
-            ("description", True, v_display_text),
+            ("statement", True, v_display_text),
             ("source_label", True, v_display_text),
             ("source_url", True, v_url),
             ("evidence", False, v_display_text),
