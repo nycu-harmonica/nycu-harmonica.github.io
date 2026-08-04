@@ -696,7 +696,7 @@ a:hover { text-decoration: underline; }
 .chronology-event-time {
   grid-column: 1;
   align-self: start;
-  padding: 0.2rem 0.65rem 0;
+  padding: 0.35rem 0.65rem 0;
   text-align: right;
   color: var(--green-700);
   font-size: 0.8rem;
@@ -757,7 +757,7 @@ a:hover { text-decoration: underline; }
     --chronology-time-width: 5.4rem;
     --chronology-line-gap: 1rem;
   }
-  .chronology-event-time { padding: 0.24rem 0.45rem 0; font-size: 0.72rem; }
+  .chronology-event-time { padding: 0.4rem 0.45rem 0; font-size: 0.72rem; }
   .chronology-event-statement { font-size: 0.9rem; }
 }
 
