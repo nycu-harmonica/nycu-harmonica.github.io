@@ -612,69 +612,10 @@ a:hover { text-decoration: underline; }
   position: absolute;
   top: 0.65rem;
   bottom: 0.65rem;
-  left: calc(var(--chronology-time-width) + (var(--chronology-line-gap) / 2) - 1px);
-  width: 2px;
+  left: calc(var(--chronology-time-width) + (var(--chronology-line-gap) / 2) - 0.5px);
+  width: 1px;
   background: var(--line);
 }
-.chronology-filters {
-  margin: 0 0 1.15rem;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--green-50);
-}
-.chronology-filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.65rem;
-}
-.chronology-filters label,
-.chronology-tag-filter-group {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-.chronology-filters select {
-  min-width: 11rem;
-  padding: 0.45rem 0.65rem;
-  border: 1px solid var(--line);
-  border-radius: 0.45rem;
-  background: var(--card-bg);
-  color: var(--ink);
-  font: inherit;
-}
-.chronology-filter-label { display: block; }
-.chronology-tag-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-.chronology-tag-filter {
-  padding: 0.35rem 0.65rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--card-bg);
-  color: var(--ink-soft);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.82rem;
-}
-.chronology-tag-filter[aria-pressed="true"] {
-  border-color: var(--green-900);
-  background: var(--green-900);
-  color: #fff;
-}
-.chronology-filter-count,
-.chronology-filter-empty {
-  margin: 0.45rem 0 0;
-  color: var(--ink-soft);
-  font-size: 0.88rem;
-}
-.chronology-filter-empty { color: var(--amber-500); }
 .chronology-item {
   position: relative;
   display: grid;
@@ -708,32 +649,8 @@ a:hover { text-decoration: underline; }
   min-width: 0;
   padding: 0.05rem 0 0.4rem;
 }
-.chronology-event-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25rem 0.35rem;
-  margin: 0.22rem 0 0;
-}
-.chronology-category,
-.chronology-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.12rem 0.4rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  line-height: 1.25;
-}
-.chronology-category {
-  background: var(--green-900);
-  color: #fff;
-  font-weight: 700;
-}
-.chronology-tag {
-  background: var(--green-50);
-  color: var(--green-900);
-}
 .chronology-event-statement {
+  display: inline;
   margin: 0;
   color: var(--ink);
   font-size: 0.96rem;
@@ -748,6 +665,7 @@ a:hover { text-decoration: underline; }
   font-weight: 600;
   line-height: 1.25;
   white-space: nowrap;
+  margin-left: 0.35rem;
 }
 .chronology-source::before { content: "↗"; }
 .chronology-source:hover { color: var(--green-900); }

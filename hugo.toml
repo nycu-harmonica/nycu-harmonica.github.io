@@ -48,8 +48,8 @@ pageRef = "/"
 weight = 10
 
 [[menus.main]]
-name = "相簿"
-pageRef = "/gallery"
+name = "Facebook 相片"
+url = "https://www.facebook.com/nycubmhc/photos/"
 weight = 20
 
 [[menus.main]]

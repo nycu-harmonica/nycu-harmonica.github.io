@@ -16,7 +16,7 @@ Hugo 所需的內容與資料檔,並更新 repo 內的 CSV 快照(fallback)。
 輸出:
     static/data/<tab>.csv                CSV 快照(僅線上抓取成功且驗證通過時覆寫)
     data/generated/<tab>.json            links / gallery_albums / chronology_events
-    content/gallery/<slug>/index.md      相簿頁 front matter(照片另由目錄管理)
+    content/gallery/<slug>/index.md      舊相簿頁 front matter(目前不再發布,照片素材保留)
     data/generated/last_sync.json        輸出或來源模式有變更時更新
 """
 
@@ -547,13 +547,13 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
 
         if tab == "gallery_albums":
             rows.sort(key=lambda r: (r["date"], r["slug"]), reverse=True)
-            changed = emit_gallery(rows, root / "content" / "gallery")
-            changed = emit_json(rows, generated_dir / "gallery_albums.json") or changed
+            # 公開相簿改由 Facebook 維護；保留 Sheet/JSON 快照供資料維護,不再產生官網路由。
+            changed = emit_json(rows, generated_dir / "gallery_albums.json")
         elif tab == "links":
             rows.sort(key=lambda r: (r.get("order", 999), r["key"]))
             changed = emit_json(rows, generated_dir / "links.json")
         elif tab == "chronology_events":
-            rows.sort(key=lambda r: (r["sort_date"], r["id"]))
+            rows.sort(key=lambda r: (r["sort_date"], r["id"]), reverse=True)
             changed = emit_json(rows, generated_dir / "chronology_events.json")
         else:  # pragma: no cover
             changed = False

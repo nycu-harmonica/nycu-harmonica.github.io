@@ -239,7 +239,7 @@
     }).filter(Boolean);
     if (tab === 'gallery_albums') rows.sort(function (a, b) { return b.date.localeCompare(a.date); });
     if (tab === 'links') rows.sort(function (a, b) { return (a.order == null ? 9999 : a.order) - (b.order == null ? 9999 : b.order); });
-    if (tab === 'chronology_events') rows.sort(function (a, b) { return a.sort_date.localeCompare(b.sort_date) || a.id.localeCompare(b.id); });
+    if (tab === 'chronology_events') rows.sort(function (a, b) { return b.sort_date.localeCompare(a.sort_date) || a.id.localeCompare(b.id); });
     return rows;
   }
 
@@ -420,17 +420,11 @@
     if (doc.title.indexOf('｜') !== -1) doc.title = row.title + '｜' + doc.title.split('｜').slice(1).join('｜');
   }
 
-  function chronologyTagArray(value) {
-    return String(value || '').split('|').map(function (tag) { return tag.trim(); }).filter(Boolean);
-  }
-
   function createChronologyItem(doc, row) {
     var item = doc.createElement('article');
     item.className = 'chronology-item';
     item.dataset.chronologyEvent = '';
     item.dataset.chronologyId = row.id;
-    item.dataset.chronologyCategory = row.category;
-    item.dataset.chronologyTags = row.tags;
 
     var timeBox = doc.createElement('div');
     timeBox.className = 'chronology-event-time';
@@ -444,59 +438,15 @@
     var statement = doc.createElement('p');
     statement.className = 'chronology-event-statement';
     statement.textContent = row.statement;
-    var meta = doc.createElement('div');
-    meta.className = 'chronology-event-meta';
-    var category = doc.createElement('span');
-    category.className = 'chronology-category';
-    category.textContent = row.category;
-    meta.append(category);
-    chronologyTagArray(row.tags).forEach(function (tag) {
-      if (tag === row.category) return;
-      var tagNode = doc.createElement('span');
-      tagNode.className = 'chronology-tag';
-      tagNode.textContent = tag;
-      meta.append(tagNode);
-    });
     var source = doc.createElement('a');
     source.className = 'chronology-source';
     source.href = row.source_url;
     source.target = '_blank';
     source.rel = 'noopener';
     source.textContent = row.source_label;
-    body.append(statement, meta);
-    meta.append(source);
+    body.append(statement, source);
     item.append(timeBox, body);
     return item;
-  }
-
-  function uniqueChronologyValues(events, field) {
-    var values = new Set();
-    events.forEach(function (row) {
-      if (field === 'tags') chronologyTagArray(row.tags).forEach(function (tag) { values.add(tag); });
-      else if (row[field]) values.add(row[field]);
-    });
-    return Array.from(values).sort(function (a, b) { return a.localeCompare(b, 'zh-Hant'); });
-  }
-
-  function applyChronologyFilter(root) {
-    var category = root.querySelector('[data-chronology-filter-category]');
-    var activeTag = root.dataset.chronologySelectedTag || '';
-    var categoryValue = category ? category.value : '';
-    var visible = 0;
-    root.querySelectorAll('[data-chronology-event]').forEach(function (item) {
-      var categoryMatch = !categoryValue || item.dataset.chronologyCategory === categoryValue;
-      var tags = chronologyTagArray(item.dataset.chronologyTags);
-      var tagMatch = !activeTag || tags.indexOf(activeTag) !== -1;
-      item.hidden = !(categoryMatch && tagMatch);
-      if (!item.hidden) visible += 1;
-    });
-    var count = root.querySelector('[data-chronology-count]');
-    if (count) count.textContent = '顯示 ' + visible + '／' + (root.dataset.chronologyTotal || visible) + ' 筆事件';
-    var empty = root.querySelector('[data-chronology-empty]');
-    if (empty) empty.hidden = visible !== 0;
-    root.querySelectorAll('[data-chronology-tag-filter]').forEach(function (button) {
-      button.setAttribute('aria-pressed', String(button.dataset.chronologyTag === activeTag));
-    });
   }
 
   function renderChronology(doc, events) {
@@ -504,55 +454,7 @@
     if (!root) return;
     var list = root.querySelector('[data-sheet-chronology-list]');
     if (!list) return;
-    root.dataset.chronologyTotal = String(events.length);
-    var categorySelect = root.querySelector('[data-chronology-filter-category]');
-    var selectedCategory = categorySelect ? categorySelect.value : '';
-    var selectedTag = root.dataset.chronologySelectedTag || '';
-    if (categorySelect) {
-      var categoryOptions = [doc.createElement('option')];
-      categoryOptions[0].value = '';
-      categoryOptions[0].textContent = '全部分類';
-      uniqueChronologyValues(events, 'category').forEach(function (value) {
-        var option = doc.createElement('option');
-        option.value = value;
-        option.textContent = value;
-        categoryOptions.push(option);
-      });
-      categorySelect.replaceChildren.apply(categorySelect, categoryOptions);
-      categorySelect.value = uniqueChronologyValues(events, 'category').indexOf(selectedCategory) !== -1 ? selectedCategory : '';
-    }
-    var tagHost = root.querySelector('[data-chronology-tag-filters]');
-    if (tagHost) {
-      var tagButtons = [doc.createElement('button')];
-      tagButtons[0].type = 'button';
-      tagButtons[0].className = 'chronology-tag-filter';
-      tagButtons[0].dataset.chronologyTagFilter = '';
-      tagButtons[0].dataset.chronologyTag = '';
-      tagButtons[0].textContent = '全部標籤';
-      uniqueChronologyValues(events, 'tags').forEach(function (value) {
-        var button = doc.createElement('button');
-        button.type = 'button';
-        button.className = 'chronology-tag-filter';
-        button.dataset.chronologyTagFilter = '';
-        button.dataset.chronologyTag = value;
-        button.textContent = value;
-        tagButtons.push(button);
-      });
-      tagHost.replaceChildren.apply(tagHost, tagButtons);
-      if (uniqueChronologyValues(events, 'tags').indexOf(selectedTag) === -1) root.dataset.chronologySelectedTag = '';
-    }
     list.replaceChildren.apply(list, events.map(function (row) { return createChronologyItem(doc, row); }));
-    if (!root.dataset.chronologyBound) {
-      root.dataset.chronologyBound = 'true';
-      if (categorySelect) categorySelect.addEventListener('change', function () { applyChronologyFilter(root); });
-      root.addEventListener('click', function (event) {
-        var button = event.target.closest ? event.target.closest('[data-chronology-tag-filter]') : null;
-        if (!button || !root.contains(button)) return;
-        root.dataset.chronologySelectedTag = button.dataset.chronologyTag || '';
-        applyChronologyFilter(root);
-      });
-    }
-    applyChronologyFilter(root);
   }
 
   function formatTaipei(date) {

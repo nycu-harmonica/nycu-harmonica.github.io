@@ -55,9 +55,9 @@ function testNormalizeAndSort() {
   assert.deepEqual(albums.map((row) => row.slug), ['newer-album', 'older-album']);
   assert.equal(albums[0].description, '活動紀錄，社員合照。');
   assert.deepEqual(links.map((row) => row.key), ['discord', 'facebook']);
-  assert.deepEqual(chronology.map((row) => row.id), ['early-event', 'later-event']);
-  assert.equal(chronology[0].tags, '社史|人物');
-  assert.equal(chronology[0].statement, '竹韻口琴社成立。');
+  assert.deepEqual(chronology.map((row) => row.id), ['later-event', 'early-event']);
+  assert.equal(chronology[1].tags, '社史|人物');
+  assert.equal(chronology[1].statement, '竹韻口琴社成立。');
 }
 
 function testChineseHeaders() {

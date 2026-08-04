@@ -39,8 +39,7 @@ def canonical_from_html(path: Path) -> str:
 BASE_URL = canonical_from_html(PUBLIC / "index.html")
 assert BASE_URL.endswith("/"), f"Home canonical URL must end with /: {BASE_URL}"
 RSS_METADATA = {
-    "index.xml": ("陽明交大竹韻口琴社相簿更新", "竹韻口琴社相簿更新"),
-    "gallery/index.xml": ("相簿｜陽明交大竹韻口琴社", "竹韻口琴社活動照片與歷史影音索引。"),
+    "index.xml": ("陽明交大竹韻口琴社網站更新", "竹韻口琴社網站更新"),
 }
 RETIRED_OUTPUTS = {
     "announcements/index.html",
@@ -49,8 +48,10 @@ RETIRED_OUTPUTS = {
     "announcements/2026-07-15-site-launch/index.html",
     "events/index.html",
     "events/index.xml",
+    "gallery/index.html",
+    "gallery/index.xml",
 }
-RETIRED_PATHS = ("/announcements/", "/events/")
+RETIRED_PATHS = ("/announcements/", "/events/", "/gallery/")
 
 
 def parse_xml(relative_path: str) -> ET.Element:
@@ -101,7 +102,9 @@ def check_rss(relative_path: str) -> None:
         f"RSS description is inaccurate: {relative_path}"
     )
     items = channel.findall("item")
-    assert items, f"RSS has no items: {relative_path}"
+    if not items:
+        assert relative_path == "index.xml", f"RSS has no items: {relative_path}"
+        return
 
     urls: list[str] = []
     for item in items:
@@ -113,9 +116,7 @@ def check_rss(relative_path: str) -> None:
         urls.append(url)
     assert len(urls) == len(set(urls)), f"RSS contains duplicate items: {relative_path}"
     if relative_path == "index.xml":
-        assert all(url.startswith(f"{BASE_URL}gallery/") for url in urls), (
-            "Home RSS must contain only remaining gallery content"
-        )
+        assert all("/gallery/" not in url for url in urls), "Home RSS must not contain retired gallery URLs"
 
 
 def check_retired_routes() -> None:

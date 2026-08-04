@@ -2,13 +2,13 @@
 
 這份文件寫給**不需要程式背景**的社團幹部:如何更新網站內容、誰該有哪些權限、出問題怎麼辦。
 
-網站長期維護模式＝社團共用 Google Sheet＋公開 Google Calendar＋臺灣口琴觀測站公開動態＋核准公開的相簿照片。
+網站長期維護模式＝社團共用 Google Sheet＋公開 Google Calendar＋臺灣口琴觀測站公開動態＋竹韻 Facebook 公開相片。
 
 > **目前狀態:**公開 Calendar 與正式公開 Google Sheet 均已連結。試算表編輯網址只留在幹部交接資料,網站與公開文件不提供編輯入口。
 
 ## 0. 「詢問竹韻」公開問答
 
-- 官網本身仍完全部署在 GitHub Pages。問答服務離線時，只會顯示暫時無法回答；其他頁面、Sheet、Calendar 和相簿不受影響。
+- 官網本身仍完全部署在 GitHub Pages。問答服務離線時，只會顯示暫時無法回答；其他頁面、Sheet、Calendar 和 Facebook 相片連結不受影響。
 - 問答只讀已核准的公開網站內容與公開 Sheet，不會讀取 `shared/`、`private/`、Discord、Gmail、Drive 或社員個資。
 - 不要在問答視窗輸入學號、電話或私人聯絡資料。
 - 若回答內容不正確，先以官網、公開 Calendar 或 Instagram 為準，並由網站管理員檢查 `club.nycu.harmonica.website-agent` 與 `website` Hermes profile。
@@ -32,20 +32,9 @@
 - 儲存 Sheet 後不需要執行 GitHub Action 或等待部署。新開網站會立即讀取最新公開資料；已開啟的頁面最慢約 60 秒更新。
 - 網站會等兩個工作表全部讀取且驗證成功才一次換成新資料。編輯到一半、表頭錯誤或 Google 暫時失效時,訪客會繼續看到 last-good 備援,不會看到半套內容。
 
-## 4. 新增相簿
+## 4. 維護相片與相簿
 
-照片目前需要一位會用 GitHub 的幹部(網站管理員)協助:
-
-1. 幹部把選好的照片交給網站管理員(挑 10–30 張精華即可)。
-2. 網站管理員:
-   - 在 repo 的 `content/gallery/` 開新資料夾,名稱=相簿代號(例:`2026-12-year-end-concert`)
-   - 照片縮圖後放入(建議 WebP、長邊 ≤1600px、單張 <300KB)。Mac 一行指令:
-     `for f in *.jpg; do cwebp -q 82 -resize 1600 0 "$f" -o "${f%.jpg}.webp"; done`
-     (`cwebp` 會自動去除照片的 GPS 等隱私資訊)
-   - commit + push
-3. 在 `gallery_albums` 工作表加一列:slug(=資料夾名)、title、date 必填;cover 填封面檔名(留空=第一張)。
-
-> 未來若建好社團 Shared Drive 與自動同步(見 docs/google-setup.md),步驟 2 會簡化成「把照片丟進指定雲端資料夾」。
+相片與相簿統一維護在[竹韻 Facebook 相片](https://www.facebook.com/nycubmhc/photos/)，官網的「Facebook 相片」入口會直接導向該頁，不再於 repo 建立或部署 `content/gallery/` 頁面。若編年史事件有對應相簿，請在 `chronology_events` 的來源欄貼上 Facebook 相簿或貼文連結。
 
 ## 5. 手動更新 last-good 備援
 

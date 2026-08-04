@@ -3,11 +3,11 @@
 國立陽明交通大學竹韻口琴社官網:<https://harmonica.nycu.club/>。
 
 - 靜態網站:[Hugo](https://gohugo.io/)(extended)+ GitHub Pages,無付費服務依賴
-- 目前內容來源：瀏覽器即時讀取公開 Google Sheet（相簿資訊與連結）＋公開 Google Calendar（首頁完整活動時程）＋臺灣口琴觀測站公開 API（首頁竹韻公開社群動態）＋ repo 內核准照片
+- 目前內容來源：瀏覽器即時讀取公開 Google Sheet（編年史與社群連結）＋公開 Google Calendar（首頁完整活動時程）＋臺灣口琴觀測站公開 API（首頁竹韻公開社群動態）；相片與相簿由[竹韻 Facebook 相片](https://www.facebook.com/nycubmhc/photos/)維護
 - repo 內公開 CSV 是 last-good 快照,供 Sheet 暫時無法讀取或瀏覽器停用 JavaScript 時 fallback
 - 「詢問竹韻」介面仍由 GitHub Pages 靜態提供；只有送出問題時才呼叫隔離的公開問答 endpoint
 
-> **正式 Google Sheet 已於 2026-07-16 接通。** 幹部日常更新相簿資訊與連結時不需要修改 repo。
+> **正式 Google Sheet 已於 2026-07-16 接通。** 幹部日常更新編年史與社群連結時不需要修改 repo；相片直接維護於 Facebook。
 
 ## 本機預覽
 
@@ -41,7 +41,7 @@ Google Sheet 不需 API key。前端透過 Google Visualization JSONP 讀取公�
 `scripts/sync_observe.py` 只用於網站管理員手動更新 committed fallback，不在定期同步 workflow 內執行。相同貼文不會只因 API 生成時間改變而重寫快照。
 
 - 活動完整時程的來源是公開 Google Calendar，首頁直接顯示完整行事曆。
-- 相簿照片放在 `content/gallery/<slug>/`(WebP/JPG),縮圖與大圖由 Hugo 於建置時自動產生,不需手動處理多種尺寸。
+- 官網不再建立獨立相簿路由；相片請維護於[竹韻 Facebook 相片](https://www.facebook.com/nycubmhc/photos/)。
 
 ## 資料格式（Google Sheet 三個工作表）
 
@@ -49,7 +49,8 @@ Google Sheet 不需 API key。前端透過 Google Visualization JSONP 讀取公�
 
 | 工作表 | 欄位(*=必填) | 用途 |
 |---|---|---|
-| `gallery_albums` | slug*、title*、date*、description、cover、status | 相簿資訊 |
+| `chronology_events` | id*、sort_date*、date_label*、category*、tags、statement*、source_label*、source_url*、evidence | 編年史事件（一行一句，公開頁面不顯示分類與標籤） |
+| `gallery_albums` | slug*、title*、date*、description、cover、status | 歷史相簿索引快照（目前不產生官網路由） |
 | `links` | key*、label*、url*、icon、order、show_in | 社群/聯絡連結 |
 
 通則:表頭支援中文別名(如「標題」=`title`);日期格式 `YYYY-MM-DD`;`status` 填 `draft`(或「草稿」)即隱藏;網址僅接受 `https://` 與 `mailto:`。
@@ -73,7 +74,7 @@ python3 scripts/sync_observe.py             # 手動更新觀測站近期動態 
 ## 部署
 
 - Sheet 日常修改不需 commit、Action 或重新部署；訪客瀏覽器會直接讀取。
-- push 到 `main` → `deploy.yml` 自動建置部署(GitHub Pages 官方流程),只用於程式、文字、版面或相簿照片變更。
+- push 到 `main` → `deploy.yml` 自動建置部署(GitHub Pages 官方流程),只用於程式、文字或版面變更；Facebook 相片更新不需部署官網。
 - `Refresh public data fallback` 只供網站管理員手動更新 repo last-good 快照,不設排程。
 - 正式 `baseURL` 固定為 `https://harmonica.nycu.club/`,確保 canonical、Open Graph、RSS 與 sitemap 一致。
 - DNS、Pages custom domain 與 HTTPS 已啟用;紀錄見 [docs/sdc-dns-request.md](docs/sdc-dns-request.md)。

@@ -1,40 +1,14 @@
 {{ $events := site.Data.generated.chronology_events | default (slice) }}
 <div class="chronology-timeline" aria-label="竹韻口琴社編年史時間線" data-sheet-chronology>
-  <div class="chronology-filters" aria-label="編年史篩選器">
-    <div class="chronology-filter-row">
-      <label for="chronology-category-filter">
-        分類
-        <select id="chronology-category-filter" data-chronology-filter-category>
-          <option value="">全部分類</option>
-        </select>
-      </label>
-      <div class="chronology-tag-filter-group">
-        <span class="chronology-filter-label">標籤</span>
-        <div class="chronology-tag-filters" data-chronology-tag-filters aria-label="標籤篩選"></div>
-      </div>
-    </div>
-    <p class="chronology-filter-count" data-chronology-count aria-live="polite">共 {{ len $events }} 筆事件</p>
-    <p class="chronology-filter-empty" data-chronology-empty hidden>目前沒有符合條件的事件。</p>
-  </div>
-
   <div class="chronology-list" data-sheet-chronology-list>
-    {{ range $events }}
-      {{ $event := . }}
-      <article class="chronology-item" data-chronology-event data-chronology-id="{{ .id }}" data-chronology-category="{{ .category }}" data-chronology-tags="{{ .tags }}">
+    {{ range sort $events "sort_date" "desc" }}
+      <article class="chronology-item" data-chronology-event data-chronology-id="{{ .id }}">
         <div class="chronology-event-time">
           <time datetime="{{ .sort_date }}">{{ .date_label }}</time>
         </div>
         <div class="chronology-event-body">
           <p class="chronology-event-statement">{{ .statement }}</p>
-          <div class="chronology-event-meta">
-            <span class="chronology-category">{{ .category }}</span>
-            {{ with $event.tags }}
-              {{ range split . "|" }}
-                {{ if and . (ne . $event.category) }}<span class="chronology-tag">{{ . }}</span>{{ end }}
-              {{ end }}
-            {{ end }}
-            <a class="chronology-source" href="{{ .source_url }}" target="_blank" rel="noopener">{{ .source_label }}</a>
-          </div>
+          <a class="chronology-source" href="{{ .source_url }}" target="_blank" rel="noopener">{{ .source_label }}</a>
         </div>
       </article>
     {{ end }}
