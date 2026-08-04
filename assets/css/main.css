@@ -679,7 +679,7 @@ a:hover { text-decoration: underline; }
   position: relative;
   display: grid;
   grid-template-columns: var(--chronology-time-width) var(--chronology-line-gap) minmax(0, 1fr);
-  padding: 0.55rem 0 0.65rem;
+  padding: 0.45rem 0;
 }
 .chronology-item::before {
   content: "";
@@ -706,10 +706,8 @@ a:hover { text-decoration: underline; }
 .chronology-event-body {
   grid-column: 3;
   min-width: 0;
-  padding: 0 0 0.65rem;
-  border-bottom: 1px solid var(--line);
+  padding: 0.05rem 0 0.4rem;
 }
-.chronology-item:last-child .chronology-event-body { border-bottom: 0; }
 .chronology-event-meta {
   display: flex;
   flex-wrap: wrap;
