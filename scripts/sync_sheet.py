@@ -15,7 +15,7 @@ Hugo 所需的內容與資料檔,並更新 repo 內的 CSV 快照(fallback)。
 
 輸出:
     static/data/<tab>.csv                CSV 快照(僅線上抓取成功且驗證通過時覆寫)
-    data/generated/<tab>.json            links / gallery_albums
+    data/generated/<tab>.json            links / gallery_albums / chronology_events
     content/gallery/<slug>/index.md      相簿頁 front matter(照片另由目錄管理)
     data/generated/last_sync.json        輸出或來源模式有變更時更新
 """
@@ -45,7 +45,10 @@ DRAFT_WORDS = {"draft", "草稿", "hidden", "隱藏"}
 PUBLISHED_WORDS = {"", "published", "發布", "公開"}
 ICON_ENUM = {"instagram", "facebook", "youtube", "email", "line", "link"}
 SHOW_IN_ENUM = {"footer", "about", "join"}
-DISPLAY_TEXT_FIELDS = {"title", "role", "name", "description", "label"}
+DISPLAY_TEXT_FIELDS = {
+    "title", "role", "name", "description", "label", "date_label", "category",
+    "source_label", "evidence",
+}
 CJK_RANGE = "\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff"
 CJK_LEFT_CONTEXT = CJK_RANGE + "）】」』》〉"
 CJK_RIGHT_CONTEXT = CJK_RANGE + "（【「『《〈"
@@ -59,6 +62,8 @@ HEADER_ALIASES = {
     "說明": "description", "封面": "cover",
     "名稱": "label", "網址": "url", "圖示": "icon", "顯示位置": "show_in",
     "key": "key",
+    "編號": "id", "排序日期": "sort_date", "顯示時間": "date_label",
+    "分類": "category", "標籤": "tags", "來源": "source_label", "證據": "evidence",
 }
 
 
@@ -173,6 +178,21 @@ def v_display_text(value: str, _row=None) -> str:
     return normalize_display_text(value.strip())
 
 
+def v_tags(value: str, _row=None) -> str:
+    tags = []
+    seen = set()
+    for item in re.split(r"[|｜]", value.strip()):
+        item = normalize_display_text(item.strip())
+        if not item:
+            continue
+        if len(item) > 60 or "<" in item or ">" in item:
+            raise RowError(f"標籤內容不合法:{item!r}")
+        if item not in seen:
+            seen.add(item)
+            tags.append(item)
+    return "|".join(tags)
+
+
 def v_slug(value: str, _row=None) -> str:
     value = value.strip().lower()
     if not SLUG_RE.match(value):
@@ -249,6 +269,22 @@ TAB_SPECS = {
             ("icon", False, v_icon),
             ("order", False, v_int),
             ("show_in", False, v_show_in),
+        ],
+    },
+    "chronology_events": {
+        "unique": "id",
+        "fields": [
+            ("id", True, v_slug),
+            ("sort_date", True, v_date),
+            ("date_label", True, v_display_text),
+            ("category", True, v_display_text),
+            ("tags", False, v_tags),
+            ("title", True, v_display_text),
+            ("description", True, v_display_text),
+            ("source_label", True, v_display_text),
+            ("source_url", True, v_url),
+            ("evidence", False, v_display_text),
+            ("status", False, v_text),
         ],
     },
 }
@@ -402,6 +438,10 @@ def emit_gallery(rows: list[dict], gallery_dir: Path) -> bool:
         album_dir = gallery_dir / r["slug"]
         if not album_dir.is_dir():
             log("warn", f"相簿 {r['slug']} 在資料表中,但 content/gallery/{r['slug']}/ 目錄不存在(照片尚未放入)")
+        index_path = album_dir / "index.md"
+        if index_path.exists() and not is_generated_file(index_path):
+            log("info", f"相簿 {r['slug']}/ 為手寫頁,保留補充內容(公開 Sheet 仍供列表與即時頁面使用)")
+            continue
         fm = {
             "title": r["title"],
             "date": r["date"],
@@ -411,7 +451,7 @@ def emit_gallery(rows: list[dict], gallery_dir: Path) -> bool:
             fm["cover"] = r["cover"]
         body = (r.get("description", "").strip() + "\n") if r.get("description") else ""
         text = front_matter(fm) + "\n\n" + body
-        if write_if_changed(album_dir / "index.md", text):
+        if write_if_changed(index_path, text):
             changed = True
     for album_dir in sorted(p for p in gallery_dir.iterdir() if p.is_dir()):
         if album_dir.name in slugs:
@@ -512,6 +552,9 @@ def sync(root: Path, offline: bool, strict: bool, only: set[str] | None) -> int:
         elif tab == "links":
             rows.sort(key=lambda r: (r.get("order", 999), r["key"]))
             changed = emit_json(rows, generated_dir / "links.json")
+        elif tab == "chronology_events":
+            rows.sort(key=lambda r: (r["sort_date"], r["id"]))
+            changed = emit_json(rows, generated_dir / "chronology_events.json")
         else:  # pragma: no cover
             changed = False
 

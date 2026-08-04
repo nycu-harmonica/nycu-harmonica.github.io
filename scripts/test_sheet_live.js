@@ -14,6 +14,13 @@ function payload(headers, rows) {
   };
 }
 
+function payloadWithColumnLabels(headers, rows) {
+  const value = payload(headers, rows);
+  value.table.cols = headers.map((header, index) => ({ id: String.fromCharCode(65 + index), type: 'string', label: header }));
+  value.table.rows = value.table.rows.slice(1);
+  return value;
+}
+
 function fixtures() {
   return {
     gallery_albums: payload(
@@ -29,6 +36,13 @@ function fixtures() {
         ['facebook', 'Facebook 粉絲專頁', 'https://www.facebook.com/example/', 'facebook', '20', 'footer,about'],
         ['discord', 'Discord 社群', 'https://discord.gg/example', 'link', '10', 'footer,about,join']
       ]
+    ),
+    chronology_events: payload(
+      ['id', 'sort_date', 'date_label', 'category', 'tags', 'title', 'description', 'source_label', 'source_url', 'evidence', 'status'],
+      [
+        ['later-event', '2026-07-01', '2026/07/01', '活動', '活動|演出', '後來的事件', '公開活動說明', '公開行事曆', 'https://example.com/later', 'A1', ''],
+        ['early-event', '1968-04-08', '1968/04/08', '創社', '社史|人物', '早期事件', '公開社史說明', '官方說明', 'https://example.com/early', 'A1', '']
+      ]
     )
   };
 }
@@ -37,9 +51,12 @@ function testNormalizeAndSort() {
   const data = fixtures();
   const albums = sheetLive.normalizeTab('gallery_albums', data.gallery_albums);
   const links = sheetLive.normalizeTab('links', data.links);
+  const chronology = sheetLive.normalizeTab('chronology_events', data.chronology_events);
   assert.deepEqual(albums.map((row) => row.slug), ['newer-album', 'older-album']);
   assert.equal(albums[0].description, '活動紀錄，社員合照。');
   assert.deepEqual(links.map((row) => row.key), ['discord', 'facebook']);
+  assert.deepEqual(chronology.map((row) => row.id), ['early-event', 'later-event']);
+  assert.equal(chronology[0].tags, '社史|人物');
 }
 
 function testChineseHeaders() {
@@ -50,6 +67,16 @@ function testChineseHeaders() {
   assert.equal(sheetLive.normalizeTab('gallery_albums', value)[0].title, '春季成發');
 }
 
+function testGvizColumnLabels() {
+  const value = payloadWithColumnLabels(
+    ['id', 'sort_date', 'date_label', 'category', 'title', 'description', 'source_label', 'source_url'],
+    [['labeled-event', '1968-04-08', '1968/04/08', '創社', '事件', '說明', '來源', 'https://example.com/']]
+  );
+  const rows = sheetLive.normalizeTab('chronology_events', value);
+  assert.equal(rows[0].id, 'labeled-event');
+  assert.equal(rows[0].date_label, '1968/04/08');
+}
+
 function testInvalidTablesAreRejected() {
   const invalid = [
     ['links', payload(['key', 'label', 'url', 'token'], [['discord', 'Discord', 'https://example.com/', 'secret']])],
@@ -58,6 +85,8 @@ function testInvalidTablesAreRejected() {
     ['gallery_albums', payload(['slug', 'title', 'date'], [['bad-album', '標題', '2026-02-30']])],
     ['gallery_albums', payload(['slug', 'title', 'date'], [['bad-album', '<script>', '2026-04-12']])],
     ['links', payload(['key', 'label', 'url'], [['discord', 'Discord', 'https://example.com/'], ['discord', 'Dup', 'https://example.com/b']])]
+    ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'title', 'description', 'source_label', 'source_url'], [['bad-event', '2026-02-30', 'bad', '活動', '標題', '說明', '來源', 'https://example.com/']])]
+    ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'title', 'description', 'source_label', 'source_url'], [['bad-event', '2026-04-12', '2026/04/12', '活動', '<script>', '說明', '來源', 'https://example.com/']])]
   ];
   invalid.forEach(([tab, value]) => assert.throws(() => sheetLive.normalizeTab(tab, value), Error));
 }
@@ -76,6 +105,7 @@ function testGvizUrl() {
   assert.equal(url.origin, 'https://docs.google.com');
   assert.equal(url.searchParams.get('gid'), '1378930118');
   assert.equal(url.searchParams.get('tqx'), 'out:json;responseHandler:__callback_123');
+  assert.equal(url.searchParams.get('headers'), '1');
   assert.equal(url.searchParams.get('_'), '42');
 }
 

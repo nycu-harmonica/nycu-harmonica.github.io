@@ -6,6 +6,8 @@ menu_note: 公開社史、影音與比賽紀錄
 
 這是一份以公開來源整理的竹韻口琴社時間線。它把**社團官方自述**、**官方比賽資料**與**公開影音／檔案**分開標示；來源日期若是 YouTube 回填日期、播放清單標題或公開轉載，會保留原始脈絡，不把它誤寫成演出日期。
 
+事件資料由[竹韻口琴社網站資料 Google Sheet](https://docs.google.com/spreadsheets/d/19facgxayMMiYSz1gNmoQRtkY_EjLTYiRyyTa6KfYWic/edit) 的 `chronology_events` 分頁維護。每列是一個事件，使用 `sort_date` 排序，並以 `category`、`tags`、`evidence` 和來源網址保留分類與核對脈絡；標示「待核」的內容仍是公開線索，不代表已完成官方查證。
+
 ## 時間軸
 
 {{< chronology-timeline >}}

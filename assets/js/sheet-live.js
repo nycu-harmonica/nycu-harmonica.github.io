@@ -2,7 +2,7 @@
 (function (global) {
   'use strict';
 
-  var TAB_NAMES = ['gallery_albums', 'links'];
+  var TAB_NAMES = ['gallery_albums', 'links', 'chronology_events'];
   var DRAFT_WORDS = new Set(['draft', '草稿', 'hidden', '隱藏']);
   var PUBLISHED_WORDS = new Set(['', 'published', '發布', '公開']);
   var ICONS = new Set(['instagram', 'facebook', 'youtube', 'email', 'line', 'link']);
@@ -18,7 +18,9 @@
     '代號': 'slug', '日期': 'date', '標題': 'title', '狀態': 'status',
     '排序': 'order', '職稱': 'role', '姓名': 'name', '說明': 'description',
     '封面': 'cover', '名稱': 'label', '網址': 'url', '圖示': 'icon',
-    '顯示位置': 'show_in', 'key': 'key'
+    '顯示位置': 'show_in', 'key': 'key',
+    '編號': 'id', '排序日期': 'sort_date', '顯示時間': 'date_label',
+    '分類': 'category', '標籤': 'tags', '來源': 'source_label', '證據': 'evidence'
   };
   var SPECS = {
     gallery_albums: {
@@ -30,6 +32,11 @@
       required: ['key', 'label', 'url'],
       allowed: ['key', 'label', 'url', 'icon', 'order', 'show_in'],
       unique: 'key'
+    },
+    chronology_events: {
+      required: ['id', 'sort_date', 'date_label', 'category', 'title', 'description', 'source_label', 'source_url'],
+      allowed: ['id', 'sort_date', 'date_label', 'category', 'tags', 'title', 'description', 'source_label', 'source_url', 'evidence', 'status'],
+      unique: 'id'
     }
   };
 
@@ -72,7 +79,10 @@
       throw new Error('Google Sheet 欄數不合理');
     }
     var rawRows = payload.table.rows.map(function (row) { return Array.isArray(row.c) ? row.c : []; });
-    var headers = rawRows[0].map(function (cell) { return normalizeHeader(cellText(cell)); });
+    var columnLabels = payload.table.cols.map(function (column) { return normalizeHeader(column.label || ''); });
+    var hasColumnLabels = columnLabels.some(Boolean);
+    var headers = hasColumnLabels ? columnLabels : rawRows[0].map(function (cell) { return normalizeHeader(cellText(cell)); });
+    var dataRows = hasColumnLabels ? rawRows : rawRows.slice(1);
     var positions = [];
     var seenHeaders = new Set();
     headers.forEach(function (header, index) {
@@ -84,7 +94,7 @@
     if (!positions.length) throw new Error('Google Sheet 缺少表頭');
 
     var rows = [];
-    rawRows.slice(1).forEach(function (cells, rowIndex) {
+    dataRows.forEach(function (cells, rowIndex) {
       cells.forEach(function (cell, columnIndex) {
         if (cellText(cell) && !headers[columnIndex]) {
           throw new Error('Google Sheet 第 ' + (rowIndex + 2) + ' 列有未命名欄位');
@@ -117,7 +127,7 @@
   }
 
   function boundedText(value, field) {
-    var limits = { name: 80, role: 80, title: 160, description: 1000, label: 160 };
+    var limits = { name: 80, role: 80, title: 160, description: 1000, label: 160, date_label: 80, category: 60, source_label: 160, evidence: 100 };
     var text = normalizeDisplayText(value);
     if (!text || text.length > (limits[field] || 200) || /[<>]/.test(text)) {
       throw new Error(field + ' 內容不合法');
@@ -133,11 +143,42 @@
     return number;
   }
 
+  function chronologyTags(value) {
+    var seen = new Set();
+    return String(value == null ? '' : value).split(/[|｜]/).map(function (tag) {
+      return normalizeDisplayText(tag);
+    }).filter(function (tag) {
+      if (!tag || tag.length > 60 || /[<>]/.test(tag) || seen.has(tag)) return false;
+      seen.add(tag);
+      return true;
+    }).join('|');
+  }
+
   function normalizeRow(tab, row) {
     var status = String(row.status || '').trim().toLowerCase();
     if (DRAFT_WORDS.has(status)) return null;
-    if (tab === 'gallery_albums' && !PUBLISHED_WORDS.has(status)) {
+    if ((tab === 'gallery_albums' || tab === 'chronology_events') && !PUBLISHED_WORDS.has(status)) {
       throw new Error('狀態值無法辨識');
+    }
+    if (tab === 'chronology_events') {
+      var id = String(row.id || '').trim().toLowerCase();
+      if (!SLUG_RE.test(id)) throw new Error('事件代號格式錯誤');
+      var sortDate = String(row.sort_date || '').trim();
+      if (!validDate(sortDate)) throw new Error('事件排序日期格式錯誤');
+      var sourceUrl = validUrl(String(row.source_url || '').trim());
+      if (!sourceUrl) throw new Error('事件來源網址不合法');
+      return {
+        id: id,
+        sort_date: sortDate,
+        date_label: boundedText(row.date_label, 'date_label'),
+        category: boundedText(row.category, 'category'),
+        tags: chronologyTags(row.tags),
+        title: boundedText(row.title, 'title'),
+        description: boundedText(row.description, 'description'),
+        source_label: boundedText(row.source_label, 'source_label'),
+        source_url: sourceUrl,
+        evidence: row.evidence ? boundedText(row.evidence, 'evidence') : ''
+      };
     }
     if (tab === 'gallery_albums') {
       var slug = String(row.slug || '').trim().toLowerCase();
@@ -198,6 +239,7 @@
     }).filter(Boolean);
     if (tab === 'gallery_albums') rows.sort(function (a, b) { return b.date.localeCompare(a.date); });
     if (tab === 'links') rows.sort(function (a, b) { return (a.order == null ? 9999 : a.order) - (b.order == null ? 9999 : b.order); });
+    if (tab === 'chronology_events') rows.sort(function (a, b) { return a.sort_date.localeCompare(b.sort_date) || a.id.localeCompare(b.id); });
     return rows;
   }
 
@@ -205,7 +247,7 @@
     var params = new URLSearchParams({
       gid: String(config.tabs[tab].gid),
       tqx: 'out:json;responseHandler:' + callbackName,
-      headers: '0',
+      headers: '1',
       _: String(now == null ? Date.now() : now)
     });
     return 'https://docs.google.com/spreadsheets/d/' + config.sheetId + '/gviz/tq?' + params.toString();
@@ -378,6 +420,149 @@
     if (doc.title.indexOf('｜') !== -1) doc.title = row.title + '｜' + doc.title.split('｜').slice(1).join('｜');
   }
 
+  function chronologyTagArray(value) {
+    return String(value || '').split('|').map(function (tag) { return tag.trim(); }).filter(Boolean);
+  }
+
+  function createChronologyItem(doc, row) {
+    var item = doc.createElement('article');
+    item.className = 'chronology-item';
+    item.dataset.chronologyEvent = '';
+    item.dataset.chronologyId = row.id;
+    item.dataset.chronologyCategory = row.category;
+    item.dataset.chronologyTags = row.tags;
+
+    var timeBox = doc.createElement('div');
+    timeBox.className = 'chronology-event-time';
+    var time = doc.createElement('time');
+    time.dateTime = row.sort_date;
+    time.textContent = row.date_label;
+    timeBox.append(time);
+
+    var body = doc.createElement('div');
+    body.className = 'chronology-event-body';
+    var meta = doc.createElement('div');
+    meta.className = 'chronology-event-meta';
+    var category = doc.createElement('span');
+    category.className = 'chronology-category';
+    category.textContent = row.category;
+    meta.append(category);
+    chronologyTagArray(row.tags).forEach(function (tag) {
+      var tagNode = doc.createElement('span');
+      tagNode.className = 'chronology-tag';
+      tagNode.textContent = tag;
+      meta.append(tagNode);
+    });
+    var title = doc.createElement('h3');
+    title.textContent = row.title;
+    var description = doc.createElement('p');
+    description.textContent = row.description;
+    var source = doc.createElement('p');
+    source.className = 'chronology-source';
+    source.append(doc.createTextNode('來源：'));
+    var anchor = doc.createElement('a');
+    anchor.href = row.source_url;
+    anchor.target = '_blank';
+    anchor.rel = 'noopener';
+    anchor.textContent = row.source_label;
+    source.append(anchor);
+    if (row.evidence) {
+      var evidence = doc.createElement('span');
+      evidence.className = 'chronology-evidence';
+      evidence.textContent = row.evidence;
+      source.append(evidence);
+    }
+    body.append(meta, title, description, source);
+    item.append(timeBox, body);
+    return item;
+  }
+
+  function uniqueChronologyValues(events, field) {
+    var values = new Set();
+    events.forEach(function (row) {
+      if (field === 'tags') chronologyTagArray(row.tags).forEach(function (tag) { values.add(tag); });
+      else if (row[field]) values.add(row[field]);
+    });
+    return Array.from(values).sort(function (a, b) { return a.localeCompare(b, 'zh-Hant'); });
+  }
+
+  function applyChronologyFilter(root) {
+    var category = root.querySelector('[data-chronology-filter-category]');
+    var activeTag = root.dataset.chronologySelectedTag || '';
+    var categoryValue = category ? category.value : '';
+    var visible = 0;
+    root.querySelectorAll('[data-chronology-event]').forEach(function (item) {
+      var categoryMatch = !categoryValue || item.dataset.chronologyCategory === categoryValue;
+      var tags = chronologyTagArray(item.dataset.chronologyTags);
+      var tagMatch = !activeTag || tags.indexOf(activeTag) !== -1;
+      item.hidden = !(categoryMatch && tagMatch);
+      if (!item.hidden) visible += 1;
+    });
+    var count = root.querySelector('[data-chronology-count]');
+    if (count) count.textContent = '顯示 ' + visible + '／' + (root.dataset.chronologyTotal || visible) + ' 筆事件';
+    var empty = root.querySelector('[data-chronology-empty]');
+    if (empty) empty.hidden = visible !== 0;
+    root.querySelectorAll('[data-chronology-tag-filter]').forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.dataset.chronologyTag === activeTag));
+    });
+  }
+
+  function renderChronology(doc, events) {
+    var root = doc.querySelector('[data-sheet-chronology]');
+    if (!root) return;
+    var list = root.querySelector('[data-sheet-chronology-list]');
+    if (!list) return;
+    root.dataset.chronologyTotal = String(events.length);
+    var categorySelect = root.querySelector('[data-chronology-filter-category]');
+    var selectedCategory = categorySelect ? categorySelect.value : '';
+    var selectedTag = root.dataset.chronologySelectedTag || '';
+    if (categorySelect) {
+      var categoryOptions = [doc.createElement('option')];
+      categoryOptions[0].value = '';
+      categoryOptions[0].textContent = '全部分類';
+      uniqueChronologyValues(events, 'category').forEach(function (value) {
+        var option = doc.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        categoryOptions.push(option);
+      });
+      categorySelect.replaceChildren.apply(categorySelect, categoryOptions);
+      categorySelect.value = uniqueChronologyValues(events, 'category').indexOf(selectedCategory) !== -1 ? selectedCategory : '';
+    }
+    var tagHost = root.querySelector('[data-chronology-tag-filters]');
+    if (tagHost) {
+      var tagButtons = [doc.createElement('button')];
+      tagButtons[0].type = 'button';
+      tagButtons[0].className = 'chronology-tag-filter';
+      tagButtons[0].dataset.chronologyTagFilter = '';
+      tagButtons[0].dataset.chronologyTag = '';
+      tagButtons[0].textContent = '全部標籤';
+      uniqueChronologyValues(events, 'tags').forEach(function (value) {
+        var button = doc.createElement('button');
+        button.type = 'button';
+        button.className = 'chronology-tag-filter';
+        button.dataset.chronologyTagFilter = '';
+        button.dataset.chronologyTag = value;
+        button.textContent = value;
+        tagButtons.push(button);
+      });
+      tagHost.replaceChildren.apply(tagHost, tagButtons);
+      if (uniqueChronologyValues(events, 'tags').indexOf(selectedTag) === -1) root.dataset.chronologySelectedTag = '';
+    }
+    list.replaceChildren.apply(list, events.map(function (row) { return createChronologyItem(doc, row); }));
+    if (!root.dataset.chronologyBound) {
+      root.dataset.chronologyBound = 'true';
+      if (categorySelect) categorySelect.addEventListener('change', function () { applyChronologyFilter(root); });
+      root.addEventListener('click', function (event) {
+        var button = event.target.closest ? event.target.closest('[data-chronology-tag-filter]') : null;
+        if (!button || !root.contains(button)) return;
+        root.dataset.chronologySelectedTag = button.dataset.chronologyTag || '';
+        applyChronologyFilter(root);
+      });
+    }
+    applyChronologyFilter(root);
+  }
+
   function formatTaipei(date) {
     var parts = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit',
@@ -392,6 +577,7 @@
     renderLinks(doc, data.links);
     renderGallery(doc, data.gallery_albums);
     renderAlbumPage(doc, data.gallery_albums);
+    renderChronology(doc, data.chronology_events);
     var status = doc.getElementById('sheet-live-status');
     if (status) {
       status.dataset.sheetMode = 'live';

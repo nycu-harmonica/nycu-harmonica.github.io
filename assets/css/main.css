@@ -600,111 +600,142 @@ a:hover { text-decoration: underline; }
 /* ---------- Chronology timeline ---------- */
 .chronology-timeline {
   position: relative;
-  margin: 2rem 0 3rem;
+  margin: 1.5rem 0 3rem;
+  padding-left: 1.75rem;
 }
 .chronology-timeline::before {
   content: "";
   position: absolute;
-  top: 0.4rem;
-  bottom: 0.4rem;
-  left: 1.45rem;
-  width: 3px;
-  border-radius: 999px;
-  background: linear-gradient(var(--amber-500), var(--green-600) 48%, var(--green-900));
+  top: 0.65rem;
+  bottom: 0.65rem;
+  left: 0.38rem;
+  width: 2px;
+  background: var(--line);
 }
-.chronology-event {
+.chronology-filters {
+  margin: 0 0 1.8rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--green-50);
+}
+.chronology-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+}
+.chronology-filters label,
+.chronology-tag-filter-group {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.chronology-filters select {
+  min-width: 11rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  background: var(--card-bg);
+  color: var(--ink);
+  font: inherit;
+}
+.chronology-filter-label { display: block; }
+.chronology-tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.chronology-tag-filter {
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--ink-soft);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+}
+.chronology-tag-filter[aria-pressed="true"] {
+  border-color: var(--green-900);
+  background: var(--green-900);
+  color: #fff;
+}
+.chronology-filter-count,
+.chronology-filter-empty {
+  margin: 0.85rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+.chronology-filter-empty { color: var(--amber-500); }
+.chronology-item {
   position: relative;
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.15rem;
+  padding: 0 0 1.35rem;
 }
-.chronology-node {
+.chronology-item::before {
+  content: "";
+  position: absolute;
   z-index: 1;
-  grid-column: 1;
-  grid-row: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  min-height: 3.2rem;
-  padding: 0.25rem;
-  border: 4px solid var(--bg);
-  border-radius: 999px;
-  background: var(--amber-500);
-  box-shadow: 0 0 0 2px var(--green-700);
-  color: var(--ink);
-  text-align: center;
-  font-size: 0.68rem;
-  font-weight: 800;
-  line-height: 1.15;
+  top: 0.35rem;
+  left: -1.63rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 2px solid var(--green-700);
+  border-radius: 50%;
+  background: var(--bg);
 }
-.chronology-card {
-  grid-column: 2;
-  grid-row: 1;
-  padding: 1.1rem 1.15rem 1.15rem;
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--green-700);
-  border-radius: var(--radius);
-  background: var(--card-bg);
-  box-shadow: var(--shadow);
-}
-.chronology-card-current { border-left-color: var(--amber-500); }
-.chronology-kicker {
-  margin: 0 0 0.2rem;
+.chronology-event-time {
   color: var(--green-700);
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  line-height: 1.3;
 }
-.chronology-card h3 {
-  margin: 0 0 0.55rem;
+.chronology-event-body {
+  padding: 0 0 0.95rem;
+  border-bottom: 1px solid var(--line);
+}
+.chronology-item:last-child .chronology-event-body { border-bottom: 0; }
+.chronology-event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.2rem 0 0.35rem;
+}
+.chronology-category,
+.chronology-tag,
+.chronology-evidence {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.48rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+.chronology-category {
+  background: var(--green-900);
+  color: #fff;
+  font-weight: 700;
+}
+.chronology-tag {
+  background: var(--green-50);
   color: var(--green-900);
-  font-size: 1.3rem;
+}
+.chronology-event-body h3 {
+  margin: 0;
+  color: var(--green-900);
+  font-size: 1.12rem;
   line-height: 1.35;
 }
-.chronology-card p { margin: 0.55rem 0; }
-.chronology-results,
-.chronology-links {
-  margin: 0.75rem 0;
-  padding-left: 1.25rem;
-}
-.chronology-results li,
-.chronology-links li { margin: 0.25rem 0; }
+.chronology-event-body > p { margin: 0.45rem 0; }
 .chronology-source {
-  padding-top: 0.65rem;
-  border-top: 1px solid var(--line);
   color: var(--ink-soft);
   font-size: 0.9rem;
 }
 .chronology-source a { font-weight: 600; }
-
-@media (min-width: 768px) {
-  .chronology-timeline::before {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .chronology-event {
-    grid-template-columns: minmax(0, 1fr) 5rem minmax(0, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .chronology-node {
-    grid-column: 2;
-    width: 4.2rem;
-    min-height: 4.2rem;
-    justify-self: center;
-    font-size: 0.78rem;
-  }
-  .chronology-card { grid-row: 1; }
-  .chronology-event:nth-child(odd) .chronology-card { grid-column: 1; }
-  .chronology-event:nth-child(even) .chronology-card { grid-column: 3; }
-}
-
-@media (min-width: 960px) {
-  .chronology-results { columns: 2; column-gap: 1.4rem; }
-  .chronology-results li { break-inside: avoid; }
-}
 
 .back-link { margin-top: 2rem; }
 

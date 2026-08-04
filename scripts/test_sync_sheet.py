@@ -104,6 +104,27 @@ def test_bad_formats_rejected():
         assert valid == [] and len(errors) == 1, (tab, valid, errors)
 
 
+def test_chronology_events_validate_and_sort_fields():
+    csv_text = (
+        "id,sort_date,date_label,category,tags,title,description,source_label,source_url,evidence,status\n"
+        "event-one,1968-04-08,1968/04/08,創社,社史|人物,成立,公開社史記載成立日期,官方說明,https://example.com/history,A1,\n"
+    )
+    valid, errors = ss.validate_rows("chronology_events", ss.parse_rows(csv_text))
+    assert errors == []
+    assert valid[0]["id"] == "event-one"
+    assert valid[0]["sort_date"] == "1968-04-08"
+    assert valid[0]["tags"] == "社史|人物"
+
+
+def test_chronology_events_require_source_url():
+    csv_text = (
+        "id,sort_date,date_label,category,title,description,source_label,source_url\n"
+        "event-one,1968-04-08,1968/04/08,創社,成立,說明,來源,\n"
+    )
+    valid, errors = ss.validate_rows("chronology_events", ss.parse_rows(csv_text))
+    assert valid == [] and len(errors) == 1 and "source_url" in errors[0]
+
+
 def test_status_draft_filtered():
     csv_text = (
         "slug,date,title,status\n"
@@ -173,7 +194,10 @@ def test_show_in_parsing():
 
 
 def test_emit_gallery_removes_generated_only():
-    rows = [{"slug": "album-live", "title": "現役相簿", "date": "2026-06-01"}]
+    rows = [
+        {"slug": "album-live", "title": "現役相簿", "date": "2026-06-01"},
+        {"slug": "album-manual", "title": "表格標題不應覆蓋手寫補充", "date": "2026-06-02"},
+    ]
     with tempfile.TemporaryDirectory() as td:
         g = Path(td) / "gallery"
         (g / "album-live").mkdir(parents=True)
@@ -186,6 +210,7 @@ def test_emit_gallery_removes_generated_only():
         assert (g / "album-live" / "index.md").exists()
         assert not (g / "album-gone" / "index.md").exists(), "不在表中的生成頁應刪除"
         assert (g / "album-manual" / "index.md").exists(), "手寫頁應保留"
+        assert "title: 手寫" in (g / "album-manual" / "index.md").read_text(encoding="utf-8"), "資料表列不應覆蓋手寫頁"
         assert ss.emit_gallery(rows, g) is False, "重跑不得有變更"
 
 
