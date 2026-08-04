@@ -441,6 +441,9 @@
 
     var body = doc.createElement('div');
     body.className = 'chronology-event-body';
+    var statement = doc.createElement('p');
+    statement.className = 'chronology-event-statement';
+    statement.textContent = row.statement;
     var meta = doc.createElement('div');
     meta.className = 'chronology-event-meta';
     var category = doc.createElement('span');
@@ -448,23 +451,20 @@
     category.textContent = row.category;
     meta.append(category);
     chronologyTagArray(row.tags).forEach(function (tag) {
+      if (tag === row.category) return;
       var tagNode = doc.createElement('span');
       tagNode.className = 'chronology-tag';
       tagNode.textContent = tag;
       meta.append(tagNode);
     });
-    var statement = doc.createElement('p');
-    statement.className = 'chronology-event-statement';
-    statement.textContent = row.statement;
-    var source = doc.createElement('p');
+    var source = doc.createElement('a');
     source.className = 'chronology-source';
-    var anchor = doc.createElement('a');
-    anchor.href = row.source_url;
-    anchor.target = '_blank';
-    anchor.rel = 'noopener';
-    anchor.textContent = row.source_label;
-    source.append(anchor);
-    body.append(meta, statement, source);
+    source.href = row.source_url;
+    source.target = '_blank';
+    source.rel = 'noopener';
+    source.textContent = row.source_label;
+    body.append(statement, meta);
+    meta.append(source);
     item.append(timeBox, body);
     return item;
   }

@@ -19,21 +19,22 @@
 
   <div class="chronology-list" data-sheet-chronology-list>
     {{ range $events }}
+      {{ $event := . }}
       <article class="chronology-item" data-chronology-event data-chronology-id="{{ .id }}" data-chronology-category="{{ .category }}" data-chronology-tags="{{ .tags }}">
         <div class="chronology-event-time">
           <time datetime="{{ .sort_date }}">{{ .date_label }}</time>
         </div>
         <div class="chronology-event-body">
+          <p class="chronology-event-statement">{{ .statement }}</p>
           <div class="chronology-event-meta">
             <span class="chronology-category">{{ .category }}</span>
-            {{ with .tags }}
+            {{ with $event.tags }}
               {{ range split . "|" }}
-                {{ if . }}<span class="chronology-tag">{{ . }}</span>{{ end }}
+                {{ if and . (ne . $event.category) }}<span class="chronology-tag">{{ . }}</span>{{ end }}
               {{ end }}
             {{ end }}
+            <a class="chronology-source" href="{{ .source_url }}" target="_blank" rel="noopener">{{ .source_label }}</a>
           </div>
-          <p class="chronology-event-statement">{{ .statement }}</p>
-          <p class="chronology-source"><a href="{{ .source_url }}" target="_blank" rel="noopener">{{ .source_label }}</a></p>
         </div>
       </article>
     {{ end }}

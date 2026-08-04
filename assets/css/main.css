@@ -601,20 +601,24 @@ a:hover { text-decoration: underline; }
 .chronology-timeline {
   position: relative;
   margin: 1.5rem 0 3rem;
-  padding-left: 1.75rem;
+  --chronology-time-width: 7rem;
+  --chronology-line-gap: 1.5rem;
 }
-.chronology-timeline::before {
+.chronology-list {
+  position: relative;
+}
+.chronology-list::before {
   content: "";
   position: absolute;
   top: 0.65rem;
   bottom: 0.65rem;
-  left: 0.38rem;
+  left: calc(var(--chronology-time-width) + (var(--chronology-line-gap) / 2) - 1px);
   width: 2px;
   background: var(--line);
 }
 .chronology-filters {
-  margin: 0 0 1.8rem;
-  padding: 1rem 1.1rem;
+  margin: 0 0 1.15rem;
+  padding: 0.7rem 0.85rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--green-50);
@@ -622,12 +626,14 @@ a:hover { text-decoration: underline; }
 .chronology-filter-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: end;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.65rem;
 }
 .chronology-filters label,
 .chronology-tag-filter-group {
-  display: grid;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 0.35rem;
   font-size: 0.9rem;
   font-weight: 700;
@@ -664,7 +670,7 @@ a:hover { text-decoration: underline; }
 }
 .chronology-filter-count,
 .chronology-filter-empty {
-  margin: 0.85rem 0 0;
+  margin: 0.45rem 0 0;
   color: var(--ink-soft);
   font-size: 0.88rem;
 }
@@ -672,47 +678,52 @@ a:hover { text-decoration: underline; }
 .chronology-item {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.15rem;
-  padding: 0 0 1.35rem;
+  grid-template-columns: var(--chronology-time-width) var(--chronology-line-gap) minmax(0, 1fr);
+  padding: 0.55rem 0 0.65rem;
 }
 .chronology-item::before {
   content: "";
   position: absolute;
   z-index: 1;
-  top: 0.35rem;
-  left: -1.63rem;
-  width: 0.55rem;
-  height: 0.55rem;
-  border: 2px solid var(--green-700);
+  top: 0.95rem;
+  left: calc(var(--chronology-time-width) + (var(--chronology-line-gap) / 2) - 0.27rem);
+  width: 0.54rem;
+  height: 0.54rem;
+  border: 1px solid var(--green-700);
   border-radius: 50%;
   background: var(--bg);
 }
 .chronology-event-time {
+  grid-column: 1;
+  align-self: start;
+  padding-right: 0.65rem;
+  text-align: right;
   color: var(--green-700);
-  font-size: 0.88rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 .chronology-event-body {
-  padding: 0 0 0.95rem;
+  grid-column: 3;
+  min-width: 0;
+  padding: 0 0 0.65rem;
   border-bottom: 1px solid var(--line);
 }
 .chronology-item:last-child .chronology-event-body { border-bottom: 0; }
 .chronology-event-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
-  margin: 0.2rem 0 0.35rem;
+  align-items: center;
+  gap: 0.25rem 0.35rem;
+  margin: 0.22rem 0 0;
 }
 .chronology-category,
-.chronology-tag,
-.chronology-evidence {
+.chronology-tag {
   display: inline-flex;
   align-items: center;
-  padding: 0.18rem 0.48rem;
+  padding: 0.12rem 0.4rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   line-height: 1.25;
 }
 .chronology-category {
@@ -725,17 +736,32 @@ a:hover { text-decoration: underline; }
   color: var(--green-900);
 }
 .chronology-event-statement {
-  margin: 0.25rem 0 0.45rem;
+  margin: 0;
   color: var(--ink);
-  font-size: 1rem;
-  line-height: 1.65;
+  font-size: 0.96rem;
+  line-height: 1.45;
 }
 .chronology-source {
-  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
   color: var(--ink-soft);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
 }
-.chronology-source a { font-weight: 600; }
+.chronology-source::before { content: "↗"; }
+.chronology-source:hover { color: var(--green-900); }
+
+@media (max-width: 639px) {
+  .chronology-timeline {
+    --chronology-time-width: 5.4rem;
+    --chronology-line-gap: 1rem;
+  }
+  .chronology-event-time { padding-right: 0.45rem; font-size: 0.72rem; }
+  .chronology-event-statement { font-size: 0.9rem; }
+}
 
 .back-link { margin-top: 2rem; }
 
