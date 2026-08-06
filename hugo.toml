@@ -37,6 +37,21 @@ calendarId = "bmhc1968@gmail.com"
 # 對外公開的社團聯絡信箱(與行事曆同一個 Google 帳號,已因行事曆嵌入而公開)。
 contactEmail = "bmhc1968@gmail.com"
 
+# 編年史頁的限時「開放回報」提示。過期後前端自動隱藏,重建後也不再輸出。
+[params.chronologyContribute]
+enabled = true
+url = "https://docs.google.com/forms/d/e/1FAIpQLSfXHQnJanusPzTYdKhAyApHzeRUdEFIn6y1Xbg9FugZ18RguA/viewform"
+# 表單回覆分頁「表單回覆 1」的 gid;清空可停用即時回報清單。
+gid = "1453768960"
+expires = "2026-08-13T00:00:00+08:00"
+
+# 全站臨時公告 popup。改公告內容時記得換 id,否則已按過關閉的訪客不會再看到。
+[params.announcement]
+enabled = true
+id = "reunion-tea-2026"
+# 臺灣口琴音樂節 2026-08-07 ~ 08-09;音樂節結束(8/9 整天過完)即下架。
+expires = "2026-08-10T00:00:00+08:00"
+
 [params.websiteAgent]
 enabled = true
 endpoint = "https://skyhong-cclabmacmini.tailf76d1d.ts.net:8443/ask"
@@ -46,11 +61,6 @@ maxQuestionChars = 500
 name = "首頁"
 pageRef = "/"
 weight = 10
-
-[[menus.main]]
-name = "Facebook 相片"
-url = "https://www.facebook.com/nycubmhc/photos/"
-weight = 20
 
 [[menus.main]]
 name = "編年史"

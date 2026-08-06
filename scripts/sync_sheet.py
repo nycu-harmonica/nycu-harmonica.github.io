@@ -43,7 +43,7 @@ DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 DRAFT_WORDS = {"draft", "草稿", "hidden", "隱藏"}
 PUBLISHED_WORDS = {"", "published", "發布", "公開"}
-ICON_ENUM = {"instagram", "facebook", "youtube", "email", "line", "link"}
+ICON_ENUM = {"instagram", "facebook", "youtube", "email", "line", "discord", "link"}
 SHOW_IN_ENUM = {"footer", "about", "join"}
 DISPLAY_TEXT_FIELDS = {
     "title", "role", "name", "description", "label", "date_label", "category",

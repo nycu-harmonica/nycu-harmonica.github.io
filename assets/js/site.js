@@ -29,6 +29,36 @@
     desktopMedia.addEventListener('change', resetNavOnDesktop);
   }
 
+  // 限時區塊:過期(data-expires)就隱藏,不必等網站重新建置
+  document.querySelectorAll('[data-expires]').forEach(function (el) {
+    var expires = Date.parse(el.dataset.expires || '');
+    if (expires && Date.now() >= expires) el.hidden = true;
+  });
+
+  // 臨時公告 popup:過期就不顯示。重整或從站外進來都會再跳;
+  // 只有「這次瀏覽已點掉 + 站內連結換頁」才不重複打擾。
+  var announce = document.getElementById('announcement');
+  if (announce && typeof announce.showModal === 'function') {
+    var announceKey = 'announcement-dismissed:' + (announce.dataset.id || '');
+    var announceExpires = Date.parse(announce.dataset.expires || '');
+    var announceDismissed = false;
+    try { announceDismissed = sessionStorage.getItem(announceKey) === '1'; } catch (e) {}
+    var navEntry = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+    var internalNav = navEntry && (navEntry.type === 'back_forward' ||
+      (navEntry.type === 'navigate' && document.referrer.indexOf(location.origin + '/') === 0));
+    if (!(announceDismissed && internalNav) && !(announceExpires && Date.now() >= announceExpires)) {
+      announce.showModal();
+    }
+    announce.addEventListener('close', function () {
+      try { sessionStorage.setItem(announceKey, '1'); } catch (e) {}
+    });
+    announce.addEventListener('click', function (e) {
+      if (e.target === announce) announce.close();
+    });
+    var announceClose = document.getElementById('announcement-close');
+    if (announceClose) announceClose.addEventListener('click', function () { announce.close(); });
+  }
+
   var box = document.getElementById('lightbox');
   var img = document.getElementById('lightbox-img');
   if (box && img) {

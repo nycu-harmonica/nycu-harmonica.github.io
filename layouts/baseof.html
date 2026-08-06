@@ -10,6 +10,7 @@
     {{ block "main" . }}{{ end }}
   </main>
   {{ partial "footer.html" . }}
+  {{ partial "announcement.html" . }}
   {{ with site.Params.websiteAgent }}{{ if .enabled }}
   {{ partial "website-agent.html" . }}
   {{ $deepChat := resources.Get "vendor/deep-chat/deepChat.bundle.js" | fingerprint }}
@@ -19,9 +20,13 @@
   {{ end }}
   {{ end }}{{ end }}
   {{ $sheetSource := readFile "scripts/sources.json" | transform.Unmarshal }}
-  <script id="sheet-live-config" type="application/json">{{ dict "sheetId" $sheetSource.sheet_id "tabs" $sheetSource.tabs "refreshMs" 60000 | jsonify | safeJS }}</script>
+  {{ $sheetConfig := dict "sheetId" $sheetSource.sheet_id "tabs" $sheetSource.tabs "refreshMs" 60000 }}
+  {{ with site.Params.chronologyContribute }}{{ if and .enabled .url .gid (time.Now.Before (time.AsTime .expires)) }}
+  {{ $sheetConfig = merge $sheetConfig (dict "contribute" (dict "gid" (string .gid) "expires" .expires)) }}
+  {{ end }}{{ end }}
+  <script id="sheet-live-config" type="application/json">{{ $sheetConfig | jsonify | safeJS }}</script>
   <div id="sheet-live-icon-templates" hidden aria-hidden="true">
-    {{ range slice "instagram" "facebook" "youtube" "email" "line" "link" }}
+    {{ range slice "instagram" "facebook" "youtube" "email" "line" "discord" "link" }}
     <span data-sheet-icon="{{ . }}">{{ partial "icon.html" (dict "name" .) }}</span>
     {{ end }}
   </div>

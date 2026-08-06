@@ -5,7 +5,7 @@
   var TAB_NAMES = ['gallery_albums', 'links', 'chronology_events'];
   var DRAFT_WORDS = new Set(['draft', '草稿', 'hidden', '隱藏']);
   var PUBLISHED_WORDS = new Set(['', 'published', '發布', '公開']);
-  var ICONS = new Set(['instagram', 'facebook', 'youtube', 'email', 'line', 'link']);
+  var ICONS = new Set(['instagram', 'facebook', 'youtube', 'email', 'line', 'discord', 'link']);
   var SHOW_IN = new Set(['footer', 'about', 'join']);
   var SLUG_RE = /^[a-z0-9][a-z0-9-]{2,60}$/;
   var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -295,6 +295,11 @@
       }
     });
     config.refreshMs = Math.max(30000, Number(config.refreshMs) || DEFAULT_REFRESH_MS);
+    if (config.contribute && GID_RE.test(String(config.contribute.gid || ''))) {
+      config.tabs.contribute = { gid: String(config.contribute.gid) };
+    } else {
+      config.contribute = null;
+    }
     return config;
   }
 
@@ -457,6 +462,80 @@
     list.replaceChildren.apply(list, events.map(function (row) { return createChronologyItem(doc, row); }));
   }
 
+  // 社史限時回報:表單回覆分頁的寬鬆讀取。只做展示消毒(純文字 + https 連結),
+  // 與正式 chronology_events 的嚴格驗證互不影響。
+  function contributeText(value, max) {
+    var text = normalizeDisplayText(value).replace(/[<>]/g, '');
+    return text.length > max ? text.slice(0, max - 1) + '…' : text;
+  }
+
+  function normalizeContribute(payload) {
+    var parsed = parseGvizTable(payload);
+    function headerFor(keyword) {
+      return parsed.headers.find(function (header) { return header.indexOf(keyword) !== -1; }) || '';
+    }
+    var whenKey = headerFor('大約時間');
+    var whatKey = headerFor('事件描述');
+    var refKey = headerFor('參考連結');
+    var whoKey = headerFor('姓名');
+    if (!whatKey) throw new Error('回報分頁缺少事件描述欄');
+    return parsed.rows.map(function (row) {
+      var what = contributeText(row[whatKey], 280);
+      if (!what) return null;
+      return {
+        when: contributeText(whenKey ? row[whenKey] : '', 80),
+        what: what,
+        ref: validUrl(String((refKey ? row[refKey] : '') || '').trim()),
+        who: contributeText(whoKey ? row[whoKey] : '', 80)
+      };
+    }).filter(Boolean).reverse().slice(0, 30);
+  }
+
+  function renderContribute(doc, rows) {
+    var list = doc.querySelector('[data-sheet-contribute]');
+    if (!list) return;
+    var items = rows.map(function (row) {
+      var item = doc.createElement('li');
+      var meta = doc.createElement('span');
+      meta.className = 'contribute-meta';
+      meta.textContent = row.when || '時間待補';
+      var text = doc.createElement('span');
+      text.className = 'contribute-text';
+      text.textContent = row.what;
+      item.append(meta, text);
+      if (row.ref) {
+        var link = doc.createElement('a');
+        link.href = row.ref;
+        link.target = '_blank';
+        link.rel = 'noopener nofollow';
+        link.textContent = '參考連結';
+        item.append(link);
+      }
+      if (row.who) {
+        var who = doc.createElement('span');
+        who.className = 'contribute-who';
+        who.textContent = '（' + row.who + ' 提供）';
+        item.append(who);
+      }
+      return item;
+    });
+    list.replaceChildren.apply(list, items);
+    var wrap = doc.querySelector('[data-sheet-contribute-wrap]');
+    if (wrap) wrap.hidden = !items.length;
+  }
+
+  async function refreshContribute(config, doc, options) {
+    if (!config.contribute || !doc.querySelector('[data-sheet-contribute]')) return;
+    var expires = Date.parse(config.contribute.expires || '');
+    if (expires && Date.now() >= expires) return;
+    try {
+      var loadTab = (options && options.loadTab) || function (tab) { return fetchGviz(config, tab, { document: doc }); };
+      renderContribute(doc, normalizeContribute(await loadTab('contribute')));
+    } catch (_error) {
+      // 回報清單失敗不影響主要資料
+    }
+  }
+
   function formatTaipei(date) {
     var parts = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit',
@@ -490,6 +569,7 @@
       var data = {};
       TAB_NAMES.forEach(function (tab, index) { data[tab] = normalizeTab(tab, payloads[index]); });
       (options.renderImpl || renderLiveData)(doc, data, options.fetchedAt || new Date());
+      await refreshContribute(config, doc, options);
       return true;
     } catch (_error) {
       return false;

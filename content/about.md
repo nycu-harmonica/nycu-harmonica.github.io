@@ -10,7 +10,7 @@ menu_note: 社團介紹、支持與聯絡方式
 
 竹韻口琴社的前身成立於交通大學時期，累積了成果發表、口琴營與巡演等豐富的活動紀錄（可見[Facebook 相片](https://www.facebook.com/nycubmhc/photos/)）。社團其後一度停止運作，在許多琴友與同學的努力下，於 **2026 年 6 月正式復社**，目前正積極籌備社課與招生，持續招募琴友與新社員。想一次瀏覽可查證的年代、曲目與比賽紀錄，請看[竹韻編年史](/chronology/)。
 
-**社課時間與地點**：復社後首學期的社課資訊將於 [Instagram](https://www.instagram.com/nycu_harmonica/) 公布。
+**社課時間與地點**：開學後每週二晚上在學生活動中心練習；詳細時間與教室將於 [Instagram](https://www.instagram.com/nycu_harmonica/) 公布。
 
 ## 支持竹韻 {#support}
 

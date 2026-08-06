@@ -213,7 +213,9 @@ a:hover { text-decoration: underline; }
   border: 1.5px solid var(--green-700);
   color: var(--green-700);
   background: var(--card-bg);
+  font: inherit;
   font-weight: 600;
+  cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 .btn:hover { background: var(--green-100); text-decoration: none; }
@@ -544,6 +546,80 @@ a:hover { text-decoration: underline; }
   width: 2.4rem; height: 2.4rem;
   border-radius: 999px;
   cursor: pointer;
+}
+
+/* ---------- 編年史限時回報 ---------- */
+.chronology-contribute {
+  margin: 0 0 1.25rem;
+  padding: 0.8rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--green-50);
+}
+.chronology-contribute p { margin: 0; font-size: 0.95rem; }
+.chronology-contribute strong { color: var(--green-900); }
+.chronology-contribute h3 { margin: 0.9rem 0 0.4rem; font-size: 1rem; color: var(--green-900); }
+.contribute-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.92rem;
+}
+.contribute-list li { margin-bottom: 0.35rem; }
+.contribute-list li > * { margin-right: 0.45rem; }
+.contribute-meta { font-weight: 600; color: var(--green-900); }
+.contribute-who { color: var(--ink-soft); font-size: 0.85rem; }
+
+/* ---------- 臨時公告 popup ---------- */
+.announce-dialog {
+  width: min(560px, calc(100vw - 2rem));
+  max-width: none;
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  background: var(--card-bg);
+  box-shadow: 0 10px 34px rgba(15, 44, 54, 0.24);
+}
+.announce-dialog::backdrop { background: rgba(15, 44, 54, 0.42); }
+.announce-body { padding: 1.5rem 1.75rem 1.75rem; }
+.announce-kicker {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--amber-500);
+}
+.announce-body h2 { margin: 0 0 0.75rem; color: var(--green-900); font-size: 1.3rem; }
+.announce-body p { margin: 0 0 0.85rem; }
+.announce-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+.announce-support {
+  margin: 1.5rem 0 0;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--radius);
+  background: var(--green-50);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.announce-support p { margin: 0 0 0.6rem; }
+.announce-support p:last-child { margin-bottom: 0; }
+.announce-support strong { color: var(--ink); }
+.announce-fund {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--ink);
+}
+.announce-fund .announce-fund-date { font-size: 0.85rem; color: var(--ink-soft); }
+@media (max-width: 480px) {
+  .announce-body { padding: 1.25rem 1.25rem 1.5rem; }
+  .announce-actions .btn { flex: 1 1 auto; text-align: center; }
 }
 
 /* ---------- 行事曆 ---------- */
