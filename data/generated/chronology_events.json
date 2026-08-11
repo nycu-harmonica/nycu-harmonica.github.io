@@ -727,6 +727,28 @@
   },
   {
     "category": "比賽",
+    "date_label": "民國85年（1996）",
+    "evidence": "A2｜待核",
+    "id": "competition-1996",
+    "sort_date": "1996-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "社刊記載於全國大專口琴合奏比賽獲優等名次；不同頁面分別記為第二名與第三名，名次待原始成績資料複核。",
+    "tags": "比賽|社史|待核"
+  },
+  {
+    "category": "社務",
+    "date_label": "1996年社刊",
+    "evidence": "A2｜待核",
+    "id": "annual-cycle-1996",
+    "sort_date": "1996-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "社刊記錄寒假營、全國比賽、校慶音樂會、期末成果展、暑期營、迎新、國際音樂節與跨校交流等年度節奏；完整活動名稱與日期仍待核對。",
+    "tags": "社務|營隊|比賽|跨校|社群|待核"
+  },
+  {
+    "category": "比賽",
     "date_label": "1993–1994 起",
     "evidence": "A2",
     "id": "eight-years-excellent-82",
@@ -738,14 +760,36 @@
   },
   {
     "category": "比賽",
-    "date_label": "1983–1984",
-    "evidence": "A2",
+    "date_label": "民國78年（1989）",
+    "evidence": "A2｜待核",
+    "id": "competition-1989",
+    "sort_date": "1989-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "社史記載全國性音樂比賽獲得優等。",
+    "tags": "比賽|社史|待核"
+  },
+  {
+    "category": "比賽",
+    "date_label": "民國72–73年（1983–1984）",
+    "evidence": "A2｜待核",
     "id": "first-national-competition-72",
     "sort_date": "1984-01-01",
-    "source_label": "公開社史",
-    "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/0R2eqZTiMNA/m/TtTWvO1WOvMJ",
-    "statement": "竹韻首次參加全國大專口琴比賽，先獲大專 B 組甲等，後獲優等。",
-    "tags": "比賽|社史"
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "社史記載首次參加全國大專口琴比賽，結果記為甲等；指定曲與自選曲名稱仍有不同記法，待原始文件複核。",
+    "tags": "比賽|社史|待核"
+  },
+  {
+    "category": "演出",
+    "date_label": "民國71年（1982）",
+    "evidence": "A2｜待核",
+    "id": "inter-school-show-1982",
+    "sort_date": "1982-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "出現校際觀摩演奏與聯合演出；早期曲目線索包括《戰地黎歌》與《波斯市場》。",
+    "tags": "演出|跨校|社史|待核"
   },
   {
     "category": "制度化",
@@ -760,35 +804,90 @@
   },
   {
     "category": "制度化",
-    "date_label": "1980–1981",
-    "evidence": "A1＋A2",
+    "date_label": "民國69–70年（1980–1981）",
+    "evidence": "A2｜待核",
     "id": "music-competition-1980",
     "sort_date": "1981-01-01",
-    "source_label": "YouTube 頻道說明",
-    "source_url": "https://www.youtube.com/@nycu_harmonica/about",
-    "statement": "首次舉辦社內口琴競賽。",
-    "tags": "制度|比賽"
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "約民國69–70年舉辦社內口琴競賽／「考試晚會」，設有指定曲、名次與鼓勵性獎項。",
+    "tags": "制度|比賽|待核"
+  },
+  {
+    "category": "活動",
+    "date_label": "民國70年（1981）",
+    "evidence": "A2｜待核",
+    "id": "first-camp-1981",
+    "sort_date": "1981-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "舉辦第一屆口琴營；寒暑假營隊此後逐漸成為社團固定傳統，合作細節仍待逐頁核對。",
+    "tags": "活動|營隊|跨校|待核"
+  },
+  {
+    "category": "社史",
+    "date_label": "民國69年左右（1980）",
+    "evidence": "A2｜待核",
+    "id": "reassembly-1980",
+    "sort_date": "1980-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "分散在交大的口琴社成員重新集合，開始固定練習合奏，社團逐漸活絡。",
+    "tags": "社史|教學|合奏|待核"
+  },
+  {
+    "category": "檔案",
+    "date_label": "民國57–66年後（史料斷層）",
+    "evidence": "A2｜待核",
+    "id": "history-gap-1968-1979",
+    "sort_date": "1979-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "社史提醒創社至民國66年間資料幾乎空白、民國67–69年多為會議紀錄；這段斷層正是今日應固定留下活動紀錄的原因。",
+    "tags": "社史|檔案|待核"
   },
   {
     "category": "制度化",
-    "date_label": "1969–1970",
-    "evidence": "A2",
+    "date_label": "民國59年左右（1970）",
+    "evidence": "A2｜待核",
     "id": "coach-58-academic-year",
     "sort_date": "1970-01-01",
-    "source_label": "公開社史",
-    "source_url": "https://groups.google.com/g/nctu.club.harmonica/c/0R2eqZTiMNA/m/TtTWvO1WOvMJ",
-    "statement": "聘請台北中華口琴會會長王慶勳擔任指導老師。",
-    "tags": "制度|指導"
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "社史記錄約在民國59年邀請外部口琴組織指導者到校，進行口琴介紹、示範與技巧教學。",
+    "tags": "制度|指導|待核"
   },
   {
-    "category": "創社",
-    "date_label": "1968/04/08",
-    "evidence": "A1",
+    "category": "社史",
+    "date_label": "民國56–57年（1967–1968）",
+    "evidence": "A2｜待核",
     "id": "founding-1968",
-    "sort_date": "1968-04-08",
-    "source_label": "YouTube 頻道說明",
-    "source_url": "https://www.youtube.com/channel/UClIoDAYl9-jVnBpC4nFtHGw",
-    "statement": "竹韻口琴社成立；吳傳誠任首任社長、葉沐陽任副社長，創社時共有 24 名社員。",
-    "tags": "社史|人物|制度化"
+    "sort_date": "1968-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "《57–81年社團簡史》記載「民國五十七年創立」，早期名稱為「交大口琴社／交大口琴研究社」；創社月日仍待核對。",
+    "tags": "社史|創社|待核"
+  },
+  {
+    "category": "社務",
+    "date_label": "民國56–57年（1967–1968）",
+    "evidence": "A2｜待核",
+    "id": "early-space-1968",
+    "sort_date": "1968-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "早期活動主要在竹銘館教室進行，尚未有固定社團空間；社員自備小口琴，校方另有低音與半音階口琴等器材支援。",
+    "tags": "社史|社務|器材|待核"
+  },
+  {
+    "category": "社史",
+    "date_label": "民國56年下學期（1967）",
+    "evidence": "A2｜待核",
+    "id": "early-roster-1967",
+    "sort_date": "1967-01-01",
+    "source_label": "竹韻歷史檔案整理（2026-08-12）",
+    "source_url": "https://harmonica.nycu.club/chronology/#history-evidence",
+    "statement": "現存會員名冊顯示，交大口琴社在民國56年下學期已留下社員制度與活動紀錄；名冊約記46人，個人名單不公開。",
+    "tags": "社史|檔案|待核"
   }
 ]
