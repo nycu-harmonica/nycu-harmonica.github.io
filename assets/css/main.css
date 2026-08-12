@@ -677,8 +677,8 @@ a:hover { text-decoration: underline; }
 .chronology-timeline {
   position: relative;
   margin: 1.5rem 0 3rem;
-  --chronology-time-width: 7rem;
-  --chronology-line-gap: 1.5rem;
+  --chronology-time-width: 10rem;
+  --chronology-line-gap: 1.25rem;
 }
 .chronology-list {
   position: relative;
@@ -719,6 +719,7 @@ a:hover { text-decoration: underline; }
   font-size: 0.8rem;
   font-weight: 800;
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 .chronology-event-body {
   grid-column: 3;
@@ -748,7 +749,7 @@ a:hover { text-decoration: underline; }
 
 @media (max-width: 639px) {
   .chronology-timeline {
-    --chronology-time-width: 5.4rem;
+    --chronology-time-width: 6.4rem;
     --chronology-line-gap: 1rem;
   }
   .chronology-event-time { padding: 0.4rem 0.45rem 0; font-size: 0.72rem; }

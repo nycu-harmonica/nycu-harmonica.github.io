@@ -40,6 +40,15 @@ GENERATED_MARK = '"generated": true'
 
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{2,60}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+CHRONOLOGY_DATE_LABEL_RE = re.compile(
+    r"^(?:"
+    r"\d{4}/\d{2}/\d{2}(?:–\d{2}/\d{2})?(?: 前後)?|"
+    r"\d{4}(?:–\d{4})(?: 年起)?|"
+    r"\d{4}|"
+    r"\d{4} 年(?:春季|夏季|秋季|冬季|社刊)|"
+    r"民國 \d+(?:–\d+)? 年(?:左右|上學期|下學期|後)?（[^（）]+）"
+    r")$"
+)
 
 DRAFT_WORDS = {"draft", "草稿", "hidden", "隱藏"}
 PUBLISHED_WORDS = {"", "published", "發布", "公開"}
@@ -212,6 +221,15 @@ def v_date(value: str, _row=None) -> str:
     return value
 
 
+def v_chronology_date_label(value: str, _row=None) -> str:
+    value = normalize_display_text(value.strip())
+    if not CHRONOLOGY_DATE_LABEL_RE.fullmatch(value):
+        raise RowError(
+            "編年史日期須使用 YYYY/MM/DD、YYYY/MM/DD–MM/DD、年份範圍或民國 X 年（YYYY）格式"
+        )
+    return value
+
+
 def v_url(value: str, _row=None) -> str:
     value = value.strip()
     if not (value.startswith("https://") or value.startswith("mailto:")):
@@ -277,7 +295,7 @@ TAB_SPECS = {
         "fields": [
             ("id", True, v_slug),
             ("sort_date", True, v_date),
-            ("date_label", True, v_display_text),
+            ("date_label", True, v_chronology_date_label),
             ("category", True, v_display_text),
             ("tags", False, v_tags),
             ("statement", True, v_display_text),

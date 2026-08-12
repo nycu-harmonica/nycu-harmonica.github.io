@@ -117,6 +117,18 @@ def test_chronology_events_validate_and_sort_fields():
     assert valid[0]["statement"] == "竹韻口琴社成立。"
 
 
+def test_chronology_date_labels_use_canonical_format():
+    csv_text = (
+        "id,sort_date,date_label,category,statement,source_label,source_url\n"
+        "valid-exact,2013-03-12,2013/03/12,教學,社課。,來源,https://example.com/history\n"
+        "valid-roc,1968-01-01,民國 56–57 年（1967–1968）,社史,創社線索。,來源,https://example.com/history\n"
+        "bad-padding,2013-03-12,2013/3/12,教學,日期未補零。,來源,https://example.com/history\n"
+    )
+    valid, errors = ss.validate_rows("chronology_events", ss.parse_rows(csv_text))
+    assert [row["id"] for row in valid] == ["valid-exact", "valid-roc"]
+    assert len(errors) == 1 and "編年史日期" in errors[0]
+
+
 def test_chronology_events_require_source_url():
     csv_text = (
         "id,sort_date,date_label,category,statement,source_label,source_url\n"
