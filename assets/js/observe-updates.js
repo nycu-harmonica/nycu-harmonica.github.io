@@ -58,7 +58,7 @@
     }).formatToParts(date);
     var values = {};
     parts.forEach(function (part) { values[part.type] = part.value; });
-    return values.year + '-' + values.month + '-' + values.day + ' ' + values.hour + ':' + values.minute;
+    return values.year + '/' + values.month + '/' + values.day + ' ' + values.hour + ':' + values.minute;
   }
 
   function utf8ByteLength(value) {

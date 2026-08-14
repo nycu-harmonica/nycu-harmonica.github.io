@@ -88,6 +88,7 @@ function testInvalidTablesAreRejected() {
     ['links', payload(['key', 'label', 'url'], [['discord', 'Discord', 'https://example.com/'], ['discord', 'Dup', 'https://example.com/b']])]
     ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2026-02-30', 'bad', '活動', '敘述', '來源', 'https://example.com/']])]
     ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2026-04-12', '2026/04/12', '活動', '<script>', '來源', 'https://example.com/']])]
+    ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2018-01-01', '2018', '社史', '年份未標示年', '來源', 'https://example.com/']])]
   ];
   invalid.forEach(([tab, value]) => assert.throws(() => sheetLive.normalizeTab(tab, value), Error));
 }

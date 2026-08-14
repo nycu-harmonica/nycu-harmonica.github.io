@@ -79,7 +79,9 @@ async function testSuccessReplacesFallbackAtomically() {
   assert.equal(link.attributes.href, 'https://example.com/post/1');
   assert.equal(link.attributes.rel, 'noopener noreferrer');
   assert.equal(view.grid.dataset.observeMode, 'live');
-  assert.match(view.status.textContent, /^即時資料：/);
+  assert.match(view.status.textContent, /^即時資料：2026\/07\/16 19:45（Asia\/Taipei）$/);
+  const cardTime = view.grid.children[0].children[0].children[0].children[0];
+  assert.equal(cardTime.textContent, '2026/07/16 19:30');
 }
 
 async function testInvalidPayloadsKeepFallback() {

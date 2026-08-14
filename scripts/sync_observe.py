@@ -132,7 +132,7 @@ def normalize_item(row: object) -> dict[str, str] | None:
         "title": title,
         "source": source,
         "platform": platform,
-        "posted_at_local": published.astimezone(TAIPEI).strftime("%Y-%m-%d %H:%M"),
+        "posted_at_local": published.astimezone(TAIPEI).strftime("%Y/%m/%d %H:%M"),
         "link": link,
     }
     image = normalize_image(row.get("image"))
@@ -208,7 +208,7 @@ def validate_existing_snapshot(value: object) -> bool:
             "title": item.get("title"),
             "sourceName": item.get("source"),
             "platform": item.get("platform"),
-            "publishedAt": str(item.get("posted_at_local") or "").replace(" ", "T") + ":00+08:00",
+            "publishedAt": str(item.get("posted_at_local") or "").replace("/", "-").replace(" ", "T") + ":00+08:00",
             "url": link,
             "image": item.get("image"),
         }

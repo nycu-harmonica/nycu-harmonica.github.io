@@ -1,6 +1,6 @@
 {{ with site.Params.chronologyContribute }}{{ if and .enabled .url (time.Now.Before (time.AsTime .expires)) }}
 <aside class="chronology-contribute" data-expires="{{ .expires }}">
-  <p><strong>限時開放回報</strong>：適逢復社茶會，歡迎歷屆社員在 8/12（週三）前<a href="{{ .url }}" target="_blank" rel="noopener">填寫社史回報表單</a>，分享您記得的演出、比賽或營隊。送出後約一分鐘就會出現在下方，之後由我們整理進正式時間線。</p>
+  <p><strong>限時開放回報</strong>：適逢復社茶會，歡迎歷屆社員在 2026/08/12（週三）前<a href="{{ .url }}" target="_blank" rel="noopener">填寫社史回報表單</a>，分享您記得的演出、比賽或營隊。送出後約一分鐘就會出現在下方，之後由我們整理進正式時間線。</p>
   <div data-sheet-contribute-wrap hidden>
     <h3>最新回報</h3>
     <ol class="contribute-list" data-sheet-contribute></ol>

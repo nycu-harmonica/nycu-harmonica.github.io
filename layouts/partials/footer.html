@@ -16,7 +16,7 @@
       ・<a href="{{ "/index.xml" | relURL }}">網站 RSS</a>
     </p>
     {{ with site.Data.generated.last_sync }}
-    <p class="footer-meta footer-sync" id="sheet-live-status" data-sheet-mode="fallback" aria-live="polite">Repo 資料備援：{{ time.Format "2006-01-02 15:04" .updated_at }}（Asia/Taipei）</p>
+    <p class="footer-meta footer-sync" id="sheet-live-status" data-sheet-mode="fallback" aria-live="polite">Repo 資料備援：{{ time.Format "2006/01/02 15:04" .updated_at }}（Asia/Taipei）</p>
     {{ end }}
   </div>
 </footer>

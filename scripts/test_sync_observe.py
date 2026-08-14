@@ -52,7 +52,7 @@ def test_normalizes_minimal_safe_fields_and_taipei_time():
         "title": "社團成果發表～",
         "source": so.SOURCE_NAME,
         "platform": "Instagram",
-        "posted_at_local": "2026-07-16 19:30",
+        "posted_at_local": "2026/07/16 19:30",
         "link": "https://example.com/posts/1",
     }]
     assert "excerpt" not in json.dumps(snapshot, ensure_ascii=False)

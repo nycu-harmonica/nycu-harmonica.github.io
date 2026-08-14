@@ -1,30 +1,43 @@
 {
   "items": [
     {
-      "id": "post-75c3736d749ce80627940b00",
+      "id": "post-55763e5a24cc41ba36f1be4e",
       "image": {
-        "height": 1920,
-        "url": "https://harmonica.observe.tw/assets/feed-images/6b7dd80dd7408fb12c33.webp",
-        "width": 1440
+        "height": 450,
+        "url": "https://harmonica.observe.tw/assets/feed-images/36e5cb12cc7eb8407cee.webp",
+        "width": 800
       },
-      "link": "https://www.instagram.com/p/DbLX1c9lGv9/",
-      "platform": "Instagram",
-      "posted_at_local": "2026-07-24 22:44",
+      "link": "https://www.youtube.com/watch?v=CxUG95kHNdc",
+      "platform": "YouTube",
+      "posted_at_local": "2026/08/09 14:00",
       "source": "陽明交大竹韻口琴社",
-      "title": "【竹韻，再次響起】"
+      "title": "陽明交大竹韻口琴社｜復社紀念影片"
     },
     {
-      "id": "post-776a6fcd2c27fad6c25dd7c6",
+      "id": "post-b1aed94442e7bac30c938bca",
       "image": {
-        "height": 640,
-        "url": "https://harmonica.observe.tw/assets/feed-images/5df58ce4300a663aa190.webp",
-        "width": 512
+        "height": 1920,
+        "url": "https://harmonica.observe.tw/assets/feed-images/a07dd519a366511f1829.webp",
+        "width": 1440
       },
-      "link": "https://www.facebook.com/nycubmhc/posts/pfbid0nVzb9bvXdMpPV7bQdSgSGnoGQKzNhvRe4WJEieapwStaNUwN5VSQ9nzHESNWwGwwl",
-      "platform": "Facebook",
-      "posted_at_local": "2026-07-04 14:56",
+      "link": "https://www.instagram.com/p/DbkYItixTKM/",
+      "platform": "Instagram",
+      "posted_at_local": "2026/08/03 14:48",
       "source": "陽明交大竹韻口琴社",
-      "title": "各位竹韻口琴社的學長姊，大家午安～"
+      "title": "活動詳情請見【竹韻，再次響起】"
+    },
+    {
+      "id": "post-59ebe8a43281823106377cca",
+      "image": {
+        "height": 1920,
+        "url": "https://harmonica.observe.tw/assets/feed-images/c8ff28b781c165fb81f8.webp",
+        "width": 1440
+      },
+      "link": "https://www.instagram.com/p/DbgAQJ5gYor/",
+      "platform": "Instagram",
+      "posted_at_local": "2026/08/01 22:03",
+      "source": "陽明交大竹韻口琴社",
+      "title": "【我是誰，我在哪】"
     }
   ],
   "source": {
@@ -33,7 +46,7 @@
     "page_url": "https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/",
     "slug": "bamboo-melody-harmonica-club"
   },
-  "source_generated_at": "2026-07-30T22:10:14.714309Z",
+  "source_generated_at": "2026-08-14T03:00:00.929166Z",
   "source_url": "https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/",
-  "updated_at": "2026-07-31T06:14:57+08:00"
+  "updated_at": "2026-08-14T11:39:45+08:00"
 }

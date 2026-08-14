@@ -43,8 +43,8 @@ DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 CHRONOLOGY_DATE_LABEL_RE = re.compile(
     r"^(?:"
     r"\d{4}/\d{2}/\d{2}(?:–\d{2}/\d{2})?(?: 前後)?|"
-    r"\d{4}(?:–\d{4})(?: 年起)?|"
-    r"\d{4}|"
+    r"\d{4}(?:–\d{4}) 年(?:起)?|"
+    r"\d{4} 年|"
     r"\d{4} 年(?:春季|夏季|秋季|冬季|社刊)|"
     r"民國 \d+(?:–\d+)? 年(?:左右|上學期|下學期|後)?（[^（）]+）"
     r")$"
@@ -225,7 +225,7 @@ def v_chronology_date_label(value: str, _row=None) -> str:
     value = normalize_display_text(value.strip())
     if not CHRONOLOGY_DATE_LABEL_RE.fullmatch(value):
         raise RowError(
-            "編年史日期須使用 YYYY/MM/DD、YYYY/MM/DD–MM/DD、年份範圍或民國 X 年（YYYY）格式"
+            "編年史日期須使用 YYYY/MM/DD、YYYY/MM/DD–MM/DD、YYYY 年、YYYY–YYYY 年或民國 X 年（YYYY）格式"
         )
     return value
 

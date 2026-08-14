@@ -9,6 +9,7 @@
   var SHOW_IN = new Set(['footer', 'about', 'join']);
   var SLUG_RE = /^[a-z0-9][a-z0-9-]{2,60}$/;
   var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  var CHRONOLOGY_DATE_LABEL_RE = /^(?:\d{4}\/\d{2}\/\d{2}(?:–\d{2}\/\d{2})?(?: 前後)?|\d{4}(?:–\d{4}) 年(?:起)?|\d{4} 年|\d{4} 年(?:春季|夏季|秋季|冬季|社刊)|民國 \d+(?:–\d+)? 年(?:左右|上學期|下學期|後)?（[^（）]+）)$/;
   var SHEET_ID_RE = /^[A-Za-z0-9_-]{20,100}$/;
   var GID_RE = /^\d{1,20}$/;
   var MAX_ROWS = 500;
@@ -136,6 +137,12 @@
     return text;
   }
 
+  function chronologyDateLabel(value) {
+    var text = boundedText(value, 'date_label');
+    if (!CHRONOLOGY_DATE_LABEL_RE.test(text)) throw new Error('編年史日期格式不一致');
+    return text;
+  }
+
   function integer(value, required) {
     if (!value && !required) return null;
     if (!/^-?\d+$/.test(value)) throw new Error('排序須為整數');
@@ -171,7 +178,7 @@
       return {
         id: id,
         sort_date: sortDate,
-        date_label: boundedText(row.date_label, 'date_label'),
+        date_label: chronologyDateLabel(row.date_label),
         category: boundedText(row.category, 'category'),
         tags: chronologyTags(row.tags),
         statement: boundedText(row.statement, 'statement'),
@@ -543,7 +550,7 @@
     }).formatToParts(date);
     var values = {};
     parts.forEach(function (part) { values[part.type] = part.value; });
-    return values.year + '-' + values.month + '-' + values.day + ' ' + values.hour + ':' + values.minute + ':' + values.second;
+    return values.year + '/' + values.month + '/' + values.day + ' ' + values.hour + ':' + values.minute + ':' + values.second;
   }
 
   function renderLiveData(doc, data, fetchedAt) {

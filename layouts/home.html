@@ -44,7 +44,7 @@
     {{ end }}
   </div>
   <p class="observe-updated" id="observe-updates-status" data-observe-mode="fallback" aria-live="polite">
-    {{- if $observe -}}上次同步資料：{{ time.Format "2006-01-02 15:04" (time.In "Asia/Taipei" (time.AsTime $observe.source_generated_at)) }}（Asia/Taipei）{{- else -}}目前顯示網站內建的備援資料。{{- end -}}
+    {{- if $observe -}}上次同步資料：{{ time.Format "2006/01/02 15:04" (time.In "Asia/Taipei" (time.AsTime $observe.source_generated_at)) }}（Asia/Taipei）{{- else -}}目前顯示網站內建的備援資料。{{- end -}}
   </p>
   <noscript><p class="observe-updated">目前顯示網站內建的備援資料。</p></noscript>
 </section>
