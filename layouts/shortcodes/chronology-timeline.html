@@ -13,7 +13,10 @@
     {{ range sort $events "sort_date" "desc" }}
       <article class="chronology-item" data-chronology-event data-chronology-id="{{ .id }}">
         <div class="chronology-event-time">
-          <time datetime="{{ .sort_date }}">{{ .date_label }}</time>
+          <time datetime="{{ .sort_date }}" aria-label="{{ .date_label }}">
+            <span class="chronology-date-main">{{ .date_main | default .date_label }}</span>
+            {{ with .date_note }}<span class="chronology-date-note">{{ . }}</span>{{ end }}
+          </time>
         </div>
         <div class="chronology-event-body">
           <p class="chronology-event-statement">{{ .statement }}</p>

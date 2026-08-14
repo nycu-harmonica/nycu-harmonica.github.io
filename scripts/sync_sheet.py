@@ -188,6 +188,13 @@ def v_display_text(value: str, _row=None) -> str:
     return normalize_display_text(value.strip())
 
 
+def v_chronology_statement(value: str, _row=None) -> str:
+    value = v_display_text(value)
+    if len(value) > 45:
+        raise RowError("編年史敘述請控制在 45 字內")
+    return value
+
+
 def v_tags(value: str, _row=None) -> str:
     tags = []
     seen = set()
@@ -228,6 +235,33 @@ def v_chronology_date_label(value: str, _row=None) -> str:
             "編年史日期須使用 YYYY/MM/DD、YYYY/MM/DD–MM/DD、YYYY 年、YYYY–YYYY 年或民國 X 年（YYYY）格式"
         )
     return value
+
+
+def chronology_date_parts(value: str) -> tuple[str, str]:
+    """把保留史料語意的日期拆成一致的主日期與補充註記。"""
+    roc_match = re.fullmatch(r"民國 (.+?)(?:（([^（）]+)）)?", value)
+    if roc_match:
+        era_text, detail = roc_match.groups()
+        era_main = era_text
+        qualifier = ""
+        for suffix in ("左右", "上學期", "下學期", "後"):
+            if era_main.endswith(suffix):
+                era_main = era_main[:-len(suffix)].rstrip()
+                qualifier = suffix
+                break
+        if detail and re.fullmatch(r"\d{4}(?:–\d{4})?", detail):
+            return f"{detail} 年", f"民國 {era_text}"
+        note = f"{qualifier}（{detail}）" if detail else qualifier
+        return f"民國 {era_main}", note
+
+    year_detail = re.fullmatch(r"(\d{4}) 年(春季|夏季|秋季|冬季|社刊)", value)
+    if year_detail:
+        return f"{year_detail.group(1)} 年", year_detail.group(2)
+    if value.endswith(" 前後"):
+        return value[:-3], "前後"
+    if re.fullmatch(r"\d{4}(?:–\d{4})? 年起", value):
+        return value[:-1], "起"
+    return value, ""
 
 
 def v_url(value: str, _row=None) -> str:
@@ -298,7 +332,7 @@ TAB_SPECS = {
             ("date_label", True, v_chronology_date_label),
             ("category", True, v_display_text),
             ("tags", False, v_tags),
-            ("statement", True, v_display_text),
+            ("statement", True, v_chronology_statement),
             ("source_label", True, v_display_text),
             ("source_url", True, v_url),
             ("evidence", False, v_display_text),
@@ -398,6 +432,8 @@ def validate_rows(tab: str, rows: list[dict]) -> tuple[list[dict], list[str]]:
         if row_errs:
             errors.append(f"{tab} 第 {i} 列:{';'.join(row_errs)},已跳過")
             continue
+        if tab == "chronology_events":
+            out["date_main"], out["date_note"] = chronology_date_parts(out["date_label"])
         uniq = spec["unique"]
         if uniq:
             if out[uniq] in seen_unique:

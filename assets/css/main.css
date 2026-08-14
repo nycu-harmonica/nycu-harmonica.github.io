@@ -677,7 +677,7 @@ a:hover { text-decoration: underline; }
 .chronology-timeline {
   position: relative;
   margin: 1.5rem 0 3rem;
-  --chronology-time-width: 10rem;
+  --chronology-time-width: 12.5rem;
   --chronology-line-gap: 1.25rem;
 }
 .chronology-list {
@@ -719,15 +719,34 @@ a:hover { text-decoration: underline; }
   font-size: 0.8rem;
   font-weight: 800;
   line-height: 1.35;
-  overflow-wrap: anywhere;
+}
+.chronology-event-time time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.08rem;
+}
+.chronology-date-main {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.chronology-date-note {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 .chronology-event-body {
   grid-column: 3;
   min-width: 0;
-  padding: 0.05rem 0 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.32rem;
+  padding: 0.05rem 0 0.65rem;
 }
 .chronology-event-statement {
-  display: inline;
+  display: block;
   margin: 0;
   color: var(--ink);
   font-size: 0.96rem;
@@ -742,17 +761,18 @@ a:hover { text-decoration: underline; }
   font-weight: 600;
   line-height: 1.25;
   white-space: nowrap;
-  margin-left: 0.35rem;
+  margin: 0;
 }
 .chronology-source::before { content: "↗"; }
 .chronology-source:hover { color: var(--green-900); }
 
 @media (max-width: 639px) {
   .chronology-timeline {
-    --chronology-time-width: 6.4rem;
+    --chronology-time-width: 8.5rem;
     --chronology-line-gap: 1rem;
   }
   .chronology-event-time { padding: 0.4rem 0.45rem 0; font-size: 0.72rem; }
+  .chronology-date-note { font-size: 0.66rem; }
   .chronology-event-statement { font-size: 0.9rem; }
 }
 

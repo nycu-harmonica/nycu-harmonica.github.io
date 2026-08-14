@@ -143,6 +143,37 @@
     return text;
   }
 
+  function chronologyStatement(value) {
+    var text = boundedText(value, 'statement');
+    if (text.length > 45) throw new Error('編年史敘述請控制在 45 字內');
+    return text;
+  }
+
+  function chronologyDateParts(value) {
+    var roc = value.match(/^民國 (.+?)(?:（([^（）]+)）)?$/);
+    if (roc) {
+      var eraText = roc[1];
+      var detail = roc[2] || '';
+      var eraMain = eraText;
+      var qualifier = '';
+      ['左右', '上學期', '下學期', '後'].some(function (suffix) {
+        if (!eraMain.endsWith(suffix)) return false;
+        eraMain = eraMain.slice(0, -suffix.length).trim();
+        qualifier = suffix;
+        return true;
+      });
+      if (/^\d{4}(?:–\d{4})?$/.test(detail)) {
+        return { main: detail + ' 年', note: '民國 ' + eraText };
+      }
+      return { main: '民國 ' + eraMain, note: detail ? qualifier + '（' + detail + '）' : qualifier };
+    }
+    var yearDetail = value.match(/^(\d{4}) 年(春季|夏季|秋季|冬季|社刊)$/);
+    if (yearDetail) return { main: yearDetail[1] + ' 年', note: yearDetail[2] };
+    if (value.endsWith(' 前後')) return { main: value.slice(0, -3), note: '前後' };
+    if (/^\d{4}(?:–\d{4})? 年起$/.test(value)) return { main: value.slice(0, -1), note: '起' };
+    return { main: value, note: '' };
+  }
+
   function integer(value, required) {
     if (!value && !required) return null;
     if (!/^-?\d+$/.test(value)) throw new Error('排序須為整數');
@@ -175,13 +206,17 @@
       if (!validDate(sortDate)) throw new Error('事件排序日期格式錯誤');
       var sourceUrl = validUrl(String(row.source_url || '').trim());
       if (!sourceUrl) throw new Error('事件來源網址不合法');
+      var dateLabel = chronologyDateLabel(row.date_label);
+      var dateParts = chronologyDateParts(dateLabel);
       return {
         id: id,
         sort_date: sortDate,
-        date_label: chronologyDateLabel(row.date_label),
+        date_label: dateLabel,
+        date_main: dateParts.main,
+        date_note: dateParts.note,
         category: boundedText(row.category, 'category'),
         tags: chronologyTags(row.tags),
-        statement: boundedText(row.statement, 'statement'),
+        statement: chronologyStatement(row.statement),
         source_label: boundedText(row.source_label, 'source_label'),
         source_url: sourceUrl,
         evidence: row.evidence ? boundedText(row.evidence, 'evidence') : ''
@@ -442,7 +477,17 @@
     timeBox.className = 'chronology-event-time';
     var time = doc.createElement('time');
     time.dateTime = row.sort_date;
-    time.textContent = row.date_label;
+    time.setAttribute('aria-label', row.date_label);
+    var dateMain = doc.createElement('span');
+    dateMain.className = 'chronology-date-main';
+    dateMain.textContent = row.date_main || row.date_label;
+    time.append(dateMain);
+    if (row.date_note) {
+      var dateNote = doc.createElement('span');
+      dateNote.className = 'chronology-date-note';
+      dateNote.textContent = row.date_note;
+      time.append(dateNote);
+    }
     timeBox.append(time);
 
     var body = doc.createElement('div');
@@ -603,6 +648,7 @@
 
   var api = {
     buildGvizUrl: buildGvizUrl,
+    chronologyDateParts: chronologyDateParts,
     normalizeDisplayText: normalizeDisplayText,
     normalizeTab: normalizeTab,
     parseGvizTable: parseGvizTable,

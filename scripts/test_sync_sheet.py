@@ -115,6 +115,8 @@ def test_chronology_events_validate_and_sort_fields():
     assert valid[0]["sort_date"] == "1968-04-08"
     assert valid[0]["tags"] == "社史|人物"
     assert valid[0]["statement"] == "竹韻口琴社成立。"
+    assert valid[0]["date_main"] == "1968/04/08"
+    assert valid[0]["date_note"] == ""
 
 
 def test_chronology_date_labels_use_canonical_format():
@@ -131,6 +133,23 @@ def test_chronology_date_labels_use_canonical_format():
     valid, errors = ss.validate_rows("chronology_events", ss.parse_rows(csv_text))
     assert [row["id"] for row in valid] == ["valid-exact", "valid-year", "valid-range", "valid-roc"]
     assert len(errors) == 3 and all("編年史日期" in error for error in errors)
+    assert valid[-1]["date_main"] == "1967–1968 年"
+    assert valid[-1]["date_note"] == "民國 56–57 年"
+
+
+def test_chronology_date_parts_keep_uncertainty_visible():
+    assert ss.chronology_date_parts("2026/05/15 前後") == ("2026/05/15", "前後")
+    assert ss.chronology_date_parts("民國 57–66 年後（史料斷層）") == ("民國 57–66 年", "後（史料斷層）")
+    assert ss.chronology_date_parts("1996 年社刊") == ("1996 年", "社刊")
+
+
+def test_chronology_statements_have_a_consistent_display_limit():
+    csv_text = (
+        "id,sort_date,date_label,category,statement,source_label,source_url\n"
+        "too-long,2026-01-01,2026/01/01,社史," + "字" * 46 + ",來源,https://example.com/history\n"
+    )
+    valid, errors = ss.validate_rows("chronology_events", ss.parse_rows(csv_text))
+    assert valid == [] and len(errors) == 1 and "45 字內" in errors[0]
 
 
 def test_chronology_events_require_source_url():

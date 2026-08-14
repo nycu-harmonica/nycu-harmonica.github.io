@@ -58,6 +58,8 @@ function testNormalizeAndSort() {
   assert.deepEqual(chronology.map((row) => row.id), ['later-event', 'early-event']);
   assert.equal(chronology[1].tags, '社史|人物');
   assert.equal(chronology[1].statement, '竹韻口琴社成立。');
+  assert.deepEqual(sheetLive.chronologyDateParts('民國 70 年（1981）'), { main: '1981 年', note: '民國 70 年' });
+  assert.deepEqual(sheetLive.chronologyDateParts('2019 年春季'), { main: '2019 年', note: '春季' });
 }
 
 function testChineseHeaders() {
@@ -76,6 +78,8 @@ function testGvizColumnLabels() {
   const rows = sheetLive.normalizeTab('chronology_events', value);
   assert.equal(rows[0].id, 'labeled-event');
   assert.equal(rows[0].date_label, '1968/04/08');
+  assert.equal(rows[0].date_main, '1968/04/08');
+  assert.equal(rows[0].date_note, '');
 }
 
 function testInvalidTablesAreRejected() {
@@ -89,6 +93,7 @@ function testInvalidTablesAreRejected() {
     ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2026-02-30', 'bad', '活動', '敘述', '來源', 'https://example.com/']])]
     ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2026-04-12', '2026/04/12', '活動', '<script>', '來源', 'https://example.com/']])]
     ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2018-01-01', '2018', '社史', '年份未標示年', '來源', 'https://example.com/']])]
+    ,['chronology_events', payload(['id', 'sort_date', 'date_label', 'category', 'statement', 'source_label', 'source_url'], [['bad-event', '2026-01-01', '2026/01/01', '社史', '字'.repeat(46), '來源', 'https://example.com/']])]
   ];
   invalid.forEach(([tab, value]) => assert.throws(() => sheetLive.normalizeTab(tab, value), Error));
 }
