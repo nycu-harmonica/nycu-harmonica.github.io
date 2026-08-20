@@ -10,7 +10,7 @@ GitHub Pages -> public facade /ask -> localhost Hermes API -> ai.kot.gg gpt-5.6-
 安全邊界：
 
 - `website` 是獨立 Hermes profile，不共用 Bamboo Discord session 或工具。
-- 主模型是 `gpt-5.6-luna`，固定 `reasoning_effort: none` 與 250-token 輸出上限；`ai.kot.gg` 無法使用時才回退本機 `qwen3.5:9b`。
+- 主模型是 `gpt-5.6-luna`，固定 `reasoning_effort: max` 與 250-token 輸出上限；`ai.kot.gg` 無法使用時才回退本機 `qwen3.5:9b`。
 - Hermes API 只監聽 `127.0.0.1:8643`，bearer key 不會傳給瀏覽器。
 - 公開 facade 只監聽 `127.0.0.1:8788`，只提供 `POST /ask` 與 `GET /health`。
 - facade 只讀官網 repo 中的公開頁面、公開 Google Sheet 及 repo last-good fallback。
