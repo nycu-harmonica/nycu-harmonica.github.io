@@ -91,7 +91,7 @@ python3 scripts/sync_observe.py             # 手動更新觀測站近期動態 
 
 GitHub Pages 不保存模型金鑰，也不直接連完整 Bamboo Hermes。前端只呼叫 `hugo.toml` 中的 `params.websiteAgent.endpoint`；該 endpoint 是一個窄 facade，再轉送到 localhost-only 的獨立 `website` Hermes profile。
 
-`website` profile 固定使用 `ai.kot.gg` 的 `gpt-5.6-luna`，關閉 reasoning 並限制 250 tokens；服務失效時才使用本機 `qwen3.5:9b` fallback。它沒有工具、MCP、內部記憶或寫入權限，上下文只來自本 repo 的公開頁面、公開 Google Sheet 與公開 fallback。前端使用 vendored Deep Chat Web Component，以短對話模式顯示回答與安全來源連結，不在瀏覽器保存對話。架構、安裝與停用方式見 [ops/website-agent/README.md](ops/website-agent/README.md)。
+`website` profile 固定使用 `ai.kot.gg` 的 `gpt-5.6-luna`，設定 `reasoning_effort: max` 並限制 250 tokens；服務失效時才使用本機 `qwen3.5:9b` fallback。它沒有工具、MCP、內部記憶或寫入權限，上下文只來自本 repo 的公開頁面、公開 Google Sheet 與公開 fallback。前端使用 vendored Deep Chat Web Component，以短對話模式顯示回答與安全來源連結，不在瀏覽器保存對話。架構、安裝與停用方式見 [ops/website-agent/README.md](ops/website-agent/README.md)。
 
 ## 相關文件
 
