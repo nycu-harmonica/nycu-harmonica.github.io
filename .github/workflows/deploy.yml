@@ -44,6 +44,9 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Install frontend dependencies
+        run: npm ci
+
       - name: Build
         env:
           HUGO_ENVIRONMENT: production
