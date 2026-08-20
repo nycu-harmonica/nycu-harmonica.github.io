@@ -1,0 +1,283 @@
+/* 竹韻 Discord 邀請頁：保留 Discord 卡片語彙，套用竹韻藍白識別。 */
+
+.discord-page {
+  min-height: 100dvh;
+  margin: 0;
+  color: #f2f3f5;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(31, 139, 171, 0.34), transparent 28rem),
+    radial-gradient(circle at 90% 85%, rgba(88, 101, 242, 0.22), transparent 30rem),
+    #080d20;
+}
+
+.discord-page main { min-height: 100dvh; }
+
+.discord-skip-link {
+  position: fixed;
+  z-index: 100;
+  top: -5rem;
+  left: 1rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  color: #fff;
+  background: #176b84;
+}
+
+.discord-skip-link:focus { top: 0; }
+
+.discord-stage {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1.35rem;
+  width: min(100%, 48rem);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1.4rem, env(safe-area-inset-bottom));
+}
+
+.discord-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.discord-topbar a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #dbe7f0;
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+
+.discord-topbar a:hover { color: #fff; text-decoration: none; }
+
+.discord-topbar img {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.discord-invite {
+  align-self: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.75rem;
+  background: #111827;
+  box-shadow: 0 1.7rem 5rem rgba(0, 0, 0, 0.42), 0 0 0 0.3rem rgba(88, 101, 242, 0.08);
+}
+
+.discord-banner {
+  position: relative;
+  height: clamp(10rem, 32vw, 14rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(255, 255, 255, 0.2), transparent 18rem),
+    linear-gradient(128deg, #176b84 0%, #318ead 55%, #75bed5 100%);
+}
+
+.discord-banner::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(7, 15, 31, 0.18));
+  content: "";
+}
+
+.discord-banner img {
+  position: absolute;
+  top: -35%;
+  right: -9%;
+  width: min(66%, 29rem);
+  opacity: 0.13;
+  transform: rotate(-8deg);
+}
+
+.discord-banner-note {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.32);
+  font-weight: 900;
+}
+
+.discord-banner-note-one { top: 20%; left: 12%; font-size: 2.8rem; transform: rotate(-13deg); }
+.discord-banner-note-two { right: 30%; bottom: 12%; font-size: 2rem; transform: rotate(11deg); }
+.discord-banner-note-three { top: 13%; right: 12%; font-size: 3.4rem; transform: rotate(15deg); }
+
+.discord-card-body {
+  position: relative;
+  padding: 4.6rem 1.35rem 1.4rem;
+}
+
+.discord-server-icon {
+  position: absolute;
+  top: -4rem;
+  left: 1.35rem;
+  width: 7.4rem;
+  height: 7.4rem;
+  border: 0.48rem solid #111827;
+  border-radius: 2.35rem;
+  object-fit: cover;
+  background: #176b84;
+}
+
+.discord-heading { position: relative; }
+
+.discord-eyebrow {
+  margin: 0 0 0.45rem;
+  color: #949ba4;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  line-height: 1.45;
+}
+
+.discord-heading h1 {
+  display: inline;
+  margin: 0;
+  color: #f2f3f5;
+  font-size: clamp(1.65rem, 7vw, 2.45rem);
+  font-weight: 850;
+  letter-spacing: -0.035em;
+  line-height: 1.22;
+}
+
+.discord-community-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+  margin: 0.55rem 0 0 0.5rem;
+  padding: 0.18rem 0.48rem;
+  border-radius: 999px;
+  color: #dceff3;
+  background: #263859;
+  font-size: 0.68rem;
+  font-weight: 750;
+  vertical-align: 0.3rem;
+}
+
+.discord-community-badge > span { color: #7bd1e5; }
+
+.discord-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+  margin-top: 0.65rem;
+  color: #b5bac1;
+  font-size: 0.95rem;
+}
+
+.discord-counts > span { display: inline-flex; align-items: center; }
+.discord-counts strong { margin-right: 0.22rem; color: #dbdee1; font-weight: 650; }
+
+.discord-counts i {
+  width: 0.72rem;
+  height: 0.72rem;
+  margin-right: 0.38rem;
+  border-radius: 50%;
+}
+
+.discord-status-online { background: #23a55a; }
+.discord-status-member { background: #80848e; }
+
+.discord-description {
+  margin: 1rem 0 0;
+  color: #c9cdd2;
+  font-size: 1rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.discord-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.05rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.discord-tags li {
+  padding: 0.34rem 0.72rem;
+  border: 1px solid #2d3748;
+  border-radius: 999px;
+  color: #d3d6da;
+  background: #151d2d;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.discord-actions {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+}
+
+.discord-join-button,
+.discord-copy-button {
+  display: inline-flex;
+  min-height: 3.4rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  border: 0;
+  border-radius: 0.75rem;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.discord-join-button {
+  justify-content: space-between;
+  padding: 0.8rem 1.15rem;
+  color: #fff;
+  background: #23a55a;
+  box-shadow: 0 0.65rem 1.7rem rgba(35, 165, 90, 0.18);
+}
+
+.discord-join-button:hover { color: #fff; text-decoration: none; background: #1a8f4b; }
+
+.discord-copy-button {
+  min-height: 3rem;
+  padding: 0.7rem 1rem;
+  color: #dbdee1;
+  background: #252d3a;
+}
+
+.discord-copy-button:hover { background: #303948; }
+
+.discord-live-status {
+  margin: 0.8rem 0 0;
+  color: #949ba4;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.discord-footnote {
+  max-width: 34rem;
+  margin: 0 auto;
+  color: #aab4c1;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  text-align: center;
+}
+
+@media (min-width: 42rem) {
+  .discord-stage { padding: 1.5rem; }
+  .discord-card-body { padding: 5rem 2rem 2rem; }
+  .discord-server-icon { left: 2rem; }
+  .discord-actions { grid-template-columns: 1fr auto; }
+  .discord-copy-button { min-height: 3.4rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .discord-invite { animation: discord-card-in 480ms ease-out both; }
+  .discord-join-button { transition: background 160ms ease, transform 160ms ease; }
+  .discord-join-button:hover { transform: translateY(-1px); }
+}
+
+@keyframes discord-card-in {
+  from { opacity: 0; transform: translateY(0.75rem) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
