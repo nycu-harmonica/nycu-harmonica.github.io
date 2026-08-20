@@ -1,0 +1,45 @@
+{{ define "main" }}
+{{ $portal := site.Data.portal }}
+<div class="portal-screen-stage" data-screen-stage data-song-count="{{ len $portal.program }}">
+  <div class="portal-screen-glow portal-screen-glow-one" aria-hidden="true"></div>
+  <div class="portal-screen-glow portal-screen-glow-two" aria-hidden="true"></div>
+  <header class="portal-screen-header">
+    <div class="portal-screen-brand">
+      <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="64" height="64" alt="">
+      <p><strong>{{ $portal.kicker }}</strong><span>{{ $portal.subtitle }}</span></p>
+    </div>
+    <span class="portal-screen-live"><span aria-hidden="true"></span>{{ $portal.status }}</span>
+  </header>
+
+  <section class="portal-screen-copy">
+    <p class="portal-screen-eyebrow">WELCOME TO OUR PERFORMANCE</p>
+    <h1>{{ $portal.title }}</h1>
+    <p>{{ $portal.subtitle }}</p>
+  </section>
+
+  <section class="portal-screen-program" aria-labelledby="screen-program-title">
+    <p class="portal-screen-section-label" id="screen-program-title">TODAY'S PROGRAM</p>
+    <ol>
+      {{ range $index, $song := $portal.program }}
+      <li data-program-item="{{ add $index 1 }}">
+        <span>{{ printf "%02d" (add $index 1) }}</span>
+        <strong>{{ $song.title }}</strong>
+        <small>{{ $song.credit }}</small>
+      </li>
+      {{ end }}
+    </ol>
+  </section>
+
+  <aside class="portal-screen-qr">
+    <div class="portal-qr-frame">
+      <img src="{{ "images/portal-qr.png" | relURL }}" width="720" height="720" alt="QR Code：開啟竹韻今日節目單">
+    </div>
+    <p>{{ $portal.screen_prompt }}</p>
+    <strong>harmonica.nycu.club/p</strong>
+  </aside>
+
+  <img class="portal-screen-mark" src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="" aria-hidden="true">
+  <button class="portal-fullscreen-button" type="button" data-fullscreen-button>進入全螢幕</button>
+  <p class="portal-screen-controls">按 F 進入全螢幕・數字鍵 1–{{ len $portal.program }} 標示曲目・0 取消</p>
+</div>
+{{ end }}

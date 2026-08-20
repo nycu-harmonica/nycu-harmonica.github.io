@@ -1,0 +1,17 @@
+# 演出 Portal 的公開內容。換場次時只需要更新這個檔案並重新部署。
+status: 現場演出
+kicker: NYCU BAMBOO MELODY HARMONICA CLUB
+title: 陽明交大竹韻口琴社
+subtitle: 用一把口琴，吹出屬於你的旋律
+welcome: 歡迎來到竹韻的演出現場
+intro: 節目進行中，歡迎查看今天的曲目，也可以在演出後認識竹韻、加入我們。
+screen_prompt: 掃描 QR Code，開啟今日節目單
+program:
+  - title: Just the Way You Are
+    credit: Bruno Mars
+  - title: Tradition ／ Matchmaker
+    credit: 《屋頂上的提琴手》配樂
+  - title: 風之丘
+    credit: 《魔女宅急便》配樂
+  - title: 孤單北半球
+    credit: 林依晨

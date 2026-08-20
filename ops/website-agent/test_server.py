@@ -155,7 +155,7 @@ class ProfileConfigTests(unittest.TestCase):
         config = (Path(__file__).parent / "hermes-config.yaml").read_text(encoding="utf-8")
         self.assertIn("default: gpt-5.6-luna", config)
         self.assertIn("provider: custom:ai-kot-gg-luna", config)
-        self.assertIn("reasoning_effort: none", config)
+        self.assertIn("reasoning_effort: max", config)
         self.assertIn("max_tokens: 250", config)
         self.assertIn("fallback_providers:", config)
         self.assertIn("model: qwen3.5:9b", config)

@@ -1,0 +1,586 @@
+/* 竹韻演出 Portal：手機節目單與 16:9 舞台投影共用樣式 */
+
+.portal-body {
+  --portal-blue: #176f89;
+  --portal-blue-dark: #0d4358;
+  --portal-blue-light: #dff3f6;
+  --portal-cream: #f7f4ec;
+  --portal-gold: #f0b34a;
+  min-height: 100dvh;
+  color: #102f3a;
+  background: var(--portal-cream);
+}
+
+.portal-body main { min-height: 100dvh; }
+
+.portal-skip-link {
+  position: fixed;
+  z-index: 100;
+  top: -5rem;
+  left: 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  color: #fff;
+  background: var(--portal-blue-dark);
+}
+
+.portal-skip-link:focus { top: 0; }
+
+/* ---------- 手機節目單 ---------- */
+.portal-list {
+  max-width: 48rem;
+  margin: 0 auto;
+  overflow-x: hidden;
+  background: #fff;
+  box-shadow: 0 0 40px rgba(13, 67, 88, 0.08);
+}
+
+.portal-mobile-header {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.5rem;
+  padding: 0.75rem 1.1rem;
+  color: #fff;
+  background: var(--portal-blue);
+}
+
+.portal-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.portal-brand:hover { text-decoration: none; }
+
+.portal-brand img {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 0.6rem;
+}
+
+.portal-status,
+.portal-screen-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  flex: none;
+  padding: 0.3rem 0.62rem;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(5, 44, 58, 0.22);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.portal-status > span,
+.portal-screen-live > span {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: var(--portal-gold);
+  box-shadow: 0 0 0 0.22rem rgba(240, 179, 74, 0.17);
+}
+
+.portal-mobile-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 32rem;
+  padding: 4.6rem 1.35rem 3.4rem;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(circle at 86% 22%, rgba(111, 207, 219, 0.32), transparent 31%),
+    linear-gradient(145deg, var(--portal-blue) 0%, var(--portal-blue-dark) 100%);
+}
+
+.portal-mobile-hero::after {
+  position: absolute;
+  z-index: -1;
+  right: -7rem;
+  bottom: -11rem;
+  width: 23rem;
+  height: 23rem;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 50%;
+  content: "";
+}
+
+.portal-mobile-hero-mark {
+  position: absolute;
+  z-index: -1;
+  top: -2.5rem;
+  right: -7rem;
+  width: 22rem;
+  opacity: 0.11;
+  transform: rotate(-8deg);
+}
+
+.portal-kicker,
+.portal-section-label {
+  margin: 0 0 0.9rem;
+  color: #bde9ef;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+}
+
+.portal-mobile-hero h1 {
+  max-width: 9em;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.65rem, 13vw, 4.6rem);
+  font-weight: 900;
+  letter-spacing: -0.055em;
+  line-height: 1.03;
+}
+
+.portal-lead {
+  max-width: 28rem;
+  margin: 1.35rem 0 0;
+  color: #e3f4f6;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.portal-primary-action,
+.portal-outline-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  min-height: 3.25rem;
+  margin-top: 2rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.35rem;
+  font-weight: 800;
+}
+
+.portal-primary-action {
+  min-width: 12.5rem;
+  color: var(--portal-blue-dark);
+  background: #fff;
+}
+
+.portal-primary-action:hover,
+.portal-outline-action:hover { text-decoration: none; }
+
+.portal-mobile-section { padding: 3.6rem 1.35rem; }
+
+.portal-mobile-section .portal-section-label { color: var(--portal-blue); }
+
+.portal-mobile-section h2 {
+  max-width: 12em;
+  margin: 0 0 1.8rem;
+  color: var(--portal-blue-dark);
+  font-size: clamp(1.8rem, 8vw, 2.6rem);
+  line-height: 1.18;
+}
+
+.portal-program-list {
+  margin: 0;
+  padding: 0;
+  border-top: 2px solid var(--portal-blue-dark);
+  list-style: none;
+}
+
+.portal-program-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: start;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #c5d9de;
+}
+
+.portal-program-item.is-current::before,
+.portal-screen-program li.is-current::before {
+  display: block;
+  content: "正在演奏";
+}
+
+.portal-program-item.is-current::before {
+  position: absolute;
+  top: -0.58rem;
+  right: 0;
+  padding: 0.16rem 0.5rem;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--portal-blue);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.portal-program-number {
+  padding-top: 0.13rem;
+  color: var(--portal-blue);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.portal-program-copy { display: grid; gap: 0.2rem; }
+
+.portal-program-copy strong {
+  color: #102f3a;
+  font-size: 1.13rem;
+  line-height: 1.38;
+}
+
+.portal-program-copy > span {
+  color: #667b82;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.portal-about {
+  color: #e3f4f6;
+  background: var(--portal-blue-dark);
+}
+
+.portal-about .portal-section-label { color: #8fd5df; }
+.portal-about h2 { color: #fff; }
+.portal-about > p:not(.portal-section-label) { margin: 0; line-height: 1.9; }
+
+.portal-outline-action {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+
+.portal-social {
+  padding: 2.6rem 1.35rem;
+  background: #edf5f6;
+}
+
+.portal-social > p {
+  margin: 0 0 0.85rem;
+  color: #667b82;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.portal-social ul { margin: 0; padding: 0; list-style: none; }
+
+.portal-social a {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.72rem 0;
+  border-bottom: 1px solid #c5d9de;
+  color: var(--portal-blue-dark);
+  font-weight: 750;
+}
+
+.portal-social a:hover { text-decoration: none; color: var(--portal-blue); }
+
+.portal-mobile-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.5rem 1.35rem 2rem;
+  color: #fff;
+  background: var(--portal-blue);
+}
+
+.portal-mobile-footer img { border-radius: 0.35rem; }
+.portal-mobile-footer p { margin: 0; font-size: 0.85rem; font-weight: 800; line-height: 1.45; }
+.portal-mobile-footer span { color: #bde9ef; font-size: 0.75rem; font-weight: 500; }
+
+@media (min-width: 640px) {
+  .portal-mobile-header { padding-inline: 2rem; }
+  .portal-mobile-hero { padding: 6rem 3rem 4.5rem; }
+  .portal-mobile-section { padding: 4.5rem 3rem; }
+  .portal-social { padding: 3rem; }
+  .portal-mobile-footer { padding-inline: 3rem; }
+}
+
+/* ---------- 16:9 舞台投影 ---------- */
+.portal-screen {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #fff;
+  background: #061f29;
+}
+
+.portal-screen main {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 0;
+}
+
+.portal-screen-stage {
+  position: relative;
+  width: min(100vw, 177.7778vh);
+  height: min(100vh, 56.25vw);
+  min-height: 0;
+  overflow: hidden;
+  color: #fff;
+  background:
+    linear-gradient(117deg, rgba(15, 111, 137, 0.98), rgba(8, 60, 79, 0.99) 72%),
+    var(--portal-blue);
+  box-shadow: 0 0 5vh rgba(0, 0, 0, 0.55);
+  container-type: size;
+}
+
+.portal-screen-stage::before {
+  position: absolute;
+  inset: 1.5cqh;
+  border: 0.12cqh solid rgba(255, 255, 255, 0.22);
+  content: "";
+  pointer-events: none;
+}
+
+.portal-screen-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(5cqh);
+  opacity: 0.32;
+}
+
+.portal-screen-glow-one {
+  top: -26cqh;
+  right: 22cqw;
+  width: 48cqh;
+  height: 48cqh;
+  background: #48c5d4;
+}
+
+.portal-screen-glow-two {
+  bottom: -28cqh;
+  left: 16cqw;
+  width: 44cqh;
+  height: 44cqh;
+  background: #0b2631;
+}
+
+.portal-screen-header {
+  position: absolute;
+  top: 6cqh;
+  right: 6cqw;
+  left: 6cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.portal-screen-brand { display: flex; align-items: center; gap: 1.1cqw; }
+
+.portal-screen-brand img {
+  width: 5.4cqh;
+  height: 5.4cqh;
+  border: 0.1cqh solid rgba(255, 255, 255, 0.55);
+  border-radius: 0.55cqh;
+}
+
+.portal-screen-brand p { display: grid; gap: 0.1cqh; margin: 0; line-height: 1.25; }
+.portal-screen-brand strong { font-size: 1.35cqh; letter-spacing: 0.11em; }
+.portal-screen-brand span { color: #bde9ef; font-size: 1.15cqh; }
+
+.portal-screen-live {
+  gap: 0.7cqh;
+  padding: 0.6cqh 1.1cqh;
+  border-radius: 99px;
+  font-size: 1.2cqh;
+}
+
+.portal-screen-live > span { width: 0.7cqh; height: 0.7cqh; }
+
+.portal-screen-copy {
+  position: absolute;
+  top: 19cqh;
+  left: 6cqw;
+  width: 58cqw;
+}
+
+.portal-screen-eyebrow,
+.portal-screen-section-label {
+  margin: 0 0 1.4cqh;
+  color: #9fe2ea;
+  font-size: 1.25cqh;
+  font-weight: 850;
+  letter-spacing: 0.18em;
+}
+
+.portal-screen-copy h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 6.5cqh;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+}
+
+.portal-screen-copy > p:last-child {
+  margin: 1.6cqh 0 0;
+  color: #dff3f6;
+  font-size: 2.2cqh;
+  letter-spacing: 0.03em;
+}
+
+.portal-screen-program {
+  position: absolute;
+  bottom: 7cqh;
+  left: 6cqw;
+  width: 58cqw;
+}
+
+.portal-screen-program ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 2.8cqw;
+  margin: 0;
+  padding: 0;
+  border-top: 0.18cqh solid rgba(255, 255, 255, 0.72);
+  list-style: none;
+}
+
+.portal-screen-program li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5cqw minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  padding: 1.25cqh 0 1.15cqh;
+  border-bottom: 0.1cqh solid rgba(255, 255, 255, 0.28);
+  line-height: 1.25;
+  transition: background 160ms ease, padding 160ms ease;
+}
+
+.portal-screen-program li > span {
+  grid-row: 1 / 3;
+  color: #9fe2ea;
+  font-size: 1.35cqh;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.portal-screen-program li strong {
+  overflow: hidden;
+  font-size: 2cqh;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portal-screen-program li small {
+  margin-top: 0.32cqh;
+  overflow: hidden;
+  color: #c4e5e9;
+  font-size: 1.25cqh;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portal-screen-program li.is-current {
+  padding-right: 1cqh;
+  padding-left: 1cqh;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.portal-screen-program li.is-current::before {
+  position: absolute;
+  top: -0.85cqh;
+  right: 0.8cqh;
+  padding: 0.2cqh 0.75cqh;
+  border-radius: 99px;
+  color: var(--portal-blue-dark);
+  background: var(--portal-gold);
+  font-size: 0.85cqh;
+  font-weight: 900;
+}
+
+.portal-screen-qr {
+  position: absolute;
+  top: 19cqh;
+  right: 6cqw;
+  width: 20cqw;
+  text-align: center;
+}
+
+.portal-qr-frame {
+  padding: 1.25cqh;
+  border-radius: 1cqh;
+  background: #fff;
+  box-shadow: 0 1.8cqh 5cqh rgba(2, 30, 40, 0.27);
+}
+
+.portal-qr-frame img { width: 100%; height: auto; image-rendering: pixelated; }
+
+.portal-screen-qr p {
+  margin: 1.5cqh 0 0.35cqh;
+  color: #e7f7f8;
+  font-size: 1.45cqh;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+.portal-screen-qr > strong { font-size: 1.45cqh; letter-spacing: 0.035em; }
+
+.portal-screen-mark {
+  position: absolute;
+  z-index: 0;
+  right: -8cqw;
+  bottom: -24cqh;
+  width: 37cqw;
+  opacity: 0.075;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+.portal-fullscreen-button {
+  position: absolute;
+  z-index: 3;
+  right: 2.6cqw;
+  bottom: 2.7cqh;
+  padding: 0.55cqh 0.9cqh;
+  border: 0.1cqh solid rgba(255, 255, 255, 0.55);
+  border-radius: 0.45cqh;
+  color: #fff;
+  background: rgba(4, 39, 52, 0.55);
+  font: inherit;
+  font-size: 1cqh;
+  cursor: pointer;
+}
+
+.portal-screen-controls {
+  position: absolute;
+  right: 2.6cqw;
+  bottom: 0.7cqh;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.75cqh;
+}
+
+.portal-screen-stage:fullscreen {
+  width: 100vw;
+  height: 100vh;
+}
+
+.portal-screen-stage:fullscreen .portal-fullscreen-button,
+.portal-screen-stage:fullscreen .portal-screen-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-screen-program li { transition: none; }
+}
+
+@media print {
+  .portal-fullscreen-button,
+  .portal-screen-controls,
+  .portal-skip-link { display: none; }
+}

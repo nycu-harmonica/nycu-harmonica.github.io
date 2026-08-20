@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  {{ partial "head.html" . }}
+  <meta name="theme-color" content="#176b84">
+  {{ with resources.Get "css/portal.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{ end }}
+</head>
+<body class="portal-body portal-{{ if .IsSection }}list{{ else }}{{ .Layout | default .Kind }}{{ end }}">
+  <a class="portal-skip-link" href="#main">跳到主要內容</a>
+  <main id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ with resources.Get "js/portal.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+  {{ end }}
+</body>
+</html>
