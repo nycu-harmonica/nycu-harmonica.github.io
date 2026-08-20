@@ -6,61 +6,93 @@
     {{ $officialLinks = $officialLinks | append . }}
   {{ end }}
 {{ end }}
+{{ $storyCount := add (add 3 (len $portal.program)) (len ($portal.stories | default (slice))) }}
 
-<header class="portal-mobile-header">
-  <a class="portal-brand" href="{{ "/" | relURL }}" aria-label="回到竹韻口琴社官網">
-    <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="44" height="44" alt="">
-    <span>竹韻口琴社</span>
-  </a>
-  <span class="portal-status"><span aria-hidden="true"></span>{{ $portal.status }}</span>
-</header>
+<div class="portal-story-shell" data-story-player data-default-duration="{{ $portal.story_duration | default 7000 }}">
+  <section class="portal-story-frame" aria-label="竹韻演出限時動態">
+    <div class="portal-story-progress" aria-hidden="true" data-story-progress>
+      {{ range seq $storyCount }}<span><i></i></span>{{ end }}
+    </div>
 
-<section class="portal-mobile-hero">
-  <div class="portal-mobile-hero-mark" aria-hidden="true">
-    <img src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="">
-  </div>
-  <p class="portal-kicker">{{ $portal.kicker }}</p>
-  <h1>{{ $portal.welcome }}</h1>
-  <p class="portal-lead">{{ $portal.intro }}</p>
-  <a class="portal-primary-action" href="#program">查看今日曲目 <span aria-hidden="true">↓</span></a>
-</section>
+    <header class="portal-story-header">
+      <a class="portal-story-profile" href="{{ "/" | relURL }}" aria-label="回到竹韻口琴社官網">
+        <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="40" height="40" alt="">
+        <span><strong>竹韻口琴社</strong><small>現在</small></span>
+      </a>
+      <button class="portal-story-share" type="button" data-story-share aria-label="分享演出 Portal">分享</button>
+    </header>
 
-<section class="portal-mobile-section" id="program">
-  <p class="portal-section-label">TODAY'S PROGRAM</p>
-  <h2>今日演出曲目</h2>
-  <ol class="portal-program-list">
-    {{ range $index, $song := $portal.program }}
-    <li class="portal-program-item" data-program-item="{{ add $index 1 }}">
-      <span class="portal-program-number">{{ printf "%02d" (add $index 1) }}</span>
-      <span class="portal-program-copy">
-        <strong>{{ $song.title }}</strong>
-        <span>{{ $song.credit }}</span>
-      </span>
-    </li>
-    {{ end }}
-  </ol>
-</section>
+    <div class="swiper portal-story-swiper">
+      <div class="swiper-wrapper">
+        <article class="swiper-slide portal-story-slide portal-story-welcome" data-story-title="{{ $portal.welcome }}" data-swiper-autoplay="{{ $portal.story_duration | default 7000 }}">
+          <img class="portal-story-watermark" src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="" aria-hidden="true">
+          <div class="portal-story-copy">
+            <p class="portal-story-kicker">{{ $portal.kicker }}</p>
+            <span class="portal-story-live"><i aria-hidden="true"></i>{{ $portal.status }}</span>
+            <h1>{{ $portal.welcome }}</h1>
+            <p>{{ $portal.intro }}</p>
+          </div>
+          <p class="portal-story-hint"><span aria-hidden="true">↔</span> 點按兩側或左右滑動</p>
+        </article>
 
-<section class="portal-mobile-section portal-about">
-  <p class="portal-section-label">ABOUT BAMBOO MELODY</p>
-  <h2>演出結束，也歡迎來找我們</h2>
-  <p>我們是國立陽明交通大學竹韻口琴社。無論有沒有音樂基礎，都可以從第一個音開始，一起吹奏、合奏與登台演出。</p>
-  <a class="portal-outline-action" href="{{ "/about/#join" | relURL }}">認識竹韻與入社方式 <span aria-hidden="true">→</span></a>
-</section>
+        {{ range $index, $song := $portal.program }}
+        <article class="swiper-slide portal-story-slide portal-story-song portal-story-song-{{ mod $index 3 }}" data-story-title="{{ $song.title }}" data-swiper-autoplay="{{ $portal.story_duration | default 7000 }}">
+          <span class="portal-story-giant-number" aria-hidden="true">{{ printf "%02d" (add $index 1) }}</span>
+          <div class="portal-story-copy">
+            <p class="portal-story-kicker">TODAY'S PROGRAM ・ {{ printf "%02d" (add $index 1) }}/{{ printf "%02d" (len $portal.program) }}</p>
+            <h2>{{ $song.title }}</h2>
+            <p class="portal-story-credit">{{ $song.credit }}</p>
+          </div>
+          <span class="portal-story-note" aria-hidden="true">♪</span>
+        </article>
+        {{ end }}
 
-{{ with $officialLinks }}
-<nav class="portal-social" aria-label="竹韻官方社群">
-  <p>FOLLOW BAMBOO MELODY</p>
-  <ul>
-    {{ range . }}
-    <li><a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .label }} <span aria-hidden="true">↗</span></a></li>
-    {{ end }}
-  </ul>
-</nav>
-{{ end }}
+        {{ range $story := $portal.stories | default (slice) }}
+        <article class="swiper-slide portal-story-slide portal-story-media" data-story-title="{{ $story.caption | default $story.alt }}" data-story-duration="{{ $story.duration | default $portal.story_duration | default 7000 }}" data-swiper-autoplay="{{ $story.duration | default $portal.story_duration | default 7000 }}">
+          {{ if eq $story.media_type "video" }}
+          <video src="{{ $story.src | relURL }}" playsinline muted preload="metadata" aria-label="{{ $story.alt }}"></video>
+          {{ else }}
+          <img src="{{ $story.src | relURL }}" alt="{{ $story.alt }}" loading="lazy">
+          {{ end }}
+          <div class="portal-story-media-shade" aria-hidden="true"></div>
+          {{ with $story.caption }}<p class="portal-story-caption">{{ . }}</p>{{ end }}
+        </article>
+        {{ end }}
 
-<footer class="portal-mobile-footer">
-  <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="40" height="40" alt="">
-  <p>{{ $portal.title }}<br><span>{{ $portal.subtitle }}</span></p>
-</footer>
+        <article class="swiper-slide portal-story-slide portal-story-join" data-story-title="加入竹韻" data-swiper-autoplay="{{ $portal.story_duration | default 7000 }}">
+          <img class="portal-story-watermark" src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="" aria-hidden="true">
+          <div class="portal-story-copy">
+            <p class="portal-story-kicker">ABOUT BAMBOO MELODY</p>
+            <h2>下一段旋律，換你加入</h2>
+            <p>無論有沒有音樂基礎，都可以從第一個音開始，一起吹奏、合奏與登台演出。</p>
+            <a class="portal-story-cta swiper-no-swiping" href="{{ "/about/#join" | relURL }}">認識竹韻與入社方式 <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="swiper-slide portal-story-slide portal-story-follow" data-story-title="追蹤竹韻" data-swiper-autoplay="{{ $portal.story_duration | default 7000 }}">
+          <div class="portal-story-follow-orbit" aria-hidden="true"><span>♪</span><span>♬</span><span>♫</span></div>
+          <div class="portal-story-copy">
+            <p class="portal-story-kicker">KEEP IN TOUCH</p>
+            <h2>演出落幕，旋律繼續</h2>
+            <p>追蹤竹韻，收到社課、演出與下一次活動消息。</p>
+          {{ with $officialLinks }}
+          <nav class="portal-story-link-list" aria-label="竹韻官方社群">
+            {{ range . }}
+            <a class="swiper-no-swiping" href="{{ .url }}">
+              <strong>{{ .label }}</strong><span>開啟 <i aria-hidden="true">↗</i></span>
+            </a>
+            {{ end }}
+          </nav>
+          {{ end }}
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <button class="portal-story-tap portal-story-tap-prev" type="button" data-story-prev aria-label="上一則限時動態"></button>
+    <button class="portal-story-tap portal-story-tap-next" type="button" data-story-next aria-label="下一則限時動態"></button>
+
+    <p class="portal-story-announcer" aria-live="polite" data-story-announcer></p>
+  </section>
+</div>
 {{ end }}

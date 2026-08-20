@@ -12,7 +12,8 @@
   <main id="main">
     {{ block "main" . }}{{ end }}
   </main>
-  {{ with resources.Get "js/portal.js" | minify | fingerprint }}
+  {{ $portalJSOptions := dict "targetPath" "js/portal.js" "minify" true }}
+  {{ with resources.Get "js/portal.js" | js.Build $portalJSOptions | fingerprint }}
   <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
   {{ end }}
 </body>
