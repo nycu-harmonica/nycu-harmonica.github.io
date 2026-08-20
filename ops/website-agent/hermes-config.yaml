@@ -40,7 +40,7 @@ agent:
   task_completion_guidance: false
   environment_probe: false
   coding_context: "off"
-  reasoning_effort: none
+  reasoning_effort: max
   disabled_toolsets:
     - web
     - browser
