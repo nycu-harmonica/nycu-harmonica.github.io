@@ -1,0 +1,63 @@
+{{ define "main" }}
+{{ $inviteURL := "https://discord.gg/uEQDCbnY8P" }}
+{{ range site.Data.generated.links | default (slice) }}
+  {{ if eq .key "discord" }}{{ $inviteURL = .url }}{{ end }}
+{{ end }}
+
+<div class="discord-stage">
+  <nav class="discord-topbar" aria-label="頁面導覽">
+    <a href="{{ "/" | relURL }}" aria-label="回到竹韻口琴社官網">
+      <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="36" height="36" alt="">
+      <span>竹韻口琴社</span>
+    </a>
+    <a href="{{ "/p/" | relURL }}">演出 Portal</a>
+  </nav>
+
+  <section class="discord-invite" data-discord-card data-api-url="https://discord.com/api/v10/invites/uEQDCbnY8P?with_counts=true&amp;with_expiration=true">
+    <div class="discord-banner" aria-hidden="true">
+      <span class="discord-banner-note discord-banner-note-one">♪</span>
+      <span class="discord-banner-note discord-banner-note-two">♫</span>
+      <span class="discord-banner-note discord-banner-note-three">♬</span>
+      <img src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="">
+    </div>
+
+    <div class="discord-card-body">
+      <img class="discord-server-icon" src="{{ "images/bamboo-logo.webp" | relURL }}" width="128" height="128" alt="竹韻口琴社藍白識別圖">
+
+      <div class="discord-heading">
+        <p class="discord-eyebrow">YOU'VE BEEN INVITED TO JOIN A SERVER</p>
+        <h1 data-discord-name>陽明交大竹韻口琴社</h1>
+        <span class="discord-community-badge" title="Discord 社群伺服器">
+          <span aria-hidden="true">✦</span> 社群伺服器
+        </span>
+      </div>
+
+      <div class="discord-counts" aria-label="Discord 伺服器人數">
+        <span><i class="discord-status-online" aria-hidden="true"></i><strong data-discord-online>讀取中</strong> 位上線</span>
+        <span><i class="discord-status-member" aria-hidden="true"></i><strong data-discord-members>讀取中</strong> 位成員</span>
+      </div>
+
+      <p class="discord-description" data-discord-description>定期社課：週二晚上＠活動中心 1F 聯誼廳</p>
+
+      <ul class="discord-tags" aria-label="伺服器主題">
+        <li>🎵 口琴交流</li>
+        <li>📅 音樂活動</li>
+        <li>🏫 社課資訊</li>
+      </ul>
+
+      <div class="discord-actions">
+        <a class="discord-join-button" href="{{ $inviteURL }}" data-discord-join>
+          <span>前往伺服器</span><span aria-hidden="true">→</span>
+        </a>
+        <button class="discord-copy-button" type="button" data-copy-invite data-invite-url="{{ $inviteURL }}">
+          複製邀請連結
+        </button>
+      </div>
+
+      <p class="discord-live-status" role="status" aria-live="polite" data-discord-status>正在連線 Discord，取得最新伺服器資訊。</p>
+    </div>
+  </section>
+
+  <p class="discord-footnote">沒有口琴基礎也歡迎加入。進入後可以先到新成員區和大家打聲招呼！</p>
+</div>
+{{ end }}

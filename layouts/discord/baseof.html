@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  {{ partial "head.html" . }}
+  <meta name="theme-color" content="#0d1530">
+  {{ with resources.Get "css/discord.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{ end }}
+</head>
+<body class="discord-page">
+  <a class="discord-skip-link" href="#main">跳到主要內容</a>
+  <main id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ $discordJSOptions := dict "targetPath" "js/discord.js" "minify" true }}
+  {{ with resources.Get "js/discord.js" | js.Build $discordJSOptions | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+  {{ end }}
+</body>
+</html>
