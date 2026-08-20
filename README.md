@@ -22,6 +22,13 @@ Fresh checkout 不需執行任何同步腳本即可建置,因為生成內容與�
 
 檢查版面時建議至少看三種寬度:375px(手機)、768px(平板)、1280px(桌面)。
 
+## 演出 Portal
+
+- `https://harmonica.nycu.club/p/` 是觀眾掃描固定 QR Code 後看到的手機節目單。
+- `https://harmonica.nycu.club/p/screen/` 是現場使用的 16:9 投影畫面；按 `F` 可切換全螢幕，按數字鍵 `1` 至 `4` 可標示正在演奏的曲目，按 `0` 可取消標示。
+- 每場演出的標題、文案與曲目集中在 `data/portal.yaml`。更新後 push 到 `main` 即可，不需要重做 QR Code。
+- 固定 QR Code 指向正式 `/p/`；只有正式網址異動時才需要在 macOS 執行 `swift scripts/generate_portal_qr.swift` 重新產生圖檔。
+
 ## 資料流
 
 ```
@@ -63,6 +70,7 @@ python3 scripts/test_sync_observe.py        # 觀測站同步與 last-good 自�
 node scripts/test_observe_updates.js        # 首頁即時 API 驗證與 fallback 自測
 node scripts/test_sheet_live.js             # Sheet 即時讀取、欄位驗證與原子更新自測
 python3 scripts/check_public_content.py     # 公開資料隱私與欄位檢查
+python3 scripts/test_portal.py              # 建置後檢查演出 Portal 與固定 QR 圖檔
 python3 scripts/sync_sheet.py --offline     # 用 repo 內 CSV 快照重建所有生成內容
 python3 scripts/sync_sheet.py               # 手動更新 repo last-good 快照
 python3 scripts/sync_sheet.py --strict      # 手動更新快照的嚴格模式

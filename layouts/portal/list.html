@@ -1,0 +1,66 @@
+{{ define "main" }}
+{{ $portal := site.Data.portal }}
+{{ $officialLinks := slice }}
+{{ range site.Data.generated.links | default (slice) }}
+  {{ if in (slice "instagram" "facebook" "youtube" "discord") .key }}
+    {{ $officialLinks = $officialLinks | append . }}
+  {{ end }}
+{{ end }}
+
+<header class="portal-mobile-header">
+  <a class="portal-brand" href="{{ "/" | relURL }}" aria-label="回到竹韻口琴社官網">
+    <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="44" height="44" alt="">
+    <span>竹韻口琴社</span>
+  </a>
+  <span class="portal-status"><span aria-hidden="true"></span>{{ $portal.status }}</span>
+</header>
+
+<section class="portal-mobile-hero">
+  <div class="portal-mobile-hero-mark" aria-hidden="true">
+    <img src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="">
+  </div>
+  <p class="portal-kicker">{{ $portal.kicker }}</p>
+  <h1>{{ $portal.welcome }}</h1>
+  <p class="portal-lead">{{ $portal.intro }}</p>
+  <a class="portal-primary-action" href="#program">查看今日曲目 <span aria-hidden="true">↓</span></a>
+</section>
+
+<section class="portal-mobile-section" id="program">
+  <p class="portal-section-label">TODAY'S PROGRAM</p>
+  <h2>今日演出曲目</h2>
+  <ol class="portal-program-list">
+    {{ range $index, $song := $portal.program }}
+    <li class="portal-program-item" data-program-item="{{ add $index 1 }}">
+      <span class="portal-program-number">{{ printf "%02d" (add $index 1) }}</span>
+      <span class="portal-program-copy">
+        <strong>{{ $song.title }}</strong>
+        <span>{{ $song.credit }}</span>
+      </span>
+    </li>
+    {{ end }}
+  </ol>
+</section>
+
+<section class="portal-mobile-section portal-about">
+  <p class="portal-section-label">ABOUT BAMBOO MELODY</p>
+  <h2>演出結束，也歡迎來找我們</h2>
+  <p>我們是國立陽明交通大學竹韻口琴社。無論有沒有音樂基礎，都可以從第一個音開始，一起吹奏、合奏與登台演出。</p>
+  <a class="portal-outline-action" href="{{ "/about/#join" | relURL }}">認識竹韻與入社方式 <span aria-hidden="true">→</span></a>
+</section>
+
+{{ with $officialLinks }}
+<nav class="portal-social" aria-label="竹韻官方社群">
+  <p>FOLLOW BAMBOO MELODY</p>
+  <ul>
+    {{ range . }}
+    <li><a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .label }} <span aria-hidden="true">↗</span></a></li>
+    {{ end }}
+  </ul>
+</nav>
+{{ end }}
+
+<footer class="portal-mobile-footer">
+  <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="40" height="40" alt="">
+  <p>{{ $portal.title }}<br><span>{{ $portal.subtitle }}</span></p>
+</footer>
+{{ end }}

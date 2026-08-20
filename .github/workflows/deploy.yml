@@ -54,6 +54,7 @@ jobs:
           node scripts/test_website_agent.js
           python3 scripts/check_public_content.py
           hugo --gc --minify --baseURL "https://harmonica.nycu.club/"
+          python3 scripts/test_portal.py
           python3 scripts/check_seo_outputs.py
           python3 scripts/check_typography.py
 
