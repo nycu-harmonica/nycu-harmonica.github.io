@@ -116,6 +116,40 @@ function testGvizUrl() {
   assert.equal(url.searchParams.get('_'), '42');
 }
 
+function testHomepageDiscordUsesLandingPage() {
+  const joinLinks = [
+    {
+      href: 'https://discord.gg/old',
+      target: '_blank',
+      rel: 'noopener',
+      textContent: '舊連結',
+      removeAttribute(name) { delete this[name]; }
+    },
+    {
+      href: 'https://discord.gg/old',
+      target: '_blank',
+      rel: 'noopener',
+      textContent: '舊連結',
+      removeAttribute(name) { delete this[name]; }
+    }
+  ];
+  const document = {
+    querySelectorAll(selector) {
+      if (selector === '[data-sheet-links]') return [];
+      if (selector === '[data-sheet-join-link]') return joinLinks;
+      return [];
+    }
+  };
+  const links = sheetLive.normalizeTab('links', fixtures().links);
+  sheetLive.renderLinks(document, links);
+  joinLinks.forEach((anchor) => {
+    assert.equal(anchor.href, '/discord/');
+    assert.equal(anchor.textContent, '加入 Discord');
+    assert.equal(anchor.target, undefined);
+    assert.equal(anchor.rel, undefined);
+  });
+}
+
 async function testAtomicRefresh() {
   const values = fixtures();
   let renders = 0;
@@ -150,6 +184,7 @@ async function main() {
   testInvalidTablesAreRejected();
   testUnnamedExtraColumnIsRejected();
   testGvizUrl();
+  testHomepageDiscordUsesLandingPage();
   await testAtomicRefresh();
   console.log('Sheet live tests passed.');
 }

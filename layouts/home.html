@@ -1,14 +1,6 @@
 {{ define "main" }}
-{{ $joinURL := "/about/#join" | relURL }}
-{{ $joinLabel := "加入我們" }}
-{{ $joinExternal := false }}
-{{ range site.Data.generated.links | default (slice) }}
-  {{ if eq .key "discord" }}
-    {{ $joinURL = .url }}
-    {{ $joinLabel = "加入 Discord" }}
-    {{ $joinExternal = true }}
-  {{ end }}
-{{ end }}
+{{ $joinURL := "/discord/" | relURL }}
+{{ $joinLabel := "加入 Discord" }}
 <section class="hero">
   <div class="container">
     <div class="hero-copy">
@@ -16,7 +8,7 @@
       <h1>竹韻口琴社</h1>
       <p class="hero-subtitle">用一把口琴，吹出屬於你的旋律</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
+        <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}">{{ $joinLabel }}</a>
         <a class="btn" href="#calendar">社團行事曆</a>
       </div>
     </div>
@@ -59,7 +51,7 @@
 <section class="section container join-banner" id="join">
   <h2>想學口琴嗎？</h2>
   <p>不需要任何音樂基礎，社課從零開始教。開學後每週二晚上在學生活動中心練習，不限校內同學，歡迎大家加入竹韻口琴社！</p>
-  <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}"{{ if $joinExternal }} target="_blank" rel="noopener"{{ end }}>{{ $joinLabel }}</a>
+  <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}">{{ $joinLabel }}</a>
   <p class="join-banner-contact">想問社課、捐贈樂器或洽談演出，都可以<a href="{{ "/about/#join" | relURL }}">直接聯絡我們</a>。</p>
 </section>
 {{ end }}
