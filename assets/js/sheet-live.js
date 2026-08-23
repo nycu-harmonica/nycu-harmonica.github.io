@@ -391,10 +391,10 @@
     var discord = links.find(function (row) { return row.key === 'discord' && includeLink(row, 'join'); });
     if (discord) {
       doc.querySelectorAll('[data-sheet-join-link]').forEach(function (anchor) {
-        anchor.href = discord.url;
-        anchor.target = '_blank';
-        anchor.rel = 'noopener';
-        anchor.textContent = discord.label === 'Discord 社群' ? '加入 Discord' : discord.label;
+        anchor.href = '/discord/';
+        anchor.removeAttribute('target');
+        anchor.removeAttribute('rel');
+        anchor.textContent = '加入 Discord';
       });
     }
   }
@@ -653,6 +653,7 @@
     normalizeTab: normalizeTab,
     parseGvizTable: parseGvizTable,
     refreshSheetData: refreshSheetData,
+    renderLinks: renderLinks,
     renderLiveData: renderLiveData
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
