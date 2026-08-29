@@ -408,8 +408,7 @@
 }
 
 .portal-story-slide.is-active .portal-story-keyword-term { animation-name: portal-story-keyword-fly; }
-.portal-story-keyword-term:nth-child(3n) { animation-duration: 8.9s; }
-.portal-story-keyword-term:nth-child(4n + 1) { animation-duration: 10.8s; font-size: clamp(1.4rem, 7vw, 1.9rem); }
+.portal-story-keyword-term:nth-child(4n + 1) { font-size: clamp(1.4rem, 7vw, 1.9rem); }
 .portal-story-keyword-term:nth-child(7n + 2) { font-weight: 920; }
 .portal-story-keywords-song .portal-story-keyword-term {
   color: #ffe1a8;
@@ -467,15 +466,27 @@
   0% {
     opacity: 0;
     filter: blur(3px);
-    transform: translate3d(calc(var(--keyword-x) * 4px), calc(var(--keyword-y) * 6px), -960px);
+    transform: translate(-50%, -50%) translate3d(calc(var(--keyword-x) * 0.25px), calc(var(--keyword-y) * 0.25px), -650px) scale(0.45);
   }
-  15% { opacity: 0.24; }
-  50% { opacity: 0.72; filter: blur(0.4px); }
-  82% { opacity: 1; filter: blur(0); }
+  16% {
+    opacity: 0.3;
+    filter: blur(1.5px);
+    transform: translate(-50%, -50%) translate3d(calc(var(--keyword-x) * 0.75px), calc(var(--keyword-y) * 0.9px), -420px) scale(0.6);
+  }
+  55% {
+    opacity: 0.72;
+    filter: blur(0.4px);
+    transform: translate(-50%, -50%) translate3d(calc(var(--keyword-x) * 2.7px), calc(var(--keyword-y) * 3.4px), -160px) scale(0.9);
+  }
+  82% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate(-50%, -50%) translate3d(calc(var(--keyword-x) * 4.8px), calc(var(--keyword-y) * 5.8px), 20px) scale(1.05);
+  }
   100% {
     opacity: 0;
     filter: blur(1px);
-    transform: translate3d(calc(var(--keyword-x) * 4px), calc(var(--keyword-y) * 6px), 250px);
+    transform: translate(-50%, -50%) translate3d(calc(var(--keyword-x) * 7.2px), calc(var(--keyword-y) * 8.2px), 160px) scale(1.2);
   }
 }
 

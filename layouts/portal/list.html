@@ -117,9 +117,13 @@
         <div class="portal-story-keyword-tunnel" aria-label="{{ $keywordStory.title }}關鍵字動畫">
           {{ range $index, $label := $keywordStory.terms }}
             {{ $seed := add (add $index 1) (mul $storyIndex 11) }}
-            {{ $x := sub (mod (mul $seed 37) 79) 39 }}
-            {{ $y := sub (mod (mul $seed 53) 83) 41 }}
-            <span class="portal-story-keyword-term portal-story-keyword-term-{{ $keywordStory.kind }}" style="--keyword-index: {{ $index }}; --keyword-x: {{ $x }}; --keyword-y: {{ $y }}">{{ $label }}</span>
+            {{ $goLeft := eq (mod (add $index $storyIndex) 2) 0 }}
+            {{ $goUp := lt (mod (add $index $storyIndex) 4) 2 }}
+            {{ $xMagnitude := add 22 (mod (mul $seed 17) 22) }}
+            {{ $yMagnitude := add 14 (mod (mul $seed 19) 28) }}
+            {{ $x := cond $goLeft (mul -1 $xMagnitude) $xMagnitude }}
+            {{ $y := cond $goUp (mul -1 $yMagnitude) $yMagnitude }}
+            <span class="portal-story-keyword-term portal-story-keyword-term-{{ $keywordStory.kind }} portal-story-keyword-side-{{ if $goLeft }}left{{ else }}right{{ end }}" style="--keyword-index: {{ $index }}; --keyword-x: {{ $x }}; --keyword-y: {{ $y }}">{{ $label }}</span>
           {{ end }}
         </div>
         <div class="portal-story-keyword-center">

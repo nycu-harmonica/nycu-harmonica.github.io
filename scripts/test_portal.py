@@ -29,6 +29,8 @@ class PortalParser(HTMLParser):
         self.activity_terms = 0
         self.song_terms = 0
         self.keyword_terms_with_3d_position = 0
+        self.keyword_terms_left = 0
+        self.keyword_terms_right = 0
         self.social_links = 0
         self.social_links_open_new_tab = 0
         self.has_story_player = False
@@ -69,6 +71,10 @@ class PortalParser(HTMLParser):
             style = values.get("style", "")
             if "--keyword-x:" in style and "--keyword-y:" in style:
                 self.keyword_terms_with_3d_position += 1
+        if "portal-story-keyword-side-left" in classes:
+            self.keyword_terms_left += 1
+        if "portal-story-keyword-side-right" in classes:
+            self.keyword_terms_right += 1
         if "portal-story-song-visual" in classes:
             self.song_visuals += 1
             self.song_media_sources.append(values.get("src", ""))
@@ -132,6 +138,7 @@ def main() -> None:
     assert mobile.activity_terms == 27, "The activity story must include all 27 activities"
     assert mobile.song_terms == 39, "The song story must include all 39 repertoire ideas"
     assert mobile.keyword_terms_with_3d_position == 66, "Every keyword needs a deterministic 3D flight path"
+    assert mobile.keyword_terms_left == mobile.keyword_terms_right == 33, "Keyword paths must be evenly balanced between the left and right sides"
     assert mobile.media_credits == 9, "Every song, ensemble, instrument, and history visual needs a visible source credit"
     for source in mobile.song_media_sources:
         media = PUBLIC / source.split("?", 1)[0].lstrip("/")
