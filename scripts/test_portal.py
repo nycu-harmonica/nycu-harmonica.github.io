@@ -3,6 +3,7 @@
 
 from html.parser import HTMLParser
 from pathlib import Path
+import struct
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -33,6 +34,7 @@ class PortalParser(HTMLParser):
         self.keyword_terms_right = 0
         self.faq_slides = 0
         self.end_story_images = 0
+        self.end_story_image_sources: list[str] = []
         self.product_links: list[dict[str, str | None]] = []
         self.social_links = 0
         self.social_links_open_new_tab = 0
@@ -72,6 +74,7 @@ class PortalParser(HTMLParser):
             self.faq_slides += 1
         if "portal-story-end-visual" in classes:
             self.end_story_images += 1
+            self.end_story_image_sources.append(values.get("src", ""))
         if tag == "a" and values.get("href", "").startswith(("https://harmonica.tw/", "https://shopee.tw/", "https://dming.co/")):
             self.product_links.append(values)
         if "portal-story-keyword-term-activity" in classes:
@@ -129,6 +132,14 @@ def parse(relative_path: str) -> PortalParser:
     return parser
 
 
+def webp_dimensions(path: Path) -> tuple[int, int]:
+    data = path.read_bytes()
+    marker = data.find(b"\x9d\x01\x2a")
+    assert marker >= 0 and len(data) >= marker + 7, f"Cannot read WebP dimensions: {path}"
+    width, height = struct.unpack_from("<HH", data, marker + 3)
+    return width & 0x3FFF, height & 0x3FFF
+
+
 def main() -> None:
     mobile = parse("p/index.html")
     screen = parse("p/screen/index.html")
@@ -152,6 +163,12 @@ def main() -> None:
     assert mobile.keyword_terms_left == mobile.keyword_terms_right == 33, "Keyword paths must be evenly balanced between the left and right sides"
     assert mobile.faq_slides == 3, "The join CTA must be preceded by three FAQ stories"
     assert mobile.end_story_images == 4, "Stories 14–17 must each have a real background image"
+    for source in mobile.end_story_image_sources:
+        media = PUBLIC / source.lstrip("/")
+        assert media.is_file() and media.stat().st_size > 50_000, f"End-story image must be a high-resolution local asset: {source}"
+        width, height = webp_dimensions(media)
+        assert width >= 540 and height >= 960, f"End-story image is too small: {source} ({width}x{height})"
+        assert abs(width / height - 9 / 16) < 0.002, f"End-story image must be portrait 9:16: {source} ({width}x{height})"
     assert mobile.story_titles.index("沒有口琴，要先買嗎？") < mobile.story_titles.index("下一段旋律，換你加入"), "FAQ stories must precede the join CTA"
     assert mobile.media_credits == 9, "Every song, ensemble, instrument, and history visual needs a visible source credit"
     for source in mobile.song_media_sources:
@@ -169,6 +186,7 @@ def main() -> None:
     assert all(link.get("target") == "_blank" for link in mobile.product_links), "Product prices must open in a new tab"
     assert all({"noopener", "noreferrer"}.issubset(set((link.get("rel") or "").split())) for link in mobile.product_links), "New-tab product links must be isolated from the Portal"
     assert all(price in mobile_html for price in ("2,500 元", "4,200 元", "7,000 元")), "FAQ must show all three requested reference prices"
+    assert all(store in mobile_html for store in ("黃石樂器", "音和樂器", "DMing Studio")), "Product links must be labelled with the three shops"
     assert "送你一個小口琴吊飾" in mobile_html, "Join story must describe the actual harmonica charm gift"
     join_description = mobile.story_descriptions[mobile.story_titles.index("下一段旋律，換你加入")]
     assert "500 元" not in join_description and "1,000 元" not in join_description, "Join story must leave numeric pricing to the fee FAQ"

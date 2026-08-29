@@ -416,16 +416,16 @@
   gap: 0.8rem;
   min-height: 2.35rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
-.portal-story-product-row > span {
+.portal-story-product-row > strong {
   overflow: hidden;
-  color: rgba(227, 244, 246, 0.82);
-  font-size: 0.72rem;
-  font-weight: 650;
+  font-size: 0.76rem;
+  font-weight: 750;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.portal-story-product-row a {
+.portal-story-product-row > span {
   flex: none;
   padding: 0.28rem 0;
   color: #fff;
@@ -435,7 +435,8 @@
   text-decoration-color: rgba(189, 233, 239, 0.58);
   text-underline-offset: 0.22em;
 }
-.portal-story-product-row a:hover { color: #bde9ef; }
+.portal-story-product-row:hover { color: #bde9ef; text-decoration: none; }
+.portal-story-product-row:hover > span { color: #bde9ef; }
 .portal-story-product-row i { font-style: normal; }
 .portal-story-follow {
   background:

@@ -162,10 +162,10 @@
           {{ with $item.products }}
           <div class="portal-story-product-links" aria-label="半音階口琴參考琴款">
             {{ range . }}
-            <div class="portal-story-product-row">
-              <span>{{ .name }}</span>
-              <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .price }} <i aria-hidden="true">↗</i></a>
-            </div>
+            <a class="portal-story-product-row" href="{{ .url }}" target="_blank" rel="noopener noreferrer">
+              <strong>{{ .name }}</strong>
+              <span>{{ .price }} <i aria-hidden="true">↗</i></span>
+            </a>
             {{ end }}
           </div>
           {{ end }}
