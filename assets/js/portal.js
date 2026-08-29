@@ -69,6 +69,16 @@
   let ended = false;
 
   const duration = () => Number(slides[current]?.dataset.storyDuration) || defaultDuration;
+  const activeVideo = () => slides[current]?.querySelector("video") || null;
+
+  function pauseActiveVideo() {
+    activeVideo()?.pause();
+  }
+
+  function playActiveVideo() {
+    if (paused || manualPause || holding || ended || document.hidden) return;
+    activeVideo()?.play().catch(() => {});
+  }
 
   function drawProgress() {
     bars.forEach((bar, index) => {
@@ -93,6 +103,7 @@
         elapsed = duration();
         ended = true;
         paused = true;
+        pauseActiveVideo();
         drawProgress();
         updatePauseButton();
         return;
@@ -112,7 +123,10 @@
     startedAt = performance.now();
     drawProgress();
     updatePauseButton();
-    if (!paused) frame = requestAnimationFrame(tick);
+    if (!paused) {
+      playActiveVideo();
+      frame = requestAnimationFrame(tick);
+    } else pauseActiveVideo();
   }
 
   function pauseProgress() {
@@ -120,6 +134,7 @@
     elapsed = Math.min(duration(), performance.now() - startedAt);
     paused = true;
     cancelAnimationFrame(frame);
+    pauseActiveVideo();
     drawProgress();
   }
 
@@ -127,6 +142,7 @@
     if (!paused || manualPause || holding || ended || document.hidden) return;
     paused = false;
     startedAt = performance.now() - elapsed;
+    playActiveVideo();
     frame = requestAnimationFrame(tick);
   }
 
@@ -149,11 +165,8 @@
       slide.toggleAttribute("inert", !isActive);
       const video = slide.querySelector("video");
       if (!video) return;
-      if (isActive) video.play().catch(() => {});
-      else {
-        video.pause();
-        video.currentTime = 0;
-      }
+      video.pause();
+      video.currentTime = 0;
     });
     current = next;
     const storyNumber = current + 1;

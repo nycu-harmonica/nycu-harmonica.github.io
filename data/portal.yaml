@@ -11,15 +11,34 @@ program:
   - title: Tradition ／ Matchmaker
     credit: 《屋頂上的提琴手》配樂
     note: 開場先熱鬧一點。百老匯音樂劇的兩段旋律，小提琴的戲換口琴來演——聽聽看和弦口琴怎麼把整個樂隊扛起來。
+    media:
+      type: video
+      src: images/portal-songs/fiddler.mp4
+      poster: images/portal-songs/fiddler-poster.jpg
+      credit: 畫面｜電影《屋頂上的提琴手》（1971）
   - title: 風之丘
     credit: 久石讓／《魔女宅急便》配樂
     note: 久石讓寫給琪琪起飛的那陣風。半音階口琴的音色跟吉卜力特別合，這首會讓你記住「口琴原來長這樣」。
+    media:
+      type: image
+      src: images/portal-songs/kiki.webp
+      credit: 畫面｜《魔女宅急便》© 1989 角野栄子・Studio Ghibli・N
   - title: Just the Way You Are
     credit: Bruno Mars
     note: 你一定會唱的一首。試試看：副歌的時候抬頭找低音口琴——整首歌的心跳都是他。
+    media:
+      type: video
+      src: images/portal-songs/bruno.mp4
+      poster: images/portal-songs/bruno-poster.jpg
+      credit: 畫面｜Bruno Mars〈Just the Way You Are〉MV
   - title: 孤單北半球
     credit: 林依晨
     note: 壓軸回到華語歌。2004 年的旋律，用四把口琴重新編過——聽到這裡有一點點想學的話，繼續往下滑。
+    media:
+      type: video
+      src: images/portal-songs/gudan.mp4
+      poster: images/portal-songs/gudan-poster.jpg
+      credit: 畫面｜林依晨〈孤單北半球〉MV・滾石唱片
 
 # 曲目之後、入社之前的介紹頁。body 一項是一段。
 features:
