@@ -32,6 +32,8 @@ class PortalParser(HTMLParser):
         self.keyword_terms_left = 0
         self.keyword_terms_right = 0
         self.faq_slides = 0
+        self.end_story_images = 0
+        self.product_links: list[dict[str, str | None]] = []
         self.social_links = 0
         self.social_links_open_new_tab = 0
         self.has_story_player = False
@@ -39,6 +41,7 @@ class PortalParser(HTMLParser):
         self._inside_story_progress = 0
         self._inside_link_list = 0
         self.story_titles: list[str] = []
+        self.story_descriptions: list[str] = []
 
     def handle_starttag(self, tag: str, attrs) -> None:
         values = dict(attrs)
@@ -50,6 +53,7 @@ class PortalParser(HTMLParser):
         if "portal-story-slide" in classes:
             self.story_slides += 1
             self.story_titles.append(values.get("data-story-title", ""))
+            self.story_descriptions.append(values.get("data-story-description", ""))
         if "portal-story-ensemble" in classes:
             self.ensemble_slides += 1
         if "portal-story-ensemble-visual" in classes:
@@ -66,6 +70,10 @@ class PortalParser(HTMLParser):
             self.keyword_story_slides += 1
         if "portal-story-faq" in classes:
             self.faq_slides += 1
+        if "portal-story-end-visual" in classes:
+            self.end_story_images += 1
+        if tag == "a" and values.get("href", "").startswith(("https://harmonica.tw/", "https://shopee.tw/", "https://dming.co/")):
+            self.product_links.append(values)
         if "portal-story-keyword-term-activity" in classes:
             self.activity_terms += 1
         if "portal-story-keyword-term-song" in classes:
@@ -143,6 +151,7 @@ def main() -> None:
     assert mobile.keyword_terms_with_3d_position == 66, "Every keyword needs a deterministic 3D flight path"
     assert mobile.keyword_terms_left == mobile.keyword_terms_right == 33, "Keyword paths must be evenly balanced between the left and right sides"
     assert mobile.faq_slides == 3, "The join CTA must be preceded by three FAQ stories"
+    assert mobile.end_story_images == 4, "Stories 14–17 must each have a real background image"
     assert mobile.story_titles.index("沒有口琴，要先買嗎？") < mobile.story_titles.index("下一段旋律，換你加入"), "FAQ stories must precede the join CTA"
     assert mobile.media_credits == 9, "Every song, ensemble, instrument, and history visual needs a visible source credit"
     for source in mobile.song_media_sources:
@@ -156,9 +165,14 @@ def main() -> None:
         assert media.is_file() and media.stat().st_size > 1_000, f"Ensemble video is missing or empty: {source}"
     assert mobile.social_links == 4, "Social story must render all four official links"
     assert mobile.social_links_open_new_tab == 0, "Social links must work in embedded mobile browsers"
-    assert "口琴吊飾" in mobile_html, "Join story must describe the actual harmonica charm gift"
-    assert "一學期社費 500 元" in mobile_html, "FAQ and join stories must show the semester fee"
-    assert "半音階口琴約 2,500–4,000 元" in mobile_html, "FAQ must show the beginner chromatic harmonica price range"
+    assert len(mobile.product_links) == 3, "FAQ must link all three reference chromatic harmonicas"
+    assert all(link.get("target") == "_blank" for link in mobile.product_links), "Product prices must open in a new tab"
+    assert all({"noopener", "noreferrer"}.issubset(set((link.get("rel") or "").split())) for link in mobile.product_links), "New-tab product links must be isolated from the Portal"
+    assert all(price in mobile_html for price in ("2,500 元", "4,200 元", "7,000 元")), "FAQ must show all three requested reference prices"
+    assert "送你一個小口琴吊飾" in mobile_html, "Join story must describe the actual harmonica charm gift"
+    join_description = mobile.story_descriptions[mobile.story_titles.index("下一段旋律，換你加入")]
+    assert "500 元" not in join_description and "1,000 元" not in join_description, "Join story must leave numeric pricing to the fee FAQ"
+    assert mobile_html.index("一學期社費 500 元") < mobile_html.index("送你一個小口琴吊飾"), "Fee information must appear before the gift information"
     assert "和弦口琴、倍低音口琴，社團都有新買的社團用琴" in mobile_html, "FAQ must explain which ensemble instruments the club provides"
     assert "開學後每週二晚上，在學生活動中心 1 樓聯誼廳" in mobile_html, "FAQ must show the regular lesson time and location"
     assert "送你一支口琴" not in mobile_html, "Join story must not claim that new members receive an instrument"

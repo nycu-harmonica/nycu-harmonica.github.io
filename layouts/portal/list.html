@@ -148,19 +148,38 @@
       {{ end }}
 
       {{ range $index, $item := $portal.faq | default (slice) }}
-      <article class="portal-story-slide portal-story-faq portal-story-faq-{{ mod $index 3 }}" data-story-title="{{ $item.question }}" data-story-description="{{ delimit $item.answer "" }}" data-story-duration="{{ $item.duration | default 8000 }}">
+      <article class="portal-story-slide portal-story-faq portal-story-faq-{{ mod $index 3 }}{{ with $item.media }} portal-story-end-has-media{{ end }}" data-story-title="{{ $item.question }}" data-story-description="{{ delimit $item.answer "" }}" data-story-duration="{{ $item.duration | default 8000 }}">
+        {{ with $item.media }}
+        <figure class="portal-story-end-media">
+          <img class="portal-story-end-visual" src="{{ .src | relURL }}" alt="{{ .alt }}" loading="lazy">
+        </figure>
+        {{ end }}
         <span class="portal-story-faq-mark" aria-hidden="true">Q{{ add $index 1 }}</span>
         <div class="portal-story-copy">
           <p class="portal-story-kicker">BEFORE YOU JOIN ・ {{ printf "%02d" (add $index 1) }}/{{ printf "%02d" (len $portal.faq) }}</p>
           <h2>{{ $item.question }}</h2>
           {{ range $item.answer }}<p>{{ . }}</p>{{ end }}
+          {{ with $item.products }}
+          <div class="portal-story-product-links" aria-label="半音階口琴參考琴款">
+            {{ range . }}
+            <div class="portal-story-product-row">
+              <span>{{ .name }}</span>
+              <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .price }} <i aria-hidden="true">↗</i></a>
+            </div>
+            {{ end }}
+          </div>
+          {{ end }}
         </div>
       </article>
       {{ end }}
 
       {{ $join := $portal.join }}
-      <article class="portal-story-slide portal-story-join" data-story-title="{{ $join.title }}" data-story-description="{{ $join.body }}">
-        <img class="portal-story-watermark" src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="" aria-hidden="true">
+      <article class="portal-story-slide portal-story-join portal-story-end-has-media" data-story-title="{{ $join.title }}" data-story-description="{{ $join.body }}">
+        {{ with $join.media }}
+        <figure class="portal-story-end-media">
+          <img class="portal-story-end-visual" src="{{ .src | relURL }}" alt="{{ .alt }}" loading="lazy">
+        </figure>
+        {{ end }}
         <div class="portal-story-copy">
           <p class="portal-story-kicker">{{ $join.kicker }}</p>
           <h2>{{ $join.title }}</h2>
@@ -170,7 +189,12 @@
         </div>
       </article>
 
-      <article class="portal-story-slide portal-story-follow" data-story-title="追蹤竹韻" data-story-description="追蹤竹韻口琴社 Instagram、Facebook、YouTube 與 Discord，收到社課和演出消息。">
+      <article class="portal-story-slide portal-story-follow portal-story-end-has-media" data-story-title="追蹤竹韻" data-story-description="追蹤竹韻口琴社 Instagram、Facebook、YouTube 與 Discord，收到社課和演出消息。">
+        {{ with $portal.follow.media }}
+        <figure class="portal-story-end-media">
+          <img class="portal-story-end-visual" src="{{ .src | relURL }}" alt="{{ .alt }}" loading="lazy">
+        </figure>
+        {{ end }}
         <div class="portal-story-follow-orbit" aria-hidden="true"><span>♪</span><span>♬</span><span>♫</span></div>
         <div class="portal-story-copy">
           <p class="portal-story-kicker">KEEP IN TOUCH</p>

@@ -380,6 +380,63 @@
   font-size: 0.98rem;
   line-height: 1.72;
 }
+.portal-story-end-media {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  margin: 0;
+  background: #071e2b;
+  pointer-events: none;
+}
+.portal-story-end-media::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(2, 18, 25, 0.2) 0%, rgba(2, 18, 25, 0.03) 27%, rgba(3, 23, 32, 0.58) 54%, rgba(3, 23, 32, 0.94) 70%, #031720 100%);
+  content: "";
+}
+.portal-story-end-visual {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.portal-story-faq-2 .portal-story-end-visual { object-position: center; }
+.portal-story-product-links {
+  display: grid;
+  gap: 0;
+  margin-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  pointer-events: auto;
+}
+.portal-story-product-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  min-height: 2.35rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.portal-story-product-row > span {
+  overflow: hidden;
+  color: rgba(227, 244, 246, 0.82);
+  font-size: 0.72rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.portal-story-product-row a {
+  flex: none;
+  padding: 0.28rem 0;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 850;
+  text-decoration: underline;
+  text-decoration-color: rgba(189, 233, 239, 0.58);
+  text-underline-offset: 0.22em;
+}
+.portal-story-product-row a:hover { color: #bde9ef; }
+.portal-story-product-row i { font-style: normal; }
 .portal-story-follow {
   background:
     radial-gradient(circle at 78% 18%, rgba(240, 179, 74, 0.3), transparent 24%),

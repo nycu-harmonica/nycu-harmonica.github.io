@@ -179,27 +179,50 @@ keyword_stories:
 faq:
   - question: 沒有口琴，要先買嗎？
     answer:
-      - 建議使用自己的口琴。入門且好吹的半音階口琴約 2,500–4,000 元。
+      - 建議使用自己的口琴。入門到進階的半音階口琴，可以先參考下面三款。
       - 和弦口琴、倍低音口琴，社團都有新買的社團用琴。
+    products:
+      - name: JDR GM-0648
+        price: 2,500 元
+        url: https://harmonica.tw/product/jdr-gm-0648/
+      - name: JDR EVO-0648S
+        price: 4,200 元
+        url: 'https://shopee.tw/%E3%80%90%E9%9F%B3%E5%92%8C%E6%A8%82%E5%99%A8%E5%8F%A3%E7%90%B4%E5%B0%88%E8%B3%A3%E5%BA%97%E3%80%91JDR-EVO-0648S-12%E5%AD%94%E5%8D%8A%E9%9F%B3%E9%9A%8E%E5%8F%A3%E7%90%B4%EF%BC%8C%E6%97%A5%E6%9C%AC%E7%A3%B7%E9%9D%92%E9%8A%85%E7%B0%A7%E7%89%87%EF%BC%8C%E5%90%84%E7%A8%AE%E5%84%AA%E9%BB%9E%E9%9B%86%E5%90%88%E6%96%BC%E4%B8%80%E6%8A%8A%E5%8F%A3%E7%90%B4%E4%B8%AD%E3%80%82-i.239120649.29770227028?extraParams=%7B%22display_model_id%22:195628106797,%22model_selection_logic%22:3%7D'
+      - name: Suzuki SCX-64
+        price: 7,000 元
+        url: https://dming.co/product/suzuki-scx-64/
     duration: 9000
   - question: 入社要多少錢？
     answer:
       - 一學期社費 500 元，一年社費 1,000 元。
-      - 第一堂社課前入社並繳交兩學期社費，送口琴吊飾。
+    media:
+      src: images/portal-faq/official-site.webp
+      alt: 竹韻口琴社官方網站首頁
     duration: 8000
   - question: 社課什麼時候？在哪裡？
     answer:
       - 開學後每週二晚上，在學生活動中心 1 樓聯誼廳。
+    media:
+      src: images/portal-faq/activity-center.webp
+      alt: 竹韻社員在陽明交大學生活動中心合照
     duration: 7000
 
 join:
   kicker: JOIN BAMBOO MELODY
   title: 下一段旋律，換你加入
-  body: 一學期社費 500 元；第一堂社課前入社並繳交兩學期社費，送口琴吊飾。
+  body: 第一堂社課前入社並繳交兩學期社費，送你一個小口琴吊飾。
   cta_label: 填寫入社表單（約一分鐘）
   cta_url: /join/
   alt_label: 先進 Discord 潛水看看也可以
   alt_url: /discord/
+  media:
+    src: images/portal-faq/join-form.webp
+    alt: 竹韻口琴社入社表單
+
+follow:
+  media:
+    src: images/portal-faq/instagram.webp
+    alt: 竹韻口琴社 Instagram 頁面
 
 # 未來從 IG 匯入的公開限時動態放在這裡，會接在演出節目之後。
 # media_type 可用 image 或 video；src 使用 static/ 底下的站內路徑。
