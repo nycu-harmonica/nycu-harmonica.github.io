@@ -20,6 +20,7 @@ class PortalParser(HTMLParser):
         self.has_story_player = False
         self.qr_sources: list[str] = []
         self._inside_story_progress = 0
+        self._inside_link_list = 0
 
     def handle_starttag(self, tag: str, attrs) -> None:
         values = dict(attrs)
@@ -34,7 +35,9 @@ class PortalParser(HTMLParser):
             self._inside_story_progress += 1
         elif tag == "span" and self._inside_story_progress:
             self.story_progress_segments += 1
-        if tag == "a" and "swiper-no-swiping" in classes and values.get("href", "").startswith("http"):
+        if "portal-story-link-list" in classes:
+            self._inside_link_list += 1
+        elif tag == "a" and self._inside_link_list and values.get("href", "").startswith("http"):
             self.social_links += 1
             if values.get("target") == "_blank":
                 self.social_links_open_new_tab += 1
@@ -44,6 +47,8 @@ class PortalParser(HTMLParser):
     def handle_endtag(self, tag: str) -> None:
         if tag == "div" and self._inside_story_progress:
             self._inside_story_progress -= 1
+        if tag == "nav" and self._inside_link_list:
+            self._inside_link_list -= 1
 
 
 def parse(relative_path: str) -> PortalParser:
@@ -58,7 +63,7 @@ def main() -> None:
     mobile = parse("p/index.html")
     screen = parse("p/screen/index.html")
     assert mobile.has_story_player, "Mobile Portal is missing its story player"
-    assert mobile.story_slides == 7, "Mobile Portal must render intro, four songs, join, and social stories"
+    assert mobile.story_slides == 9, "Mobile Portal must render intro, four songs, two features, join, and social stories"
     assert mobile.story_progress_segments == mobile.story_slides, "Every story needs a progress segment"
     assert mobile.social_links == 4, "Social story must render all four official links"
     assert mobile.social_links_open_new_tab == 0, "Social links must work in embedded mobile browsers"

@@ -4,18 +4,44 @@ kicker: NYCU BAMBOO MELODY HARMONICA CLUB
 title: 陽明交大竹韻口琴社
 subtitle: 用一把口琴，吹出屬於你的旋律
 welcome: 歡迎來到竹韻的演出現場
-intro: 節目進行中，歡迎查看今天的曲目，也可以在演出後認識竹韻、加入我們。
+intro: 現在臺上的十五分鐘，是竹韻復社後第一次站回陽明交大的舞臺。這個頁面會陪你聽完整場——每一首曲子、每一把琴，還有怎麼加入我們。
 screen_prompt: 掃描 QR Code，開啟今日節目單
 story_duration: 7000
 program:
-  - title: Just the Way You Are
-    credit: Bruno Mars
   - title: Tradition ／ Matchmaker
     credit: 《屋頂上的提琴手》配樂
+    note: 開場先熱鬧一點。百老匯音樂劇的兩段旋律，小提琴的戲換口琴來演——聽聽看和弦口琴怎麼把整個樂隊扛起來。
   - title: 風之丘
-    credit: 《魔女宅急便》配樂
+    credit: 久石讓／《魔女宅急便》配樂
+    note: 久石讓寫給琪琪起飛的那陣風。半音階口琴的音色跟吉卜力特別合，這首會讓你記住「口琴原來長這樣」。
+  - title: Just the Way You Are
+    credit: Bruno Mars
+    note: 你一定會唱的一首。試試看：副歌的時候抬頭找低音口琴——整首歌的心跳都是他。
   - title: 孤單北半球
     credit: 林依晨
+    note: 壓軸回到華語歌。2004 年的旋律，用四把口琴重新編過——聽到這裡有一點點想學的話，繼續往下滑。
+
+# 曲目之後、入社之前的介紹頁。body 一項是一段。
+features:
+  - kicker: WHAT'S ON STAGE
+    title: 臺上四把琴，其實是四種樂器
+    body:
+      - 兩把半音階口琴負責旋律，像樂團的小提琴；和弦口琴近半公尺長，一把琴就是整組節奏；低音口琴則是全場最低的聲音。
+      - 四個人，就是一個樂團——這就是口琴合奏。
+  - kicker: SINCE 1968 ・ REBORN 2026
+    title: 沉寂多年，今年夏天重新開始
+    body:
+      - 竹韻的故事從 1968 年的「交大口琴社」開始，中間沉寂了很多年，直到 2026 年夏天，一群捨不得的人把它重新開了起來。你聽到的這場演出，來自復社後的第一個學期。
+      - 社課每週二晚上在學生活動中心 1 樓聯誼廳，從零開始教——不會看譜、沒摸過口琴，都沒關係。
+
+join:
+  kicker: JOIN BAMBOO MELODY
+  title: 下一段旋律，換你加入
+  body: 一年社費 1,000 元；第一堂社課前入社，送你一支口琴——你的第一把樂器，我們出。
+  cta_label: 填寫入社表單（約一分鐘）
+  cta_url: /join/
+  alt_label: 先進 Discord 潛水看看也可以
+  alt_url: /discord/
 
 # 未來從 IG 匯入的公開限時動態放在這裡，會接在演出節目之後。
 # media_type 可用 image 或 video；src 使用 static/ 底下的站內路徑。

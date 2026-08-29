@@ -1,6 +1,3 @@
-import Swiper from "swiper";
-import { A11y, Autoplay, Keyboard } from "swiper/modules";
-
 (() => {
   "use strict";
 
@@ -51,22 +48,141 @@ import { A11y, Autoplay, Keyboard } from "swiper/modules";
   }
 
   const player = document.querySelector("[data-story-player]");
-  const swiperElement = player?.querySelector(".portal-story-swiper");
-  if (!player || !swiperElement) return;
+  const track = player?.querySelector("[data-story-track]");
+  if (!player || !track) return;
 
+  const slides = [...track.children];
+  const bars = [...player.querySelectorAll("[data-story-progress] > span")];
+  const announcer = player.querySelector("[data-story-announcer]");
+  const pauseButton = player.querySelector("[data-story-pause]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const defaultDuration = Number(player.dataset.defaultDuration) || 7000;
-  const progress = [...player.querySelectorAll("[data-story-progress] span")];
-  const announcer = player.querySelector("[data-story-announcer]");
   const storyStorageKey = `portal-story:${window.location.pathname}`;
+
+  let current = -1;
+  let elapsed = 0;
+  let startedAt = 0;
+  let frame = 0;
+  let paused = true;
+  let manualPause = reducedMotion;
+  let holding = false;
+  let ended = false;
+
+  const duration = () => Number(slides[current]?.dataset.storyDuration) || defaultDuration;
+
+  function drawProgress() {
+    bars.forEach((bar, index) => {
+      const pct = index < current ? 100 : index === current ? Math.min(100, (elapsed / duration()) * 100) : 0;
+      bar.style.setProperty("--story-progress", `${pct}%`);
+    });
+  }
+
+  function updatePauseButton() {
+    if (!pauseButton) return;
+    const showPlay = manualPause || ended;
+    pauseButton.textContent = showPlay ? "▶" : "Ⅱ";
+    pauseButton.setAttribute("aria-label", showPlay ? "繼續播放" : "暫停播放");
+    pauseButton.setAttribute("aria-pressed", String(showPlay));
+  }
+
+  function tick(now) {
+    if (paused) return;
+    elapsed = now - startedAt;
+    if (elapsed >= duration()) {
+      if (current >= slides.length - 1) {
+        elapsed = duration();
+        ended = true;
+        paused = true;
+        drawProgress();
+        updatePauseButton();
+        return;
+      }
+      show(current + 1);
+      return;
+    }
+    drawProgress();
+    frame = requestAnimationFrame(tick);
+  }
+
+  function startProgress() {
+    cancelAnimationFrame(frame);
+    elapsed = 0;
+    ended = false;
+    paused = manualPause || document.hidden;
+    startedAt = performance.now();
+    drawProgress();
+    updatePauseButton();
+    if (!paused) frame = requestAnimationFrame(tick);
+  }
+
+  function pauseProgress() {
+    if (paused) return;
+    elapsed = Math.min(duration(), performance.now() - startedAt);
+    paused = true;
+    cancelAnimationFrame(frame);
+    drawProgress();
+  }
+
+  function resumeProgress() {
+    if (!paused || manualPause || holding || ended || document.hidden) return;
+    paused = false;
+    startedAt = performance.now() - elapsed;
+    frame = requestAnimationFrame(tick);
+  }
+
+  function togglePause() {
+    if (ended) {
+      show(0);
+      return;
+    }
+    manualPause = !manualPause;
+    if (manualPause) pauseProgress();
+    else resumeProgress();
+    updatePauseButton();
+  }
+
+  function show(n) {
+    const next = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((slide, index) => {
+      const isActive = index === next;
+      slide.classList.toggle("is-active", isActive);
+      slide.toggleAttribute("inert", !isActive);
+      const video = slide.querySelector("video");
+      if (!video) return;
+      if (isActive) video.play().catch(() => {});
+      else {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
+    current = next;
+    const storyNumber = current + 1;
+    const url = new URL(window.location.href);
+    if (storyNumber > 1) url.searchParams.set("story", String(storyNumber));
+    else url.searchParams.delete("story");
+    window.history.replaceState(window.history.state, "", url);
+    try { window.sessionStorage.setItem(storyStorageKey, String(storyNumber)); } catch (_error) {}
+    const slide = slides[current];
+    window.BambooSEO?.setState(storyNumber > 1 ? {
+      title: slide.dataset.storyTitle,
+      heading: slide.dataset.storyTitle,
+      description: slide.dataset.storyDescription,
+    } : null);
+    if (announcer) announcer.textContent = `${storyNumber} / ${slides.length}：${slide.dataset.storyTitle || "竹韻限時動態"}`;
+    startProgress();
+  }
+
+  function move(delta) {
+    show(current + delta);
+  }
 
   function readStoryNumber({ allowStored = false } = {}) {
     const requested = Number(new URL(window.location.href).searchParams.get("story"));
-    if (Number.isInteger(requested) && requested >= 1 && requested <= progress.length) return requested;
+    if (Number.isInteger(requested) && requested >= 1 && requested <= slides.length) return requested;
     if (allowStored) {
       try {
         const stored = Number(window.sessionStorage.getItem(storyStorageKey));
-        if (Number.isInteger(stored) && stored >= 1 && stored <= progress.length) return stored;
+        if (Number.isInteger(stored) && stored >= 1 && stored <= slides.length) return stored;
       } catch (_error) {
         // Some embedded browsers disable sessionStorage; the URL remains authoritative.
       }
@@ -74,103 +190,94 @@ import { A11y, Autoplay, Keyboard } from "swiper/modules";
     return 1;
   }
 
-  const navigationType = window.performance.getEntriesByType?.("navigation")?.[0]?.type;
-  const initialStory = readStoryNumber({ allowStored: navigationType === "back_forward" });
+  // 按住任意處暫停；快速點兩側前進後退；水平滑動換頁。互動元素（連結、按鈕）不攔截。
+  let gesture = null;
+  let suppressTap = false;
 
-  const swiper = new Swiper(swiperElement, {
-    modules: [A11y, Autoplay, Keyboard],
-    speed: reducedMotion ? 0 : 420,
-    resistanceRatio: 0.72,
-    longSwipesRatio: 0.18,
-    noSwiping: true,
-    noSwipingSelector: ".swiper-no-swiping",
-    touchStartPreventDefault: false,
-    initialSlide: initialStory - 1,
-    keyboard: { enabled: true },
-    a11y: { enabled: true, slideLabelMessage: "限時動態 {{index}} / {{slidesLength}}" },
-    autoplay: reducedMotion ? false : {
-      delay: defaultDuration,
-      disableOnInteraction: false,
-      pauseOnMouseEnter: true,
-      stopOnLastSlide: true,
-    },
-    on: {
-      init(instance) { updateStory(instance); },
-      slideChange(instance) { updateStory(instance); },
-      autoplayTimeLeft(instance, time, percentage) {
-        const bar = progress[instance.activeIndex]?.querySelector("i");
-        if (bar) bar.style.transform = `scaleX(${1 - percentage})`;
-      },
-    },
+  player.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (event.target.closest("a, [data-story-share], [data-story-pause]")) return;
+    suppressTap = false;
+    gesture = {
+      x: event.clientX,
+      y: event.clientY,
+      startedAt: performance.now(),
+      onTapZone: Boolean(event.target.closest("[data-story-prev], [data-story-next]")),
+    };
+    holding = true;
+    player.classList.add("is-paused");
+    pauseProgress();
   });
 
-  function updateStory(instance) {
-    progress.forEach((item, index) => {
-      item.classList.toggle("is-complete", index < instance.activeIndex);
-      item.classList.toggle("is-active", index === instance.activeIndex);
-      const bar = item.querySelector("i");
-      if (bar) bar.style.transform = index < instance.activeIndex ? "scaleX(1)" : "scaleX(0)";
-    });
-    const activeSlide = instance.slides[instance.activeIndex];
-    const storyNumber = instance.activeIndex + 1;
-    const duration = Number(activeSlide?.dataset.storyDuration) || defaultDuration;
-    if (instance.params.autoplay) instance.params.autoplay.delay = duration;
-    player.querySelectorAll("video").forEach((video) => {
-      if (video.closest(".swiper-slide") === activeSlide) video.play().catch(() => {});
-      else { video.pause(); video.currentTime = 0; }
-    });
-    const url = new URL(window.location.href);
-    if (storyNumber > 1) url.searchParams.set("story", String(storyNumber));
-    else url.searchParams.delete("story");
-    window.history.replaceState(window.history.state, "", url);
-    window.BambooSEO?.setState(storyNumber > 1 ? {
-      title: activeSlide?.dataset.storyTitle,
-      heading: activeSlide?.dataset.storyTitle,
-      description: activeSlide?.dataset.storyDescription,
-    } : null);
-    try { window.sessionStorage.setItem(storyStorageKey, String(storyNumber)); } catch (_error) {}
-    if (announcer) announcer.textContent = `${storyNumber} / ${instance.slides.length}：${activeSlide?.dataset.storyTitle || "竹韻限時動態"}`;
-  }
+  const releaseGesture = (event) => {
+    if (!gesture) return;
+    const dx = event.clientX - gesture.x;
+    const dy = event.clientY - gesture.y;
+    const heldFor = performance.now() - gesture.startedAt;
+    const wasOnTapZone = gesture.onTapZone;
+    gesture = null;
+    holding = false;
+    player.classList.remove("is-paused");
+    if (Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.15) {
+      suppressTap = wasOnTapZone;
+      move(dx < 0 ? 1 : -1);
+      return;
+    }
+    suppressTap = wasOnTapZone && heldFor > 250;
+    resumeProgress();
+  };
+
+  player.addEventListener("pointerup", releaseGesture);
+  player.addEventListener("pointercancel", releaseGesture);
+  player.addEventListener("pointerleave", releaseGesture);
+
+  player.querySelector("[data-story-prev]")?.addEventListener("click", () => {
+    if (suppressTap) { suppressTap = false; return; }
+    move(-1);
+  });
+  player.querySelector("[data-story-next]")?.addEventListener("click", () => {
+    if (suppressTap) { suppressTap = false; return; }
+    move(1);
+  });
+  pauseButton?.addEventListener("click", togglePause);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") move(-1);
+    else if (event.key === "ArrowRight") move(1);
+    else if (event.key === " " && !event.target.closest?.("a, button")) {
+      event.preventDefault();
+      togglePause();
+    }
+  });
+
+  // 桌面觸控板送的是 wheel 事件；一次手勢只換一頁，慣性尾巴不再觸發。
+  let wheel = { x: 0, y: 0, last: 0, handled: false };
+  player.addEventListener("wheel", (event) => {
+    const now = Date.now();
+    if (now - wheel.last > 180) wheel = { x: 0, y: 0, last: now, handled: false };
+    wheel.last = now;
+    wheel.x += event.deltaX || (event.shiftKey ? event.deltaY : 0);
+    wheel.y += event.shiftKey ? 0 : event.deltaY;
+    if (wheel.handled) {
+      event.preventDefault();
+      return;
+    }
+    if (Math.abs(wheel.x) < 45 || Math.abs(wheel.x) <= Math.abs(wheel.y) * 1.15) return;
+    event.preventDefault();
+    wheel.handled = true;
+    move(wheel.x > 0 ? 1 : -1);
+  }, { passive: false });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) pauseProgress();
+    else resumeProgress();
+  });
 
   window.addEventListener("pageshow", (event) => {
     if (!event.persisted) return;
     const restoredStory = readStoryNumber({ allowStored: true });
-    if (swiper.activeIndex !== restoredStory - 1) swiper.slideTo(restoredStory - 1, 0);
+    if (current !== restoredStory - 1) show(restoredStory - 1);
   });
-
-  let holding = false;
-  let holdStartedAt = 0;
-  let holdStartedOnTapZone = false;
-  let suppressTap = false;
-  player.querySelector("[data-story-prev]")?.addEventListener("click", () => {
-    if (suppressTap) { suppressTap = false; return; }
-    swiper.slidePrev();
-  });
-  player.querySelector("[data-story-next]")?.addEventListener("click", () => {
-    if (suppressTap) { suppressTap = false; return; }
-    swiper.slideNext();
-  });
-
-  const pause = (event) => {
-    if (event.pointerType === "mouse" && event.button !== 0) return;
-    if (event.target.closest?.("a, [data-story-share]")) return;
-    holding = true;
-    holdStartedAt = performance.now();
-    holdStartedOnTapZone = Boolean(event.target.closest?.("[data-story-prev], [data-story-next]"));
-    player.classList.add("is-paused");
-    swiper.autoplay?.pause();
-  };
-  const resume = () => {
-    if (!holding) return;
-    suppressTap = holdStartedOnTapZone && performance.now() - holdStartedAt > 250;
-    holding = false;
-    player.classList.remove("is-paused");
-    swiper.autoplay?.resume();
-  };
-  player.addEventListener("pointerdown", pause);
-  player.addEventListener("pointerup", resume);
-  player.addEventListener("pointercancel", resume);
-  player.addEventListener("pointerleave", resume);
 
   player.querySelector("[data-story-share]")?.addEventListener("click", async (event) => {
     const button = event.currentTarget;
@@ -185,4 +292,7 @@ import { A11y, Autoplay, Keyboard } from "swiper/modules";
       if (error?.name !== "AbortError") button.textContent = "請複製網址";
     }
   });
+
+  const navigationType = window.performance.getEntriesByType?.("navigation")?.[0]?.type;
+  show(readStoryNumber({ allowStored: navigationType === "back_forward" }) - 1);
 })();

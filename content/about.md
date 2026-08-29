@@ -17,7 +17,7 @@ menu_note: 社團介紹、支持與聯絡方式
 
 網站公開的社史只保留去個資與證據狀態；名冊、通訊錄、留言簿私人內容與尚未確認公開授權的照片仍留在幹部／Hermes 工作區，不會轉成公開名單。
 
-**社課時間與地點**：開學後每週二晚上在學生活動中心練習；詳細時間與教室將於 [Instagram](https://www.instagram.com/nycu_harmonica/) 公布。
+**社課時間與地點**：開學後每週二晚上在學生活動中心 1 樓聯誼廳練習；詳細時間將於 [Instagram](https://www.instagram.com/nycu_harmonica/) 公布。
 
 ## 支持竹韻 {#support}
 

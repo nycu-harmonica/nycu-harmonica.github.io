@@ -2,7 +2,5 @@
   "name": "nycu-bamboo-melody-site",
   "private": true,
   "description": "Frontend build dependencies for the Bamboo Melody Club Hugo site.",
-  "dependencies": {
-    "swiper": "14.1.0"
-  }
+  "dependencies": {}
 }

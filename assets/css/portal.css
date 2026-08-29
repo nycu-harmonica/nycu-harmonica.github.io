@@ -39,9 +39,9 @@
   width: 100%;
   min-height: 100dvh;
   padding: 0;
-  background:
-    radial-gradient(circle at 25% 15%, rgba(72, 197, 212, 0.18), transparent 28rem),
-    #061f29;
+  background: #16191c;
+  user-select: none;
+  overscroll-behavior: contain;
 }
 
 .portal-story-frame {
@@ -56,34 +56,10 @@
   touch-action: pan-y;
 }
 
-.swiper {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  overflow: hidden;
-  list-style: none;
+.portal-story-track {
+  position: absolute;
   z-index: 1;
-}
-
-.swiper-wrapper {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  box-sizing: content-box;
-  transition-property: transform;
-}
-
-.swiper-slide {
-  position: relative;
-  display: block;
-  flex-shrink: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
 }
 
 .portal-story-progress {
@@ -96,25 +72,25 @@
   gap: 0.22rem;
   height: 0.18rem;
   pointer-events: none;
+  transition: opacity 200ms ease;
 }
 
 .portal-story-progress > span {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   border-radius: 99px;
   background: rgba(255, 255, 255, 0.36);
 }
 
-.portal-story-progress i {
+.portal-story-progress > span::after {
   display: block;
-  width: 100%;
+  width: var(--story-progress, 0%);
   height: 100%;
+  border-radius: inherit;
   background: #fff;
-  transform: scaleX(0);
-  transform-origin: left;
+  content: "";
 }
-
-.portal-story-progress .is-complete i { transform: scaleX(1) !important; }
 
 .portal-story-header {
   position: absolute;
@@ -126,6 +102,7 @@
   align-items: center;
   justify-content: space-between;
   pointer-events: none;
+  transition: opacity 200ms ease;
 }
 
 .portal-story-profile {
@@ -151,6 +128,27 @@
 .portal-story-profile strong { font-size: 0.86rem; }
 .portal-story-profile small { color: rgba(255, 255, 255, 0.72); font-size: 0.72rem; }
 
+.portal-story-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: auto;
+}
+
+.portal-story-pause {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 0;
+  color: #fff;
+  background: transparent;
+  font: 750 0.95rem/1 system-ui, sans-serif;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
 .portal-story-share {
   padding: 0.42rem 0.72rem;
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -162,16 +160,30 @@
   font-size: 0.75rem;
   font-weight: 750;
   cursor: pointer;
-  pointer-events: auto;
 }
 
 .portal-story-slide {
+  position: absolute;
+  inset: 0;
   isolation: isolate;
   display: flex;
+  visibility: hidden;
   align-items: flex-end;
   padding: 7.2rem 1.35rem max(2.2rem, calc(env(safe-area-inset-bottom) + 1.2rem));
   overflow: hidden;
+  opacity: 0;
+  transition: opacity 170ms ease, visibility 0s 170ms;
 }
+
+.portal-story-slide.is-active {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+/* IG 的手勢語彙：按住時收起頂部 chrome，專心看內容 */
+.is-paused .portal-story-progress,
+.is-paused .portal-story-header { opacity: 0; }
 
 .portal-story-slide::after {
   position: absolute;
@@ -190,6 +202,12 @@
 .portal-story-song-0 { background: linear-gradient(150deg, #0f6b84, #092e40 73%); }
 .portal-story-song-1 { background: linear-gradient(145deg, #263a65, #0b2237 72%); }
 .portal-story-song-2 { background: linear-gradient(145deg, #5d3c5f, #16283e 74%); }
+.portal-story-feature-0 { background: linear-gradient(148deg, #14705f, #07242e 74%); }
+.portal-story-feature-1 {
+  background:
+    radial-gradient(circle at 80% 22%, rgba(240, 179, 74, 0.24), transparent 28%),
+    linear-gradient(145deg, #5f4a28, #12202f 72%);
+}
 .portal-story-join { background: linear-gradient(145deg, #0c536a, #071e2b 76%); }
 .portal-story-follow {
   background:
@@ -269,6 +287,8 @@
   letter-spacing: -0.055em;
   line-height: 1.04;
   text-wrap: balance;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .portal-story-copy > p:not(.portal-story-kicker) {
@@ -280,6 +300,12 @@
 }
 
 .portal-story-credit { font-size: 1.1rem !important; font-weight: 650; }
+
+.portal-story-copy > p.portal-story-song-note {
+  margin-top: 0.9rem;
+  color: #d9edf0;
+  font-size: 0.92rem;
+}
 
 .portal-story-giant-number {
   position: absolute;
@@ -335,6 +361,14 @@
 }
 
 .portal-story-cta:hover { color: #fff; text-decoration: none; background: rgba(255, 255, 255, 0.16); }
+
+.portal-story-cta-secondary {
+  min-height: 2.8rem;
+  margin-top: 0.7rem;
+  border-color: rgba(255, 255, 255, 0.32);
+  background: transparent;
+  font-weight: 650;
+}
 
 .portal-story-follow-orbit { position: absolute; z-index: 1; inset: 0; pointer-events: none; }
 .portal-story-follow-orbit span { position: absolute; color: rgba(255, 255, 255, 0.1); font-size: 5rem; }
@@ -397,7 +431,7 @@
   z-index: 10;
   top: 5.6rem;
   bottom: 1rem;
-  width: 28%;
+  width: 33%;
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -701,6 +735,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .portal-screen-program li { transition: none; }
+  .portal-story-slide { transition: none; }
+  .portal-story-progress,
+  .portal-story-header { transition: none; }
 }
 
 @media print {
