@@ -60,7 +60,14 @@
 
       {{ with $portal.ensemble }}
       <article class="portal-story-slide portal-story-ensemble" data-story-title="{{ .title }}" data-story-description="{{ .body }}">
+        {{ with .media }}
+        <figure class="portal-story-ensemble-media">
+          <video class="portal-story-ensemble-visual" src="{{ .src | relURL }}"{{ with .poster }} poster="{{ . | relURL }}"{{ end }} playsinline muted loop preload="metadata" aria-hidden="true" tabindex="-1"></video>
+        </figure>
+        {{ with .credit }}<p class="portal-story-media-credit portal-story-ensemble-credit">{{ . }}</p>{{ end }}
+        {{ else }}
         <div class="portal-story-ensemble-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+        {{ end }}
         <div class="portal-story-copy">
           <p class="portal-story-kicker">{{ .kicker }}</p>
           <h2>{{ .title }}</h2>

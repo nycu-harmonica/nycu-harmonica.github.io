@@ -21,6 +21,8 @@ class PortalParser(HTMLParser):
         self.song_media_sources: list[str] = []
         self.instrument_slides = 0
         self.ensemble_slides = 0
+        self.ensemble_videos = 0
+        self.ensemble_media_sources: list[str] = []
         self.instrument_media_sources: list[str] = []
         self.feature_pan_images = 0
         self.keyword_story_slides = 0
@@ -47,6 +49,14 @@ class PortalParser(HTMLParser):
             self.story_titles.append(values.get("data-story-title", ""))
         if "portal-story-ensemble" in classes:
             self.ensemble_slides += 1
+        if "portal-story-ensemble-visual" in classes:
+            self.ensemble_videos += 1
+            self.ensemble_media_sources.append(values.get("src", ""))
+            assert tag == "video", "The ensemble visual must be a video"
+            assert "muted" in values, "The ensemble video must stay muted"
+            assert "loop" in values, "The ensemble video must loop like a lightweight GIF"
+            assert "playsinline" in values, "The ensemble video must play inline on mobile"
+            assert values.get("poster"), "The ensemble video needs a static poster"
         if "portal-story-instrument" in classes:
             self.instrument_slides += 1
         if "portal-story-keywords" in classes:
@@ -105,6 +115,7 @@ def parse(relative_path: str) -> PortalParser:
 def main() -> None:
     mobile = parse("p/index.html")
     screen = parse("p/screen/index.html")
+    mobile_html = (PUBLIC / "p" / "index.html").read_text(encoding="utf-8")
     assert mobile.has_story_player, "Mobile Portal is missing its story player"
     assert mobile.story_slides == 14, "Mobile Portal must render intro, four songs, ensemble intro, three instruments, history, two keyword stories, join, and social stories"
     assert mobile.story_progress_segments == mobile.story_slides, "Every story needs a progress segment"
@@ -112,6 +123,7 @@ def main() -> None:
     assert mobile.song_videos == 3, "Three song stories must use lightweight looping video"
     assert mobile.instrument_slides == 3, "The three harmonica types need one story each"
     assert mobile.ensemble_slides == 1, "Harmonica ensemble needs an introduction before the instrument stories"
+    assert mobile.ensemble_videos == 1, "The ensemble introduction needs a matching performance video"
     assert mobile.story_titles.index("四把口琴，怎麼變成一個樂團？") < mobile.story_titles.index("半音階口琴"), "Ensemble introduction must precede instrument details"
     assert len(mobile.instrument_media_sources) == 3, "Every harmonica story needs a real instrument photo"
     assert mobile.feature_pan_images == 1, "The revival photo must pan from left to right"
@@ -119,15 +131,20 @@ def main() -> None:
     assert mobile.activity_terms == 27, "The activity story must include all 27 activities"
     assert mobile.song_terms == 39, "The song story must include all 39 repertoire ideas"
     assert mobile.keyword_terms_with_3d_position == 66, "Every keyword needs a deterministic 3D flight path"
-    assert mobile.media_credits == 8, "Every song, instrument, and history visual needs a visible source credit"
+    assert mobile.media_credits == 9, "Every song, ensemble, instrument, and history visual needs a visible source credit"
     for source in mobile.song_media_sources:
         media = PUBLIC / source.split("?", 1)[0].lstrip("/")
         assert media.is_file() and media.stat().st_size > 1_000, f"Song visual is missing or empty: {source}"
     for source in mobile.instrument_media_sources:
         media = PUBLIC / source.split("?", 1)[0].lstrip("/")
         assert media.is_file() and media.stat().st_size > 1_000, f"Instrument photo is missing or empty: {source}"
+    for source in mobile.ensemble_media_sources:
+        media = PUBLIC / source.split("?", 1)[0].lstrip("/")
+        assert media.is_file() and media.stat().st_size > 1_000, f"Ensemble video is missing or empty: {source}"
     assert mobile.social_links == 4, "Social story must render all four official links"
     assert mobile.social_links_open_new_tab == 0, "Social links must work in embedded mobile browsers"
+    assert "口琴吊飾" in mobile_html, "Join story must describe the actual harmonica charm gift"
+    assert "送你一支口琴" not in mobile_html, "Join story must not claim that new members receive an instrument"
     assert screen.program_items == 4, "Projection screen must render all four songs"
     assert screen.qr_sources, "Projection screen is missing its fixed Portal QR Code"
     qr = PUBLIC / screen.qr_sources[0].split("?", 1)[0].lstrip("/")

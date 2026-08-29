@@ -45,6 +45,12 @@ ensemble:
   kicker: HARMONICA ENSEMBLE
   title: 四把口琴，怎麼變成一個樂團？
   body: 口琴重奏把旋律、和聲、節奏與低音分給不同聲部。有人唱主旋律，有人補和聲，也有人撐住節拍與低音——合在一起，就像一支縮小的樂團。
+  media:
+    type: video
+    src: images/portal-ensemble/sirius.mp4
+    poster: images/portal-ensemble/sirius-poster.jpg
+    credit: 畫面｜天狼星口琴樂團〈殘酷天使的行動綱領〉MV
+    source_url: https://www.youtube.com/watch?v=4W_CZl4FBdY
   stats:
     - value: "4"
       label: 位演奏者
@@ -180,7 +186,7 @@ keyword_stories:
 join:
   kicker: JOIN BAMBOO MELODY
   title: 下一段旋律，換你加入
-  body: 一年社費 1,000 元；第一堂社課前入社，送你一支口琴——你的第一把樂器，我們出。
+  body: 一年社費 1,000 元；第一堂社課前入社，送你一個口琴吊飾。
   cta_label: 填寫入社表單（約一分鐘）
   cta_url: /join/
   alt_label: 先進 Discord 潛水看看也可以
