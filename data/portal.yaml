@@ -81,79 +81,87 @@ features:
       credit: 2026 復社茶會｜陽明交大學生活動中心
       pan: left-to-right
 
-word_cloud:
-  kicker: THIS IS BAMBOO MELODY
-  title: 招募社員
-  subtitle: 歡迎零基礎・一起吹喜歡的歌
-  duration: 12000
-  activities:
-    - 臺灣口琴音樂節 THMF
-    - 全國學生音樂比賽
-    - 期末演出
-    - 半音階口琴
-    - 複音口琴
-    - 和弦口琴
-    - 倍低音口琴
-    - 合奏團練
-    - 固定社課
-    - 校外參演
-    - 成果發表
-    - 迎新
-    - 社遊
-    - 聯合社課
-    - 快閃演出
-    - 聚餐
-    - 樂器體驗
-    - 認識新朋友
-    - 分部練習
-    - 技巧交流
-    - 大合奏・五重奏
-    - 一起練琴
-    - 社課完吃宵夜
-    - 曲目排練
-    - 音樂交流
-    - 在 Discord 揪練琴
-    - 玩社長架的 Hermes Agent
-  repertoire:
-    - 宮崎駿組曲
-    - 名偵探柯南組曲
-    - 哈利波特組曲
-    - 加勒比海盜
-    - 小幸運
-    - 直至世界盡頭 — 灌籃高手
-    - From the Start — Laufey
-    - "Ashes on The Fire — 進擊的巨人最終季"
-    - 情熱大陸
-    - "Alicia — Clair Obscur: Expedition 33"
-    - Somnus — FINAL FANTASY XV
-    - Fallen Down — Undertale
-    - 載著你 — 天空之城
-    - "Zelda: Breath of the Wild"
-    - Just the Way You Are — Bruno Mars
-    - One Night in 北京
-    - TOTORO Suite — 龍貓組曲
-    - Tico Tico
-    - 六兆年と一夜物語
-    - 晴る — ヨルシカ
-    - 魔戒主題曲
-    - 大黃蜂的飛行
-    - 千本桜
-    - 夜に駆ける — YOASOBI
-    - You Raise Me Up
-    - 怪獸 — 魚韻
-    - Theme of the Green Hornet — 青蜂俠
-    - Oblivion
-    - 羅馬尼亞狂想曲
-    - 道別的夏天 — 來自紅花坂
-    - Sabre Dance — 劍舞
-    - Bésame Mucho
-    - 孤單北半球
-    - 威廉泰爾序曲
-    - The Good, the Bad and the Ugly
-    - 風之丘
-    - Kahoot! Lobby Tune
-    - 港都夜雨
-    - 狂暴之海
+keyword_stories:
+  - kind: activity
+    kicker: WHAT WE DO
+    badge: 招募社員
+    title: 社團活動
+    subtitle: 歡迎零基礎，從社課、團練一路吹上舞臺
+    duration: 12000
+    terms:
+      - 臺灣口琴音樂節 THMF
+      - 全國學生音樂比賽
+      - 期末演出
+      - 半音階口琴
+      - 複音口琴
+      - 和弦口琴
+      - 倍低音口琴
+      - 合奏團練
+      - 固定社課
+      - 校外參演
+      - 成果發表
+      - 迎新
+      - 社遊
+      - 聯合社課
+      - 快閃演出
+      - 聚餐
+      - 樂器體驗
+      - 認識新朋友
+      - 分部練習
+      - 技巧交流
+      - 大合奏・五重奏
+      - 一起練琴
+      - 社課完吃宵夜
+      - 曲目排練
+      - 音樂交流
+      - 在 Discord 揪練琴
+      - 玩社長架的 Hermes Agent
+  - kind: song
+    kicker: WHAT WE WANT TO PLAY
+    badge: 歡迎零基礎
+    title: 想吹的歌
+    subtitle: 動漫、遊戲、電影與流行歌，帶來一起排
+    duration: 14000
+    terms:
+      - 宮崎駿組曲
+      - 名偵探柯南組曲
+      - 哈利波特組曲
+      - 加勒比海盜
+      - 小幸運
+      - 直至世界盡頭 — 灌籃高手
+      - From the Start — Laufey
+      - "Ashes on The Fire — 進擊的巨人最終季"
+      - 情熱大陸
+      - "Alicia — Clair Obscur: Expedition 33"
+      - Somnus — FINAL FANTASY XV
+      - Fallen Down — Undertale
+      - 載著你 — 天空之城
+      - "Zelda: Breath of the Wild"
+      - Just the Way You Are — Bruno Mars
+      - One Night in 北京
+      - TOTORO Suite — 龍貓組曲
+      - Tico Tico
+      - 六兆年と一夜物語
+      - 晴る — ヨルシカ
+      - 魔戒主題曲
+      - 大黃蜂的飛行
+      - 千本桜
+      - 夜に駆ける — YOASOBI
+      - You Raise Me Up
+      - 怪獸 — 魚韻
+      - Theme of the Green Hornet — 青蜂俠
+      - Oblivion
+      - 羅馬尼亞狂想曲
+      - 道別的夏天 — 來自紅花坂
+      - Sabre Dance — 劍舞
+      - Bésame Mucho
+      - 孤單北半球
+      - 威廉泰爾序曲
+      - The Good, the Bad and the Ugly
+      - 風之丘
+      - Kahoot! Lobby Tune
+      - 港都夜雨
+      - 狂暴之海
 
 join:
   kicker: JOIN BAMBOO MELODY

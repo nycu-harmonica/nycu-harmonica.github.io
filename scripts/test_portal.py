@@ -22,8 +22,10 @@ class PortalParser(HTMLParser):
         self.instrument_slides = 0
         self.instrument_media_sources: list[str] = []
         self.feature_pan_images = 0
-        self.word_cloud_slides = 0
-        self.word_cloud_terms = 0
+        self.keyword_story_slides = 0
+        self.activity_terms = 0
+        self.song_terms = 0
+        self.keyword_terms_with_3d_position = 0
         self.social_links = 0
         self.social_links_open_new_tab = 0
         self.has_story_player = False
@@ -42,10 +44,16 @@ class PortalParser(HTMLParser):
             self.story_slides += 1
         if "portal-story-instrument" in classes:
             self.instrument_slides += 1
-        if "portal-story-word-cloud" in classes:
-            self.word_cloud_slides += 1
-        if "portal-story-cloud-activity" in classes or "portal-story-cloud-song" in classes:
-            self.word_cloud_terms += 1
+        if "portal-story-keywords" in classes:
+            self.keyword_story_slides += 1
+        if "portal-story-keyword-term-activity" in classes:
+            self.activity_terms += 1
+        if "portal-story-keyword-term-song" in classes:
+            self.song_terms += 1
+        if "portal-story-keyword-term" in classes:
+            style = values.get("style", "")
+            if "--keyword-x:" in style and "--keyword-y:" in style:
+                self.keyword_terms_with_3d_position += 1
         if "portal-story-song-visual" in classes:
             self.song_visuals += 1
             self.song_media_sources.append(values.get("src", ""))
@@ -93,15 +101,17 @@ def main() -> None:
     mobile = parse("p/index.html")
     screen = parse("p/screen/index.html")
     assert mobile.has_story_player, "Mobile Portal is missing its story player"
-    assert mobile.story_slides == 12, "Mobile Portal must render intro, four songs, three instruments, history, word cloud, join, and social stories"
+    assert mobile.story_slides == 13, "Mobile Portal must render intro, four songs, three instruments, history, two keyword stories, join, and social stories"
     assert mobile.story_progress_segments == mobile.story_slides, "Every story needs a progress segment"
     assert mobile.song_visuals == 4, "Every song story needs a movie or MV visual"
     assert mobile.song_videos == 3, "Three song stories must use lightweight looping video"
     assert mobile.instrument_slides == 3, "The three harmonica types need one story each"
     assert len(mobile.instrument_media_sources) == 3, "Every harmonica story needs a real instrument photo"
     assert mobile.feature_pan_images == 1, "The revival photo must pan from left to right"
-    assert mobile.word_cloud_slides == 1, "Activities and repertoire need one recruitment word-cloud story"
-    assert mobile.word_cloud_terms == 66, "The word cloud must include all 27 activities and 39 songs"
+    assert mobile.keyword_story_slides == 2, "Activities and repertoire need separate keyword stories"
+    assert mobile.activity_terms == 27, "The activity story must include all 27 activities"
+    assert mobile.song_terms == 39, "The song story must include all 39 repertoire ideas"
+    assert mobile.keyword_terms_with_3d_position == 66, "Every keyword needs a deterministic 3D flight path"
     assert mobile.media_credits == 8, "Every song, instrument, and history visual needs a visible source credit"
     for source in mobile.song_media_sources:
         media = PUBLIC / source.split("?", 1)[0].lstrip("/")

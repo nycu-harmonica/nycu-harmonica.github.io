@@ -6,7 +6,7 @@
     {{ $officialLinks = $officialLinks | append . }}
   {{ end }}
 {{ end }}
-{{ $storyCount := add (add (add (add 4 (len $portal.program)) (len ($portal.instruments | default (slice)))) (len ($portal.features | default (slice)))) (len ($portal.stories | default (slice))) }}
+{{ $storyCount := add (add (add (add (add 3 (len $portal.program)) (len ($portal.instruments | default (slice)))) (len ($portal.features | default (slice)))) (len ($portal.keyword_stories | default (slice)))) (len ($portal.stories | default (slice))) }}
 
 <div class="portal-story-shell" data-story-player data-default-duration="{{ $portal.story_duration | default 7000 }}">
   <section class="portal-story-frame" aria-label="竹韻演出限時動態">
@@ -93,17 +93,21 @@
       </article>
       {{ end }}
 
-      {{ with $portal.word_cloud }}
-      <article class="portal-story-slide portal-story-word-cloud" data-story-title="{{ .title }}" data-story-description="{{ .subtitle }}；社課、團練、演出、比賽與喜歡的曲目都在竹韻。" data-story-duration="{{ .duration | default 12000 }}">
-        <div class="portal-story-cloud" aria-label="竹韻活動與曲目文字雲">
-          {{ range $index, $label := .activities }}<span class="portal-story-cloud-activity" style="--cloud-index: {{ $index }}">{{ $label }}</span>{{ end }}
-          {{ range $index, $label := .repertoire }}<span class="portal-story-cloud-song" style="--cloud-index: {{ add $index 27 }}">{{ $label }}</span>{{ end }}
+      {{ range $storyIndex, $keywordStory := $portal.keyword_stories | default (slice) }}
+      <article class="portal-story-slide portal-story-keywords portal-story-keywords-{{ $keywordStory.kind }}" data-story-title="{{ $keywordStory.title }}" data-story-description="{{ $keywordStory.subtitle }}。" data-story-duration="{{ $keywordStory.duration | default 12000 }}" data-keyword-kind="{{ $keywordStory.kind }}">
+        <div class="portal-story-keyword-tunnel" aria-label="{{ $keywordStory.title }}關鍵字動畫">
+          {{ range $index, $label := $keywordStory.terms }}
+            {{ $seed := add (add $index 1) (mul $storyIndex 11) }}
+            {{ $x := sub (mod (mul $seed 37) 79) 39 }}
+            {{ $y := sub (mod (mul $seed 53) 83) 41 }}
+            <span class="portal-story-keyword-term portal-story-keyword-term-{{ $keywordStory.kind }}" style="--keyword-index: {{ $index }}; --keyword-x: {{ $x }}; --keyword-y: {{ $y }}">{{ $label }}</span>
+          {{ end }}
         </div>
-        <div class="portal-story-cloud-center">
-          <p class="portal-story-kicker">{{ .kicker }}</p>
-          <h2>{{ .title }}</h2>
-          <p>{{ .subtitle }}</p>
-          <div class="portal-story-cloud-legend" aria-hidden="true"><span>社團活動</span><span>我們想吹的歌</span></div>
+        <div class="portal-story-keyword-center">
+          <span class="portal-story-keyword-badge">{{ $keywordStory.badge }}</span>
+          <p class="portal-story-kicker">{{ $keywordStory.kicker }}</p>
+          <h2>{{ $keywordStory.title }}</h2>
+          <p>{{ $keywordStory.subtitle }}</p>
         </div>
       </article>
       {{ end }}
