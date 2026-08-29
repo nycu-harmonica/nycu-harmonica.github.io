@@ -59,6 +59,7 @@ jobs:
           hugo --gc --minify --baseURL "https://harmonica.nycu.club/"
           python3 scripts/test_portal.py
           python3 scripts/test_discord.py
+          python3 scripts/test_join_redirect.py
           python3 scripts/check_seo_outputs.py
           python3 scripts/check_typography.py
 

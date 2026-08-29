@@ -1,0 +1,26 @@
+{{- $target := .Params.redirectURL -}}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Title }}｜{{ .Site.Title }}</title>
+  <meta name="description" content="{{ .Params.description }}">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="{{ .Permalink }}">
+  <meta http-equiv="refresh" content="0; url={{ $target }}">
+  <script>window.location.replace({{ $target | jsonify | safeJS }});</script>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    body { display: grid; min-height: 100vh; margin: 0; place-items: center; background: #f4f7fb; color: #17233c; }
+    main { max-width: 32rem; padding: 2rem; text-align: center; }
+    a { color: #1456a0; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <main>
+    <p>正在前往竹韻口琴社入社表單……</p>
+    <p><a href="{{ $target }}">若未自動前往，請點此開啟表單</a></p>
+  </main>
+</body>
+</html>
