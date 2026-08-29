@@ -344,6 +344,42 @@
     linear-gradient(145deg, #5f4a28, #12202f 72%);
 }
 .portal-story-join { background: linear-gradient(145deg, #0c536a, #071e2b 76%); }
+.portal-story-faq {
+  background:
+    radial-gradient(circle at 84% 18%, rgba(240, 179, 74, 0.2), transparent 26%),
+    linear-gradient(145deg, #135d70, #071e2b 76%);
+}
+.portal-story-faq-1 {
+  background:
+    radial-gradient(circle at 15% 22%, rgba(104, 215, 218, 0.2), transparent 29%),
+    linear-gradient(145deg, #23486d, #0a2031 76%);
+}
+.portal-story-faq-2 {
+  background:
+    radial-gradient(circle at 80% 78%, rgba(150, 101, 169, 0.25), transparent 30%),
+    linear-gradient(145deg, #4d3c66, #111e31 76%);
+}
+.portal-story-faq-mark {
+  position: absolute;
+  z-index: 1;
+  top: 8%;
+  left: -0.05em;
+  color: rgba(255, 255, 255, 0.075);
+  font-size: clamp(12rem, 58vw, 19rem);
+  font-weight: 950;
+  letter-spacing: -0.12em;
+  line-height: 1;
+  pointer-events: none;
+}
+.portal-story-faq .portal-story-copy h2 {
+  max-width: 9em;
+  font-size: clamp(2.45rem, 11.5vw, 4.1rem);
+}
+.portal-story-faq .portal-story-copy > p:not(.portal-story-kicker) {
+  margin-top: 0.9rem;
+  font-size: 0.98rem;
+  line-height: 1.72;
+}
 .portal-story-follow {
   background:
     radial-gradient(circle at 78% 18%, rgba(240, 179, 74, 0.3), transparent 24%),

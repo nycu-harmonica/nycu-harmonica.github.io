@@ -31,6 +31,7 @@ class PortalParser(HTMLParser):
         self.keyword_terms_with_3d_position = 0
         self.keyword_terms_left = 0
         self.keyword_terms_right = 0
+        self.faq_slides = 0
         self.social_links = 0
         self.social_links_open_new_tab = 0
         self.has_story_player = False
@@ -63,6 +64,8 @@ class PortalParser(HTMLParser):
             self.instrument_slides += 1
         if "portal-story-keywords" in classes:
             self.keyword_story_slides += 1
+        if "portal-story-faq" in classes:
+            self.faq_slides += 1
         if "portal-story-keyword-term-activity" in classes:
             self.activity_terms += 1
         if "portal-story-keyword-term-song" in classes:
@@ -123,7 +126,7 @@ def main() -> None:
     screen = parse("p/screen/index.html")
     mobile_html = (PUBLIC / "p" / "index.html").read_text(encoding="utf-8")
     assert mobile.has_story_player, "Mobile Portal is missing its story player"
-    assert mobile.story_slides == 14, "Mobile Portal must render intro, four songs, ensemble intro, three instruments, history, two keyword stories, join, and social stories"
+    assert mobile.story_slides == 17, "Mobile Portal must render intro, four songs, ensemble intro, three instruments, history, two keyword stories, three FAQs, join, and social stories"
     assert mobile.story_progress_segments == mobile.story_slides, "Every story needs a progress segment"
     assert mobile.song_visuals == 4, "Every song story needs a movie or MV visual"
     assert mobile.song_videos == 3, "Three song stories must use lightweight looping video"
@@ -139,6 +142,8 @@ def main() -> None:
     assert mobile.song_terms == 39, "The song story must include all 39 repertoire ideas"
     assert mobile.keyword_terms_with_3d_position == 66, "Every keyword needs a deterministic 3D flight path"
     assert mobile.keyword_terms_left == mobile.keyword_terms_right == 33, "Keyword paths must be evenly balanced between the left and right sides"
+    assert mobile.faq_slides == 3, "The join CTA must be preceded by three FAQ stories"
+    assert mobile.story_titles.index("沒有口琴，要先買嗎？") < mobile.story_titles.index("下一段旋律，換你加入"), "FAQ stories must precede the join CTA"
     assert mobile.media_credits == 9, "Every song, ensemble, instrument, and history visual needs a visible source credit"
     for source in mobile.song_media_sources:
         media = PUBLIC / source.split("?", 1)[0].lstrip("/")
@@ -152,6 +157,10 @@ def main() -> None:
     assert mobile.social_links == 4, "Social story must render all four official links"
     assert mobile.social_links_open_new_tab == 0, "Social links must work in embedded mobile browsers"
     assert "口琴吊飾" in mobile_html, "Join story must describe the actual harmonica charm gift"
+    assert "一學期社費 500 元" in mobile_html, "FAQ and join stories must show the semester fee"
+    assert "半音階口琴約 2,500–4,000 元" in mobile_html, "FAQ must show the beginner chromatic harmonica price range"
+    assert "和弦口琴、倍低音口琴，社團都有新買的社團用琴" in mobile_html, "FAQ must explain which ensemble instruments the club provides"
+    assert "開學後每週二晚上，在學生活動中心 1 樓聯誼廳" in mobile_html, "FAQ must show the regular lesson time and location"
     assert "送你一支口琴" not in mobile_html, "Join story must not claim that new members receive an instrument"
     assert screen.program_items == 4, "Projection screen must render all four songs"
     assert screen.qr_sources, "Projection screen is missing its fixed Portal QR Code"

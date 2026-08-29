@@ -176,10 +176,26 @@ keyword_stories:
       - 港都夜雨
       - 狂暴之海
 
+faq:
+  - question: 沒有口琴，要先買嗎？
+    answer:
+      - 建議使用自己的口琴。入門且好吹的半音階口琴約 2,500–4,000 元。
+      - 和弦口琴、倍低音口琴，社團都有新買的社團用琴。
+    duration: 9000
+  - question: 入社要多少錢？
+    answer:
+      - 一學期社費 500 元，一年社費 1,000 元。
+      - 第一堂社課前入社並繳交兩學期社費，送口琴吊飾。
+    duration: 8000
+  - question: 社課什麼時候？在哪裡？
+    answer:
+      - 開學後每週二晚上，在學生活動中心 1 樓聯誼廳。
+    duration: 7000
+
 join:
   kicker: JOIN BAMBOO MELODY
   title: 下一段旋律，換你加入
-  body: 一年社費 1,000 元；第一堂社課前入社，送你一個口琴吊飾。
+  body: 一學期社費 500 元；第一堂社課前入社並繳交兩學期社費，送口琴吊飾。
   cta_label: 填寫入社表單（約一分鐘）
   cta_url: /join/
   alt_label: 先進 Discord 潛水看看也可以

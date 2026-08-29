@@ -6,7 +6,7 @@
     {{ $officialLinks = $officialLinks | append . }}
   {{ end }}
 {{ end }}
-{{ $storyCount := add (add (add (add (add 4 (len $portal.program)) (len ($portal.instruments | default (slice)))) (len ($portal.features | default (slice)))) (len ($portal.keyword_stories | default (slice)))) (len ($portal.stories | default (slice))) }}
+{{ $storyCount := add (add (add (add (add (add 4 (len $portal.program)) (len ($portal.instruments | default (slice)))) (len ($portal.features | default (slice)))) (len ($portal.keyword_stories | default (slice)))) (len ($portal.faq | default (slice)))) (len ($portal.stories | default (slice))) }}
 
 <div class="portal-story-shell" data-story-player data-default-duration="{{ $portal.story_duration | default 7000 }}">
   <section class="portal-story-frame" aria-label="竹韻演出限時動態">
@@ -144,6 +144,17 @@
         {{ end }}
         <div class="portal-story-media-shade" aria-hidden="true"></div>
         {{ with $story.caption }}<p class="portal-story-caption">{{ . }}</p>{{ end }}
+      </article>
+      {{ end }}
+
+      {{ range $index, $item := $portal.faq | default (slice) }}
+      <article class="portal-story-slide portal-story-faq portal-story-faq-{{ mod $index 3 }}" data-story-title="{{ $item.question }}" data-story-description="{{ delimit $item.answer "" }}" data-story-duration="{{ $item.duration | default 8000 }}">
+        <span class="portal-story-faq-mark" aria-hidden="true">Q{{ add $index 1 }}</span>
+        <div class="portal-story-copy">
+          <p class="portal-story-kicker">BEFORE YOU JOIN ・ {{ printf "%02d" (add $index 1) }}/{{ printf "%02d" (len $portal.faq) }}</p>
+          <h2>{{ $item.question }}</h2>
+          {{ range $item.answer }}<p>{{ . }}</p>{{ end }}
+        </div>
       </article>
       {{ end }}
 
