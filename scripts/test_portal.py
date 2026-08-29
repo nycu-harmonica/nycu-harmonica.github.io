@@ -17,8 +17,13 @@ class PortalParser(HTMLParser):
         self.story_progress_segments = 0
         self.song_visuals = 0
         self.song_videos = 0
-        self.song_media_credits = 0
+        self.media_credits = 0
         self.song_media_sources: list[str] = []
+        self.instrument_slides = 0
+        self.instrument_media_sources: list[str] = []
+        self.feature_pan_images = 0
+        self.word_cloud_slides = 0
+        self.word_cloud_terms = 0
         self.social_links = 0
         self.social_links_open_new_tab = 0
         self.has_story_player = False
@@ -35,6 +40,12 @@ class PortalParser(HTMLParser):
         classes = (values.get("class") or "").split()
         if "portal-story-slide" in classes:
             self.story_slides += 1
+        if "portal-story-instrument" in classes:
+            self.instrument_slides += 1
+        if "portal-story-word-cloud" in classes:
+            self.word_cloud_slides += 1
+        if "portal-story-cloud-activity" in classes or "portal-story-cloud-song" in classes:
+            self.word_cloud_terms += 1
         if "portal-story-song-visual" in classes:
             self.song_visuals += 1
             self.song_media_sources.append(values.get("src", ""))
@@ -45,7 +56,11 @@ class PortalParser(HTMLParser):
                 assert "playsinline" in values, "Song videos must play inline on mobile"
                 assert values.get("poster"), "Song videos need a static poster"
         if "portal-story-media-credit" in classes:
-            self.song_media_credits += 1
+            self.media_credits += 1
+        if "portal-story-instrument-visual" in classes:
+            self.instrument_media_sources.append(values.get("src", ""))
+        if "portal-story-feature-pan" in classes:
+            self.feature_pan_images += 1
         if "portal-story-progress" in classes:
             self._inside_story_progress += 1
         elif tag == "span" and self._inside_story_progress:
@@ -78,14 +93,22 @@ def main() -> None:
     mobile = parse("p/index.html")
     screen = parse("p/screen/index.html")
     assert mobile.has_story_player, "Mobile Portal is missing its story player"
-    assert mobile.story_slides == 9, "Mobile Portal must render intro, four songs, two features, join, and social stories"
+    assert mobile.story_slides == 12, "Mobile Portal must render intro, four songs, three instruments, history, word cloud, join, and social stories"
     assert mobile.story_progress_segments == mobile.story_slides, "Every story needs a progress segment"
     assert mobile.song_visuals == 4, "Every song story needs a movie or MV visual"
     assert mobile.song_videos == 3, "Three song stories must use lightweight looping video"
-    assert mobile.song_media_credits == 4, "Every song visual needs a visible source credit"
+    assert mobile.instrument_slides == 3, "The three harmonica types need one story each"
+    assert len(mobile.instrument_media_sources) == 3, "Every harmonica story needs a real instrument photo"
+    assert mobile.feature_pan_images == 1, "The revival photo must pan from left to right"
+    assert mobile.word_cloud_slides == 1, "Activities and repertoire need one recruitment word-cloud story"
+    assert mobile.word_cloud_terms == 66, "The word cloud must include all 27 activities and 39 songs"
+    assert mobile.media_credits == 8, "Every song, instrument, and history visual needs a visible source credit"
     for source in mobile.song_media_sources:
         media = PUBLIC / source.split("?", 1)[0].lstrip("/")
         assert media.is_file() and media.stat().st_size > 1_000, f"Song visual is missing or empty: {source}"
+    for source in mobile.instrument_media_sources:
+        media = PUBLIC / source.split("?", 1)[0].lstrip("/")
+        assert media.is_file() and media.stat().st_size > 1_000, f"Instrument photo is missing or empty: {source}"
     assert mobile.social_links == 4, "Social story must render all four official links"
     assert mobile.social_links_open_new_tab == 0, "Social links must work in embedded mobile browsers"
     assert screen.program_items == 4, "Projection screen must render all four songs"

@@ -6,7 +6,7 @@
     {{ $officialLinks = $officialLinks | append . }}
   {{ end }}
 {{ end }}
-{{ $storyCount := add (add (add 3 (len $portal.program)) (len ($portal.features | default (slice)))) (len ($portal.stories | default (slice))) }}
+{{ $storyCount := add (add (add (add 4 (len $portal.program)) (len ($portal.instruments | default (slice)))) (len ($portal.features | default (slice)))) (len ($portal.stories | default (slice))) }}
 
 <div class="portal-story-shell" data-story-player data-default-duration="{{ $portal.story_duration | default 7000 }}">
   <section class="portal-story-frame" aria-label="竹韻演出限時動態">
@@ -49,24 +49,61 @@
         </figure>
         {{ with .credit }}<p class="portal-story-media-credit">{{ . }}</p>{{ end }}
         {{ end }}
-        <span class="portal-story-giant-number" aria-hidden="true">{{ printf "%02d" (add $index 1) }}</span>
         <div class="portal-story-copy">
           <p class="portal-story-kicker">TODAY'S PROGRAM ・ {{ printf "%02d" (add $index 1) }}/{{ printf "%02d" (len $portal.program) }}</p>
           <h2>{{ $song.title }}</h2>
           <p class="portal-story-credit">{{ $song.credit }}</p>
           {{ with $song.note }}<p class="portal-story-song-note">{{ . }}</p>{{ end }}
         </div>
-        <span class="portal-story-note" aria-hidden="true">♪</span>
+      </article>
+      {{ end }}
+
+      {{ range $index, $instrument := $portal.instruments | default (slice) }}
+      <article class="portal-story-slide portal-story-instrument portal-story-instrument-{{ mod $index 3 }}" data-story-title="{{ $instrument.title }}" data-story-description="{{ printf "%s。%s" $instrument.role $instrument.body }}">
+        {{ with $instrument.media }}
+        <figure class="portal-story-instrument-media">
+          <img class="portal-story-instrument-visual" src="{{ .src | relURL }}" alt="{{ .alt }}" loading="lazy">
+        </figure>
+        {{ with .credit }}<p class="portal-story-media-credit">{{ . }}</p>{{ end }}
+        {{ end }}
+        <div class="portal-story-copy">
+          <p class="portal-story-kicker">{{ $instrument.kicker }}</p>
+          <h2>{{ $instrument.title }}</h2>
+          <p class="portal-story-instrument-role">{{ $instrument.role }}</p>
+          <p>{{ $instrument.body }}</p>
+        </div>
       </article>
       {{ end }}
 
       {{ range $index, $feature := $portal.features | default (slice) }}
-      <article class="portal-story-slide portal-story-feature portal-story-feature-{{ mod $index 2 }}" data-story-title="{{ $feature.title }}" data-story-description="{{ delimit $feature.body "" }}">
+      <article class="portal-story-slide portal-story-feature portal-story-feature-{{ mod $index 2 }}" data-story-title="{{ $feature.title }}" data-story-description="{{ delimit $feature.body "" }}" data-story-duration="{{ $feature.duration | default $portal.story_duration | default 7000 }}">
+        {{ with $feature.media }}
+        <figure class="portal-story-feature-media">
+          <img class="portal-story-feature-visual{{ if eq .pan "left-to-right" }} portal-story-feature-pan{{ end }}" src="{{ .src | relURL }}" alt="{{ .alt }}" loading="lazy">
+        </figure>
+        {{ with .credit }}<p class="portal-story-media-credit">{{ . }}</p>{{ end }}
+        {{ else }}
         <img class="portal-story-watermark" src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="" aria-hidden="true">
+        {{ end }}
         <div class="portal-story-copy">
           <p class="portal-story-kicker">{{ $feature.kicker }}</p>
           <h2>{{ $feature.title }}</h2>
           {{ range $feature.body }}<p>{{ . }}</p>{{ end }}
+        </div>
+      </article>
+      {{ end }}
+
+      {{ with $portal.word_cloud }}
+      <article class="portal-story-slide portal-story-word-cloud" data-story-title="{{ .title }}" data-story-description="{{ .subtitle }}；社課、團練、演出、比賽與喜歡的曲目都在竹韻。" data-story-duration="{{ .duration | default 12000 }}">
+        <div class="portal-story-cloud" aria-label="竹韻活動與曲目文字雲">
+          {{ range $index, $label := .activities }}<span class="portal-story-cloud-activity" style="--cloud-index: {{ $index }}">{{ $label }}</span>{{ end }}
+          {{ range $index, $label := .repertoire }}<span class="portal-story-cloud-song" style="--cloud-index: {{ add $index 27 }}">{{ $label }}</span>{{ end }}
+        </div>
+        <div class="portal-story-cloud-center">
+          <p class="portal-story-kicker">{{ .kicker }}</p>
+          <h2>{{ .title }}</h2>
+          <p>{{ .subtitle }}</p>
+          <div class="portal-story-cloud-legend" aria-hidden="true"><span>社團活動</span><span>我們想吹的歌</span></div>
         </div>
       </article>
       {{ end }}

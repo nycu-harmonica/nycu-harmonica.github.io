@@ -40,18 +40,120 @@ program:
       poster: images/portal-songs/gudan-poster.jpg
       credit: 畫面｜林依晨〈孤單北半球〉MV・滾石唱片
 
-# 曲目之後、入社之前的介紹頁。body 一項是一段。
+# 臺上共有四把琴，但只有三種口琴：兩把半音階、一把和弦、一把低音。
+instruments:
+  - kicker: THREE HARMONICAS ・ 01/03
+    title: 半音階口琴 × 2
+    role: 旋律｜像樂團的小提琴
+    body: 右側的按鍵可以吹出升降音。臺上兩位演奏者分別擔任第一、第二部，在主旋律與和聲之間接力。
+    media:
+      src: images/portal-instruments/chromatic.webp
+      alt: 竹韻社員演奏半音階口琴
+      credit: 竹韻歷史影像｜2015 期末音樂會
+  - kicker: THREE HARMONICAS ・ 02/03
+    title: 和弦口琴
+    role: 節奏與和聲｜一個人撐起整組伴奏
+    body: 琴身接近半公尺，一次能吹出完整和弦。它把每一拍接起來，讓四把口琴真的像一個樂團。
+    media:
+      src: images/portal-instruments/chord.webp
+      alt: 竹韻社員演奏長型和弦口琴
+      credit: 竹韻歷史影像｜2015 期末音樂會
+  - kicker: THREE HARMONICAS ・ 03/03
+    title: 低音口琴
+    role: 低音｜全場最低的地基
+    body: 上下兩排的低音口琴負責最深、最穩的聲音。旋律飛得再高，都由它把整首曲子牢牢托住。
+    media:
+      src: images/portal-instruments/bass.webp
+      alt: 竹韻社員演奏雙層低音口琴
+      credit: 竹韻歷史影像｜2015 期末音樂會
+
+# 曲目和樂器之後、入社之前的介紹頁。body 一項是一段。
 features:
-  - kicker: WHAT'S ON STAGE
-    title: 臺上四把琴，其實是四種樂器
-    body:
-      - 兩把半音階口琴負責旋律，像樂團的小提琴；和弦口琴近半公尺長，一把琴就是整組節奏；低音口琴則是全場最低的聲音。
-      - 四個人，就是一個樂團——這就是口琴合奏。
   - kicker: SINCE 1968 ・ REBORN 2026
-    title: 沉寂多年，今年夏天重新開始
+    title: 沉寂多年，那一夜我們重新聚在一起
+    duration: 10000
     body:
-      - 竹韻的故事從 1968 年的「交大口琴社」開始，中間沉寂了很多年，直到 2026 年夏天，一群捨不得的人把它重新開了起來。你聽到的這場演出，來自復社後的第一個學期。
-      - 社課每週二晚上在學生活動中心 1 樓聯誼廳，從零開始教——不會看譜、沒摸過口琴，都沒關係。
+      - 2026 年 8 月 9 日，老社員與新夥伴在陽明交大重逢。從 1968 年的交大口琴社，到沉寂後復社，竹韻重新有人接著吹下去。
+      - 你現在聽到的演出，來自復社後第一個學期；下一段旋律，等新社員一起接下去。
+    media:
+      src: images/portal-history/revival-tea-2026.webp
+      alt: 2026 年 8 月 9 日竹韻復社茶會大合照
+      credit: 2026 復社茶會｜陽明交大學生活動中心
+      pan: left-to-right
+
+word_cloud:
+  kicker: THIS IS BAMBOO MELODY
+  title: 招募社員
+  subtitle: 歡迎零基礎・一起吹喜歡的歌
+  duration: 12000
+  activities:
+    - 臺灣口琴音樂節 THMF
+    - 全國學生音樂比賽
+    - 期末演出
+    - 半音階口琴
+    - 複音口琴
+    - 和弦口琴
+    - 倍低音口琴
+    - 合奏團練
+    - 固定社課
+    - 校外參演
+    - 成果發表
+    - 迎新
+    - 社遊
+    - 聯合社課
+    - 快閃演出
+    - 聚餐
+    - 樂器體驗
+    - 認識新朋友
+    - 分部練習
+    - 技巧交流
+    - 大合奏・五重奏
+    - 一起練琴
+    - 社課完吃宵夜
+    - 曲目排練
+    - 音樂交流
+    - 在 Discord 揪練琴
+    - 玩社長架的 Hermes Agent
+  repertoire:
+    - 宮崎駿組曲
+    - 名偵探柯南組曲
+    - 哈利波特組曲
+    - 加勒比海盜
+    - 小幸運
+    - 直至世界盡頭 — 灌籃高手
+    - From the Start — Laufey
+    - "Ashes on The Fire — 進擊的巨人最終季"
+    - 情熱大陸
+    - "Alicia — Clair Obscur: Expedition 33"
+    - Somnus — FINAL FANTASY XV
+    - Fallen Down — Undertale
+    - 載著你 — 天空之城
+    - "Zelda: Breath of the Wild"
+    - Just the Way You Are — Bruno Mars
+    - One Night in 北京
+    - TOTORO Suite — 龍貓組曲
+    - Tico Tico
+    - 六兆年と一夜物語
+    - 晴る — ヨルシカ
+    - 魔戒主題曲
+    - 大黃蜂的飛行
+    - 千本桜
+    - 夜に駆ける — YOASOBI
+    - You Raise Me Up
+    - 怪獸 — 魚韻
+    - Theme of the Green Hornet — 青蜂俠
+    - Oblivion
+    - 羅馬尼亞狂想曲
+    - 道別的夏天 — 來自紅花坂
+    - Sabre Dance — 劍舞
+    - Bésame Mucho
+    - 孤單北半球
+    - 威廉泰爾序曲
+    - The Good, the Bad and the Ugly
+    - 風之丘
+    - Kahoot! Lobby Tune
+    - 港都夜雨
+    - 狂暴之海
 
 join:
   kicker: JOIN BAMBOO MELODY

@@ -88,6 +88,7 @@
   }
 
   function updatePauseButton() {
+    player.classList.toggle("is-manual-paused", manualPause || ended);
     if (!pauseButton) return;
     const showPlay = manualPause || ended;
     pauseButton.textContent = showPlay ? "▶" : "Ⅱ";
