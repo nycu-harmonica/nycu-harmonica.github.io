@@ -293,17 +293,37 @@
     if (current !== restoredStory - 1) show(restoredStory - 1);
   });
 
+  async function copyStoryUrl(url) {
+    const input = document.createElement("textarea");
+    input.value = url;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.append(input);
+    input.select();
+    input.setSelectionRange(0, input.value.length);
+    let copied = document.execCommand("copy");
+    input.remove();
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(url);
+        copied = true;
+      } catch (_error) {
+        // The synchronous selection copy above remains available in older embedded browsers.
+      }
+    }
+    if (!copied) throw new Error("Copy command failed");
+  }
+
   player.querySelector("[data-story-share]")?.addEventListener("click", async (event) => {
     const button = event.currentTarget;
     try {
-      if (navigator.share) await navigator.share({ title: document.title, url: window.location.href });
-      else {
-        await navigator.clipboard.writeText(window.location.href);
-        button.textContent = "已複製";
-        window.setTimeout(() => { button.textContent = "分享"; }, 1600);
-      }
+      await copyStoryUrl(window.location.href);
+      button.textContent = "已複製";
+      window.setTimeout(() => { button.textContent = "分享"; }, 1600);
     } catch (error) {
-      if (error?.name !== "AbortError") button.textContent = "請複製網址";
+      button.textContent = "複製失敗";
+      window.setTimeout(() => { button.textContent = "分享"; }, 1600);
     }
   });
 

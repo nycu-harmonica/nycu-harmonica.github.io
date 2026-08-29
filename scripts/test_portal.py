@@ -20,6 +20,7 @@ class PortalParser(HTMLParser):
         self.media_credits = 0
         self.song_media_sources: list[str] = []
         self.instrument_slides = 0
+        self.ensemble_slides = 0
         self.instrument_media_sources: list[str] = []
         self.feature_pan_images = 0
         self.keyword_story_slides = 0
@@ -32,6 +33,7 @@ class PortalParser(HTMLParser):
         self.qr_sources: list[str] = []
         self._inside_story_progress = 0
         self._inside_link_list = 0
+        self.story_titles: list[str] = []
 
     def handle_starttag(self, tag: str, attrs) -> None:
         values = dict(attrs)
@@ -42,6 +44,9 @@ class PortalParser(HTMLParser):
         classes = (values.get("class") or "").split()
         if "portal-story-slide" in classes:
             self.story_slides += 1
+            self.story_titles.append(values.get("data-story-title", ""))
+        if "portal-story-ensemble" in classes:
+            self.ensemble_slides += 1
         if "portal-story-instrument" in classes:
             self.instrument_slides += 1
         if "portal-story-keywords" in classes:
@@ -101,11 +106,13 @@ def main() -> None:
     mobile = parse("p/index.html")
     screen = parse("p/screen/index.html")
     assert mobile.has_story_player, "Mobile Portal is missing its story player"
-    assert mobile.story_slides == 13, "Mobile Portal must render intro, four songs, three instruments, history, two keyword stories, join, and social stories"
+    assert mobile.story_slides == 14, "Mobile Portal must render intro, four songs, ensemble intro, three instruments, history, two keyword stories, join, and social stories"
     assert mobile.story_progress_segments == mobile.story_slides, "Every story needs a progress segment"
     assert mobile.song_visuals == 4, "Every song story needs a movie or MV visual"
     assert mobile.song_videos == 3, "Three song stories must use lightweight looping video"
     assert mobile.instrument_slides == 3, "The three harmonica types need one story each"
+    assert mobile.ensemble_slides == 1, "Harmonica ensemble needs an introduction before the instrument stories"
+    assert mobile.story_titles.index("四把口琴，怎麼變成一個樂團？") < mobile.story_titles.index("半音階口琴"), "Ensemble introduction must precede instrument details"
     assert len(mobile.instrument_media_sources) == 3, "Every harmonica story needs a real instrument photo"
     assert mobile.feature_pan_images == 1, "The revival photo must pan from left to right"
     assert mobile.keyword_story_slides == 2, "Activities and repertoire need separate keyword stories"
@@ -125,6 +132,9 @@ def main() -> None:
     assert screen.qr_sources, "Projection screen is missing its fixed Portal QR Code"
     qr = PUBLIC / screen.qr_sources[0].split("?", 1)[0].lstrip("/")
     assert qr.is_file() and qr.stat().st_size > 500, "Portal QR asset is missing or empty"
+    portal_js = (ROOT / "assets" / "js" / "portal.js").read_text(encoding="utf-8")
+    assert "navigator.share" not in portal_js, "Share must copy the current story URL directly"
+    assert "navigator.clipboard?.writeText" in portal_js, "Share needs a direct clipboard path"
     print("Portal output check passed.")
 
 

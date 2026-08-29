@@ -6,7 +6,7 @@
     {{ $officialLinks = $officialLinks | append . }}
   {{ end }}
 {{ end }}
-{{ $storyCount := add (add (add (add (add 3 (len $portal.program)) (len ($portal.instruments | default (slice)))) (len ($portal.features | default (slice)))) (len ($portal.keyword_stories | default (slice)))) (len ($portal.stories | default (slice))) }}
+{{ $storyCount := add (add (add (add (add 4 (len $portal.program)) (len ($portal.instruments | default (slice)))) (len ($portal.features | default (slice)))) (len ($portal.keyword_stories | default (slice)))) (len ($portal.stories | default (slice))) }}
 
 <div class="portal-story-shell" data-story-player data-default-duration="{{ $portal.story_duration | default 7000 }}">
   <section class="portal-story-frame" aria-label="竹韻演出限時動態">
@@ -54,6 +54,21 @@
           <h2>{{ $song.title }}</h2>
           <p class="portal-story-credit">{{ $song.credit }}</p>
           {{ with $song.note }}<p class="portal-story-song-note">{{ . }}</p>{{ end }}
+        </div>
+      </article>
+      {{ end }}
+
+      {{ with $portal.ensemble }}
+      <article class="portal-story-slide portal-story-ensemble" data-story-title="{{ .title }}" data-story-description="{{ .body }}">
+        <div class="portal-story-ensemble-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="portal-story-copy">
+          <p class="portal-story-kicker">{{ .kicker }}</p>
+          <h2>{{ .title }}</h2>
+          <p>{{ .body }}</p>
+          <dl class="portal-story-ensemble-stats">
+            {{ range .stats }}<div><dt>{{ .value }}</dt><dd>{{ .label }}</dd></div>{{ end }}
+          </dl>
+          <p class="portal-story-ensemble-footer">{{ .footer }}</p>
         </div>
       </article>
       {{ end }}

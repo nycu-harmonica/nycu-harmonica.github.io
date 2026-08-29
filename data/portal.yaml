@@ -33,17 +33,31 @@ program:
       credit: 畫面｜Bruno Mars〈Just the Way You Are〉MV
   - title: 孤單北半球
     credit: 林依晨
-    note: 壓軸回到華語歌。2004 年的旋律，用四把口琴重新編過——聽到這裡有一點點想學的話，繼續往下滑。
+    note: 壓軸回到華語歌。2004 年的旋律，用四把口琴重新編過。聽完這首，接著看看臺上三種不一樣的口琴。
     media:
       type: video
       src: images/portal-songs/gudan.mp4
       poster: images/portal-songs/gudan-poster.jpg
       credit: 畫面｜林依晨〈孤單北半球〉MV・滾石唱片
 
+# 曲目結束後，先介紹口琴重奏，再拆解臺上的三種口琴。
+ensemble:
+  kicker: HARMONICA ENSEMBLE
+  title: 四把口琴，怎麼變成一個樂團？
+  body: 口琴重奏把旋律、和聲、節奏與低音分給不同聲部。有人唱主旋律，有人補和聲，也有人撐住節拍與低音——合在一起，就像一支縮小的樂團。
+  stats:
+    - value: "4"
+      label: 位演奏者
+    - value: "3"
+      label: 種口琴
+    - value: "1"
+      label: 個完整樂團
+  footer: 這次的編制是兩把半音階口琴、一把和弦口琴與一把低音口琴。
+
 # 臺上共有四把琴，但只有三種口琴：兩把半音階、一把和弦、一把低音。
 instruments:
   - kicker: THREE HARMONICAS ・ 01/03
-    title: 半音階口琴 × 2
+    title: 半音階口琴
     role: 旋律｜像樂團的小提琴
     body: 右側的按鍵可以吹出升降音。臺上兩位演奏者分別擔任第一、第二部，在主旋律與和聲之間接力。
     media:
