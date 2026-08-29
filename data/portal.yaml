@@ -196,14 +196,14 @@ faq:
     answer:
       - 一學期社費 500 元，一年社費 1,000 元。
     media:
-      src: images/portal-faq/official-site.webp
+      src: images/portal-faq/official-site-portrait.webp
       alt: 竹韻口琴社官方網站首頁
     duration: 8000
   - question: 社課什麼時候？在哪裡？
     answer:
       - 開學後每週二晚上，在學生活動中心 1 樓聯誼廳。
     media:
-      src: images/portal-faq/activity-center.webp
+      src: images/portal-faq/activity-center-portrait.webp
       alt: 竹韻社員在陽明交大學生活動中心合照
     duration: 7000
 
@@ -216,12 +216,12 @@ join:
   alt_label: 先進 Discord 潛水看看也可以
   alt_url: /discord/
   media:
-    src: images/portal-faq/join-form.webp
+    src: images/portal-faq/join-form-portrait.webp
     alt: 竹韻口琴社入社表單
 
 follow:
   media:
-    src: images/portal-faq/instagram.webp
+    src: images/portal-faq/instagram-portrait.webp
     alt: 竹韻口琴社 Instagram 頁面
 
 # 未來從 IG 匯入的公開限時動態放在這裡，會接在演出節目之後。
