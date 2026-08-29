@@ -43,7 +43,7 @@ program:
 # 曲目結束後，先介紹口琴重奏，再拆解臺上的三種口琴。
 ensemble:
   kicker: HARMONICA ENSEMBLE
-  title: 四把口琴，怎麼變成一個樂團？
+  title: 口琴重奏
   body: 口琴重奏把旋律、和聲、節奏與低音分給不同聲部。有人唱主旋律，有人補和聲，也有人撐住節拍與低音——合在一起，就像一支縮小的樂團。
   media:
     type: video
@@ -51,13 +51,6 @@ ensemble:
     poster: images/portal-ensemble/sirius-poster.jpg
     credit: 畫面｜天狼星口琴樂團〈殘酷天使的行動綱領〉MV
     source_url: https://www.youtube.com/watch?v=4W_CZl4FBdY
-  stats:
-    - value: "4"
-      label: 位演奏者
-    - value: "3"
-      label: 種口琴
-    - value: "1"
-      label: 個完整樂團
   footer: 這次的編制是兩把半音階口琴、一把和弦口琴與一把低音口琴。
 
 # 臺上共有四把琴，但只有三種口琴：兩把半音階、一把和弦、一把低音。
