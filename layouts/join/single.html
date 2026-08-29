@@ -2,12 +2,8 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ .Title }}｜{{ .Site.Title }}</title>
-  <meta name="description" content="{{ .Params.description }}">
+  {{ partial "head.html" . }}
   <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="{{ .Permalink }}">
   <meta http-equiv="refresh" content="0; url={{ $target }}">
   <script>window.location.replace({{ $target | jsonify | safeJS }});</script>
   <style>
@@ -19,6 +15,7 @@
 </head>
 <body>
   <main>
+    <h1 data-seo-heading>加入陽明交大竹韻口琴社</h1>
     <p>正在前往竹韻口琴社入社表單……</p>
     <p><a href="{{ $target }}">若未自動前往，請點此開啟表單</a></p>
   </main>

@@ -1,10 +1,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-{{- $title := .Site.Title }}
-{{- if not .IsHome }}{{ $title = printf "%s｜%s" .Title .Site.Title }}{{ end }}
+{{- $title := .Params.seoTitle | default .Title | default .Site.Title }}
+{{- if and (not .IsHome) (not .Params.seoTitle) }}{{ $title = printf "%s｜%s" $title .Site.Title }}{{ end }}
 <title>{{ $title }}</title>
 {{- $desc := .Params.description | default .Summary | default .Site.Params.description }}
 <meta name="description" content="{{ $desc | plainify | truncate 150 }}">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ $desc | plainify | truncate 150 }}">
 <meta property="og:type" content="website">
@@ -14,6 +15,11 @@
 <meta property="og:image:width" content="320">
 <meta property="og:image:height" content="320">
 <meta property="og:image:alt" content="竹韻口琴社藍白識別圖">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc | plainify | truncate 150 }}">
+<meta name="twitter:image" content="{{ "images/bamboo-logo.webp" | absURL }}">
+<meta name="twitter:image:alt" content="竹韻口琴社藍白識別圖">
 <link rel="canonical" href="{{ .Permalink }}">
 <link rel="icon" href="{{ "favicon.png" | relURL }}" type="image/png">
 <link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
@@ -22,4 +28,36 @@
 {{ end -}}
 {{ with resources.Get "css/main.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+{{ end }}
+{{- if .IsHome }}
+{{- $sameAs := slice }}
+{{- range site.Data.generated.links | default (slice) }}
+  {{- if in (slice "instagram" "facebook" "youtube") .key }}{{ $sameAs = $sameAs | append .url }}{{ end }}
+{{- end }}
+{{- $organizationID := printf "%s#organization" .Permalink }}
+{{- $websiteID := printf "%s#website" .Permalink }}
+{{- $alternateNames := slice "陽明交大竹韻口琴社" "交大口琴社" "Bamboo Melody Harmonica Club" }}
+{{- $organization := dict
+  "@type" "Organization"
+  "@id" $organizationID
+  "name" "國立陽明交通大學竹韻口琴社"
+  "alternateName" $alternateNames
+  "url" .Permalink
+  "logo" (dict "@type" "ImageObject" "url" ("images/bamboo-logo.webp" | absURL) "width" 320 "height" 320)
+  "email" site.Params.contactEmail
+  "sameAs" $sameAs
+-}}
+{{- $website := dict
+  "@type" "WebSite"
+  "@id" $websiteID
+  "url" .Permalink
+  "name" "陽明交大竹韻口琴社"
+  "alternateName" $alternateNames
+  "inLanguage" "zh-TW"
+  "publisher" (dict "@id" $organizationID)
+-}}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" (slice $organization $website) | jsonify | safeJS }}</script>
+{{- end }}
+{{ with resources.Get "js/seo-csr.js" | minify | fingerprint }}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
 {{ end }}

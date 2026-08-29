@@ -1,5 +1,8 @@
 ---
 title: 關於我們
+seoTitle: 關於竹韻｜陽明交大竹韻口琴社
+heading: 關於國立陽明交通大學竹韻口琴社
+description: 認識陽明交大竹韻口琴社的沿革、每週社課、口琴教學、樂器需求、支持方式與官方聯絡管道。
 layout: about
 menu_note: 社團介紹、支持與聯絡方式
 ---

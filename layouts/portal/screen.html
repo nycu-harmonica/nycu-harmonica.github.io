@@ -13,7 +13,7 @@
 
   <section class="portal-screen-copy">
     <p class="portal-screen-eyebrow">WELCOME TO OUR PERFORMANCE</p>
-    <h1>{{ $portal.title }}</h1>
+    <h1 data-seo-heading>{{ $portal.title }}演出投影畫面<span class="sr-only" data-seo-heading-state></span></h1>
     <p>{{ $portal.subtitle }}</p>
   </section>
 
@@ -21,7 +21,7 @@
     <p class="portal-screen-section-label" id="screen-program-title">TODAY'S PROGRAM</p>
     <ol>
       {{ range $index, $song := $portal.program }}
-      <li data-program-item="{{ add $index 1 }}">
+      <li data-program-item="{{ add $index 1 }}" data-program-title="{{ $song.title }}" data-program-credit="{{ $song.credit }}">
         <span>{{ printf "%02d" (add $index 1) }}</span>
         <strong>{{ $song.title }}</strong>
         <small>{{ $song.credit }}</small>

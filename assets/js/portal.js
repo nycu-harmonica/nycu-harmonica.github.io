@@ -22,6 +22,12 @@ import { A11y, Autoplay, Keyboard } from "swiper/modules";
       if (selected) url.searchParams.set("song", String(selected));
       else url.searchParams.delete("song");
       window.history.replaceState({}, "", url);
+      const current = selected ? items[selected - 1] : null;
+      window.BambooSEO?.setState(current ? {
+        title: `第 ${selected} 首：${current.dataset.programTitle}`,
+        heading: `目前曲目第 ${selected} 首：${current.dataset.programTitle}`,
+        description: `竹韻演出投影畫面目前標示第 ${selected} 首《${current.dataset.programTitle}》，曲目資訊：${current.dataset.programCredit}。`,
+      } : null);
     };
 
     setCurrentSong(Number(new URL(window.location.href).searchParams.get("song")));
@@ -117,6 +123,11 @@ import { A11y, Autoplay, Keyboard } from "swiper/modules";
     if (storyNumber > 1) url.searchParams.set("story", String(storyNumber));
     else url.searchParams.delete("story");
     window.history.replaceState(window.history.state, "", url);
+    window.BambooSEO?.setState(storyNumber > 1 ? {
+      title: activeSlide?.dataset.storyTitle,
+      heading: activeSlide?.dataset.storyTitle,
+      description: activeSlide?.dataset.storyDescription,
+    } : null);
     try { window.sessionStorage.setItem(storyStorageKey, String(storyNumber)); } catch (_error) {}
     if (announcer) announcer.textContent = `${storyNumber} / ${instance.slides.length}：${activeSlide?.dataset.storyTitle || "竹韻限時動態"}`;
   }
