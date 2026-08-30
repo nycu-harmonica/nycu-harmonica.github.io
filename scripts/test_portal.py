@@ -36,6 +36,7 @@ class PortalParser(HTMLParser):
         self.faq_slides = 0
         self.end_story_images = 0
         self.end_story_image_sources: list[str] = []
+        self.welcome_visual_sources: list[str] = []
         self.product_links: list[dict[str, str | None]] = []
         self.social_links = 0
         self.social_links_open_new_tab = 0
@@ -76,6 +77,8 @@ class PortalParser(HTMLParser):
         if "portal-story-end-visual" in classes:
             self.end_story_images += 1
             self.end_story_image_sources.append(values.get("src", ""))
+        if "portal-story-welcome-visual" in classes:
+            self.welcome_visual_sources.append(values.get("src", ""))
         if tag == "a" and values.get("href", "").startswith(("https://harmonica.tw/", "https://shopee.tw/", "https://dming.co/")):
             self.product_links.append(values)
         if "portal-story-keyword-term-activity" in classes:
@@ -148,6 +151,11 @@ def main() -> None:
     assert mobile.has_story_player, "Mobile Portal is missing its story player"
     assert mobile.story_slides == 17, "Mobile Portal must render intro, four songs, ensemble intro, three instruments, history, two keyword stories, three FAQs, join, and social stories"
     assert mobile.story_progress_segments == mobile.story_slides, "Every story needs a progress segment"
+    assert len(mobile.welcome_visual_sources) == 2, "Welcome story needs two depth layers"
+    assert len(set(mobile.welcome_visual_sources)) == 1, "Welcome depth layers must use the same four-player cutout"
+    welcome_visual = PUBLIC / mobile.welcome_visual_sources[0].lstrip("/")
+    assert welcome_visual.is_file() and welcome_visual.stat().st_size > 200_000, "Welcome story needs the supplied high-resolution photo"
+    assert webp_dimensions(welcome_visual) == (3840, 2160), "Welcome photo must retain its original resolution"
     assert mobile.song_visuals == 4, "Every song story needs a movie or MV visual"
     assert mobile.song_videos == 3, "Three song stories must use lightweight looping video"
     assert mobile.instrument_slides == 3, "The three harmonica types need one story each"
@@ -207,6 +215,9 @@ def main() -> None:
     qr = PUBLIC / screen.qr_sources[0].split("?", 1)[0].lstrip("/")
     assert qr.is_file() and qr.stat().st_size > 500, "Portal QR asset is missing or empty"
     portal_js = (ROOT / "assets" / "js" / "portal.js").read_text(encoding="utf-8")
+    portal_css = (ROOT / "assets" / "css" / "portal.css").read_text(encoding="utf-8")
+    assert "portal-story-welcome-pan 7s" in portal_css, "Welcome story must pan across all four performers"
+    assert ".portal-story-welcome-visual-back" in portal_css and ".portal-story-welcome-visual-front" in portal_css, "Welcome story must split the performers into back and front depth layers"
     assert "navigator.share" not in portal_js, "Share must copy the current story URL directly"
     assert "navigator.clipboard?.writeText" in portal_js, "Share needs a direct clipboard path"
     print("Portal output check passed.")

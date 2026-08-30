@@ -195,8 +195,77 @@
 
 .portal-story-welcome {
   background:
-    radial-gradient(circle at 82% 26%, rgba(111, 207, 219, 0.48), transparent 31%),
-    linear-gradient(145deg, #1d819a 0%, #0b3e52 100%);
+    radial-gradient(circle at 80% 20%, rgba(73, 191, 199, 0.38), transparent 33%),
+    linear-gradient(155deg, #126f80 0%, #073b4b 55%, #031d29 100%);
+}
+
+.portal-story-welcome::after {
+  background:
+    linear-gradient(180deg, rgba(2, 20, 27, 0.08) 0%, rgba(2, 20, 27, 0.03) 31%, rgba(2, 24, 32, 0.32) 50%, rgba(2, 22, 30, 0.88) 72%, #031720 100%);
+}
+
+.portal-story-welcome-scene {
+  position: absolute;
+  z-index: 0;
+  top: 8%;
+  left: 0;
+  width: 238%;
+  aspect-ratio: 16 / 9;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.portal-story-welcome-scene::after {
+  position: absolute;
+  z-index: 2;
+  top: 38%;
+  right: 0;
+  left: 0;
+  height: 25%;
+  background: linear-gradient(180deg, transparent, rgba(6, 57, 69, 0.12), transparent);
+  content: "";
+}
+
+.portal-story-welcome-visual {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+}
+
+.portal-story-welcome-visual-back {
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 47%, transparent 62%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 47%, transparent 62%);
+  filter: saturate(0.72) brightness(0.72);
+  opacity: 0.62;
+}
+
+.portal-story-welcome-visual-front {
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(180deg, transparent 40%, #000 56%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 40%, #000 56%, #000 100%);
+  filter: saturate(0.92) brightness(0.9);
+  opacity: 0.96;
+}
+
+.portal-story-welcome .portal-story-copy {
+  text-shadow: 0 0.12rem 1.2rem rgba(0, 0, 0, 0.52);
+}
+
+.portal-story-slide.is-active .portal-story-welcome-scene {
+  animation: portal-story-welcome-pan 7s cubic-bezier(0.42, 0, 0.58, 1) both;
+}
+
+.portal-story-shell.is-paused .portal-story-welcome-scene,
+.portal-story-shell.is-manual-paused .portal-story-welcome-scene {
+  animation-play-state: paused;
+}
+
+@keyframes portal-story-welcome-pan {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-58%, 0, 0); }
 }
 
 .portal-story-song-0 { background: linear-gradient(150deg, #0f6b84, #092e40 73%); }
@@ -1180,6 +1249,10 @@
   .portal-story-slide.is-active .portal-story-feature-pan {
     animation: none;
     object-position: center;
+  }
+  .portal-story-slide.is-active .portal-story-welcome-scene {
+    animation: none;
+    transform: translate3d(-29%, 0, 0);
   }
   .portal-story-ensemble-rings span { animation: none; }
   .portal-story-keyword-tunnel {

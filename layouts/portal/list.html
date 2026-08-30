@@ -27,7 +27,10 @@
 
     <div class="portal-story-track" data-story-track>
       <article class="portal-story-slide portal-story-welcome" data-story-title="{{ $portal.welcome }}" data-story-description="{{ $portal.intro }}">
-        <img class="portal-story-watermark" src="{{ "images/bamboo-hero-mark.webp" | relURL }}" alt="" aria-hidden="true">
+        <div class="portal-story-welcome-scene" aria-hidden="true">
+          <img class="portal-story-welcome-visual portal-story-welcome-visual-back" src="{{ "images/portal-welcome/four-harmonica-players.webp" | relURL }}" alt="">
+          <img class="portal-story-welcome-visual portal-story-welcome-visual-front" src="{{ "images/portal-welcome/four-harmonica-players.webp" | relURL }}" alt="">
+        </div>
         <div class="portal-story-copy">
           <p class="portal-story-kicker">{{ $portal.kicker }}</p>
           <span class="portal-story-live"><i aria-hidden="true"></i>{{ $portal.status }}</span>
