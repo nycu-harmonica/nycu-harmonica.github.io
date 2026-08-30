@@ -203,6 +203,8 @@ def main() -> None:
     assert "join-form-portrait.webp" not in mobile_html, "Join story must not reuse the form header group photo"
     assert "activity-center-portrait.webp" not in mobile_html, "Lesson-location FAQ must not reuse the revival group photo"
     assert "activity-center-map-portrait.webp" in mobile_html, "Lesson-location FAQ must show the unique activity-center map"
+    assert "instagram-profile-portrait.webp" in mobile_html, "Follow story must use the fixed 540x960 Instagram profile screenshot"
+    assert "instagram-portrait.webp" not in mobile_html, "Follow story must not reuse the previous Instagram crop"
     assert "送你一個小口琴吊飾" in mobile_html, "Join story must describe the actual harmonica charm gift"
     join_description = mobile.story_descriptions[mobile.story_titles.index("下一段旋律，換你加入")]
     assert "500 元" not in join_description and "1,000 元" not in join_description, "Join story must leave numeric pricing to the fee FAQ"

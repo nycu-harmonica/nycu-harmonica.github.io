@@ -224,8 +224,8 @@ join:
 
 follow:
   media:
-    src: images/portal-faq/instagram-portrait.webp
-    alt: 竹韻口琴社 Instagram 頁面
+    src: images/portal-faq/instagram-profile-portrait.webp
+    alt: 竹韻口琴社 Instagram 個人檔案與貼文
 
 # 未來從 IG 匯入的公開限時動態放在這裡，會接在演出節目之後。
 # media_type 可用 image 或 video；src 使用 static/ 底下的站內路徑。
