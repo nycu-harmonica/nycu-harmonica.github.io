@@ -163,8 +163,11 @@
           <div class="portal-story-product-links" aria-label="半音階口琴參考琴款">
             {{ range . }}
             <a class="portal-story-product-row" href="{{ .url }}" target="_blank" rel="noopener noreferrer">
-              <strong>{{ .name }}</strong>
-              <span>{{ .price }} <i aria-hidden="true">↗</i></span>
+              <span class="portal-story-product-name">
+                <strong>{{ .name }}</strong>
+                <small>{{ .model }}</small>
+              </span>
+              <span class="portal-story-product-price">{{ .price }} <i aria-hidden="true">↗</i></span>
             </a>
             {{ end }}
           </div>

@@ -414,18 +414,32 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.8rem;
-  min-height: 2.35rem;
+  min-height: 2.8rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
 }
-.portal-story-product-row > strong {
+.portal-story-product-name {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+}
+.portal-story-product-name > strong {
   overflow: hidden;
   font-size: 0.76rem;
   font-weight: 750;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.portal-story-product-row > span {
+.portal-story-product-name > small {
+  overflow: hidden;
+  color: rgba(226, 244, 247, 0.72);
+  font-size: 0.62rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.portal-story-product-price {
   flex: none;
   padding: 0.28rem 0;
   color: #fff;
@@ -436,7 +450,7 @@
   text-underline-offset: 0.22em;
 }
 .portal-story-product-row:hover { color: #bde9ef; text-decoration: none; }
-.portal-story-product-row:hover > span { color: #bde9ef; }
+.portal-story-product-row:hover .portal-story-product-price { color: #bde9ef; }
 .portal-story-product-row i { font-style: normal; }
 .portal-story-follow {
   background:

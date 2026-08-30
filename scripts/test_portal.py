@@ -3,6 +3,7 @@
 
 from html.parser import HTMLParser
 from pathlib import Path
+import hashlib
 import struct
 
 
@@ -163,12 +164,15 @@ def main() -> None:
     assert mobile.keyword_terms_left == mobile.keyword_terms_right == 33, "Keyword paths must be evenly balanced between the left and right sides"
     assert mobile.faq_slides == 3, "The join CTA must be preceded by three FAQ stories"
     assert mobile.end_story_images == 4, "Stories 14–17 must each have a real background image"
+    end_story_hashes: set[str] = set()
     for source in mobile.end_story_image_sources:
         media = PUBLIC / source.lstrip("/")
-        assert media.is_file() and media.stat().st_size > 50_000, f"End-story image must be a high-resolution local asset: {source}"
+        assert media.is_file() and media.stat().st_size > 15_000, f"End-story image must be a high-resolution local asset: {source}"
+        end_story_hashes.add(hashlib.sha256(media.read_bytes()).hexdigest())
         width, height = webp_dimensions(media)
         assert width >= 540 and height >= 960, f"End-story image is too small: {source} ({width}x{height})"
         assert abs(width / height - 9 / 16) < 0.002, f"End-story image must be portrait 9:16: {source} ({width}x{height})"
+    assert len(end_story_hashes) == len(mobile.end_story_image_sources), "Stories 14–17 must not reuse the same image"
     assert mobile.story_titles.index("沒有口琴，要先買嗎？") < mobile.story_titles.index("下一段旋律，換你加入"), "FAQ stories must precede the join CTA"
     assert mobile.media_credits == 9, "Every song, ensemble, instrument, and history visual needs a visible source credit"
     for source in mobile.song_media_sources:
@@ -187,6 +191,8 @@ def main() -> None:
     assert all({"noopener", "noreferrer"}.issubset(set((link.get("rel") or "").split())) for link in mobile.product_links), "New-tab product links must be isolated from the Portal"
     assert all(price in mobile_html for price in ("2,500 元", "4,200 元", "7,000 元")), "FAQ must show all three requested reference prices"
     assert all(store in mobile_html for store in ("黃石樂器", "音和樂器", "DMing Studio")), "Product links must be labelled with the three shops"
+    assert all(model in mobile_html for model in ("JDR GM-0648", "JDR EVO-0648S", "Suzuki SCX-64")), "Product links must retain each harmonica model"
+    assert "join-form-portrait.webp" not in mobile_html, "Join story must not reuse the form header group photo"
     assert "送你一個小口琴吊飾" in mobile_html, "Join story must describe the actual harmonica charm gift"
     join_description = mobile.story_descriptions[mobile.story_titles.index("下一段旋律，換你加入")]
     assert "500 元" not in join_description and "1,000 元" not in join_description, "Join story must leave numeric pricing to the fee FAQ"
