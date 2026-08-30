@@ -206,8 +206,8 @@ faq:
     answer:
       - 開學後每週二晚上，在學生活動中心 1 樓聯誼廳。
     media:
-      src: images/portal-faq/activity-center-portrait.webp
-      alt: 竹韻社員在陽明交大學生活動中心合照
+      src: images/portal-faq/activity-center-map-portrait.webp
+      alt: 陽明交大學生活動中心位置與入口
     duration: 7000
 
 join:

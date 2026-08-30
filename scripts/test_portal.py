@@ -193,6 +193,8 @@ def main() -> None:
     assert all(store in mobile_html for store in ("黃石樂器", "音和樂器", "DMing Studio")), "Product links must be labelled with the three shops"
     assert all(model in mobile_html for model in ("JDR GM-0648", "JDR EVO-0648S", "Suzuki SCX-64")), "Product links must retain each harmonica model"
     assert "join-form-portrait.webp" not in mobile_html, "Join story must not reuse the form header group photo"
+    assert "activity-center-portrait.webp" not in mobile_html, "Lesson-location FAQ must not reuse the revival group photo"
+    assert "activity-center-map-portrait.webp" in mobile_html, "Lesson-location FAQ must show the unique activity-center map"
     assert "送你一個小口琴吊飾" in mobile_html, "Join story must describe the actual harmonica charm gift"
     join_description = mobile.story_descriptions[mobile.story_titles.index("下一段旋律，換你加入")]
     assert "500 元" not in join_description and "1,000 元" not in join_description, "Join story must leave numeric pricing to the fee FAQ"
