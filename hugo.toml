@@ -54,7 +54,7 @@ expires = "2026-08-10T00:00:00+08:00"
 
 [params.websiteAgent]
 enabled = true
-endpoint = "https://skyhong-cclabmacmini.tailf76d1d.ts.net:8443/ask"
+endpoint = "https://sky-mini.tailf76d1d.ts.net:8443/ask"
 maxQuestionChars = 500
 
 [[menus.main]]
