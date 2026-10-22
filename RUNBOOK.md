@@ -19,7 +19,7 @@
 ## 0. 「詢問竹韻」公開問答
 
 - 官網本身仍完全部署在 GitHub Pages。問答服務離線時，只會顯示暫時無法回答；其他頁面、Sheet、Calendar 和 Facebook 相片連結不受影響。
-- 問答只讀已核准的公開網站內容與公開 Sheet，不會讀取 `shared/`、`private/`、Discord、Gmail、Drive 或社員個資。
+- 問答只讀已核准的公開網站內容、公開 Sheet 與公開 Calendar 的活動名稱、日期時間、地點，不會讀取 `shared/`、`private/`、Discord、Gmail、Drive 或社員個資。
 - 不要在問答視窗輸入學號、電話或私人聯絡資料。
 - 若回答內容不正確，先以官網、公開 Calendar 或 Instagram 為準，並由網站管理員檢查 `club.nycu.harmonica.website-agent` 與 `website` Hermes profile。
 - 緊急停用時，把 `hugo.toml` 的 `params.websiteAgent.enabled` 設為 `false` 後部署；網站其他功能仍會正常運作。
@@ -49,7 +49,7 @@
 ## 3. 更新社群連結
 - `links` 工作表只放官方公開入口。icon 可填 `instagram / facebook / youtube / email / line / link`,不得填個人聯絡資料。
 - 儲存 Sheet 後不需要執行 GitHub Action 或等待部署。新開網站會立即讀取最新公開資料；已開啟的頁面最慢約 60 秒更新。
-- 網站會等兩個工作表全部讀取且驗證成功才一次換成新資料。編輯到一半、表頭錯誤或 Google 暫時失效時,訪客會繼續看到 last-good 備援,不會看到半套內容。
+- 網站會等三個工作表（`chronology_events`、`gallery_albums`、`links`）全部讀取且驗證成功才一次換成新資料。編輯到一半、表頭錯誤或 Google 暫時失效時,訪客會繼續看到 last-good 備援,不會看到半套內容。
 
 ## 4. 維護相片與相簿
 

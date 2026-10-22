@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
+import json
 import os
 from pathlib import Path
 import plistlib
@@ -12,6 +14,7 @@ import shutil
 import subprocess
 import sys
 import time
+from urllib import error, request
 
 
 PROFILE = Path.home() / ".hermes/profiles/website"
@@ -23,6 +26,10 @@ HERMES_LAUNCH_AGENT = Path.home() / "Library/LaunchAgents/club.nycu.harmonica.we
 HERMES_LABEL = "club.nycu.harmonica.website-hermes"
 LEGACY_HERMES_LABEL = "ai.hermes.gateway-website"
 LEGACY_HERMES_PLIST = Path.home() / "Library/LaunchAgents/ai.hermes.gateway-website.plist"
+OLLAMA_LABEL = "club.nycu.harmonica.website-ollama"
+OLLAMA_LAUNCH_AGENT = Path.home() / f"Library/LaunchAgents/{OLLAMA_LABEL}.plist"
+LOCAL_MODEL = "qwen3.5:9b"
+LOCAL_CONTEXT = 65536
 
 
 def update_env(path: Path, values: dict[str, str]) -> None:
@@ -42,21 +49,71 @@ def update_env(path: Path, values: dict[str, str]) -> None:
     path.chmod(0o600)
 
 
-def read_env_value(path: Path, key: str) -> str:
-    if not path.exists():
-        return ""
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if not line.startswith(key + "="):
-            continue
-        value = line.split("=", 1)[1].strip()
-        if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
-            value = value[1:-1]
-        return value
-    return ""
-
-
 def run(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     return subprocess.run(args, check=check, text=True)
+
+
+def local_model_preflight() -> str:
+    """Check an already installed model; never pull one or acquire credentials."""
+    binary = shutil.which("ollama")
+    if not binary:
+        raise SystemExit("An existing Ollama installation with qwen3.5:9b is required.")
+    for port in (11435, 11434):
+        req = request.Request(
+            f"http://127.0.0.1:{port}/api/show",
+            data=json.dumps({"model": LOCAL_MODEL}).encode(),
+            headers={"Content-Type": "application/json"},
+        )
+        try:
+            with request.urlopen(req, timeout=5) as response:
+                metadata = json.load(response)
+        except (error.URLError, TimeoutError, OSError, ValueError):
+            continue
+        info = metadata.get("model_info", {})
+        # A model-level num_ctx wins over the service default. Reject a changed
+        # alias that would silently shrink or greatly enlarge the allocation.
+        overrides = [line.split()[1] for line in metadata.get("parameters", "").splitlines()
+                     if len(line.split()) >= 2 and line.split()[0] == "num_ctx"]
+        if (info.get("general.architecture") == "qwen35"
+                and info.get("qwen35.context_length", 0) >= LOCAL_CONTEXT
+                and 0 < info.get("general.parameter_count", 0) <= 10_000_000_000
+                and metadata.get("details", {}).get("quantization_level") == "Q4_K_M"
+                and all(value == str(LOCAL_CONTEXT) for value in overrides)
+                and "completion" in metadata.get("capabilities", [])):
+            return binary
+        raise SystemExit(
+            "The existing qwen3.5:9b must be Q4_K_M, genuinely support at least 65,536 tokens, "
+            "and have no conflicting num_ctx override."
+        )
+    raise SystemExit("Start the existing local Ollama with qwen3.5:9b before installing; no model is downloaded.")
+
+
+def ollama_service(binary: str) -> dict:
+    return {
+        "Label": OLLAMA_LABEL,
+        "ProgramArguments": [binary, "serve"],
+        "WorkingDirectory": str(RUNTIME),
+        "RunAtLoad": True,
+        "KeepAlive": True,
+        "ThrottleInterval": 10,
+        "ProcessType": "Background",
+        "EnvironmentVariables": {
+            "OLLAMA_HOST": "127.0.0.1:11435",
+            "OLLAMA_MODELS": str(Path.home() / ".ollama/models"),
+            "OLLAMA_FLASH_ATTENTION": "1",
+            "OLLAMA_KV_CACHE_TYPE": "q4_0",
+            "OLLAMA_CONTEXT_LENGTH": str(LOCAL_CONTEXT),
+            "OLLAMA_NUM_PARALLEL": "1",
+            "OLLAMA_MAX_LOADED_MODELS": "1",
+            "OLLAMA_MAX_QUEUE": "1",
+            "OLLAMA_KEEP_ALIVE": "30s",
+            "OLLAMA_LOAD_TIMEOUT": "45s",
+            "OLLAMA_NO_CLOUD": "1",
+            "OLLAMA_NOPRUNE": "1",
+        },
+        "StandardOutPath": str(PROFILE / "logs/ollama.log"),
+        "StandardErrorPath": str(PROFILE / "logs/ollama.error.log"),
+    }
 
 
 def reload_launch_agent(uid: str, label: str, plist: Path) -> None:
@@ -69,17 +126,36 @@ def reload_launch_agent(uid: str, label: str, plist: Path) -> None:
         time.sleep(1)
     if result is None or result.returncode != 0:
         raise SystemExit(f"Could not bootstrap {label}")
-    run("launchctl", "kickstart", "-k", f"gui/{uid}/{label}")
+    # RunAtLoad already starts it; do not kill a service that just bootstrapped.
+    run("launchctl", "kickstart", f"gui/{uid}/{label}")
 
 
 def main() -> None:
+    # Fail before touching profiles, keys, snapshots or LaunchAgents.
+    if sys.version_info < (3, 11):
+        raise SystemExit("Python >= 3.11 is required. Run with ~/.hermes/bamboo-runtime/bin/python.")
+    try:
+        import dateutil.rrule  # noqa: F401
+    except ImportError:
+        raise SystemExit(
+            "python-dateutil is required in the selected Python environment. "
+            "Use ~/.hermes/bamboo-runtime/bin/python with its PM-managed dependencies."
+        ) from None
+    hermes_spec = importlib.util.find_spec("hermes_cli")
+    if hermes_spec is None or not hermes_spec.origin:
+        raise SystemExit("The selected Python must have Hermes installed; use ~/.hermes/bamboo-runtime/bin/python.")
+    hermes_root = Path(hermes_spec.origin).parent.parent
+    hermes_python = Path(sys.executable)
+    hermes_venv = hermes_python.parent.parent
     parser = argparse.ArgumentParser()
     parser.add_argument("--no-start", action="store_true", help="Install files without starting services")
     args = parser.parse_args()
+    ollama_binary = local_model_preflight()
 
     here = Path(__file__).resolve().parent
     site_root = here.parents[1]
     PROFILE.mkdir(parents=True, exist_ok=True)
+    PROFILE.chmod(0o700)
     (PROFILE / "logs").mkdir(parents=True, exist_ok=True)
 
     # LaunchAgents cannot read ~/Documents without interactive TCC approval.
@@ -103,18 +179,13 @@ def main() -> None:
         key_file.write_text(secrets.token_hex(32) + "\n", encoding="utf-8")
         key_file.chmod(0o600)
 
-    ai_kot_key = os.getenv("AI_KOT_GG_API_KEY", "").strip()
-    if not ai_kot_key:
-        ai_kot_key = read_env_value(Path.home() / ".hermes/profiles/bamboo/.env", "AI_KOT_GG_API_KEY")
-    if not ai_kot_key:
-        raise SystemExit("AI_KOT_GG_API_KEY is required for the Luna 5.6 website profile")
-
     shutil.copyfile(here / "hermes-config.yaml", PROFILE / "config.yaml")
+    (PROFILE / "config.yaml").chmod(0o600)
     shutil.copyfile(here / "SOUL.md", PROFILE / "SOUL.md")
     update_env(
         PROFILE / ".env",
         {
-            "AI_KOT_GG_API_KEY": ai_kot_key,
+            # Leave the disabled remote provider's existing key untouched.
             "OLLAMA_API_KEY": "ollama",
             "API_SERVER_ENABLED": "true",
             "API_SERVER_HOST": "127.0.0.1",
@@ -126,17 +197,16 @@ def main() -> None:
 
     logs = Path.home() / "Library/Logs"
     logs.mkdir(parents=True, exist_ok=True)
-    hermes_root = Path.home() / ".hermes/hermes-agent"
-    hermes_venv = hermes_root / "venv"
     hermes_plist = {
         "Label": HERMES_LABEL,
         "ProgramArguments": [
-            str(hermes_venv / "bin/python"),
+            str(hermes_python),
             "-m",
             "hermes_cli.main",
             "gateway",
             "run",
             "--replace",
+            "--external-supervisor",
         ],
         "WorkingDirectory": str(PROFILE),
         "RunAtLoad": True,
@@ -166,10 +236,13 @@ def main() -> None:
     HERMES_LAUNCH_AGENT.parent.mkdir(parents=True, exist_ok=True)
     with HERMES_LAUNCH_AGENT.open("wb") as handle:
         plistlib.dump(hermes_plist, handle, sort_keys=False)
+    with OLLAMA_LAUNCH_AGENT.open("wb") as handle:
+        plistlib.dump(ollama_service(ollama_binary), handle, sort_keys=False)
 
     plist = {
         "Label": LABEL,
-        "ProgramArguments": [str(Path(sys.executable).resolve()), str(RUNTIME / "server.py")],
+        # Keep the venv interpreter path: resolving its symlink loses installed dependencies.
+        "ProgramArguments": [sys.executable, str(RUNTIME / "server.py")],
         "WorkingDirectory": str(RUNTIME),
         "RunAtLoad": True,
         "KeepAlive": {"SuccessfulExit": False},
@@ -197,6 +270,7 @@ def main() -> None:
     run("launchctl", "bootout", f"gui/{uid}/{LEGACY_HERMES_LABEL}", check=False)
     if LEGACY_HERMES_PLIST.exists():
         LEGACY_HERMES_PLIST.unlink()
+    reload_launch_agent(uid, OLLAMA_LABEL, OLLAMA_LAUNCH_AGENT)
     reload_launch_agent(uid, HERMES_LABEL, HERMES_LAUNCH_AGENT)
     reload_launch_agent(uid, LABEL, LAUNCH_AGENT)
 

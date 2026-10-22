@@ -24,6 +24,8 @@ from typing import Any
 from urllib import error, parse, request
 from zoneinfo import ZoneInfo
 
+from dateutil.rrule import rruleset, rrulestr
+
 
 LOG = logging.getLogger("bamboo-website-agent")
 MAX_REQUEST_BYTES = 4096
@@ -36,6 +38,9 @@ DEFAULT_SITE_URL = "https://harmonica.nycu.club/"
 CALENDAR_ICS_URL = "https://calendar.google.com/calendar/ical/bmhc1968%40gmail.com/public/basic.ics"
 TAIPEI = ZoneInfo("Asia/Taipei")
 VISITOR_EVENT_EXCLUDES = ("幹部", "截止", "確認", "預備期", "彩排")
+CALENDAR_LOOKAHEAD_DAYS = 180
+MAX_CALENDAR_EVENTS = 128
+ICSFields = dict[str, list[tuple[str, str]]]
 
 
 @dataclass(frozen=True)
@@ -156,75 +161,172 @@ def _unescape_ics_text(value: str) -> str:
 
 
 def _parse_ics_datetime(property_name: str, value: str) -> tuple[datetime, bool]:
-    params = property_name.split(";")[1:]
-    if "VALUE=DATE" in params:
+    params = dict(
+        part.split("=", 1) for part in property_name.split(";")[1:] if "=" in part
+    )
+    if params.get("VALUE") == "DATE":
         return datetime.strptime(value, "%Y%m%d").replace(tzinfo=TAIPEI), True
     if value.endswith("Z"):
         parsed = datetime.strptime(value, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
-        return parsed.astimezone(TAIPEI), False
+        return parsed, False
     parsed = datetime.strptime(value, "%Y%m%dT%H%M%S")
-    return parsed.replace(tzinfo=TAIPEI), False
+    zone = ZoneInfo(params.get("TZID", "Asia/Taipei").strip('"'))
+    return parsed.replace(tzinfo=zone), False
+
+
+def _ics_value(block: ICSFields, key: str, default: str = "") -> str:
+    return block.get(key, [("", default)])[-1][1]
+
+
+def _calendar_event(block: ICSFields, parent: dict[str, Any] | None = None) -> dict[str, Any]:
+    start, all_day = _parse_ics_datetime(*block["DTSTART"][-1])
+    if "DTEND" in block:
+        end, _ = _parse_ics_datetime(*block["DTEND"][-1])
+    elif parent:
+        end = start + (parent["end"] - parent["start"])
+    else:
+        end = start + (timedelta(days=1) if all_day else timedelta())
+    if end < start:
+        raise ValueError("Calendar event ends before it starts")
+    return {
+        "summary": _unescape_ics_text(_ics_value(block, "SUMMARY", (parent or {}).get("summary", ""))),
+        "location": _unescape_ics_text(_ics_value(block, "LOCATION", (parent or {}).get("location", ""))),
+        "start": start,
+        "end": end,
+        "all_day": all_day,
+    }
 
 
 def parse_calendar_events(ics_text: str, now: datetime | None = None) -> list[dict[str, Any]]:
-    """Parse only the public Calendar fields needed for visitor-facing answers."""
+    """Expand public events, excluding cancelled/replaced instances before sorting.
+
+    Only dates, titles and locations leave this parser. Expansion is limited to
+    180 days and daily-or-slower rules; unsupported series fail closed.
+    """
     unfolded: list[str] = []
     for raw_line in ics_text.replace("\r\n", "\n").split("\n"):
         if raw_line.startswith((" ", "\t")) and unfolded:
             unfolded[-1] += raw_line[1:]
         else:
             unfolded.append(raw_line)
+    if "BEGIN:VCALENDAR" not in unfolded or "END:VCALENDAR" not in unfolded:
+        raise ValueError("incomplete or invalid public Calendar response")
 
     current = (now or datetime.now(TAIPEI)).astimezone(TAIPEI)
-    cutoff = current - timedelta(days=1)
+    horizon = current + timedelta(days=CALENDAR_LOOKAHEAD_DAYS)
     events: list[dict[str, Any]] = []
-    block: dict[str, tuple[str, str]] | None = None
+    blocks: list[ICSFields] = []
+    block: ICSFields | None = None
+    depth = 0
     for line in unfolded:
         if line == "BEGIN:VEVENT":
             block = {}
+            depth = 1
             continue
         if line == "END:VEVENT":
             if block is not None:
-                try:
-                    start_name, start_value = block["DTSTART"]
-                    end_name, end_value = block.get("DTEND", block["DTSTART"])
-                    start, all_day = _parse_ics_datetime(start_name, start_value)
-                    end, _ = _parse_ics_datetime(end_name, end_value)
-                    all_day = all_day or (
-                        start.time().isoformat() == "00:00:00"
-                        and end.time().isoformat() == "00:00:00"
-                        and end - start >= timedelta(days=1)
-                    )
-                    summary = _unescape_ics_text(block.get("SUMMARY", ("", ""))[1])
-                    location = _unescape_ics_text(block.get("LOCATION", ("", ""))[1])
-                    status = block.get("STATUS", ("", "CONFIRMED"))[1]
-                except (KeyError, ValueError):
-                    block = None
-                    continue
-                if (
-                    status == "CONFIRMED"
-                    and summary
-                    and end >= cutoff
-                    and not any(word in summary for word in VISITOR_EVENT_EXCLUDES)
-                ):
-                    events.append(
-                        {
-                            "summary": summary[:160],
-                            "location": location[:220],
-                            "start": start,
-                            "end": end,
-                            "all_day": all_day,
-                        }
-                    )
+                blocks.append(block)
             block = None
             continue
         if block is None or ":" not in line:
             continue
+        if line.startswith("BEGIN:"):
+            depth += 1
+            continue
+        if line.startswith("END:"):
+            depth -= 1
+            continue
+        if depth != 1:
+            continue
         name, value = line.split(":", 1)
-        key = name.split(";", 1)[0]
-        if key in {"DTSTART", "DTEND", "SUMMARY", "LOCATION", "STATUS"}:
-            block[key] = (name, value)
-    return sorted(events, key=lambda event: event["start"])[:8]
+        key = name.split(";", 1)[0].upper()
+        if key in {"UID", "DTSTART", "DTEND", "SUMMARY", "LOCATION", "STATUS",
+                   "RRULE", "RDATE", "EXDATE", "RECURRENCE-ID", "EXRULE", "DURATION"}:
+            block.setdefault(key, []).append((name, value))
+
+    series: dict[str, list[ICSFields]] = defaultdict(list)
+    for index, item in enumerate(blocks):
+        series[_ics_value(item, "UID") or f"anonymous-{index}"].append(item)
+
+    def include(event: dict[str, Any]) -> None:
+        start = event["start"].astimezone(TAIPEI)
+        end = event["end"].astimezone(TAIPEI)
+        if (start > horizon or (end <= current and start < current)
+                or not event["summary"]
+                or any(word in event["summary"] for word in VISITOR_EVENT_EXCLUDES)):
+            return
+        events.append({
+            **event, "start": start, "end": end,
+            "summary": event["summary"][:160], "location": event["location"][:220],
+            "all_day": event["all_day"] or (
+                start.hour == start.minute == start.second == 0
+                and end.hour == end.minute == end.second == 0
+                and end - start >= timedelta(days=1)
+            ),
+        })
+
+    for items in series.values():
+        # Do not show an old schedule when a range exception cannot be expanded.
+        if any("EXRULE" in item or "DURATION" in item or any(
+            ";RANGE=" in name for name, _ in item.get("RECURRENCE-ID", [])
+        ) for item in items):
+            LOG.warning("Skipping public Calendar series with unsupported recurrence fields")
+            continue
+        masters = [item for item in items if "RECURRENCE-ID" not in item]
+        exceptions = [item for item in items if "RECURRENCE-ID" in item]
+        if len(masters) > 1:
+            LOG.warning("Skipping public Calendar series with ambiguous masters")
+            continue
+        master = masters[0] if masters else None
+        if master and _ics_value(master, "STATUS", "CONFIRMED") != "CONFIRMED":
+            continue
+        try:
+            base = _calendar_event(master) if master else None
+            rules = rruleset()
+            if base is not None:
+                rules.rdate(base["start"])
+                for _, value in master.get("RRULE", []):
+                    parts = dict(part.split("=", 1) for part in value.split(";"))
+                    if int(parts.get("INTERVAL", "1")) < 1 or int(parts.get("COUNT", "1")) < 1:
+                        raise ValueError("recurrence interval and count must be positive")
+                    if parts.get("FREQ") not in {"DAILY", "WEEKLY", "MONTHLY", "YEARLY"} or any(
+                        key in parts for key in ("BYHOUR", "BYMINUTE", "BYSECOND")
+                    ):
+                        raise ValueError("unsupported high-frequency recurrence")
+                    if base["all_day"] and re.fullmatch(r"\d{8}", parts.get("UNTIL", "")):
+                        until, _ = _parse_ics_datetime("UNTIL;VALUE=DATE", parts["UNTIL"])
+                        parts["UNTIL"] = until.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+                        value = ";".join(f"{key}={item}" for key, item in parts.items())
+                    rules.rrule(rrulestr(value, dtstart=base["start"]))
+                for key, add in (("RDATE", rules.rdate), ("EXDATE", rules.exdate)):
+                    for name, values in master.get(key, []):
+                        for value in values.split(","):
+                            instant, _ = _parse_ics_datetime(name, value)
+                            add(instant)
+
+            replacements: list[dict[str, Any]] = []
+            for exception in exceptions:
+                name, value = exception["RECURRENCE-ID"][-1]
+                original, _ = _parse_ics_datetime(name, value)
+                rules.exdate(original)
+                if _ics_value(exception, "STATUS", "CONFIRMED") != "CONFIRMED":
+                    continue
+                instance = dict(exception)
+                instance.setdefault("DTSTART", [(name, value)])
+                replacements.append(_calendar_event(instance, base))
+
+            expanded: list[dict[str, Any]] = []
+            if base is not None:
+                duration = base["end"] - base["start"]
+                for start in rules.xafter(current - duration, count=256, inc=True):
+                    if start > horizon:
+                        break
+                    expanded.append({**base, "start": start, "end": start + duration})
+            for event in expanded + replacements:
+                include(event)
+        except (KeyError, ValueError, TypeError, OverflowError):
+            LOG.warning("Skipping invalid or unsupported public Calendar series")
+    return sorted(events, key=lambda event: event["start"])[:MAX_CALENDAR_EVENTS]
 
 
 def format_public_event(event: dict[str, Any]) -> str:
@@ -238,7 +340,7 @@ def format_public_event(event: dict[str, Any]) -> str:
     else:
         when = f"{start.month}/{start.day} {start:%H:%M}–{end:%H:%M}"
     summary = str(event["summary"]).replace("｜", "：")
-    location = str(event.get("location") or "待公告").replace("｜", "、")
+    location = str(event.get("location") or "公開行事曆未列出，請向社團確認").replace("｜", "、")
     return f"{when}｜{summary}｜地點：{location}"
 
 
@@ -271,6 +373,7 @@ class KnowledgeBase:
         self._expires_at = 0.0
         self._lock = threading.Lock()
         self._events: list[dict[str, Any]] = []
+        self._calendar_available = False
         self._links: dict[str, dict[str, Any]] = {}
 
     def get(self) -> str:
@@ -409,17 +512,35 @@ class KnowledgeBase:
                 [contact, instagram, discord],
             )
 
+        if "社課" in compact and any(
+            word in compact for word in (
+                "時間", "地點", "哪裡", "在哪", "何時", "什麼時候", "幾點", "星期", "禮拜", "哪天", "週幾"
+            )
+        ):
+            classes = [event for event in self._events if "社課" in event["summary"]]
+            if classes:
+                note = "\n\n日期、時間與地點若有異動，以公開行事曆最新內容為準。"
+                if any(event["all_day"] for event in classes[:4]):
+                    note += "全天標記未提供確切上課時段，請向社團確認。"
+                return (
+                    "公開行事曆列出的近期社課：\n\n"
+                    + format_public_event_list(classes[:4]) + note,
+                    [calendar, discord, instagram],
+                )
+            uncertainty = (
+                "目前讀取的公開行事曆中未找到近期社課，無法確認固定時間與地點。"
+                if self._calendar_available else
+                "目前無法讀取公開行事曆，因此無法確認社課時間與地點。"
+            )
+            return (
+                uncertainty + "請查看下方行事曆、Instagram 最新公告，或加入 Discord 向社團確認。",
+                [discord, instagram, calendar],
+            )
         if any(word in compact for word in ("加入", "入社", "新生", "社員")):
             return (
                 "可以直接點下方「Discord 社群」加入竹韻；零基礎也歡迎。"
                 "加入後可收到招生、社課與活動的第一手消息，公開公告也會同步在 Instagram。",
                 [discord, instagram],
-            )
-        if "社課" in compact and any(word in compact for word in ("時間", "地點", "哪裡", "何時")):
-            return (
-                "目前尚未公布固定社課時間與地點，這是目前公開資料的真實狀態。"
-                "建議先加入下方 Discord 社群；正式社課公告會同步在 Instagram 與官網行事曆。",
-                [discord, instagram, calendar],
             )
         if "活動" in compact and any(word in compact for word in ("最近", "近期", "什麼", "哪些", "有沒有")):
             if self._events:
@@ -429,7 +550,12 @@ class KnowledgeBase:
                     + "\n\n時間與地點若有異動，以公開行事曆為準。",
                     [calendar],
                 )
-            return ("目前無法讀取近期活動清單，請直接查看下方社團公開行事曆。", [calendar])
+            message = (
+                "目前讀取的公開行事曆中沒有近期活動，請查看下方行事曆的最新內容。"
+                if self._calendar_available else
+                "目前無法讀取近期活動清單，請直接查看下方社團公開行事曆。"
+            )
+            return (message, [calendar])
         return None
 
     def _build(self) -> str:
@@ -457,13 +583,18 @@ class KnowledgeBase:
 
         try:
             self._events = self._fetch_calendar_events()
+            self._calendar_available = True
         except Exception as exc:
-            LOG.warning("public Calendar unavailable; keeping cached events: %s", exc)
+            LOG.warning("public Calendar unavailable: %s", exc)
+            self._events = []
+            self._calendar_available = False
         if self._events:
             sections.append(
                 "【近期公開活動】\n"
-                + "\n".join(f"- {format_public_event(event)}" for event in self._events)
+                + "\n".join(f"- {format_public_event(event)}" for event in self._events[:8])
             )
+        elif not self._calendar_available:
+            sections.append("【公開行事曆狀態】目前無法讀取；不得據此推論活動或社課尚未公告。")
 
         sections.append(
             "【固定入口】\n"
@@ -517,7 +648,18 @@ class HermesClient:
         with request.urlopen(req, timeout=self.settings.request_timeout_seconds) as response:
             result = json.loads(response.read(2_000_000).decode("utf-8"))
         choices = result.get("choices") or []
-        answer = choices[0].get("message", {}).get("content", "") if choices else ""
+        choice = choices[0] if choices else {}
+        status = result.get("hermes") or {}
+        # New Hermes can return HTTP 200 with operator-facing failure text.
+        # Keep those errors behind the facade's public agent_unavailable response.
+        if (
+            result.get("error")
+            or status.get("failed")
+            or choice.get("finish_reason") in {"error", "cancelled"}
+            or (status.get("completed") is False and choice.get("finish_reason") != "length")
+        ):
+            raise RuntimeError("Hermes model request failed")
+        answer = choice.get("message", {}).get("content", "")
         answer = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", str(answer)).strip()
         if not answer:
             raise RuntimeError("Hermes returned an empty answer")

@@ -1,30 +1,40 @@
 model:
-  default: gpt-5.6-luna
-  provider: custom:ai-kot-gg-luna
+  default: qwen3.5:9b
+  provider: custom:ollama-qwen35-local
   base_url: ""
+  # Match the real allocation on the isolated website Ollama service.
+  context_length: 65536
+  ollama_num_ctx: 65536
   max_tokens: 250
 
-custom_providers:
-  - name: ai-kot-gg-luna
-    base_url: https://ai.kot.gg
+providers:
+  # Named local providers resolve to "custom" for core timeout lookup.
+  custom:
+    request_timeout_seconds: 55
+    stale_timeout_seconds: 55
+  ai-kot-gg-luna:
+    # Existing credential returns 401. Retain it without retrying this route.
+    enabled: false
+    api: https://ai.kot.gg
     key_env: AI_KOT_GG_API_KEY
-    api_mode: codex_responses
-    model: gpt-5.6-luna
-  - name: ollama-qwen35-local
-    base_url: http://127.0.0.1:11434/v1
+    transport: codex_responses
+    default_model: gpt-5.6-luna
+  ollama-qwen35-local:
+    # Dedicated service: Q4 KV, one slot, no global Ollama setting changes.
+    api: http://127.0.0.1:11435/v1
     key_env: OLLAMA_API_KEY
-    api_mode: chat_completions
-    model: qwen3.5:9b
-    context_length: 8192
+    transport: chat_completions
+    default_model: qwen3.5:9b
+    context_length: 65536
     extra_body:
       think: false
+      keep_alive: 30s
+      # The gateway does not forward the facade's generation limit.
+      max_tokens: 250
+      temperature: 0.2
 
-fallback_providers:
-  - provider: custom
-    model: qwen3.5:9b
-    base_url: http://127.0.0.1:11434/v1
-    api_key: ollama
-    api_mode: chat_completions
+# Use the verified local route directly; do not retry a known invalid remote key.
+fallback_providers: []
 
 # Explicitly empty capability surface. no_mcp prevents globally configured MCP
 # servers from being inherited by this public-facing profile.
@@ -37,10 +47,11 @@ platform_toolsets:
 agent:
   max_turns: 1
   api_max_retries: 1
+  auto_recovery_cycles: 0
   task_completion_guidance: false
   environment_probe: false
   coding_context: "off"
-  reasoning_effort: max
+  reasoning_effort: "none"
   disabled_toolsets:
     - web
     - browser
@@ -68,7 +79,14 @@ agent:
     - yuanbao
     - computer_use
 
+memory:
+  memory_enabled: false
+  user_profile_enabled: false
+  provider: ""
+
 gateway:
+  # Keep this public facade isolated from the officer-facing Bamboo gateway.
+  standalone: true
   strict: true
   trust_recent_files: false
   api_server:
