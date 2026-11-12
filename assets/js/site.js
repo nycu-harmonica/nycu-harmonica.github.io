@@ -48,6 +48,15 @@
     } else arm();
   });
 
+  // 「詢問竹韻」浮動鈕在頁尾出現時讓位（頁尾本身就有聯絡方式）。
+  var launch = document.getElementById('website-agent-launch');
+  var footer = document.querySelector('.site-footer');
+  if (launch && footer && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      launch.classList.toggle('is-docked', entries[0].isIntersecting);
+    }, { rootMargin: '0px 0px -40px 0px' }).observe(footer);
+  }
+
   // 限時區塊:過期(data-expires)就隱藏,不必等網站重新建置
   document.querySelectorAll('[data-expires]').forEach(function (el) {
     var expires = Date.parse(el.dataset.expires || '');

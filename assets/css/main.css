@@ -320,7 +320,7 @@ p, li { text-wrap: pretty; }
   border-radius: var(--radius);
   background: rgba(4, 30, 40, 0.22);
 }
-.hero-fact-label { flex: none; font-size: 0.8rem; font-weight: 700; color: var(--amber-400); letter-spacing: 0.08em; }
+.hero-fact-label { flex: none; font-size: 0.86rem; font-weight: 700; color: var(--amber-400); letter-spacing: 0.08em; }
 .hero-facts strong { font-weight: 700; }
 
 @media (min-width: 860px) {
@@ -458,7 +458,7 @@ p, li { text-wrap: pretty; }
   align-items: flex-start;
   gap: 0.55rem;
   margin: 1rem 0 0;
-  font-size: 0.86rem;
+  font-size: 0.92rem;
   line-height: 1.55;
   color: var(--ink-soft);
 }
@@ -964,6 +964,9 @@ p, li { text-wrap: pretty; }
   .footer-bottom { padding-right: 1.25rem; }
 }
 body:has(.site-nav.open) .website-agent-launch { display: none; }
+/* 捲到頁尾時讓位，不蓋住頁尾連結與資料狀態。 */
+.website-agent-launch.is-docked { opacity: 0; pointer-events: none; transform: translateY(0.5rem); }
+.website-agent-launch { transition: opacity 0.2s, transform 0.2s, background-color 0.15s; }
 @media (min-width: 640px) {
   .website-agent-launch { right: 1.5rem; bottom: 1.5rem; }
   .website-agent-dialog { margin: auto 1.5rem 1.5rem auto; }

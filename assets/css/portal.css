@@ -1278,6 +1278,20 @@
   }
 }
 
+.portal-screen-now {
+  display: grid;
+  gap: 0.6cqh;
+  margin-top: 4.5cqh;
+  padding: 2.2cqh 2.6cqh;
+  border-left: 0.8cqh solid var(--portal-gold);
+  border-radius: 0 1.4cqh 1.4cqh 0;
+  background: rgba(255, 255, 255, 0.1);
+}
+.portal-screen-now[hidden] { display: none; }
+.portal-screen-now-label { color: var(--portal-gold); font-size: 1.8cqh; font-weight: 900; letter-spacing: 0.16em; }
+.portal-screen-now strong { color: #fff; font-size: 5cqh; line-height: 1.15; }
+.portal-screen-now small { color: #dff3f6; font-size: 2.2cqh; }
+
 /* 操作提示只給操作的人看：滑鼠或鍵盤一段時間沒動就淡出，觀眾只看到節目。 */
 .portal-screen-stage.is-idle .portal-fullscreen-button,
 .portal-screen-stage.is-idle .portal-screen-controls {

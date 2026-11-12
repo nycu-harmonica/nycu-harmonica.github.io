@@ -20,6 +20,14 @@
       else url.searchParams.delete("song");
       window.history.replaceState({}, "", url);
       const current = selected ? items[selected - 1] : null;
+      const nowPlaying = stage.querySelector("[data-now-playing]");
+      if (nowPlaying) {
+        nowPlaying.hidden = !current;
+        if (current) {
+          nowPlaying.querySelector("[data-now-title]").textContent = `${String(selected).padStart(2, "0")}　${current.dataset.programTitle}`;
+          nowPlaying.querySelector("[data-now-credit]").textContent = current.dataset.programCredit;
+        }
+      }
       window.BambooSEO?.setState(current ? {
         title: `第 ${selected} 首：${current.dataset.programTitle}`,
         heading: `目前曲目第 ${selected} 首：${current.dataset.programTitle}`,

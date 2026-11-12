@@ -231,12 +231,12 @@
 .discord-join-button {
   justify-content: space-between;
   padding: 0.8rem 1.15rem;
-  color: #fff;
-  background: #23a55a;
-  box-shadow: 0 0.65rem 1.7rem rgba(35, 165, 90, 0.18);
+  color: #1c2a2f;
+  background: #f0b85a;
+  box-shadow: 0 0.65rem 1.7rem rgba(240, 184, 90, 0.22);
 }
 
-.discord-join-button:hover { color: #fff; text-decoration: none; background: #1a8f4b; }
+.discord-join-button:hover { color: #1c2a2f; text-decoration: none; background: #f6c773; }
 
 .discord-copy-button {
   min-height: 3rem;

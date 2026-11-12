@@ -1,7 +1,8 @@
 <header class="page-hero">
   <div class="container">
     {{ with .Params.kicker }}<p class="section-kicker">{{ . }}</p>{{ end }}
-    <h1 data-seo-heading>{{ .Params.heading | default .Title }}</h1>
+    {{- /* 社名不在中間斷行。 */}}
+    <h1 data-seo-heading>{{ replace (.Params.heading | default .Title | htmlEscape) "竹韻口琴社" "<span class=\"nowrap\">竹韻口琴社</span>" | safeHTML }}</h1>
     {{ with .Params.lede | default .Description }}<p class="page-lede">{{ . }}</p>{{ end }}
   </div>
 </header>

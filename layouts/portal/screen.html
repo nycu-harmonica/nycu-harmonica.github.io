@@ -15,6 +15,11 @@
     <p class="portal-screen-eyebrow">{{ $portal.title }}・{{ $portal.status }}</p>
     <h1 data-seo-heading>{{ $portal.welcome }}<span class="sr-only">｜{{ $portal.title }}演出投影畫面</span><span class="sr-only" data-seo-heading-state></span></h1>
     <p>{{ $portal.subtitle }}</p>
+    <div class="portal-screen-now" data-now-playing hidden>
+      <span class="portal-screen-now-label">正在演奏</span>
+      <strong data-now-title></strong>
+      <small data-now-credit></small>
+    </div>
   </section>
 
   <section class="portal-screen-program" aria-labelledby="screen-program-title">

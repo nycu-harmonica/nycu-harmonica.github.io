@@ -19,7 +19,7 @@
     .join-progress { height: 4px; margin: 0 auto 1.25rem; overflow: hidden; border-radius: 999px; background: var(--line); }
     .join-progress span { display: block; width: 40%; height: 100%; border-radius: inherit; background: #e3a63f; animation: join-slide 1.2s ease-in-out infinite; }
     @keyframes join-slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
-    @media (prefers-reduced-motion: reduce) { .join-progress span { width: 100%; animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .join-progress { display: none; } }
     .join-button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 999px; background: #f0b85a; color: #1c2a2f; font-weight: 800; text-decoration: none; }
     .join-button:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; }
     .join-back { display: inline-block; margin-top: 1rem; color: var(--link); font-size: 0.92rem; }
@@ -28,7 +28,7 @@
 <body>
   <main class="join-card">
     <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="72" height="72" alt="">
-    <h1 data-seo-heading>加入陽明交大竹韻口琴社</h1>
+    <h1 data-seo-heading>加入陽明交大<span style="white-space: nowrap">竹韻口琴社</span></h1>
     <div class="join-progress" aria-hidden="true"><span></span></div>
     <p role="status">正在前往 Google 入社表單……</p>
     <a class="join-button" href="{{ $target }}">沒有自動跳轉？開啟入社表單</a>
