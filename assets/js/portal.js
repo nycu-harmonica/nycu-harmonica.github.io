@@ -36,6 +36,15 @@
     document.addEventListener("fullscreenchange", () => {
       if (fullscreenButton) fullscreenButton.textContent = document.fullscreenElement ? "離開全螢幕" : "進入全螢幕";
     });
+    // 操作提示與全螢幕按鈕閒置 3 秒後淡出；滑鼠、觸控或按鍵再叫回來。
+    let idleTimer = 0;
+    const wake = () => {
+      stage.classList.remove("is-idle");
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => stage.classList.add("is-idle"), 3000);
+    };
+    ["pointermove", "pointerdown", "keydown"].forEach((type) => document.addEventListener(type, wake, { passive: true }));
+    wake();
     document.addEventListener("keydown", (event) => {
       if (event.key.toLowerCase() === "f") {
         event.preventDefault();

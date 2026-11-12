@@ -8,7 +8,8 @@
     <p class="calendar-loading"><span class="calendar-loading-dot" aria-hidden="true"></span>正在載入 Google 日曆…</p>
     <div class="calendar-failed">
       <p class="calendar-failed-title">Google 日曆暫時載不出來</p>
-      <p>每週二晚上的定期社課照常在學生活動中心 1F 聯誼廳舉行。完整行程請直接開啟 Google 日曆，或到 Discord 問問大家。</p>
+      <p>每週二晚上的定期社課照常在學生活動中心 1F 聯誼廳舉行。</p>
+      <p class="calendar-failed-next">請用下方按鈕直接開啟 Google 日曆，或到 Discord 問問大家 ↓</p>
     </div>
   </div>
   {{- /* 手機改用可捲動的議程清單，不再把行事曆截在固定高度裡。 */}}
@@ -19,7 +20,10 @@
 </div>
 <div class="calendar-meta">
   <p class="calendar-note">時間皆為臺灣時間。想加到自己的日曆，或上面沒有顯示？</p>
-  <a class="btn btn-small" href="{{ $calendarURL | safeURL }}" target="_blank" rel="noopener noreferrer">在 Google 日曆開啟<span aria-hidden="true"> ↗</span></a>
+  <div class="calendar-actions">
+    <a class="btn btn-small" href="{{ $calendarURL | safeURL }}" target="_blank" rel="noopener noreferrer">在 Google 日曆開啟<span aria-hidden="true"> ↗</span></a>
+    <a class="btn btn-small" href="{{ "/discord/" | relURL }}">到 Discord 問活動</a>
+  </div>
 </div>
 {{- else -}}
 <div class="placeholder-card">

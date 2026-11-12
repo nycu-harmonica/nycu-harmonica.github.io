@@ -463,7 +463,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(2, 18, 25, 0.2) 0%, rgba(2, 18, 25, 0.04) 22%, rgba(3, 23, 32, 0.8) 40%, rgba(3, 23, 32, 0.97) 52%, #031720 100%);
+    linear-gradient(180deg, rgba(2, 18, 25, 0.55) 0%, rgba(2, 18, 25, 0.25) 14%, rgba(3, 23, 32, 0.85) 38%, rgba(3, 23, 32, 0.98) 50%, #031720 100%);
   content: "";
 }
 .portal-story-end-visual {
@@ -1086,16 +1086,16 @@
 .portal-screen-copy h1 {
   margin: 0;
   color: #fff;
-  font-size: 6.5cqh;
+  font-size: 8.4cqh;
   font-weight: 900;
   letter-spacing: -0.055em;
   line-height: 1.05;
 }
 
 .portal-screen-copy > p:last-child {
-  margin: 1.6cqh 0 0;
+  margin: 2.2cqh 0 0;
   color: #dff3f6;
-  font-size: 2.2cqh;
+  font-size: 3cqh;
   letter-spacing: 0.03em;
 }
 
@@ -1277,6 +1277,15 @@
     transform: none;
   }
 }
+
+/* 操作提示只給操作的人看：滑鼠或鍵盤一段時間沒動就淡出，觀眾只看到節目。 */
+.portal-screen-stage.is-idle .portal-fullscreen-button,
+.portal-screen-stage.is-idle .portal-screen-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+.portal-fullscreen-button,
+.portal-screen-controls { transition: opacity 400ms ease; }
 
 @media print {
   .portal-fullscreen-button,

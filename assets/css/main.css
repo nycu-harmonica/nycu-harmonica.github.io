@@ -555,6 +555,8 @@ p, li { text-wrap: pretty; }
   margin-top: 0.9rem;
 }
 .calendar-note { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
+.calendar-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.calendar-failed .calendar-failed-next { color: var(--heading); font-weight: 700; }
 
 /* ---------- 加入橫幅 ---------- */
 .join-banner {
@@ -627,7 +629,7 @@ p, li { text-wrap: pretty; }
   .prose table, .prose tbody, .prose tr, .prose td { display: block; width: 100%; }
   .prose thead { display: none; }
   .prose tr { margin-bottom: 0.75rem; padding: 0.5rem 0.9rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
-  .prose td { padding: 0.3rem 0; border: 0; }
+  .prose tr td { padding: 0.3rem 0; border: 0; }
   .prose td:first-child { color: var(--heading); font-weight: 800; }
 }
 .prose th, .prose td { border-bottom: 1px solid var(--line); padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
