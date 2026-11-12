@@ -56,6 +56,17 @@
       launch.classList.toggle('is-docked', entries[0].isIntersecting);
     }, { rootMargin: '0px 0px -40px 0px' }).observe(footer);
   }
+  // 手機往下讀的時候先收起來，往回捲才出現，避免一直蓋住標題與內文。
+  if (launch) {
+    var lastY = window.scrollY;
+    var narrow = window.matchMedia('(max-width: 639px)');
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY;
+      if (narrow.matches) launch.classList.toggle('is-tucked', y > lastY && y > 240);
+      else launch.classList.remove('is-tucked');
+      lastY = y;
+    }, { passive: true });
+  }
 
   // 限時區塊:過期(data-expires)就隱藏,不必等網站重新建置
   document.querySelectorAll('[data-expires]').forEach(function (el) {

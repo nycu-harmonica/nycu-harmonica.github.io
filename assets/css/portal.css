@@ -472,6 +472,8 @@
   object-fit: cover;
 }
 .portal-story-faq-2 .portal-story-end-visual { object-position: center; }
+/* 入社頁背景是表單截圖：只留輪廓，不和標題搶字。 */
+.portal-story-join .portal-story-end-visual { opacity: 0.4; filter: blur(1.5px); }
 .portal-story-product-links {
   display: grid;
   gap: 0;
@@ -1152,7 +1154,8 @@
 }
 
 .portal-screen-program li.is-current {
-  padding-right: 1.4cqh;
+  /* 底色往左外推，曲名起點和其他列對齊。 */
+  margin-left: -1.4cqh;
   padding-left: 1.4cqh;
   background: rgba(255, 255, 255, 0.14);
   box-shadow: inset 0.7cqh 0 0 var(--portal-gold);

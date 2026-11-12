@@ -433,5 +433,92 @@
     },
     "delta_overall": 2.5,
     "delta_mean": 2.46
+  },
+  {
+    "round": "6",
+    "reviewer": "opus-5-5",
+    "file": "r6-opus-5-5.md",
+    "mapping": {
+      "C": "baseline",
+      "A": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 5.8,
+      "mean": 5.88,
+      "scores": {
+        "資訊層級": 7,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6,
+        "一致性": 5.5,
+        "資訊密度": 6,
+        "導覽": 6,
+        "狀態與回饋": 4.5,
+        "響應式": 6,
+        "文案": 5,
+        "無障礙": 6,
+        "動畫與轉場": 6
+      },
+      "issues": [
+        "所有 -dark 截圖與淺色版完全相同，深色外觀沒有作用；Discord 頁卻固定深色",
+        "loading／error／empty 只改頁尾灰色小字，內容區沒有提示；discord-empty 顯示 0 位成員卻寫已連線",
+        "公開頁面露出 chronology_events、Hermes、last-good、Hugo、Portal、演出投影畫面等內部術語",
+        "site-guide mobile 表格第一欄一字一行；浮動「詢問竹韻」遮住頁尾與內文",
+        "Discord 頁與入社頁風格脫離主站、沒有回官網導覽；主站頁首沒有入社 CTA 與行事曆入口"
+      ]
+    },
+    "new": {
+      "overall": 8.3,
+      "mean": 8.29,
+      "scores": {
+        "資訊層級": 9,
+        "字體排印": 8.5,
+        "色彩": 8.5,
+        "間距與版面": 8,
+        "一致性": 8.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8.5,
+        "響應式": 8.5,
+        "文案": 8.5,
+        "無障礙": 7.5,
+        "動畫與轉場": 7.5
+      },
+      "issues": [
+        "home-error desktop：行事曆錯誤卡片疊在約 500px 的灰色骨架上，看起來像仍在載入，也浪費版面",
+        "home／home-calendar desktop：嵌入日曆每列重複同一段英文長地址，稀釋活動名稱",
+        "home／about-contact 等 mobile：浮動「詢問竹韻」遮住段落標題與內文",
+        "portal-join mobile：背景表單截圖透出干擾主標，眉標用英文「JOIN BAMBOO MELODY」",
+        "screen-song screen：目前曲目在大卡片與清單重複顯示，02／04 曲名起點不一致"
+      ]
+    },
+    "reference": {
+      "overall": 5.2,
+      "mean": 5.25,
+      "scores": {
+        "資訊層級": 6,
+        "字體排印": 6.5,
+        "色彩": 5,
+        "間距與版面": 5.5,
+        "一致性": 5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3.5,
+        "響應式": 5.5,
+        "文案": 6,
+        "無障礙": 5,
+        "動畫與轉場": 4
+      },
+      "issues": [
+        "ref-cums-home：Twitter 外掛載入失敗，只留標題與大片空白",
+        "ref-mcu-harmonica-home：圖片失效露出替代文字，並顯示 CMS 系統字串",
+        "ref-mcu-harmonica／ref-cums：首屏沒有入社或練習資訊，銘傳把登入框放在主要位置",
+        "ref-yale-glee-home：內文只佔左側約 750px，1440 寬的右側近半空白",
+        "ref-cums／ref-mcu-harmonica：預設灰白主題，沒有品牌色系統，元件風格混雜"
+      ]
+    },
+    "delta_overall": 2.5,
+    "delta_mean": 2.41
   }
 ]
