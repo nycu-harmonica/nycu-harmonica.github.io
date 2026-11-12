@@ -781,5 +781,92 @@
     },
     "delta_overall": 2.0,
     "delta_mean": 2.42
+  },
+  {
+    "round": "10",
+    "reviewer": "opus-5-5",
+    "file": "r10-opus-5-5.md",
+    "mapping": {
+      "B": "baseline",
+      "A": "new",
+      "C": "reference"
+    },
+    "baseline": {
+      "overall": 5.8,
+      "mean": 5.79,
+      "scores": {
+        "資訊層級": 7,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6.5,
+        "一致性": 5.5,
+        "資訊密度": 6.5,
+        "導覽": 6,
+        "狀態與回饋": 4,
+        "響應式": 6.5,
+        "文案": 4.5,
+        "無障礙": 6,
+        "動畫與轉場": 4.5
+      },
+      "issues": [
+        "[狀態與回饋] home、chronology、about、site-guide：loading、error、empty 和正常狀態相同或只剩空白日曆框，沒有說明與下一步",
+        "[色彩] 所有 -dark 截圖和淺色版逐位元相同，深色外觀沒有生效",
+        "[文案] chronology、site-guide、about、footer：chronology_events、Hermes、GitHub Actions、last-good、Hugo、Asia/Taipei 等內部術語外露",
+        "[一致性／文案] discord、screen：Discord 綠 CTA 和英文眉標、導覽只有「演出 Portal」，投影標題寫成「演出投影畫面」",
+        "[響應式／導覽] home-menu-open、home-calendar mobile：浮動按鈕壓住 hero CTA 與頁尾文字，手機選單沒有加入 Discord 的 CTA"
+      ]
+    },
+    "new": {
+      "overall": 8.4,
+      "mean": 8.29,
+      "scores": {
+        "資訊層級": 9,
+        "字體排印": 8.5,
+        "色彩": 8.5,
+        "間距與版面": 8,
+        "一致性": 8.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8.5,
+        "響應式": 8.5,
+        "文案": 8.5,
+        "無障礙": 7.5,
+        "動畫與轉場": 7.5
+      },
+      "issues": [
+        "[響應式／無障礙] about、site-guide、home mobile/desktop：浮動「詢問竹韻」按鈕蓋住正文、標題與相鄰的「到 Discord 問活動」按鈕",
+        "[文案／資訊密度] home、home-dark、home-calendar：日曆 iframe 每列重複中英混雜的長地址，截斷後難以辨識",
+        "[狀態與回饋] home-empty desktop：日曆空狀態直接露出 Google 的「目前顯示…尋找更多」系統文字和大片白框，沒有自訂說明",
+        "[間距與版面] chronology、about desktop：左欄只放頂部目錄，下方大片空白，時間軸每則約 74px，密度低",
+        "[字體排印] about、chronology desktop：頁首副標第二行只剩「管道。」「時間線。」孤字"
+      ]
+    },
+    "reference": {
+      "overall": 5.4,
+      "mean": 5.42,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 5.5,
+        "一致性": 5.5,
+        "資訊密度": 5.5,
+        "導覽": 6.5,
+        "狀態與回饋": 4,
+        "響應式": 4.5,
+        "文案": 5.5,
+        "無障礙": 5,
+        "動畫與轉場": 4
+      },
+      "issues": [
+        "[響應式] ref-mcu-harmonica-home mobile：桌面版等比縮小，字小到無法閱讀",
+        "[狀態與回饋／文案] ref-yale-glee-events：露出 CMS 範本佔位文字「Use the Calendar List Block…」",
+        "[響應式／狀態] ref-cums-home mobile：輪播以下約 1300px 空白，內容沒有渲染",
+        "[色彩／無障礙] ref-cums-home mobile：半透明白字標題疊在照片上，對比不足",
+        "[間距與版面] ref-yale-glee-about desktop：內容只佔左側約 800px，右側閒置"
+      ]
+    },
+    "delta_overall": 2.6,
+    "delta_mean": 2.5
   }
 ]
