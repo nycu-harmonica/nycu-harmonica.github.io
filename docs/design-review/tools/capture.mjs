@@ -24,7 +24,7 @@ function loadData(dir) {
   const har = JSON.parse(readFileSync(join(dir, 'calendar.har'), 'utf8'));
   const embed = har.log.entries.find((entry) => entry.request.url.includes('/calendar/embed?') && entry.response.status === 200);
   return {
-    dir, tabByGid, gviz, harPath: join(dir, 'calendar.har'),
+    dir, tabByGid, gviz, harPath: join(dir, 'calendar.har'), emptyHarPath: join(dir, 'calendar-empty.har'),
     calendarHtml: Buffer.from(embed.response.content.text, embed.response.content.encoding === 'base64' ? 'base64' : 'utf8'),
     calendarEmptyHtml: readFileSync(join(dir, 'calendar-empty.html')),
     observe: JSON.parse(readFileSync(join(dir, 'observe.json'), 'utf8')),
@@ -38,7 +38,7 @@ async function installRoutes(context, data, state) {
   await context.route((url) => !['127.0.0.1', 'localhost'].includes(url.hostname), (route) => route.abort('blockedbyclient'));
   // Google Calendar embed: replay one frozen recording.
   if (mode === 'normal' || mode === 'empty') {
-    await context.routeFromHAR(data.harPath, { url: /google\.com|gstatic\.com|googleusercontent\.com/, notFound: 'abort' });
+    await context.routeFromHAR(mode === 'empty' ? data.emptyHarPath : data.harPath, { url: /google\.com|gstatic\.com|googleusercontent\.com/, notFound: 'abort' });
   }
   await context.route(/calendar\.google\.com\/calendar\/embed\?/, (route) => {
     if (mode === 'loading') return hang();

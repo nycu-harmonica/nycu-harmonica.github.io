@@ -305,3 +305,38 @@
   from { opacity: 0; transform: translateY(0.75rem) scale(0.985); }
   to { opacity: 1; transform: none; }
 }
+
+/* ---------- 淺色外觀：卡片語彙不變，換成竹韻官網的淺色調 ---------- */
+@media (prefers-color-scheme: light) {
+  .discord-page {
+    color: #132f38;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(42, 143, 176, 0.18), transparent 28rem),
+      radial-gradient(circle at 90% 85%, rgba(88, 101, 242, 0.1), transparent 30rem),
+      #eef5f7;
+  }
+  .discord-topbar a { color: #0d4a5e; }
+  .discord-topbar a:hover { color: #082f3c; }
+  .discord-invite {
+    border-color: #d2e2e7;
+    background: #fff;
+    box-shadow: 0 1.5rem 4rem rgba(8, 47, 60, 0.16), 0 0 0 0.3rem rgba(23, 107, 132, 0.06);
+  }
+  .discord-server-icon { border-color: #fff; }
+  .discord-eyebrow { color: #5b6f77; }
+  .discord-heading h1 { color: #0f2a33; }
+  .discord-community-badge { color: #0d4a5e; background: #dceff3; }
+  .discord-community-badge > span { color: #176b84; }
+  .discord-counts { color: #4b646d; }
+  .discord-counts strong { color: #132f38; }
+  .discord-description { color: #2b4650; }
+  .discord-tags li { border-color: #d2e2e7; color: #2b4650; background: #f3f8fa; }
+  .discord-copy-button { color: #0d4a5e; background: #e6f0f3; }
+  .discord-copy-button:hover { background: #d6e7ec; }
+  .discord-live-status { color: #5b6f77; }
+  .discord-invite[data-live="false"] .discord-live-status { border-color: #ebd3a6; color: #6b4300; background: #fff6e5; }
+  .discord-invite[data-live="loading"] .discord-counts strong {
+    background-image: linear-gradient(90deg, #e3edf0 0%, #f4f8f9 50%, #e3edf0 100%);
+  }
+  .discord-footnote { color: #4b646d; }
+}

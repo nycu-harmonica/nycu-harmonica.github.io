@@ -29,6 +29,25 @@
     desktopMedia.addEventListener('change', resetNavOnDesktop);
   }
 
+  // Google 日曆嵌入：進入畫面 4.5 秒後還沒畫好，就把後方的說明換成「載不出來」與替代資訊。
+  // 跨網域 iframe 無法得知內容是否成功，所以說明放在 iframe 下層，日曆畫好時自然被蓋住。
+  document.querySelectorAll('[data-calendar-embed]').forEach(function (embed) {
+    var frame = embed.querySelector('iframe');
+    if (!frame) return;
+    function arm() {
+      window.setTimeout(function () { embed.classList.add('is-slow'); }, 4500);
+    }
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        if (entries.some(function (entry) { return entry.isIntersecting; })) {
+          observer.disconnect();
+          arm();
+        }
+      });
+      observer.observe(embed);
+    } else arm();
+  });
+
   // 限時區塊:過期(data-expires)就隱藏,不必等網站重新建置
   document.querySelectorAll('[data-expires]').forEach(function (el) {
     var expires = Date.parse(el.dataset.expires || '');

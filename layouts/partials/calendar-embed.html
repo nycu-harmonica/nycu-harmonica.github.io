@@ -2,8 +2,15 @@
 {{- $cid := .Site.Params.calendarId -}}
 {{- if $cid -}}
 {{- $calendarURL := printf "https://calendar.google.com/calendar/embed?src=%s&ctz=Asia%%2FTaipei&hl=zh_TW&mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTz=0&showTab=1&wkst=1" ($cid | urlquery) -}}
-<div class="calendar-embed">
-  <p class="calendar-loading" aria-hidden="true"><span class="calendar-loading-dot"></span>正在載入 Google 日曆…</p>
+<div class="calendar-embed" data-calendar-embed>
+  {{- /* 這段在 iframe 後方：日曆畫出來就蓋住它；日曆讀不到（iframe 透明）時就看得到說明。 */}}
+  <div class="calendar-fallback">
+    <p class="calendar-loading"><span class="calendar-loading-dot" aria-hidden="true"></span>正在載入 Google 日曆…</p>
+    <div class="calendar-failed">
+      <p class="calendar-failed-title">Google 日曆暫時載不出來</p>
+      <p>每週二晚上的定期社課照常在學生活動中心 1F 聯誼廳舉行。完整行程請直接開啟 Google 日曆，或到 Discord 問問大家。</p>
+    </div>
+  </div>
   {{- /* 手機改用可捲動的議程清單，不再把行事曆截在固定高度裡。 */}}
   <iframe
     src="{{ $calendarURL | safeURL }}"
@@ -11,7 +18,7 @@
     loading="lazy"></iframe>
 </div>
 <div class="calendar-meta">
-  <p class="calendar-note">時間皆為臺灣時間。行事曆沒有出現，或想加到自己的日曆？</p>
+  <p class="calendar-note">時間皆為臺灣時間。想加到自己的日曆，或上面沒有顯示？</p>
   <a class="btn btn-small" href="{{ $calendarURL | safeURL }}" target="_blank" rel="noopener noreferrer">在 Google 日曆開啟<span aria-hidden="true"> ↗</span></a>
 </div>
 {{- else -}}

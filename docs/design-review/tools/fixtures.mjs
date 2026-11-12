@@ -10,7 +10,7 @@
 //   assets/<path>          Observatory-cached images used by those posts
 //   discord.json           one real public Discord invite response
 //   calendar.har           one recording of the public Google Calendar embed
-//   calendar-empty.html    the same embed showing a range with no events
+//   calendar-empty.{har,html}  the same embed for a range with no events
 // Nothing is written to any production source; every request here is a GET.
 import { chromium } from 'playwright';
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -89,11 +89,17 @@ if (!existsSync(join(out, 'calendar.har'))) {
   await page.waitForTimeout(3000);
   await page.screenshot({ path: join(out, 'calendar-recorded.png') });
   await context.close();
-  // An agenda for a range with no events, served in place of the embed for the empty state.
-  const empty = await browser.newContext({ locale: 'zh-TW', timezoneId: 'Asia/Taipei' });
+  await browser.close();
+}
+if (!existsSync(join(out, 'calendar-empty.har'))) {
+  // An agenda for a range with no events, served in place of the embed for the
+  // empty state. Recorded as its own HAR so its event request replays too.
+  const browser = await chromium.launch();
+  const empty = await browser.newContext({ recordHar: { path: join(out, 'calendar-empty.har'), urlFilter: /google|gstatic/, content: 'embed' }, locale: 'zh-TW', timezoneId: 'Asia/Taipei' });
   const emptyPage = await empty.newPage();
   const response = await emptyPage.goto(CAL + '&dates=20990101%2F20990131', { waitUntil: 'networkidle', timeout: 45000 }).catch(() => null);
   if (response) writeFileSync(join(out, 'calendar-empty.html'), await response.text());
+  await emptyPage.waitForTimeout(3000);
   await emptyPage.screenshot({ path: join(out, 'calendar-empty.png') });
   await empty.close();
   await browser.close();

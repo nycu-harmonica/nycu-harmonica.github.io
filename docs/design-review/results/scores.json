@@ -1,0 +1,89 @@
+[
+  {
+    "round": "1",
+    "reviewer": "opus-5-5",
+    "file": "r1-opus-5-5.md",
+    "mapping": {
+      "B": "baseline",
+      "A": "new",
+      "C": "reference"
+    },
+    "baseline": {
+      "overall": 5.5,
+      "mean": 5.75,
+      "scores": {
+        "資訊層級": 6,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6,
+        "一致性": 6,
+        "資訊密度": 6,
+        "導覽": 5.5,
+        "狀態與回饋": 4.5,
+        "響應式": 6.5,
+        "文案": 5.5,
+        "無障礙": 6,
+        "動畫與轉場": 4.5
+      },
+      "issues": [
+        "home/chronology 的 loading、error、empty 狀態幾乎相同：日曆是空白大框或 Google 錯誤畫面，動態區文字不分狀態，沒有說明和下一步",
+        "深色外觀不成立：home、about、chronology、site-guide、join、home-calendar 的 -dark 截圖與淺色版完全相同",
+        "頁首導覽只有首頁／編年史／關於我們三項，沒有 Discord 或入社 CTA，也沒有行事曆入口，手機選單同樣如此",
+        "首頁 hero 下是置中長文，缺少社課時間地點等重點卡和入門步驟；about 是 1020px 寬單欄長文",
+        "頁尾外露『Google Sheet 即時讀取』『Repo 資料備援』，動態區把三個月前的資料標成『即時資料』"
+      ]
+    },
+    "new": {
+      "overall": 7.5,
+      "mean": 7.38,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 7.5,
+        "色彩": 8,
+        "間距與版面": 7.5,
+        "一致性": 7.5,
+        "資訊密度": 7,
+        "導覽": 8,
+        "狀態與回饋": 7,
+        "響應式": 7.5,
+        "文案": 6.5,
+        "無障礙": 7,
+        "動畫與轉場": 6.5
+      },
+      "issues": [
+        "home-empty/home-error desktop：日曆空資料露出 Google 原生『2099年1月 – 2098年12月』與『糟糕，無法載入活動』，失敗時仍顯示『正在載入 Google 日曆⋯』，應改成站內替代卡＋外連",
+        "about/chronology：公開頁面寫出 Hermes 工作區、chronology_events 分頁、PDF 盤點與日期格式規範等內部術語，應移到 site-guide 並把時間軸往前提",
+        "home-calendar-dark 與 discord-dark：深色外觀下 Google 日曆是整塊白框，Discord 頁深色和淺色截圖完全相同",
+        "mobile 多頁：浮動『詢問竹韻』按鈕蓋住 hero 的『看社團行事曆』CTA 與正文，應在 hero／選單展開時隱藏或縮小並保留安全區",
+        "portal-join 標題壓在半透明 Google 表單截圖上互相干擾；screen 快捷鍵提示字太小、對比太低"
+      ]
+    },
+    "reference": {
+      "overall": 4.5,
+      "mean": 4.75,
+      "scores": {
+        "資訊層級": 5,
+        "字體排印": 6,
+        "色彩": 5,
+        "間距與版面": 5,
+        "一致性": 5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3,
+        "響應式": 4,
+        "文案": 5,
+        "無障礙": 5,
+        "動畫與轉場": 3
+      },
+      "issues": [
+        "CUMS about 與 MCU 口琴社手機版是桌面版直接縮小，字小到讀不了",
+        "CUMS 首頁外嵌 Twitter 元件空白、MCU 貼文圖片壞掉露出替代文字，失敗時沒有替代內容",
+        "Yale events 頁露出 CMS 範本說明文字『Use the Calendar List Block…』",
+        "CUMS 與 MCU 首頁看不出社團定位和入社方式，CUMS 中段大片空白",
+        "CUMS home 與 about 的頁首、導覽、配色、Logo 完全不同"
+      ]
+    },
+    "delta_overall": 2.0,
+    "delta_mean": 1.63
+  }
+]
