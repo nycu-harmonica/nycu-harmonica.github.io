@@ -607,5 +607,92 @@
     },
     "delta_overall": 2.5,
     "delta_mean": 2.33
+  },
+  {
+    "round": "8",
+    "reviewer": "opus-5-5",
+    "file": "r8-opus-5-5.md",
+    "mapping": {
+      "B": "baseline",
+      "C": "new",
+      "A": "reference"
+    },
+    "baseline": {
+      "overall": 5.5,
+      "mean": 4.92,
+      "scores": {
+        "資訊層級": 6,
+        "字體排印": 5.5,
+        "色彩": 4.5,
+        "間距與版面": 5.5,
+        "一致性": 4.5,
+        "資訊密度": 5.5,
+        "導覽": 5,
+        "狀態與回饋": 3.5,
+        "響應式": 5.5,
+        "文案": 3.5,
+        "無障礙": 5.5,
+        "動畫與轉場": 4.5
+      },
+      "issues": [
+        "所有 -dark 截圖與淺色逐像素相同，深色外觀完全沒有作用",
+        "home-loading/error 行事曆是約 520px 空白框，empty 只有 Google 系統字；mobile 五種狀態完全一樣",
+        "site-guide、chronology、about、頁尾外露 GitHub、Hugo、Repo、Hermes、chronology_events 等內部術語",
+        "join 頁沒有設計，discord 頁用綠色按鈕與英文眉標，和官網風格斷裂",
+        "頁首缺少行事曆與 Discord 主按鈕，手機選單只有三個連結，浮動按鈕遮住內容"
+      ]
+    },
+    "new": {
+      "overall": 8.0,
+      "mean": 8.0,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 8,
+        "色彩": 8.5,
+        "間距與版面": 7.5,
+        "一致性": 8.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8,
+        "響應式": 7.5,
+        "文案": 8,
+        "無障礙": 7.5,
+        "動畫與轉場": 7.5
+      },
+      "issues": [
+        "home-error desktop 行事曆說明卡周圍有 400px 以上的灰色空白",
+        "home-empty 行事曆仍只有 Google 的空資料系統字，沒有站方說明",
+        "mobile 浮動「詢問竹韻」按鈕蓋住 site-guide 與 home 的內文",
+        "chronology 時間軸字級約 10–13px，來源連結點擊範圍小，左側空白",
+        "portal、screen 仍有英文眉標，chronology 的「Club Portal」沒有解釋"
+      ]
+    },
+    "reference": {
+      "overall": 4.5,
+      "mean": 4.58,
+      "scores": {
+        "資訊層級": 5,
+        "字體排印": 5.5,
+        "色彩": 5,
+        "間距與版面": 4,
+        "一致性": 5,
+        "資訊密度": 4.5,
+        "導覽": 5.5,
+        "狀態與回饋": 3.5,
+        "響應式": 5,
+        "文案": 4,
+        "無障礙": 5,
+        "動畫與轉場": 3
+      },
+      "issues": [
+        "ref-cums-home desktop 社群嵌入讀取失敗後留下約 600px 空白並重複兩次",
+        "ref-yale-glee-events desktop CMS 範本說明文字直接公開",
+        "ref-mcu-harmonica-home 首屏被選單與登入表單佔據，看不到入社資訊",
+        "ref-mcu-harmonica-home desktop 圖片破圖只剩替代文字",
+        "ref-yale-glee-home desktop 右欄全空，未善用寬螢幕"
+      ]
+    },
+    "delta_overall": 2.5,
+    "delta_mean": 3.08
   }
 ]

@@ -211,7 +211,7 @@ faq:
     duration: 7000
 
 join:
-  kicker: JOIN BAMBOO MELODY
+  kicker: 加入竹韻
   title: 下一段旋律，換你加入
   body: 第一堂社課前入社並繳交兩學期社費，送你一個小口琴吊飾。
   cta_label: 填寫入社表單（約一分鐘）
