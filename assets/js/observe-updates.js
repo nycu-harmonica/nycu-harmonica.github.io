@@ -142,7 +142,11 @@
       seenUrls.add(item.url);
       return items.length === MAX_ITEMS;
     });
-    if (!items.length) throw new Error('API 沒有安全的竹韻動態');
+    if (!items.length) {
+      var empty = new Error('API 沒有安全的竹韻動態');
+      empty.reason = payload.items.length ? 'invalid' : 'empty';
+      throw empty;
+    }
     return { generatedAt: payload.generatedAt, source: source, items: items };
   }
 
@@ -177,7 +181,10 @@
     var time = doc.createElement('time');
     time.setAttribute('datetime', item.publishedAt);
     time.textContent = item.postedAtLocal;
-    dateLine.append(time);
+    var platform = doc.createElement('span');
+    platform.className = 'card-platform';
+    platform.textContent = item.platform;
+    dateLine.append(time, platform);
     var heading = doc.createElement('h3');
     heading.className = 'card-title';
     var link = doc.createElement('a');
@@ -186,10 +193,7 @@
     link.setAttribute('rel', 'noopener noreferrer');
     link.textContent = item.title;
     heading.append(link);
-    var summary = doc.createElement('p');
-    summary.className = 'card-summary';
-    summary.textContent = item.sourceName + '・' + item.platform;
-    body.append(dateLine, heading, summary);
+    body.append(dateLine, heading);
     article.append(body);
     return article;
   }
@@ -198,8 +202,23 @@
     var cards = normalized.items.map(function (item) { return createUpdateCard(doc, item); });
     grid.replaceChildren.apply(grid, cards);
     grid.dataset.observeMode = 'live';
-    status.dataset.observeMode = 'live';
-    status.textContent = '即時資料：' + formatTaipei(normalized.generatedAt) + '（Asia/Taipei）';
+    setStatus(status, 'live', '已讀取最新動態（' + formatTaipei(normalized.generatedAt) + ' 更新）・' + SOURCE_NOTE);
+  }
+
+  var SOURCE_NOTE = '資料來自臺灣口琴觀測站，內容以原始貼文為準';
+
+  // 狀態列分成 loading / live / fallback 三種；訪客永遠看得到目前畫面是哪一份資料。
+  function setStatus(status, mode, text) {
+    status.dataset.observeMode = mode;
+    var target = typeof status.querySelector === 'function' ? status.querySelector('[data-status-text]') : null;
+    (target || status).textContent = text;
+  }
+
+  function fallbackText(status, reason) {
+    var time = status.dataset && status.dataset.fallbackTime;
+    var shown = time ? '先顯示 ' + time + ' 同步的動態' : '先顯示網站內建的動態';
+    if (reason === 'empty') return '觀測站目前沒有新的公開貼文，' + shown;
+    return '暫時連不上臺灣口琴觀測站，' + shown;
   }
 
   async function refreshObserveUpdates(options) {
@@ -216,6 +235,7 @@
     var clearTimer = options.clearTimeoutImpl || global.clearTimeout;
     var controller = new AbortControllerImpl();
     var timer = setTimer(function () { controller.abort(); }, options.timeoutMs || 8000);
+    setStatus(status, 'loading', '正在讀取觀測站的最新動態…');
     try {
       var response = await fetchImpl(API_URL, {
         method: 'GET', mode: 'cors', credentials: 'omit', cache: 'no-cache',
@@ -229,9 +249,9 @@
       var normalized = normalizePayload(JSON.parse(raw));
       renderUpdates(doc, grid, status, normalized);
       return true;
-    } catch (_error) {
+    } catch (error) {
       grid.dataset.observeMode = 'fallback';
-      status.dataset.observeMode = 'fallback';
+      setStatus(status, 'fallback', fallbackText(status, error && error.reason));
       return false;
     } finally {
       clearTimer(timer);

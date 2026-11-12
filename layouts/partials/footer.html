@@ -1,22 +1,41 @@
 <footer class="site-footer">
   <div class="container footer-inner">
-    <div class="footer-links" data-sheet-links="footer">
-      {{ $links := site.Data.generated.links | default (slice) }}
-      {{ range $links }}
-        {{ $show := .show_in | default (slice) }}
-        {{ if or (eq (len $show) 0) (in $show "footer") }}
-        <a data-sheet-link-key="{{ .key }}" href="{{ .url }}" rel="me noopener" target="_blank">{{ partial "icon.html" (dict "name" (.icon | default "link")) }}<span>{{ .label }}</span></a>
-        {{ end }}
-      {{ end }}
+    <div class="footer-brand">
+      <a class="footer-logo" href="{{ "/" | relURL }}">
+        <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="40" height="40" alt="" loading="lazy">
+        <span>國立陽明交通大學竹韻口琴社</span>
+      </a>
+      <p>每週二晚上在學生活動中心練習，零基礎歡迎。</p>
+      {{ with site.Params.contactEmail }}<p><a href="mailto:{{ . }}">{{ partial "icon.html" (dict "name" "email") }}<span>{{ . }}</span></a></p>{{ end }}
     </div>
-    <p class="footer-meta">
-      © {{ now.Format "2006" }} 國立陽明交通大學竹韻口琴社
-      {{ with site.Params.contactEmail }}・<a href="mailto:{{ . }}">{{ . }}</a>{{ end }}
-      ・<a href="{{ "/site-guide/" | relURL }}">網站維護說明</a>
-      ・<a href="{{ "/index.xml" | relURL }}">網站 RSS</a>
-    </p>
+    <nav class="footer-col" aria-label="網站頁面">
+      <h2>網站</h2>
+      <ul>
+        <li><a href="{{ "/#calendar" | relURL }}">社團行事曆</a></li>
+        <li><a href="{{ "/chronology/" | relURL }}">竹韻編年史</a></li>
+        <li><a href="{{ "/about/" | relURL }}">關於我們</a></li>
+        <li><a href="{{ "/about/#support" | relURL }}">支持竹韻</a></li>
+        <li><a href="{{ "/site-guide/" | relURL }}">網站資料說明</a></li>
+      </ul>
+    </nav>
+    <div class="footer-col">
+      <h2>社群</h2>
+      <div class="footer-links" data-sheet-links="footer">
+        {{ $links := site.Data.generated.links | default (slice) }}
+        {{ range $links }}
+          {{ $show := .show_in | default (slice) }}
+          {{ if or (eq (len $show) 0) (in $show "footer") }}
+          <a data-sheet-link-key="{{ .key }}" href="{{ .url }}" rel="me noopener" target="_blank">{{ partial "icon.html" (dict "name" (.icon | default "link")) }}<span>{{ .label }}</span></a>
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© {{ now.Format "2006" }} 國立陽明交通大學竹韻口琴社・<a href="{{ "/index.xml" | relURL }}">RSS</a></p>
     {{ with site.Data.generated.last_sync }}
-    <p class="footer-meta footer-sync" id="sheet-live-status" data-sheet-mode="fallback" aria-live="polite">Repo 資料備援：{{ time.Format "2006/01/02 15:04" .updated_at }}（Asia/Taipei）</p>
+    {{ $synced := time.Format "2006/01/02" .updated_at }}
+    <p class="data-status data-status-footer" id="sheet-live-status" data-sheet-status data-sheet-mode="fallback" data-fallback-time="{{ $synced }}" aria-live="polite"><span class="data-status-dot" aria-hidden="true"></span><span data-status-text>目前顯示 {{ $synced }} 整理的社團公開資料</span></p>
     {{ end }}
   </div>
 </footer>

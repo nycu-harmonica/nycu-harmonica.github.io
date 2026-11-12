@@ -3,16 +3,16 @@
 {{- if $cid -}}
 {{- $calendarURL := printf "https://calendar.google.com/calendar/embed?src=%s&ctz=Asia%%2FTaipei&hl=zh_TW&mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTz=0&showTab=1&wkst=1" ($cid | urlquery) -}}
 <div class="calendar-embed">
+  <p class="calendar-loading" aria-hidden="true"><span class="calendar-loading-dot"></span>正在載入 Google 日曆…</p>
+  {{- /* 手機改用可捲動的議程清單，不再把行事曆截在固定高度裡。 */}}
   <iframe
     src="{{ $calendarURL | safeURL }}"
-    title="竹韻口琴社公開活動行事曆"
-    loading="lazy"
-    frameborder="0"
-    scrolling="no"></iframe>
+    title="竹韻口琴社公開活動行事曆（Google 日曆）"
+    loading="lazy"></iframe>
 </div>
 <div class="calendar-meta">
-  <p class="calendar-note">完整公開活動時程以此行事曆為準；手機建議使用議程模式。</p>
-  <a class="more-link" href="{{ $calendarURL | safeURL }}" target="_blank" rel="noopener noreferrer">另開完整行事曆 →</a>
+  <p class="calendar-note">時間皆為臺灣時間。行事曆沒有出現，或想加到自己的日曆？</p>
+  <a class="btn btn-small" href="{{ $calendarURL | safeURL }}" target="_blank" rel="noopener noreferrer">在 Google 日曆開啟<span aria-hidden="true"> ↗</span></a>
 </div>
 {{- else -}}
 <div class="placeholder-card">

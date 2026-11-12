@@ -1,0 +1,7 @@
+{{- /* 本頁目錄：桌面固定在側欄，手機收在內文上方。 */ -}}
+{{ if gt (len (findRE "<li>" .TableOfContents)) 1 }}
+<div class="page-toc">
+  <h2>本頁內容</h2>
+  {{ .TableOfContents }}
+</div>
+{{ end }}

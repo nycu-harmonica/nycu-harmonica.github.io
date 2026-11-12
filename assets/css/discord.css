@@ -125,8 +125,8 @@
 
 .discord-eyebrow {
   margin: 0 0 0.45rem;
-  color: #949ba4;
-  font-size: 0.67rem;
+  color: #a3aab4;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.07em;
   line-height: 1.45;
@@ -246,10 +246,30 @@
 
 .discord-copy-button:hover { background: #303948; }
 
+.discord-invite[data-live="loading"] .discord-counts strong {
+  display: inline-block;
+  min-width: 1.6rem;
+  border-radius: 0.3rem;
+  color: transparent;
+  background: linear-gradient(90deg, #252d3a 0%, #354055 50%, #252d3a 100%) 0 0 / 200% 100%;
+  animation: discord-shimmer 1.2s linear infinite;
+}
+
+@keyframes discord-shimmer { to { background-position: -200% 0; } }
+
+.discord-invite[data-live="false"] .discord-counts { display: none; }
+.discord-invite[data-live="false"] .discord-live-status {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #3b4252;
+  border-radius: 0.6rem;
+  color: #dbdee1;
+  background: #1a2130;
+}
+
 .discord-live-status {
   margin: 0.8rem 0 0;
-  color: #949ba4;
-  font-size: 0.72rem;
+  color: #a3aab4;
+  font-size: 0.82rem;
   line-height: 1.5;
   text-align: center;
 }
@@ -269,6 +289,10 @@
   .discord-server-icon { left: 2rem; }
   .discord-actions { grid-template-columns: 1fr auto; }
   .discord-copy-button { min-height: 3.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discord-invite[data-live="loading"] .discord-counts strong { animation: none; }
 }
 
 @media (prefers-reduced-motion: no-preference) {

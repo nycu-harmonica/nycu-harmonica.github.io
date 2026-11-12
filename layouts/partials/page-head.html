@@ -1,0 +1,7 @@
+<header class="page-hero">
+  <div class="container">
+    {{ with .Params.kicker }}<p class="section-kicker">{{ . }}</p>{{ end }}
+    <h1 data-seo-heading>{{ .Params.heading | default .Title }}</h1>
+    {{ with .Params.lede | default .Description }}<p class="page-lede">{{ . }}</p>{{ end }}
+  </div>
+</header>

@@ -2,9 +2,12 @@
   <div class="container header-inner">
     <a class="brand" href="{{ "/" | relURL }}">
       <img class="brand-mark" src="{{ "images/bamboo-logo.webp" | relURL }}" width="40" height="40" alt="">
-      <span class="brand-name">竹韻口琴社</span>
+      <span class="brand-text">
+        <span class="brand-name">竹韻口琴社</span>
+        <span class="brand-sub">陽明交大 · since 1968</span>
+      </span>
     </a>
-    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="開啟選單">
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="開啟選單">
       <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
@@ -15,13 +18,13 @@
         {{ range .Site.Menus.main }}
         <li>
           {{ $isExternal := strings.HasPrefix .URL "http" }}
+          {{ $isCurrent := and (not (strings.Contains .URL "#")) (or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .)) }}
           <a href="{{ if $isExternal }}{{ .URL }}{{ else }}{{ .URL | relURL }}{{ end }}"
              {{ if $isExternal }}target="_blank" rel="noopener"{{ end }}
-             {{ if or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) }}class="active" aria-current="page"{{ end }}>
-            {{ .Name }}
-          </a>
+             {{ if $isCurrent }}class="active" aria-current="page"{{ end }}>{{ .Name }}</a>
         </li>
         {{ end }}
+        <li class="nav-cta-item"><a class="nav-cta" href="{{ "/discord/" | relURL }}">{{ partial "icon.html" (dict "name" "discord") }}<span>加入 Discord</span></a></li>
       </ul>
     </nav>
   </div>

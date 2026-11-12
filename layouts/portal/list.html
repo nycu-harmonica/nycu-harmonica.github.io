@@ -28,8 +28,10 @@
     <div class="portal-story-track" data-story-track>
       <article class="portal-story-slide portal-story-welcome" data-story-title="{{ $portal.welcome }}" data-story-description="{{ $portal.intro }}">
         <div class="portal-story-welcome-scene" aria-hidden="true">
-          <img class="portal-story-welcome-visual portal-story-welcome-visual-back" src="{{ "images/portal-welcome/four-harmonica-players.webp" | relURL }}" alt="">
-          <img class="portal-story-welcome-visual portal-story-welcome-visual-front" src="{{ "images/portal-welcome/four-harmonica-players.webp" | relURL }}" alt="">
+          {{- /* 前後兩層用同一組 srcset，瀏覽器只下載一次；首屏圖依實際寬度（畫框的 238%）挑檔。 */}}
+          {{ $welcomeSrcset := printf "%s 1600w, %s 2560w, %s 3840w" ("images/portal-welcome/four-harmonica-players-1600.webp" | relURL) ("images/portal-welcome/four-harmonica-players-2560.webp" | relURL) ("images/portal-welcome/four-harmonica-players.webp" | relURL) }}
+          <img class="portal-story-welcome-visual portal-story-welcome-visual-back" src="{{ "images/portal-welcome/four-harmonica-players-1600.webp" | relURL }}" srcset="{{ $welcomeSrcset }}" sizes="(min-width: 640px) 1142px, 238vw" width="3840" height="2160" alt="" decoding="async">
+          <img class="portal-story-welcome-visual portal-story-welcome-visual-front" src="{{ "images/portal-welcome/four-harmonica-players-1600.webp" | relURL }}" srcset="{{ $welcomeSrcset }}" sizes="(min-width: 640px) 1142px, 238vw" width="3840" height="2160" alt="" fetchpriority="high">
         </div>
         <div class="portal-story-copy">
           <p class="portal-story-kicker">{{ $portal.kicker }}</p>

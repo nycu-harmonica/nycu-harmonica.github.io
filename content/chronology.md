@@ -4,6 +4,7 @@ seoTitle: 竹韻編年史｜交大口琴社歷史與復社紀錄
 heading: 竹韻口琴社編年史
 description: 從民國 56–57 年的早期史料線索、交通大學時期的演出與比賽，到 2026 年復社的公開資料時間線。
 menu_note: 公開社史、影音與比賽紀錄
+kicker: 社史
 ---
 
 這份時間線只列去個資、可追溯來源的事件句子；每列可從來源連結回看原始資料。內容由[竹韻口琴社網站資料 Google Sheet](https://docs.google.com/spreadsheets/d/19facgxayMMiYSz1gNmoQRtkY_EjLTYiRyyTa6KfYWic/edit) 的 `chronology_events` 分頁維護。

@@ -2,32 +2,54 @@
 {{ $joinURL := "/discord/" | relURL }}
 {{ $joinLabel := "加入 Discord" }}
 <section class="hero">
-  <div class="container">
+  <div class="container hero-inner">
     <div class="hero-copy">
-      <p class="hero-kicker">NYCU BAMBOO MELODY HARMONICA CLUB</p>
-      <h1 data-seo-heading>國立陽明交通大學竹韻口琴社</h1>
-      <p class="hero-subtitle">用一把口琴，吹出屬於你的旋律</p>
+      <p class="hero-kicker">NYCU Bamboo Melody Harmonica Club</p>
+      <h1 data-seo-heading>國立陽明交通大學<span class="hero-title-line">竹韻口琴社</span></h1>
+      <p class="hero-subtitle">用一把口琴，吹出屬於你的旋律。1968 年創社，2026 年夏天復社，零基礎也能從第一個音開始。</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}">{{ $joinLabel }}</a>
-        <a class="btn" href="#calendar">社團行事曆</a>
+        <a class="btn btn-primary btn-large" data-sheet-join-link href="{{ $joinURL }}">{{ $joinLabel }}</a>
+        <a class="btn btn-ghost btn-large" href="#calendar">看社團行事曆</a>
       </div>
+      <ul class="hero-facts" aria-label="社課速覽">
+        <li><span class="hero-fact-label">社課</span><strong>每週二晚上</strong></li>
+        <li><span class="hero-fact-label">地點</span><strong>學生活動中心 1F 聯誼廳</strong></li>
+        <li><span class="hero-fact-label">門檻</span><strong>零基礎、不限校內</strong></li>
+      </ul>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <img src="{{ "images/bamboo-hero-mark.webp" | relURL }}" width="960" height="960" alt="" fetchpriority="high" decoding="async">
     </div>
   </div>
 </section>
 
-<section class="section container">
-  <div class="prose home-intro">
-    {{ .Content }}
+<section class="section container home-intro-grid" aria-labelledby="intro-title">
+  <div class="home-intro">
+    <p class="section-kicker">關於竹韻</p>
+    <h2 id="intro-title">以口琴會友的大學社團</h2>
+    <div class="prose">{{ .Content }}</div>
   </div>
+  <aside class="first-steps" aria-labelledby="first-steps-title">
+    <h2 id="first-steps-title">第一次來？</h2>
+    <ol>
+      <li><strong>加入 Discord</strong><span>社課通知、借琴和問問題都在這裡。</span></li>
+      <li><strong>挑一堂社課來看看</strong><span>行事曆上的每週二社課都歡迎旁聽。</span></li>
+      <li><strong>追蹤 Instagram</strong><span>演出、成發與招生消息最先公布。</span></li>
+    </ol>
+    <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}">{{ $joinLabel }}</a>
+  </aside>
 </section>
 
-<section class="section container" id="updates">
+<section class="section container" id="updates" aria-labelledby="updates-title">
   <div class="section-head">
-    <h2>竹韻近期動態</h2>
-    <a class="more-link" href="https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/" target="_blank" rel="noopener noreferrer">前往觀測站來源頁 →</a>
+    <div>
+      <p class="section-kicker">近期動態</p>
+      <h2 id="updates-title">竹韻最近在做什麼</h2>
+    </div>
+    <a class="more-link" href="https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/" target="_blank" rel="noopener noreferrer">看全部動態<span aria-hidden="true"> ↗</span></a>
   </div>
-  <p class="section-source-note">由臺灣口琴觀測站整理自竹韻公開社群；內容以原始貼文為準。</p>
   {{ $observe := site.Data.generated.observe_updates }}
+  {{ $fallbackTime := "" }}{{ with $observe }}{{ $fallbackTime = time.Format "2006/01/02" (time.In "Asia/Taipei" (time.AsTime .source_generated_at)) }}{{ end }}
   <div class="card-grid" id="observe-updates-grid" data-observe-mode="fallback">
     {{ if and $observe $observe.items }}
     {{ range $observe.items }}{{ partial "observe-update-card.html" . }}{{ end }}
@@ -35,23 +57,31 @@
     <div class="placeholder-card"><p>目前沒有可顯示的竹韻近期動態。</p></div>
     {{ end }}
   </div>
-  <p class="observe-updated" id="observe-updates-status" data-observe-mode="fallback" aria-live="polite">
-    {{- if $observe -}}上次同步資料：{{ time.Format "2006/01/02 15:04" (time.In "Asia/Taipei" (time.AsTime $observe.source_generated_at)) }}（Asia/Taipei）{{- else -}}目前顯示網站內建的備援資料。{{- end -}}
+  <p class="data-status" id="observe-updates-status" data-observe-mode="fallback" data-fallback-time="{{ $fallbackTime }}" aria-live="polite">
+    <span class="data-status-dot" aria-hidden="true"></span><span data-status-text>{{ with $fallbackTime }}目前顯示 {{ . }} 同步的動態{{ else }}目前顯示網站內建的動態{{ end }}・資料來自臺灣口琴觀測站，內容以原始貼文為準</span>
   </p>
-  <noscript><p class="observe-updated">目前顯示網站內建的備援資料。</p></noscript>
 </section>
 
-<section class="section container" id="calendar">
+<section class="section container" id="calendar" aria-labelledby="calendar-title">
   <div class="section-head">
-    <h2>社團活動行事曆</h2>
+    <div>
+      <p class="section-kicker">行事曆</p>
+      <h2 id="calendar-title">社課、演出與活動</h2>
+    </div>
   </div>
   {{ partial "calendar-embed.html" . }}
 </section>
 
-<section class="section container join-banner" id="join">
-  <h2>想學口琴嗎？</h2>
-  <p>不需要任何音樂基礎，社課從零開始教。開學後每週二晚上在學生活動中心練習，不限校內同學，歡迎大家加入竹韻口琴社！</p>
-  <a class="btn btn-primary" data-sheet-join-link href="{{ $joinURL }}">{{ $joinLabel }}</a>
-  <p class="join-banner-contact">想問社課、捐贈樂器或洽談演出，都可以<a href="{{ "/about/#join" | relURL }}">直接聯絡我們</a>。</p>
+<section class="section container" id="join">
+  <div class="join-banner">
+    <div class="join-banner-copy">
+      <h2>想學口琴嗎？</h2>
+      <p>不需要任何音樂基礎，社課從零開始教。開學後每週二晚上在學生活動中心練習，不限校內同學，歡迎大家加入竹韻口琴社！</p>
+    </div>
+    <div class="join-banner-actions">
+      <a class="btn btn-primary btn-large" data-sheet-join-link href="{{ $joinURL }}">{{ $joinLabel }}</a>
+      <p class="join-banner-contact">想問社課、捐贈樂器或洽談演出？<a href="{{ "/about/#join" | relURL }}">直接聯絡我們</a></p>
+    </div>
+  </div>
 </section>
 {{ end }}

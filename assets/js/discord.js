@@ -29,12 +29,10 @@ if (card) {
       setText(description, invite.guild?.description);
       setText(online, String(invite.approximate_presence_count));
       setText(members, String(invite.approximate_member_count));
-      setText(status, '已連線 Discord，顯示目前的約略上線與成員人數。');
+      setText(status, '人數由 Discord 即時提供，為約略值。');
       card.dataset.live = 'true';
     } catch (error) {
-      setText(online, '—');
-      setText(members, '—');
-      setText(status, '暫時無法取得即時人數；邀請連結仍可正常使用。');
+      setText(status, '暫時無法取得 Discord 人數，邀請連結照常可以使用。');
       card.dataset.live = 'false';
     }
   };
