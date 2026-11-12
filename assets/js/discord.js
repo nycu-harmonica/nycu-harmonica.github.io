@@ -25,10 +25,19 @@ if (card) {
       if (!response.ok) throw new Error(`Discord API ${response.status}`);
 
       const invite = await response.json();
-      setText(name, invite.guild?.name);
-      setText(description, invite.guild?.description);
-      setText(online, String(invite.approximate_presence_count));
-      setText(members, String(invite.approximate_member_count));
+      setText(name, invite.guild?.name ? `加入${invite.guild.name} Discord` : '');
+      // 伺服器描述常帶官網網址；這頁本來就在官網上，只留說明文字。
+      setText(description, String(invite.guild?.description || '').replace(/\s*https?:\/\/\S+/g, '').replace(/\s*@\s*/g, '＠'));
+      const onlineCount = Number(invite.approximate_presence_count);
+      const memberCount = Number(invite.approximate_member_count);
+      if (!(memberCount > 0)) {
+        // 拿到 0 或缺值時不顯示人數，避免看起來像沒有人。
+        card.dataset.live = 'empty';
+        setText(status, '伺服器已開放加入，進去和大家打聲招呼吧！');
+        return;
+      }
+      setText(online, String(Number.isFinite(onlineCount) ? onlineCount : 0));
+      setText(members, String(memberCount));
       setText(status, '人數由 Discord 即時提供，為約略值。');
       card.dataset.live = 'true';
     } catch (error) {

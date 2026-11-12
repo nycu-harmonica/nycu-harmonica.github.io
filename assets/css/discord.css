@@ -52,6 +52,7 @@
 }
 
 .discord-topbar a:hover { color: #fff; text-decoration: none; }
+.discord-topbar-links { display: inline-flex; gap: 1.1rem; }
 
 .discord-topbar img {
   width: 2.25rem;
@@ -133,7 +134,7 @@
 }
 
 .discord-heading h1 {
-  display: inline;
+  display: block;
   margin: 0;
   color: #f2f3f5;
   font-size: clamp(1.65rem, 7vw, 2.45rem);
@@ -146,7 +147,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.24rem;
-  margin: 0.55rem 0 0 0.5rem;
+  margin: 0.55rem 0 0;
   padding: 0.18rem 0.48rem;
   border-radius: 999px;
   color: #dceff3;
@@ -257,7 +258,8 @@
 
 @keyframes discord-shimmer { to { background-position: -200% 0; } }
 
-.discord-invite[data-live="false"] .discord-counts { display: none; }
+.discord-invite[data-live="false"] .discord-counts,
+.discord-invite[data-live="empty"] .discord-counts { display: none; }
 .discord-invite[data-live="false"] .discord-live-status {
   padding: 0.6rem 0.8rem;
   border: 1px solid #3b4252;

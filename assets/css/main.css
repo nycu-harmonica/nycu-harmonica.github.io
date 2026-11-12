@@ -523,6 +523,14 @@ p, li { text-wrap: pretty; }
 }
 .calendar-embed.is-slow .calendar-loading { display: none; }
 .calendar-embed.is-slow .calendar-failed { display: block; }
+.calendar-embed.is-slow .calendar-fallback { place-items: start center; padding-top: clamp(2rem, 8vh, 4rem); }
+.calendar-failed {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
 .calendar-embed iframe {
   position: relative;
   display: block;
@@ -613,7 +621,15 @@ p, li { text-wrap: pretty; }
   background: var(--surface-2);
   color: var(--ink-soft);
 }
-.prose table { border-collapse: collapse; width: 100%; font-size: 0.93rem; display: block; overflow-x: auto; }
+.prose table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+@media (max-width: 639px) {
+  /* 手機把表格每一列改成一張卡，不再擠出兩字一行的窄欄。 */
+  .prose table, .prose tbody, .prose tr, .prose td { display: block; width: 100%; }
+  .prose thead { display: none; }
+  .prose tr { margin-bottom: 0.75rem; padding: 0.5rem 0.9rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .prose td { padding: 0.3rem 0; border: 0; }
+  .prose td:first-child { color: var(--heading); font-weight: 800; }
+}
 .prose th, .prose td { border-bottom: 1px solid var(--line); padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
 .prose th { background: var(--surface-2); color: var(--heading); white-space: nowrap; }
 .prose code { padding: 0.05rem 0.35rem; border-radius: 4px; background: var(--surface-2); font-size: 0.88em; }
@@ -937,6 +953,7 @@ p, li { text-wrap: pretty; }
   }
   .website-agent-launch::before { width: 1.75rem; height: 1.75rem; font-size: 1.05rem; }
   .site-footer { padding-bottom: 5rem; }
+  .footer-bottom { padding-right: 1.25rem; }
 }
 body:has(.site-nav.open) .website-agent-launch { display: none; }
 @media (min-width: 640px) {
@@ -1007,6 +1024,8 @@ body:has(.site-nav.open) .website-agent-launch { display: none; }
 .footer-col li a, .footer-links a { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 40px; }
 .footer-links { display: grid; }
 .footer-bottom {
+  /* 右下留給「詢問竹韻」浮動鈕，狀態文字不會被蓋住。 */
+  padding-right: 10rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

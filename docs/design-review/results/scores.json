@@ -85,5 +85,92 @@
     },
     "delta_overall": 2.0,
     "delta_mean": 1.63
+  },
+  {
+    "round": "2",
+    "reviewer": "opus-5-5",
+    "file": "r2-opus-5-5.md",
+    "mapping": {
+      "A": "baseline",
+      "B": "new",
+      "C": "reference"
+    },
+    "baseline": {
+      "overall": 5.8,
+      "mean": 5.75,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6,
+        "一致性": 5,
+        "資訊密度": 6,
+        "導覽": 6,
+        "狀態與回饋": 4.5,
+        "響應式": 6,
+        "文案": 6,
+        "無障礙": 5.5,
+        "動畫與轉場": 5
+      },
+      "issues": [
+        "home-error 行事曆讀取失敗時顯示約 520px 空白框，沒有任何說明",
+        "深色外觀未實作：home/about/chronology/site-guide/home-calendar/join 的 dark 截圖與淺色版逐像素相同",
+        "join 是無樣式白底純文字頁，discord 固定深色，和主站是三套視覺系統",
+        "header 缺行事曆與 Discord 主 CTA；「詢問竹韻」浮動鈕在 mobile 遮住卡片標題、hero 按鈕與 footer",
+        "chronology/site-guide/discord/screen 露出 chronology_events、Hermes、YYYY/MM/DD、英文樣板句與裸網址"
+      ]
+    },
+    "new": {
+      "overall": 7.6,
+      "mean": 7.54,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 7.5,
+        "色彩": 8,
+        "間距與版面": 7.5,
+        "一致性": 7.5,
+        "資訊密度": 7.5,
+        "導覽": 8,
+        "狀態與回饋": 8,
+        "響應式": 7.5,
+        "文案": 7,
+        "無障礙": 7,
+        "動畫與轉場": 6.5
+      },
+      "issues": [
+        "site-guide 內部術語外露（chronology_events、last-good、Repo 資料備援、GitHub Actions、Hermes），discord 保留英文樣板與裸網址，screen 主標為「演出投影畫面」",
+        "discord-empty 把「0 位上線 0 位成員」當正常資料顯示，可能勸退新生",
+        "home-error 行事曆失敗卡維持約 600px 高；screen 左側中段約 400px 空白、節目單擠在底部",
+        "site-guide mobile 表格第一欄過窄，文字折成每行兩字；discord mobile 徽章掉行、縮排不齊",
+        "「詢問竹韻」浮動鈕與 footer 狀態文字重疊；screen-song「正在演奏」標籤過小"
+      ]
+    },
+    "reference": {
+      "overall": 4.7,
+      "mean": 4.67,
+      "scores": {
+        "資訊層級": 5,
+        "字體排印": 6,
+        "色彩": 4.5,
+        "間距與版面": 5,
+        "一致性": 4.5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3,
+        "響應式": 4,
+        "文案": 5,
+        "無障礙": 5,
+        "動畫與轉場": 3
+      },
+      "issues": [
+        "CUMS about 與 MCU 首頁在手機上只是整頁縮小，無法閱讀",
+        "CUMS 首頁社群嵌入失敗後留下大片空白和「Tweets by…」殘字",
+        "MCU 首屏是登入表單與 2022 年舊貼文，缺入社與社課資訊",
+        "Yale events 頁直接顯示 CMS 範本說明文字",
+        "Yale 在 1440 寬只用左側約 800px；CUMS 輪播文字壓在照片上，對比不足"
+      ]
+    },
+    "delta_overall": 1.8,
+    "delta_mean": 1.79
   }
 ]

@@ -12,13 +12,13 @@
   </header>
 
   <section class="portal-screen-copy">
-    <p class="portal-screen-eyebrow">WELCOME TO OUR PERFORMANCE</p>
-    <h1 data-seo-heading>{{ $portal.title }}演出投影畫面<span class="sr-only" data-seo-heading-state></span></h1>
+    <p class="portal-screen-eyebrow">{{ $portal.title }}・{{ $portal.status }}</p>
+    <h1 data-seo-heading>{{ $portal.welcome }}<span class="sr-only">｜{{ $portal.title }}演出投影畫面</span><span class="sr-only" data-seo-heading-state></span></h1>
     <p>{{ $portal.subtitle }}</p>
   </section>
 
   <section class="portal-screen-program" aria-labelledby="screen-program-title">
-    <p class="portal-screen-section-label" id="screen-program-title">TODAY'S PROGRAM</p>
+    <p class="portal-screen-section-label" id="screen-program-title">今日曲目</p>
     <ol>
       {{ range $index, $song := $portal.program }}
       <li data-program-item="{{ add $index 1 }}" data-program-title="{{ $song.title }}" data-program-credit="{{ $song.credit }}">
