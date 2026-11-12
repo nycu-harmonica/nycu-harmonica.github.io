@@ -694,5 +694,92 @@
     },
     "delta_overall": 2.5,
     "delta_mean": 3.08
+  },
+  {
+    "round": "9",
+    "reviewer": "opus-5-5",
+    "file": "r9-opus-5-5.md",
+    "mapping": {
+      "A": "baseline",
+      "C": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 6.0,
+      "mean": 5.58,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6,
+        "色彩": 5,
+        "間距與版面": 6.5,
+        "一致性": 5.5,
+        "資訊密度": 6,
+        "導覽": 5.5,
+        "狀態與回饋": 4.5,
+        "響應式": 6.5,
+        "文案": 4.5,
+        "無障礙": 5.5,
+        "動畫與轉場": 5
+      },
+      "issues": [
+        "深色外觀截圖與淺色版逐位元相同，深色模式未生效（home/about/chronology/site-guide/portal/join/home-calendar）",
+        "home-error 行事曆只剩空白框、home-empty 只剩 Google 原生一行字，沒有說明與下一步",
+        "site-guide/chronology/about/discord 外露 GitHub Pages、Hugo、last-good、chronology_events、Hermes、英文 Discord 眉標等內部用語",
+        "Discord（深色＋綠鈕）、join（無 Logo 純文字）、主站三套樣式不一致；主站頁首缺行事曆與入社 CTA",
+        "screen-song 中段大片空白，正在演奏徽章與鍵盤提示字過小"
+      ]
+    },
+    "new": {
+      "overall": 8.0,
+      "mean": 8.0,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 8,
+        "色彩": 8.5,
+        "間距與版面": 7.5,
+        "一致性": 7.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8,
+        "響應式": 8,
+        "文案": 8.5,
+        "無障礙": 7.5,
+        "動畫與轉場": 7.5
+      },
+      "issues": [
+        "home-empty 行事曆是 Google 原生空畫面加大片空白，home-error 錯誤卡下方留空框",
+        "手機版「詢問竹韻」浮動按鈕蓋住正文（site-guide、chronology-dark）",
+        "Discord 頁與 portal 的頁首、背景、元件和主站不一致",
+        "portal-song 照片下方有模糊色塊，portal-join 的模糊表單背景像鬼影",
+        "行事曆每列重複冗長的英文地址並被截斷"
+      ]
+    },
+    "reference": {
+      "overall": 5.5,
+      "mean": 5.75,
+      "scores": {
+        "資訊層級": 6,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 5.5,
+        "一致性": 6.5,
+        "資訊密度": 5.5,
+        "導覽": 6.5,
+        "狀態與回饋": 4,
+        "響應式": 5.5,
+        "文案": 6.5,
+        "無障礙": 6,
+        "動畫與轉場": 4.5
+      },
+      "issues": [
+        "CUMS 首頁 Twitter 外嵌沒載入，留下大片空白，Facebook 外掛重複出現",
+        "銘傳口琴社手機版只是桌面縮放，字與點擊目標過小",
+        "CUMS 與銘傳首頁沒有說明社團是什麼、怎麼參加",
+        "三站都沒有深色外觀，CUMS 與銘傳配色缺乏個性",
+        "Yale 內文只用到約 800 px，寬螢幕右側大片空白"
+      ]
+    },
+    "delta_overall": 2.0,
+    "delta_mean": 2.42
   }
 ]

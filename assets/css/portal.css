@@ -290,7 +290,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(3, 23, 32, 0.32) 48%, rgba(3, 23, 32, 0.84) 68%, #031720 100%);
+    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(3, 23, 32, 0.55) 44%, rgba(3, 23, 32, 0.95) 56%, #031720 100%);
   content: "";
 }
 
@@ -301,7 +301,7 @@
 
 .portal-story-song-1 .portal-story-song-media::after {
   background:
-    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(11, 34, 55, 0.32) 48%, rgba(11, 34, 55, 0.86) 68%, #0b2237 100%);
+    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(11, 34, 55, 0.55) 44%, rgba(11, 34, 55, 0.95) 56%, #0b2237 100%);
 }
 
 .portal-story-instrument-1 .portal-story-instrument-media::after {
@@ -311,7 +311,7 @@
 
 .portal-story-song-2 .portal-story-song-media::after {
   background:
-    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(22, 40, 62, 0.34) 48%, rgba(22, 40, 62, 0.88) 68%, #16283e 100%);
+    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(22, 40, 62, 0.55) 44%, rgba(22, 40, 62, 0.95) 56%, #16283e 100%);
 }
 
 .portal-story-instrument-2 .portal-story-instrument-media::after {
@@ -472,8 +472,23 @@
   object-fit: cover;
 }
 .portal-story-faq-2 .portal-story-end-visual { object-position: center; }
-/* 入社頁背景是表單截圖：只留輪廓，不和標題搶字。 */
-.portal-story-join .portal-story-end-visual { opacity: 0.4; filter: blur(1.5px); }
+/* 入社頁不放表單截圖（字會和標題疊在一起），改用竹韻社徽當主視覺。 */
+.portal-story-join .portal-story-end-visual { display: none; }
+.portal-story-join .portal-story-end-media {
+  background: radial-gradient(circle at 50% 26%, #1d6f88 0%, #0b3a4a 45%, #031720 78%);
+}
+.portal-story-join .portal-story-end-media::before {
+  position: absolute;
+  top: 9%;
+  left: 50%;
+  width: min(58%, 15rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: url("/images/bamboo-hero-mark.webp") center / cover;
+  box-shadow: 0 0 0 0.6rem rgba(255, 255, 255, 0.08), 0 0 0 0.65rem rgba(255, 255, 255, 0.28), 0 1.5rem 3rem rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+  content: "";
+}
 .portal-story-product-links {
   display: grid;
   gap: 0;
