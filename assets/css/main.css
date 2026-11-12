@@ -412,7 +412,7 @@ p, li { text-wrap: pretty; }
 .card-title { margin: 0.35rem 0 0; font-size: 1.08rem; line-height: 1.5; }
 .card-title a { color: var(--ink); }
 .card-title a:hover { color: var(--link); }
-.card-date { display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 0.85rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.card-date { display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 0.9rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 .card-platform {
   padding: 0.05rem 0.55rem;
   border-radius: 999px;
@@ -563,7 +563,8 @@ p, li { text-wrap: pretty; }
   gap: 0.5rem 1rem;
   margin-top: 0.9rem;
 }
-.calendar-note { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
+.calendar-note { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
+.calendar-note strong { color: var(--heading); }
 .calendar-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .calendar-failed .calendar-failed-next { color: var(--heading); font-weight: 700; }
 

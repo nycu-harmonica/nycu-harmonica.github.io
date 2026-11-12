@@ -1291,6 +1291,8 @@
   background: rgba(255, 255, 255, 0.1);
 }
 .portal-screen-now[hidden] { display: none; }
+.portal-screen-now[data-state="upcoming"] { border-left-color: rgba(255, 255, 255, 0.55); background: rgba(255, 255, 255, 0.06); }
+.portal-screen-now[data-state="upcoming"] .portal-screen-now-label { color: #9fe2ea; }
 .portal-screen-now-label { color: var(--portal-gold); font-size: 1.8cqh; font-weight: 900; letter-spacing: 0.16em; }
 .portal-screen-now strong { color: #fff; font-size: 5cqh; line-height: 1.15; }
 .portal-screen-now small { color: #dff3f6; font-size: 2.2cqh; }

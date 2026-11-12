@@ -520,5 +520,92 @@
     },
     "delta_overall": 2.5,
     "delta_mean": 2.41
+  },
+  {
+    "round": "7",
+    "reviewer": "opus-5-5",
+    "file": "r7-opus-5-5.md",
+    "mapping": {
+      "C": "baseline",
+      "A": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 5.7,
+      "mean": 5.79,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6.5,
+        "一致性": 5.5,
+        "資訊密度": 6.5,
+        "導覽": 6,
+        "狀態與回饋": 4.5,
+        "響應式": 6,
+        "文案": 4.5,
+        "無障礙": 6,
+        "動畫與轉場": 5
+      },
+      "issues": [
+        "home-loading／home-error 日曆是沒有文字的大白框",
+        "編年史、維護說明、關於頁外露 chronology_events、Hermes、last-good、Hugo 等內部術語",
+        "深色外觀沒有作用（dark 截圖與淺色相同），Discord 卻固定深色",
+        "discord-empty 顯示 0 位成員卻寫已連線，loading 寫「讀取中 位上線」，編年史各狀態無法區分",
+        "Discord、portal、screen 英文標籤混用，join 是無樣式頁，site-guide mobile 表格直排"
+      ]
+    },
+    "new": {
+      "overall": 8.2,
+      "mean": 8.12,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 8,
+        "色彩": 8.5,
+        "間距與版面": 8,
+        "一致性": 8.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8.5,
+        "響應式": 8.5,
+        "文案": 8,
+        "無障礙": 7.5,
+        "動畫與轉場": 7
+      },
+      "issues": [
+        "home-empty 日曆外露 Google 原生「目前顯示…以前的活動」與大片空白，沒有站方說明",
+        "狀態列、卡片日期、Discord 人數說明是約 12px 淺灰小字，對比不足",
+        "浮動「詢問竹韻」在 mobile 遮住內文與卡片標題",
+        "screen_screen 中段約三分之一空白，曲目字級可以更大",
+        "site-guide／about 仍有「給幹部」、GitHub Pages 等站務語氣"
+      ]
+    },
+    "reference": {
+      "overall": 4.6,
+      "mean": 4.54,
+      "scores": {
+        "資訊層級": 5,
+        "字體排印": 6,
+        "色彩": 5,
+        "間距與版面": 5,
+        "一致性": 4.5,
+        "資訊密度": 4.5,
+        "導覽": 5.5,
+        "狀態與回饋": 3,
+        "響應式": 4,
+        "文案": 4,
+        "無障礙": 5,
+        "動畫與轉場": 3
+      },
+      "issues": [
+        "Yale events 頁外露 CMS 範本占位文字",
+        "MCU 與 CUMS about 手機版沒有響應式，只是縮小",
+        "CUMS 首頁輪播下方大片空白，社群外掛沒有載入",
+        "CUMS home 與 about 模板不一致",
+        "MCU 破圖露出 alt 文字，公開頁有登入框"
+      ]
+    },
+    "delta_overall": 2.5,
+    "delta_mean": 2.33
   }
 ]

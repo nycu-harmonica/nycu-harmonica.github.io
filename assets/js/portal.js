@@ -22,10 +22,15 @@
       const current = selected ? items[selected - 1] : null;
       const nowPlaying = stage.querySelector("[data-now-playing]");
       if (nowPlaying) {
-        nowPlaying.hidden = !current;
-        if (current) {
-          nowPlaying.querySelector("[data-now-title]").textContent = `${String(selected).padStart(2, "0")}　${current.dataset.programTitle}`;
-          nowPlaying.querySelector("[data-now-credit]").textContent = current.dataset.programCredit;
+        // 沒有標示曲目時預告第一首，中段不留白。
+        const shown = current || items[0];
+        nowPlaying.hidden = !shown;
+        if (shown) {
+          const number = current ? selected : 1;
+          nowPlaying.dataset.state = current ? "playing" : "upcoming";
+          nowPlaying.querySelector("[data-now-label]").textContent = current ? "正在演奏" : `即將開始・共 ${songCount} 首`;
+          nowPlaying.querySelector("[data-now-title]").textContent = `${String(number).padStart(2, "0")}　${shown.dataset.programTitle}`;
+          nowPlaying.querySelector("[data-now-credit]").textContent = shown.dataset.programCredit;
         }
       }
       window.BambooSEO?.setState(current ? {
