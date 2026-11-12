@@ -259,5 +259,92 @@
     },
     "delta_overall": 2.5,
     "delta_mean": 2.34
+  },
+  {
+    "round": "4",
+    "reviewer": "opus-5-5",
+    "file": "r4-opus-5-5.md",
+    "mapping": {
+      "C": "baseline",
+      "A": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 6.4,
+      "mean": 6.0,
+      "scores": {
+        "資訊層級": 7,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6.5,
+        "一致性": 6,
+        "資訊密度": 6,
+        "導覽": 6,
+        "狀態與回饋": 4.5,
+        "響應式": 6,
+        "文案": 5,
+        "無障礙": 6,
+        "動畫與轉場": 6.5
+      },
+      "issues": [
+        "編年史 loading／error／empty 三種狀態畫面完全相同、沒有任何狀態說明；手機各頁各狀態也和正常版一樣",
+        "深色外觀與淺色逐像素相同，主站沒有深色模式；Discord 固定深色、join 是無品牌白頁，風格分裂",
+        "site-guide 與 chronology 對外寫滿 chronology_events、last-good、Hugo、GitHub Actions、YYYY/MM/DD 等內部術語",
+        "site-guide_mobile 表格第一欄只剩一字寬，「首頁竹韻近期動態」直排七行，明顯破版",
+        "discord-loading 顯示「讀取中 位上線」；discord-empty 顯示「0 位上線 0 位成員」配「已連線 Discord」，語意矛盾"
+      ]
+    },
+    "new": {
+      "overall": 8.4,
+      "mean": 8.38,
+      "scores": {
+        "資訊層級": 9,
+        "字體排印": 8.5,
+        "色彩": 9,
+        "間距與版面": 8,
+        "一致性": 8.5,
+        "資訊密度": 8.5,
+        "導覽": 9,
+        "狀態與回饋": 8,
+        "響應式": 8.5,
+        "文案": 8.5,
+        "無障礙": 8,
+        "動畫與轉場": 7
+      },
+      "issues": [
+        "home-empty 行事曆直接顯示 Google 原生「2099／目前顯示 2099年12月31日以前的活動」，沒有網站自訂說明",
+        "home-loading／home-error 行事曆區留下 500px 以上空白框，提示只佔中央一小塊",
+        "手機右下圓形「?」浮動鈕壓到內文（site-guide_mobile），而且只有圖示沒有文字",
+        "Discord 標題在手機斷成「加入陽明交大竹／韻口琴社 Discord」，首頁副標「零基／礎」也在詞中斷行",
+        "首頁日曆列出現 Google 英文長地址「National Chiao Tung University Student Activity Center…」且被截斷"
+      ]
+    },
+    "reference": {
+      "overall": 5.0,
+      "mean": 4.92,
+      "scores": {
+        "資訊層級": 5.5,
+        "字體排印": 6,
+        "色彩": 5,
+        "間距與版面": 4.5,
+        "一致性": 5.5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3,
+        "響應式": 5.5,
+        "文案": 4,
+        "無障礙": 5,
+        "動畫與轉場": 4
+      },
+      "issues": [
+        "ref-cums-home 社群嵌入失敗，留下約 600px 空白和兩次「Tweets by @CamUniMusSoc」",
+        "ref-yale-glee-events 頁首外露 CMS 範本說明「Use the Calendar List Block…」",
+        "ref-mcu-harmonica-home 首頁只有貼文流和登入表單，沒有社團介紹與入社入口",
+        "ref-mcu-harmonica 內文與 meta 是 11–12px 淺灰字，還有破圖替代文字",
+        "ref-yale-glee-home 桌面內文欄約 800px 靠左，右側大片空白"
+      ]
+    },
+    "delta_overall": 2.0,
+    "delta_mean": 2.38
   }
 ]

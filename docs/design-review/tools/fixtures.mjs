@@ -10,7 +10,7 @@
 //   assets/<path>          Observatory-cached images used by those posts
 //   discord.json           one real public Discord invite response
 //   calendar.har           one recording of the public Google Calendar embed
-//   calendar-empty.{har,html}  the same embed for a range with no events
+//   calendar-empty.{har,html}  (unused since round 4; empty mode clears the events reply)
 // Nothing is written to any production source; every request here is a GET.
 import { chromium } from 'playwright';
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';

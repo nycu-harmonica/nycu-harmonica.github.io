@@ -342,3 +342,7 @@
   }
   .discord-footnote { color: #4b646d; }
 }
+
+/* 社團名稱不在中間斷行（避免「竹／韻」被拆開）。 */
+.discord-name { white-space: nowrap; }
+@media (max-width: 380px) { .discord-name { white-space: normal; } }

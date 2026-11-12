@@ -111,6 +111,7 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
 
 h1, h2, h3 { line-height: 1.3; letter-spacing: 0.01em; text-wrap: balance; }
 p, li { text-wrap: pretty; }
+.nowrap { white-space: nowrap; }
 
 .container {
   max-width: 1180px;
@@ -496,8 +497,16 @@ p, li { text-wrap: pretty; }
   padding: 1.5rem;
   text-align: center;
   color: var(--ink-soft);
+  /* 議程列骨架：日曆還沒畫出來時，看得出這裡會是一列一列的活動。 */
+  background:
+    linear-gradient(90deg, var(--surface-2) 0 4.5rem, transparent 4.5rem),
+    repeating-linear-gradient(180deg, transparent 0 1.1rem, var(--surface-sunk) 1.1rem 1.9rem, transparent 1.9rem 3.6rem);
+  background-color: var(--surface-2);
+  background-position: 1.25rem 4rem, 7rem 4rem;
+  background-size: 3.25rem calc(100% - 5rem), calc(100% - 9rem) calc(100% - 5rem);
+  background-repeat: no-repeat;
 }
-.calendar-loading { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin: 0; font-size: 0.95rem; }
+.calendar-loading { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin: 0; padding: 0.6rem 1.1rem; border-radius: 999px; background: var(--surface); box-shadow: var(--shadow); font-size: 0.95rem; }
 .calendar-loading-dot {
   width: 0.7rem;
   height: 0.7rem;
@@ -947,13 +956,10 @@ p, li { text-wrap: pretty; }
   .website-agent-launch {
     right: 0.75rem;
     bottom: max(0.75rem, env(safe-area-inset-bottom));
-    width: 52px;
-    height: 52px;
-    padding: 0;
-    justify-content: center;
-    font-size: 0;
+    min-height: 44px;
+    padding: 0.4rem 0.85rem 0.4rem 0.5rem;
+    font-size: 0.88rem;
   }
-  .website-agent-launch::before { width: 1.75rem; height: 1.75rem; font-size: 1.05rem; }
   .site-footer { padding-bottom: 5rem; }
   .footer-bottom { padding-right: 1.25rem; }
 }

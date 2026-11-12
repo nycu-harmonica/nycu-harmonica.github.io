@@ -14,7 +14,7 @@
 - 外部資料全部攔截，回 `/tmp/bmhc-review/data` 的凍結 fixture（`tools/fixtures.mjs` 產生，一次 hill climb 只抓一次）：
   - Google Sheet gviz：由 repo 的 last-good CSV（`static/data/*.csv`）轉成 gviz 表格。
   - 觀測站 `/api/source/198.json`：由 `data/generated/observe_updates.json` 轉成 API 格式；貼文圖片快取一份。
-  - Google Calendar 嵌入：2026-11-13 錄一次的 HAR 重播；空狀態用 2099 年（沒有活動）的同一嵌入。
+  - Google Calendar 嵌入：2026-11-13 錄一次的 HAR 重播；空狀態重播同一份錄製，但把 events API 回應的 `items` 清空（畫面仍是 2026 年 11 月起、沒有活動）。
   - Discord 邀請 API：2026-11-13 抓一次（15 人上線、67 位成員）。
   - `/join/` 轉向的 Google 表單回 204，讓過場頁留在畫面上。
   - 其他對外請求一律中止；不讀寫任何正式資料來源。
@@ -28,7 +28,7 @@
 | 有資料 | 回 fixture |
 | `-loading` 載入中 | 外部請求永遠不回應；開頁 2.5 秒後截圖 |
 | `-error` 錯誤 | Sheet 與行事曆連線被拒；觀測站、Discord 回 500 |
-| `-empty` 空 | Sheet 只有表頭、觀測站 `items: []`、行事曆無活動、Discord 0 人且無描述 |
+| `-empty` 空 | Sheet 只有表頭、觀測站 `items: []`、行事曆 events 為空、Discord 0 人且無描述 |
 
 ## 頁面與狀態
 
@@ -86,3 +86,9 @@ node docs/design-review/tools/capture.mjs references /tmp/bmhc-review/sets/refer
 # 4. 組一輪盲測
 python3 docs/design-review/tools/make_round.py N /tmp/bmhc-review/sets/rN
 ```
+
+## Fixture 修正紀錄
+
+- 第 1 輪後：空行事曆原本只是 HTML，事件請求不在 HAR 內而變成 Google 錯誤畫面；改錄 2099 年空範圍的完整 HAR。基準 `home-empty` 重拍。
+- 第 4 輪後：2099 年的畫面標題會出現「2099」，不像真實的空狀態；改成重播正常錄製並清空 events。基準 `home-empty` 重拍。
+- `/join/`：原本以 204 擋表單轉址會讓頁面卡住；改成只移除 HTML 裡的轉址指令，畫面不變。

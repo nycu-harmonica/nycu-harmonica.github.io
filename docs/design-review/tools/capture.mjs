@@ -24,9 +24,9 @@ function loadData(dir) {
   const har = JSON.parse(readFileSync(join(dir, 'calendar.har'), 'utf8'));
   const embed = har.log.entries.find((entry) => entry.request.url.includes('/calendar/embed?') && entry.response.status === 200);
   return {
-    dir, tabByGid, gviz, harPath: join(dir, 'calendar.har'), emptyHarPath: join(dir, 'calendar-empty.har'),
+    dir, tabByGid, gviz, harPath: join(dir, 'calendar.har'),
     calendarHtml: Buffer.from(embed.response.content.text, embed.response.content.encoding === 'base64' ? 'base64' : 'utf8'),
-    calendarEmptyHtml: readFileSync(join(dir, 'calendar-empty.html')),
+    eventEntries: har.log.entries.filter((entry) => /calendar\/v3\/calendars\/[^/]+\/events/.test(entry.request.url)),
     observe: JSON.parse(readFileSync(join(dir, 'observe.json'), 'utf8')),
     discord: JSON.parse(readFileSync(join(dir, 'discord.json'), 'utf8')),
   };
@@ -38,12 +38,20 @@ async function installRoutes(context, data, state) {
   await context.route((url) => !['127.0.0.1', 'localhost'].includes(url.hostname), (route) => route.abort('blockedbyclient'));
   // Google Calendar embed: replay one frozen recording.
   if (mode === 'normal' || mode === 'empty') {
-    await context.routeFromHAR(mode === 'empty' ? data.emptyHarPath : data.harPath, { url: /google\.com|gstatic\.com|googleusercontent\.com/, notFound: 'abort' });
+    await context.routeFromHAR(data.harPath, { url: /google\.com|gstatic\.com|googleusercontent\.com/, notFound: 'abort' });
+  }
+  if (mode === 'empty') {
+    // Same recording, same months on screen, but the calendar has no events.
+    await context.route(/clients6\.google\.com\/calendar\/v3\/calendars\/[^/]+\/events/, (route) => {
+      const entry = data.eventEntries.find((e) => e.request.url === route.request().url()) || data.eventEntries[0];
+      const body = JSON.parse(Buffer.from(entry.response.content.text, entry.response.content.encoding === 'base64' ? 'base64' : 'utf8').toString('utf8'));
+      return route.fulfill({ status: 200, contentType: 'application/json; charset=UTF-8', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ ...body, items: [] }) });
+    });
   }
   await context.route(/calendar\.google\.com\/calendar\/embed\?/, (route) => {
     if (mode === 'loading') return hang();
     if (mode === 'error') return route.abort('connectionrefused');
-    return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: mode === 'empty' ? data.calendarEmptyHtml : data.calendarHtml });
+    return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: data.calendarHtml });
   });
   // Google Sheet gviz JSONP.
   await context.route(/docs\.google\.com\/spreadsheets\/d\/[^/]+\/gviz\/tq/, (route) => {

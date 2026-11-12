@@ -25,7 +25,7 @@ if (card) {
       if (!response.ok) throw new Error(`Discord API ${response.status}`);
 
       const invite = await response.json();
-      setText(name, invite.guild?.name ? `加入${invite.guild.name} Discord` : '');
+      setText(name, invite.guild?.name);
       // 伺服器描述常帶官網網址；這頁本來就在官網上，只留說明文字。
       setText(description, String(invite.guild?.description || '').replace(/\s*https?:\/\/\S+/g, '').replace(/\s*@\s*/g, '＠'));
       const onlineCount = Number(invite.approximate_presence_count);
