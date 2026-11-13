@@ -26,15 +26,22 @@ if (card) {
 
       const invite = await response.json();
       setText(name, invite.guild?.name);
-      setText(description, invite.guild?.description);
-      setText(online, String(invite.approximate_presence_count));
-      setText(members, String(invite.approximate_member_count));
-      setText(status, '已連線 Discord，顯示目前的約略上線與成員人數。');
+      // 伺服器描述常帶官網網址；這頁本來就在官網上，只留說明文字。
+      setText(description, String(invite.guild?.description || '').replace(/\s*https?:\/\/\S+/g, '').replace(/\s*@\s*/g, '＠'));
+      const onlineCount = Number(invite.approximate_presence_count);
+      const memberCount = Number(invite.approximate_member_count);
+      if (!(memberCount > 0)) {
+        // 拿到 0 或缺值時不顯示人數，避免看起來像沒有人。
+        card.dataset.live = 'empty';
+        setText(status, '伺服器已開放加入，進去和大家打聲招呼吧！');
+        return;
+      }
+      setText(online, String(Number.isFinite(onlineCount) ? onlineCount : 0));
+      setText(members, String(memberCount));
+      setText(status, '人數由 Discord 即時提供，為約略值。');
       card.dataset.live = 'true';
     } catch (error) {
-      setText(online, '—');
-      setText(members, '—');
-      setText(status, '暫時無法取得即時人數；邀請連結仍可正常使用。');
+      setText(status, '暫時無法取得 Discord 人數，邀請連結照常可以使用。');
       card.dataset.live = 'false';
     }
   };

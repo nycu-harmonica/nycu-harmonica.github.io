@@ -20,6 +20,19 @@
       else url.searchParams.delete("song");
       window.history.replaceState({}, "", url);
       const current = selected ? items[selected - 1] : null;
+      const nowPlaying = stage.querySelector("[data-now-playing]");
+      if (nowPlaying) {
+        // 沒有標示曲目時預告第一首，中段不留白。
+        const shown = current || items[0];
+        nowPlaying.hidden = !shown;
+        if (shown) {
+          const number = current ? selected : 1;
+          nowPlaying.dataset.state = current ? "playing" : "upcoming";
+          nowPlaying.querySelector("[data-now-label]").textContent = current ? "正在演奏" : `即將開始・共 ${songCount} 首`;
+          nowPlaying.querySelector("[data-now-title]").textContent = `${String(number).padStart(2, "0")}　${shown.dataset.programTitle}`;
+          nowPlaying.querySelector("[data-now-credit]").textContent = shown.dataset.programCredit;
+        }
+      }
       window.BambooSEO?.setState(current ? {
         title: `第 ${selected} 首：${current.dataset.programTitle}`,
         heading: `目前曲目第 ${selected} 首：${current.dataset.programTitle}`,
@@ -36,6 +49,15 @@
     document.addEventListener("fullscreenchange", () => {
       if (fullscreenButton) fullscreenButton.textContent = document.fullscreenElement ? "離開全螢幕" : "進入全螢幕";
     });
+    // 操作提示與全螢幕按鈕閒置 3 秒後淡出；滑鼠、觸控或按鍵再叫回來。
+    let idleTimer = 0;
+    const wake = () => {
+      stage.classList.remove("is-idle");
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => stage.classList.add("is-idle"), 3000);
+    };
+    ["pointermove", "pointerdown", "keydown"].forEach((type) => document.addEventListener(type, wake, { passive: true }));
+    wake();
     document.addEventListener("keydown", (event) => {
       if (event.key.toLowerCase() === "f") {
         event.preventDefault();

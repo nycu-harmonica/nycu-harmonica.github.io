@@ -1,9 +1,19 @@
 {{ define "main" }}
-<div class="container section">
-  <article class="prose">
-    <h1 data-seo-heading>{{ .Params.heading | default .Title }}</h1>
+{{ partial "page-head.html" . }}
+<div class="container section page-grid">
+  <aside class="page-aside">
+    {{ partial "page-toc.html" . }}
+    <div class="aside-card">
+      <h2>想直接問？</h2>
+      <p>社課、捐贈樂器、演出邀約都可以來信。</p>
+      {{ with site.Params.contactEmail }}<a class="btn btn-small" href="mailto:{{ . }}">{{ partial "icon.html" (dict "name" "email") }}<span>寫信給我們</span></a>{{ end }}
+    </div>
+  </aside>
+  <article class="prose page-body">
     {{ .Content }}
   </article>
+</div>
+<div class="container">
 
   <section class="section-sub" id="join">
     <h2>聯絡我們</h2>

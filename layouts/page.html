@@ -1,7 +1,8 @@
 {{ define "main" }}
-<div class="container section">
-  <article class="prose">
-    <h1 data-seo-heading>{{ .Params.heading | default .Title }}</h1>
+{{ partial "page-head.html" . }}
+<div class="container section page-grid">
+  <aside class="page-aside">{{ partial "page-toc.html" . }}</aside>
+  <article class="prose page-body">
     {{ .Content }}
   </article>
 </div>

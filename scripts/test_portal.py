@@ -37,6 +37,7 @@ class PortalParser(HTMLParser):
         self.end_story_images = 0
         self.end_story_image_sources: list[str] = []
         self.welcome_visual_sources: list[str] = []
+        self.welcome_visual_attrs: list[dict[str, str]] = []
         self.product_links: list[dict[str, str | None]] = []
         self.social_links = 0
         self.social_links_open_new_tab = 0
@@ -78,7 +79,11 @@ class PortalParser(HTMLParser):
             self.end_story_images += 1
             self.end_story_image_sources.append(values.get("src", ""))
         if "portal-story-welcome-visual" in classes:
-            self.welcome_visual_sources.append(values.get("src", ""))
+            # 兩層共用同一組 srcset；以最大寬度的候選當作原始照片。
+            candidates = [part.strip().split() for part in values.get("srcset", "").split(",") if part.strip()]
+            largest = max(candidates, key=lambda item: int(item[1].rstrip("w")))[0] if candidates else values.get("src", "")
+            self.welcome_visual_sources.append(largest)
+            self.welcome_visual_attrs.append(values)
         if tag == "a" and values.get("href", "").startswith(("https://harmonica.tw/", "https://shopee.tw/", "https://dming.co/")):
             self.product_links.append(values)
         if "portal-story-keyword-term-activity" in classes:
@@ -156,6 +161,11 @@ def main() -> None:
     welcome_visual = PUBLIC / mobile.welcome_visual_sources[0].lstrip("/")
     assert welcome_visual.is_file() and welcome_visual.stat().st_size > 200_000, "Welcome story needs the supplied high-resolution photo"
     assert webp_dimensions(welcome_visual) == (3840, 2160), "Welcome photo must retain its original resolution"
+    front = mobile.welcome_visual_attrs[-1]
+    assert front.get("width") == "3840" and front.get("height") == "2160", "Welcome photo needs intrinsic size to avoid layout shift"
+    assert front.get("fetchpriority") == "high", "First-screen welcome photo should be fetched first"
+    fallback = PUBLIC / front.get("src", "").lstrip("/")
+    assert fallback.is_file() and fallback.stat().st_size < 150_000, "Welcome fallback src should be the lightweight variant"
     assert mobile.song_visuals == 4, "Every song story needs a movie or MV visual"
     assert mobile.song_videos == 3, "Three song stories must use lightweight looping video"
     assert mobile.instrument_slides == 3, "The three harmonica types need one story each"

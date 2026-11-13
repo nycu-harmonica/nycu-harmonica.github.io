@@ -29,6 +29,45 @@
     desktopMedia.addEventListener('change', resetNavOnDesktop);
   }
 
+  // Google 日曆嵌入：進入畫面 4.5 秒後還沒畫好，就把後方的說明換成「載不出來」與替代資訊。
+  // 跨網域 iframe 無法得知內容是否成功，所以說明放在 iframe 下層，日曆畫好時自然被蓋住。
+  document.querySelectorAll('[data-calendar-embed]').forEach(function (embed) {
+    var frame = embed.querySelector('iframe');
+    if (!frame) return;
+    function arm() {
+      window.setTimeout(function () { embed.classList.add('is-slow'); }, 4500);
+    }
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        if (entries.some(function (entry) { return entry.isIntersecting; })) {
+          observer.disconnect();
+          arm();
+        }
+      });
+      observer.observe(embed);
+    } else arm();
+  });
+
+  // 「詢問竹韻」浮動鈕在頁尾出現時讓位（頁尾本身就有聯絡方式）。
+  var launch = document.getElementById('website-agent-launch');
+  var footer = document.querySelector('.site-footer');
+  if (launch && footer && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      launch.classList.toggle('is-docked', entries[0].isIntersecting);
+    }, { rootMargin: '0px 0px -40px 0px' }).observe(footer);
+  }
+  // 手機往下讀的時候先收起來，往回捲才出現，避免一直蓋住標題與內文。
+  if (launch) {
+    var lastY = window.scrollY;
+    var narrow = window.matchMedia('(max-width: 639px)');
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY;
+      if (narrow.matches) launch.classList.toggle('is-tucked', y > lastY && y > 240);
+      else launch.classList.remove('is-tucked');
+      lastY = y;
+    }, { passive: true });
+  }
+
   // 限時區塊:過期(data-expires)就隱藏,不必等網站重新建置
   document.querySelectorAll('[data-expires]').forEach(function (el) {
     var expires = Date.parse(el.dataset.expires || '');

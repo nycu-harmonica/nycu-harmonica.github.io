@@ -290,7 +290,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(3, 23, 32, 0.32) 48%, rgba(3, 23, 32, 0.84) 68%, #031720 100%);
+    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(3, 23, 32, 0.55) 44%, rgba(3, 23, 32, 0.95) 56%, #031720 100%);
   content: "";
 }
 
@@ -301,7 +301,7 @@
 
 .portal-story-song-1 .portal-story-song-media::after {
   background:
-    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(11, 34, 55, 0.32) 48%, rgba(11, 34, 55, 0.86) 68%, #0b2237 100%);
+    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(11, 34, 55, 0.55) 44%, rgba(11, 34, 55, 0.95) 56%, #0b2237 100%);
 }
 
 .portal-story-instrument-1 .portal-story-instrument-media::after {
@@ -311,7 +311,7 @@
 
 .portal-story-song-2 .portal-story-song-media::after {
   background:
-    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(22, 40, 62, 0.34) 48%, rgba(22, 40, 62, 0.88) 68%, #16283e 100%);
+    linear-gradient(180deg, rgba(2, 18, 25, 0.24) 0%, rgba(2, 18, 25, 0.02) 28%, rgba(22, 40, 62, 0.55) 44%, rgba(22, 40, 62, 0.95) 56%, #16283e 100%);
 }
 
 .portal-story-instrument-2 .portal-story-instrument-media::after {
@@ -463,7 +463,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(2, 18, 25, 0.2) 0%, rgba(2, 18, 25, 0.03) 27%, rgba(3, 23, 32, 0.58) 54%, rgba(3, 23, 32, 0.94) 70%, #031720 100%);
+    linear-gradient(180deg, rgba(2, 18, 25, 0.55) 0%, rgba(2, 18, 25, 0.25) 14%, rgba(3, 23, 32, 0.85) 38%, rgba(3, 23, 32, 0.98) 50%, #031720 100%);
   content: "";
 }
 .portal-story-end-visual {
@@ -472,6 +472,23 @@
   object-fit: cover;
 }
 .portal-story-faq-2 .portal-story-end-visual { object-position: center; }
+/* 入社頁不放表單截圖（字會和標題疊在一起），改用竹韻社徽當主視覺。 */
+.portal-story-join .portal-story-end-visual { display: none; }
+.portal-story-join .portal-story-end-media {
+  background: radial-gradient(circle at 50% 26%, #1d6f88 0%, #0b3a4a 45%, #031720 78%);
+}
+.portal-story-join .portal-story-end-media::before {
+  position: absolute;
+  top: 9%;
+  left: 50%;
+  width: min(58%, 15rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: url("/images/bamboo-hero-mark.webp") center / cover;
+  box-shadow: 0 0 0 0.6rem rgba(255, 255, 255, 0.08), 0 0 0 0.65rem rgba(255, 255, 255, 0.28), 0 1.5rem 3rem rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+  content: "";
+}
 .portal-story-product-links {
   display: grid;
   gap: 0;
@@ -1078,24 +1095,24 @@
 .portal-screen-section-label {
   margin: 0 0 1.4cqh;
   color: #9fe2ea;
-  font-size: 1.25cqh;
+  font-size: 1.7cqh;
   font-weight: 850;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
 }
 
 .portal-screen-copy h1 {
   margin: 0;
   color: #fff;
-  font-size: 6.5cqh;
+  font-size: 8.4cqh;
   font-weight: 900;
   letter-spacing: -0.055em;
   line-height: 1.05;
 }
 
 .portal-screen-copy > p:last-child {
-  margin: 1.6cqh 0 0;
+  margin: 2.2cqh 0 0;
   color: #dff3f6;
-  font-size: 2.2cqh;
+  font-size: 3cqh;
   letter-spacing: 0.03em;
 }
 
@@ -1119,9 +1136,9 @@
 .portal-screen-program li {
   position: relative;
   display: grid;
-  grid-template-columns: 2.5cqw minmax(0, 1fr);
+  grid-template-columns: 3.4cqw minmax(0, 1fr);
   grid-template-rows: auto auto;
-  padding: 1.25cqh 0 1.15cqh;
+  padding: 2.1cqh 0 1.9cqh;
   border-bottom: 0.1cqh solid rgba(255, 255, 255, 0.28);
   line-height: 1.25;
   transition: background 160ms ease, padding 160ms ease;
@@ -1130,14 +1147,14 @@
 .portal-screen-program li > span {
   grid-row: 1 / 3;
   color: #9fe2ea;
-  font-size: 1.35cqh;
+  font-size: 2.1cqh;
   font-weight: 900;
   letter-spacing: 0.08em;
 }
 
 .portal-screen-program li strong {
   overflow: hidden;
-  font-size: 2cqh;
+  font-size: 3cqh;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1146,26 +1163,28 @@
   margin-top: 0.32cqh;
   overflow: hidden;
   color: #c4e5e9;
-  font-size: 1.25cqh;
+  font-size: 1.8cqh;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .portal-screen-program li.is-current {
-  padding-right: 1cqh;
-  padding-left: 1cqh;
-  background: rgba(255, 255, 255, 0.13);
+  /* 底色往左外推，曲名起點和其他列對齊。 */
+  margin-left: -1.4cqh;
+  padding-left: 1.4cqh;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0.7cqh 0 0 var(--portal-gold);
 }
 
 .portal-screen-program li.is-current::before {
   position: absolute;
-  top: -0.85cqh;
-  right: 0.8cqh;
-  padding: 0.2cqh 0.75cqh;
+  top: -1.5cqh;
+  right: 1cqh;
+  padding: 0.35cqh 1.1cqh;
   border-radius: 99px;
   color: var(--portal-blue-dark);
   background: var(--portal-gold);
-  font-size: 0.85cqh;
+  font-size: 1.6cqh;
   font-weight: 900;
 }
 
@@ -1227,8 +1246,8 @@
   right: 2.6cqw;
   bottom: 0.7cqh;
   margin: 0;
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 0.75cqh;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: max(14px, 1.3cqh);
 }
 
 .portal-screen-stage:fullscreen {
@@ -1276,6 +1295,31 @@
     transform: none;
   }
 }
+
+.portal-screen-now {
+  display: grid;
+  gap: 0.6cqh;
+  margin-top: 4.5cqh;
+  padding: 2.2cqh 2.6cqh;
+  border-left: 0.8cqh solid var(--portal-gold);
+  border-radius: 0 1.4cqh 1.4cqh 0;
+  background: rgba(255, 255, 255, 0.1);
+}
+.portal-screen-now[hidden] { display: none; }
+.portal-screen-now[data-state="upcoming"] { border-left-color: rgba(255, 255, 255, 0.55); background: rgba(255, 255, 255, 0.06); }
+.portal-screen-now[data-state="upcoming"] .portal-screen-now-label { color: #9fe2ea; }
+.portal-screen-now-label { color: var(--portal-gold); font-size: 1.8cqh; font-weight: 900; letter-spacing: 0.16em; }
+.portal-screen-now strong { color: #fff; font-size: 5cqh; line-height: 1.15; }
+.portal-screen-now small { color: #dff3f6; font-size: 2.2cqh; }
+
+/* 操作提示只給操作的人看：滑鼠或鍵盤一段時間沒動就淡出，觀眾只看到節目。 */
+.portal-screen-stage.is-idle .portal-fullscreen-button,
+.portal-screen-stage.is-idle .portal-screen-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+.portal-fullscreen-button,
+.portal-screen-controls { transition: opacity 400ms ease; }
 
 @media print {
   .portal-fullscreen-button,

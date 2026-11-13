@@ -7,17 +7,32 @@
   <meta http-equiv="refresh" content="0; url={{ $target }}">
   <script>window.location.replace({{ $target | jsonify | safeJS }});</script>
   <style>
-    :root { color-scheme: light; font-family: system-ui, sans-serif; }
-    body { display: grid; min-height: 100vh; margin: 0; place-items: center; background: #f4f7fb; color: #17233c; }
-    main { max-width: 32rem; padding: 2rem; text-align: center; }
-    a { color: #1456a0; font-weight: 700; }
+    :root { color-scheme: light dark; --bg: #f7fafb; --card: #fff; --ink: #132f38; --soft: #4b646d; --line: #d2e2e7; --link: #176b84; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #081a21; --card: #0e2630; --ink: #e4eff2; --soft: #a8bec5; --line: #1f4250; --link: #7dcbe2; }
+    }
+    body { display: grid; min-height: 100vh; min-height: 100dvh; margin: 0; padding: 1.25rem; box-sizing: border-box; place-items: center; background: var(--bg); color: var(--ink); font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif; line-height: 1.7; }
+    .join-card { width: min(100%, 30rem); padding: 2rem 1.75rem; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-align: center; box-shadow: 0 18px 44px rgba(8, 47, 60, 0.12); }
+    .join-card img { width: 72px; height: 72px; margin: 0 auto 1rem; border-radius: 50%; }
+    h1 { margin: 0 0 0.5rem; font-size: 1.45rem; line-height: 1.35; }
+    p { margin: 0 0 1rem; color: var(--soft); }
+    .join-progress { height: 4px; margin: 0 auto 1.25rem; overflow: hidden; border-radius: 999px; background: var(--line); }
+    .join-progress span { display: block; width: 40%; height: 100%; border-radius: inherit; background: #e3a63f; animation: join-slide 1.2s ease-in-out infinite; }
+    @keyframes join-slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+    @media (prefers-reduced-motion: reduce) { .join-progress { display: none; } }
+    .join-button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 999px; background: #f0b85a; color: #1c2a2f; font-weight: 800; text-decoration: none; }
+    .join-button:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; }
+    .join-back { display: inline-block; margin-top: 1rem; color: var(--link); font-size: 0.92rem; }
   </style>
 </head>
 <body>
-  <main>
-    <h1 data-seo-heading>加入陽明交大竹韻口琴社</h1>
-    <p>正在前往竹韻口琴社入社表單……</p>
-    <p><a href="{{ $target }}">若未自動前往，請點此開啟表單</a></p>
+  <main class="join-card">
+    <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="72" height="72" alt="">
+    <h1 data-seo-heading>加入陽明交大<span style="white-space: nowrap">竹韻口琴社</span></h1>
+    <div class="join-progress" aria-hidden="true"><span></span></div>
+    <p role="status">正在前往 Google 入社表單……</p>
+    <a class="join-button" href="{{ $target }}">沒有自動跳轉？開啟入社表單</a>
+    <br><a class="join-back" href="{{ "/" | relURL }}">回竹韻官網</a>
   </main>
 </body>
 </html>

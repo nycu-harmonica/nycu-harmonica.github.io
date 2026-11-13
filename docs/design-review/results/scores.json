@@ -1,0 +1,872 @@
+[
+  {
+    "round": "1",
+    "reviewer": "opus-5-5",
+    "file": "r1-opus-5-5.md",
+    "mapping": {
+      "B": "baseline",
+      "A": "new",
+      "C": "reference"
+    },
+    "baseline": {
+      "overall": 5.5,
+      "mean": 5.75,
+      "scores": {
+        "資訊層級": 6,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6,
+        "一致性": 6,
+        "資訊密度": 6,
+        "導覽": 5.5,
+        "狀態與回饋": 4.5,
+        "響應式": 6.5,
+        "文案": 5.5,
+        "無障礙": 6,
+        "動畫與轉場": 4.5
+      },
+      "issues": [
+        "home/chronology 的 loading、error、empty 狀態幾乎相同：日曆是空白大框或 Google 錯誤畫面，動態區文字不分狀態，沒有說明和下一步",
+        "深色外觀不成立：home、about、chronology、site-guide、join、home-calendar 的 -dark 截圖與淺色版完全相同",
+        "頁首導覽只有首頁／編年史／關於我們三項，沒有 Discord 或入社 CTA，也沒有行事曆入口，手機選單同樣如此",
+        "首頁 hero 下是置中長文，缺少社課時間地點等重點卡和入門步驟；about 是 1020px 寬單欄長文",
+        "頁尾外露『Google Sheet 即時讀取』『Repo 資料備援』，動態區把三個月前的資料標成『即時資料』"
+      ]
+    },
+    "new": {
+      "overall": 7.5,
+      "mean": 7.38,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 7.5,
+        "色彩": 8,
+        "間距與版面": 7.5,
+        "一致性": 7.5,
+        "資訊密度": 7,
+        "導覽": 8,
+        "狀態與回饋": 7,
+        "響應式": 7.5,
+        "文案": 6.5,
+        "無障礙": 7,
+        "動畫與轉場": 6.5
+      },
+      "issues": [
+        "home-empty/home-error desktop：日曆空資料露出 Google 原生『2099年1月 – 2098年12月』與『糟糕，無法載入活動』，失敗時仍顯示『正在載入 Google 日曆⋯』，應改成站內替代卡＋外連",
+        "about/chronology：公開頁面寫出 Hermes 工作區、chronology_events 分頁、PDF 盤點與日期格式規範等內部術語，應移到 site-guide 並把時間軸往前提",
+        "home-calendar-dark 與 discord-dark：深色外觀下 Google 日曆是整塊白框，Discord 頁深色和淺色截圖完全相同",
+        "mobile 多頁：浮動『詢問竹韻』按鈕蓋住 hero 的『看社團行事曆』CTA 與正文，應在 hero／選單展開時隱藏或縮小並保留安全區",
+        "portal-join 標題壓在半透明 Google 表單截圖上互相干擾；screen 快捷鍵提示字太小、對比太低"
+      ]
+    },
+    "reference": {
+      "overall": 4.5,
+      "mean": 4.75,
+      "scores": {
+        "資訊層級": 5,
+        "字體排印": 6,
+        "色彩": 5,
+        "間距與版面": 5,
+        "一致性": 5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3,
+        "響應式": 4,
+        "文案": 5,
+        "無障礙": 5,
+        "動畫與轉場": 3
+      },
+      "issues": [
+        "CUMS about 與 MCU 口琴社手機版是桌面版直接縮小，字小到讀不了",
+        "CUMS 首頁外嵌 Twitter 元件空白、MCU 貼文圖片壞掉露出替代文字，失敗時沒有替代內容",
+        "Yale events 頁露出 CMS 範本說明文字『Use the Calendar List Block…』",
+        "CUMS 與 MCU 首頁看不出社團定位和入社方式，CUMS 中段大片空白",
+        "CUMS home 與 about 的頁首、導覽、配色、Logo 完全不同"
+      ]
+    },
+    "delta_overall": 2.0,
+    "delta_mean": 1.63
+  },
+  {
+    "round": "2",
+    "reviewer": "opus-5-5",
+    "file": "r2-opus-5-5.md",
+    "mapping": {
+      "A": "baseline",
+      "B": "new",
+      "C": "reference"
+    },
+    "baseline": {
+      "overall": 5.8,
+      "mean": 5.75,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6,
+        "一致性": 5,
+        "資訊密度": 6,
+        "導覽": 6,
+        "狀態與回饋": 4.5,
+        "響應式": 6,
+        "文案": 6,
+        "無障礙": 5.5,
+        "動畫與轉場": 5
+      },
+      "issues": [
+        "home-error 行事曆讀取失敗時顯示約 520px 空白框，沒有任何說明",
+        "深色外觀未實作：home/about/chronology/site-guide/home-calendar/join 的 dark 截圖與淺色版逐像素相同",
+        "join 是無樣式白底純文字頁，discord 固定深色，和主站是三套視覺系統",
+        "header 缺行事曆與 Discord 主 CTA；「詢問竹韻」浮動鈕在 mobile 遮住卡片標題、hero 按鈕與 footer",
+        "chronology/site-guide/discord/screen 露出 chronology_events、Hermes、YYYY/MM/DD、英文樣板句與裸網址"
+      ]
+    },
+    "new": {
+      "overall": 7.6,
+      "mean": 7.54,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 7.5,
+        "色彩": 8,
+        "間距與版面": 7.5,
+        "一致性": 7.5,
+        "資訊密度": 7.5,
+        "導覽": 8,
+        "狀態與回饋": 8,
+        "響應式": 7.5,
+        "文案": 7,
+        "無障礙": 7,
+        "動畫與轉場": 6.5
+      },
+      "issues": [
+        "site-guide 內部術語外露（chronology_events、last-good、Repo 資料備援、GitHub Actions、Hermes），discord 保留英文樣板與裸網址，screen 主標為「演出投影畫面」",
+        "discord-empty 把「0 位上線 0 位成員」當正常資料顯示，可能勸退新生",
+        "home-error 行事曆失敗卡維持約 600px 高；screen 左側中段約 400px 空白、節目單擠在底部",
+        "site-guide mobile 表格第一欄過窄，文字折成每行兩字；discord mobile 徽章掉行、縮排不齊",
+        "「詢問竹韻」浮動鈕與 footer 狀態文字重疊；screen-song「正在演奏」標籤過小"
+      ]
+    },
+    "reference": {
+      "overall": 4.7,
+      "mean": 4.67,
+      "scores": {
+        "資訊層級": 5,
+        "字體排印": 6,
+        "色彩": 4.5,
+        "間距與版面": 5,
+        "一致性": 4.5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3,
+        "響應式": 4,
+        "文案": 5,
+        "無障礙": 5,
+        "動畫與轉場": 3
+      },
+      "issues": [
+        "CUMS about 與 MCU 首頁在手機上只是整頁縮小，無法閱讀",
+        "CUMS 首頁社群嵌入失敗後留下大片空白和「Tweets by…」殘字",
+        "MCU 首屏是登入表單與 2022 年舊貼文，缺入社與社課資訊",
+        "Yale events 頁直接顯示 CMS 範本說明文字",
+        "Yale 在 1440 寬只用左側約 800px；CUMS 輪播文字壓在照片上，對比不足"
+      ]
+    },
+    "delta_overall": 1.8,
+    "delta_mean": 1.79
+  },
+  {
+    "round": "3",
+    "reviewer": "opus-5-5",
+    "file": "r3-opus-5-5.md",
+    "mapping": {
+      "C": "baseline",
+      "A": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 5.5,
+      "mean": 5.62,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6.5,
+        "色彩": 5.5,
+        "間距與版面": 6,
+        "一致性": 5.5,
+        "資訊密度": 6,
+        "導覽": 5.5,
+        "狀態與回饋": 4.5,
+        "響應式": 5.5,
+        "文案": 5,
+        "無障礙": 6,
+        "動畫與轉場": 5
+      },
+      "issues": [
+        "載入／失敗時行事曆空白，about/chronology/site-guide 三種狀態截圖相同；discord-empty 顯示 0 人卻說已連線",
+        "深色外觀無效：所有 -dark 截圖與淺色版相同，Discord 頁卻固定深色",
+        "外露 chronology_events、Hermes、last-good、Hugo、Repo 資料備援、演出投影畫面、英文邀請眉標等內部用語",
+        "site-guide 手機表格第一欄被擠成單字直排",
+        "主導覽缺行事曆與 Discord CTA，子頁無目錄，Discord/join 頁沒有回官網的路徑"
+      ]
+    },
+    "new": {
+      "overall": 8.0,
+      "mean": 7.96,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 8,
+        "色彩": 8.5,
+        "間距與版面": 8,
+        "一致性": 8,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8,
+        "響應式": 8,
+        "文案": 8,
+        "無障礙": 7.5,
+        "動畫與轉場": 6.5
+      },
+      "issues": [
+        "home-loading/home-error 行事曆保留約 600px 空框，錯誤卡片沒有開啟 Google 日曆的按鈕",
+        "home-empty 嵌入行事曆顯示 Google 原生的 2099 年與『目前顯示 2099年12月31日以前的活動』",
+        "screen/screen-song 投影畫面露出『按 F 進入全螢幕・數字鍵 1–4…』操作提示，中段大片空白",
+        "portal-join 手機版背景表單文字（姓名、年級或階段）透出，疊在頁首與標題後方",
+        "行事曆每列重複且截斷英文長地址；浮動詢問按鈕遮住內容"
+      ]
+    },
+    "reference": {
+      "overall": 5.0,
+      "mean": 4.96,
+      "scores": {
+        "資訊層級": 5.5,
+        "字體排印": 5.5,
+        "色彩": 5,
+        "間距與版面": 5,
+        "一致性": 5.5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3,
+        "響應式": 4.5,
+        "文案": 5.5,
+        "無障礙": 5,
+        "動畫與轉場": 4
+      },
+      "issues": [
+        "銘傳口琴社手機版是桌面版縮小，無法閱讀",
+        "CUMS 首頁推文嵌入失效，留下約 600px 空白且沒有提示",
+        "銘傳首頁是舊貼文流加登入框，看不出社團現況與入社方式",
+        "銘傳外露 CMS 系統字串和破圖替代文字",
+        "Yale 1440 寬只用左側約 800px，首屏沒有 Auditions CTA"
+      ]
+    },
+    "delta_overall": 2.5,
+    "delta_mean": 2.34
+  },
+  {
+    "round": "4",
+    "reviewer": "opus-5-5",
+    "file": "r4-opus-5-5.md",
+    "mapping": {
+      "C": "baseline",
+      "A": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 6.4,
+      "mean": 6.0,
+      "scores": {
+        "資訊層級": 7,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6.5,
+        "一致性": 6,
+        "資訊密度": 6,
+        "導覽": 6,
+        "狀態與回饋": 4.5,
+        "響應式": 6,
+        "文案": 5,
+        "無障礙": 6,
+        "動畫與轉場": 6.5
+      },
+      "issues": [
+        "編年史 loading／error／empty 三種狀態畫面完全相同、沒有任何狀態說明；手機各頁各狀態也和正常版一樣",
+        "深色外觀與淺色逐像素相同，主站沒有深色模式；Discord 固定深色、join 是無品牌白頁，風格分裂",
+        "site-guide 與 chronology 對外寫滿 chronology_events、last-good、Hugo、GitHub Actions、YYYY/MM/DD 等內部術語",
+        "site-guide_mobile 表格第一欄只剩一字寬，「首頁竹韻近期動態」直排七行，明顯破版",
+        "discord-loading 顯示「讀取中 位上線」；discord-empty 顯示「0 位上線 0 位成員」配「已連線 Discord」，語意矛盾"
+      ]
+    },
+    "new": {
+      "overall": 8.4,
+      "mean": 8.38,
+      "scores": {
+        "資訊層級": 9,
+        "字體排印": 8.5,
+        "色彩": 9,
+        "間距與版面": 8,
+        "一致性": 8.5,
+        "資訊密度": 8.5,
+        "導覽": 9,
+        "狀態與回饋": 8,
+        "響應式": 8.5,
+        "文案": 8.5,
+        "無障礙": 8,
+        "動畫與轉場": 7
+      },
+      "issues": [
+        "home-empty 行事曆直接顯示 Google 原生「2099／目前顯示 2099年12月31日以前的活動」，沒有網站自訂說明",
+        "home-loading／home-error 行事曆區留下 500px 以上空白框，提示只佔中央一小塊",
+        "手機右下圓形「?」浮動鈕壓到內文（site-guide_mobile），而且只有圖示沒有文字",
+        "Discord 標題在手機斷成「加入陽明交大竹／韻口琴社 Discord」，首頁副標「零基／礎」也在詞中斷行",
+        "首頁日曆列出現 Google 英文長地址「National Chiao Tung University Student Activity Center…」且被截斷"
+      ]
+    },
+    "reference": {
+      "overall": 5.0,
+      "mean": 4.92,
+      "scores": {
+        "資訊層級": 5.5,
+        "字體排印": 6,
+        "色彩": 5,
+        "間距與版面": 4.5,
+        "一致性": 5.5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3,
+        "響應式": 5.5,
+        "文案": 4,
+        "無障礙": 5,
+        "動畫與轉場": 4
+      },
+      "issues": [
+        "ref-cums-home 社群嵌入失敗，留下約 600px 空白和兩次「Tweets by @CamUniMusSoc」",
+        "ref-yale-glee-events 頁首外露 CMS 範本說明「Use the Calendar List Block…」",
+        "ref-mcu-harmonica-home 首頁只有貼文流和登入表單，沒有社團介紹與入社入口",
+        "ref-mcu-harmonica 內文與 meta 是 11–12px 淺灰字，還有破圖替代文字",
+        "ref-yale-glee-home 桌面內文欄約 800px 靠左，右側大片空白"
+      ]
+    },
+    "delta_overall": 2.0,
+    "delta_mean": 2.38
+  },
+  {
+    "round": "5",
+    "reviewer": "opus-5-5",
+    "file": "r5-opus-5-5.md",
+    "mapping": {
+      "C": "baseline",
+      "B": "new",
+      "A": "reference"
+    },
+    "baseline": {
+      "overall": 5.5,
+      "mean": 5.58,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6,
+        "一致性": 5,
+        "資訊密度": 5.5,
+        "導覽": 6,
+        "狀態與回饋": 4,
+        "響應式": 5.5,
+        "文案": 5,
+        "無障礙": 6,
+        "動畫與轉場": 5
+      },
+      "issues": [
+        "日曆載入中與讀取失敗都是空白框，編年史各狀態畫面相同、沒有說明",
+        "外露 Hermes、chronology_events、Repo 資料備援、未翻譯的英文 Discord 字樣等內部術語",
+        "沒有深色外觀，discord／join／主站的按鈕與色彩各自為政",
+        "site-guide 手機表格首欄一字一行，浮動按鈕蓋住頁尾與卡片標題",
+        "discord-empty 顯示 0 位成員配上「已連線」，loading 顯示「讀取中 位上線」"
+      ]
+    },
+    "new": {
+      "overall": 8.0,
+      "mean": 8.04,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 8,
+        "色彩": 8.5,
+        "間距與版面": 8,
+        "一致性": 8,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8,
+        "響應式": 8,
+        "文案": 8.5,
+        "無障礙": 7.5,
+        "動畫與轉場": 7
+      },
+      "issues": [
+        "home-empty 行事曆只剩 Google 原生訊息與大片空白，沒有自訂空狀態",
+        "手機浮動按鈕「詢問竹韻」蓋住區塊標題與頁尾連結",
+        "投影畫面中段約 320px 空白，曲目字級對投影偏小",
+        "discord 頁首與綠色主按鈕、join 標題下的滿寬琥珀線和主站元件語言不一致",
+        "狀態列、hero 小標、日曆列文字約 11–12px，日曆列英文地址冗長又被截斷"
+      ]
+    },
+    "reference": {
+      "overall": 7.0,
+      "mean": 6.67,
+      "scores": {
+        "資訊層級": 7.5,
+        "字體排印": 7.5,
+        "色彩": 7.5,
+        "間距與版面": 7.5,
+        "一致性": 7,
+        "資訊密度": 7,
+        "導覽": 7,
+        "狀態與回饋": 4,
+        "響應式": 7,
+        "文案": 7.5,
+        "無障礙": 6.5,
+        "動畫與轉場": 4
+      },
+      "issues": [
+        "參考組沒有載入、錯誤、空資料、深色狀態截圖，無法驗證狀態處理",
+        "Yale 首頁手機版照片占比高，文字與行動按鈕被推後",
+        "Yale events／CUMS about 桌面內容稀疏、留白過多",
+        "MCU 口琴社首頁視覺偏舊、接近預設樣式",
+        "照片上白字的對比沒有保證"
+      ]
+    },
+    "delta_overall": 2.5,
+    "delta_mean": 2.46
+  },
+  {
+    "round": "6",
+    "reviewer": "opus-5-5",
+    "file": "r6-opus-5-5.md",
+    "mapping": {
+      "C": "baseline",
+      "A": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 5.8,
+      "mean": 5.88,
+      "scores": {
+        "資訊層級": 7,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6,
+        "一致性": 5.5,
+        "資訊密度": 6,
+        "導覽": 6,
+        "狀態與回饋": 4.5,
+        "響應式": 6,
+        "文案": 5,
+        "無障礙": 6,
+        "動畫與轉場": 6
+      },
+      "issues": [
+        "所有 -dark 截圖與淺色版完全相同，深色外觀沒有作用；Discord 頁卻固定深色",
+        "loading／error／empty 只改頁尾灰色小字，內容區沒有提示；discord-empty 顯示 0 位成員卻寫已連線",
+        "公開頁面露出 chronology_events、Hermes、last-good、Hugo、Portal、演出投影畫面等內部術語",
+        "site-guide mobile 表格第一欄一字一行；浮動「詢問竹韻」遮住頁尾與內文",
+        "Discord 頁與入社頁風格脫離主站、沒有回官網導覽；主站頁首沒有入社 CTA 與行事曆入口"
+      ]
+    },
+    "new": {
+      "overall": 8.3,
+      "mean": 8.29,
+      "scores": {
+        "資訊層級": 9,
+        "字體排印": 8.5,
+        "色彩": 8.5,
+        "間距與版面": 8,
+        "一致性": 8.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8.5,
+        "響應式": 8.5,
+        "文案": 8.5,
+        "無障礙": 7.5,
+        "動畫與轉場": 7.5
+      },
+      "issues": [
+        "home-error desktop：行事曆錯誤卡片疊在約 500px 的灰色骨架上，看起來像仍在載入，也浪費版面",
+        "home／home-calendar desktop：嵌入日曆每列重複同一段英文長地址，稀釋活動名稱",
+        "home／about-contact 等 mobile：浮動「詢問竹韻」遮住段落標題與內文",
+        "portal-join mobile：背景表單截圖透出干擾主標，眉標用英文「JOIN BAMBOO MELODY」",
+        "screen-song screen：目前曲目在大卡片與清單重複顯示，02／04 曲名起點不一致"
+      ]
+    },
+    "reference": {
+      "overall": 5.2,
+      "mean": 5.25,
+      "scores": {
+        "資訊層級": 6,
+        "字體排印": 6.5,
+        "色彩": 5,
+        "間距與版面": 5.5,
+        "一致性": 5,
+        "資訊密度": 5,
+        "導覽": 6,
+        "狀態與回饋": 3.5,
+        "響應式": 5.5,
+        "文案": 6,
+        "無障礙": 5,
+        "動畫與轉場": 4
+      },
+      "issues": [
+        "ref-cums-home：Twitter 外掛載入失敗，只留標題與大片空白",
+        "ref-mcu-harmonica-home：圖片失效露出替代文字，並顯示 CMS 系統字串",
+        "ref-mcu-harmonica／ref-cums：首屏沒有入社或練習資訊，銘傳把登入框放在主要位置",
+        "ref-yale-glee-home：內文只佔左側約 750px，1440 寬的右側近半空白",
+        "ref-cums／ref-mcu-harmonica：預設灰白主題，沒有品牌色系統，元件風格混雜"
+      ]
+    },
+    "delta_overall": 2.5,
+    "delta_mean": 2.41
+  },
+  {
+    "round": "7",
+    "reviewer": "opus-5-5",
+    "file": "r7-opus-5-5.md",
+    "mapping": {
+      "C": "baseline",
+      "A": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 5.7,
+      "mean": 5.79,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6.5,
+        "一致性": 5.5,
+        "資訊密度": 6.5,
+        "導覽": 6,
+        "狀態與回饋": 4.5,
+        "響應式": 6,
+        "文案": 4.5,
+        "無障礙": 6,
+        "動畫與轉場": 5
+      },
+      "issues": [
+        "home-loading／home-error 日曆是沒有文字的大白框",
+        "編年史、維護說明、關於頁外露 chronology_events、Hermes、last-good、Hugo 等內部術語",
+        "深色外觀沒有作用（dark 截圖與淺色相同），Discord 卻固定深色",
+        "discord-empty 顯示 0 位成員卻寫已連線，loading 寫「讀取中 位上線」，編年史各狀態無法區分",
+        "Discord、portal、screen 英文標籤混用，join 是無樣式頁，site-guide mobile 表格直排"
+      ]
+    },
+    "new": {
+      "overall": 8.2,
+      "mean": 8.12,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 8,
+        "色彩": 8.5,
+        "間距與版面": 8,
+        "一致性": 8.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8.5,
+        "響應式": 8.5,
+        "文案": 8,
+        "無障礙": 7.5,
+        "動畫與轉場": 7
+      },
+      "issues": [
+        "home-empty 日曆外露 Google 原生「目前顯示…以前的活動」與大片空白，沒有站方說明",
+        "狀態列、卡片日期、Discord 人數說明是約 12px 淺灰小字，對比不足",
+        "浮動「詢問竹韻」在 mobile 遮住內文與卡片標題",
+        "screen_screen 中段約三分之一空白，曲目字級可以更大",
+        "site-guide／about 仍有「給幹部」、GitHub Pages 等站務語氣"
+      ]
+    },
+    "reference": {
+      "overall": 4.6,
+      "mean": 4.54,
+      "scores": {
+        "資訊層級": 5,
+        "字體排印": 6,
+        "色彩": 5,
+        "間距與版面": 5,
+        "一致性": 4.5,
+        "資訊密度": 4.5,
+        "導覽": 5.5,
+        "狀態與回饋": 3,
+        "響應式": 4,
+        "文案": 4,
+        "無障礙": 5,
+        "動畫與轉場": 3
+      },
+      "issues": [
+        "Yale events 頁外露 CMS 範本占位文字",
+        "MCU 與 CUMS about 手機版沒有響應式，只是縮小",
+        "CUMS 首頁輪播下方大片空白，社群外掛沒有載入",
+        "CUMS home 與 about 模板不一致",
+        "MCU 破圖露出 alt 文字，公開頁有登入框"
+      ]
+    },
+    "delta_overall": 2.5,
+    "delta_mean": 2.33
+  },
+  {
+    "round": "8",
+    "reviewer": "opus-5-5",
+    "file": "r8-opus-5-5.md",
+    "mapping": {
+      "B": "baseline",
+      "C": "new",
+      "A": "reference"
+    },
+    "baseline": {
+      "overall": 5.5,
+      "mean": 4.92,
+      "scores": {
+        "資訊層級": 6,
+        "字體排印": 5.5,
+        "色彩": 4.5,
+        "間距與版面": 5.5,
+        "一致性": 4.5,
+        "資訊密度": 5.5,
+        "導覽": 5,
+        "狀態與回饋": 3.5,
+        "響應式": 5.5,
+        "文案": 3.5,
+        "無障礙": 5.5,
+        "動畫與轉場": 4.5
+      },
+      "issues": [
+        "所有 -dark 截圖與淺色逐像素相同，深色外觀完全沒有作用",
+        "home-loading/error 行事曆是約 520px 空白框，empty 只有 Google 系統字；mobile 五種狀態完全一樣",
+        "site-guide、chronology、about、頁尾外露 GitHub、Hugo、Repo、Hermes、chronology_events 等內部術語",
+        "join 頁沒有設計，discord 頁用綠色按鈕與英文眉標，和官網風格斷裂",
+        "頁首缺少行事曆與 Discord 主按鈕，手機選單只有三個連結，浮動按鈕遮住內容"
+      ]
+    },
+    "new": {
+      "overall": 8.0,
+      "mean": 8.0,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 8,
+        "色彩": 8.5,
+        "間距與版面": 7.5,
+        "一致性": 8.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8,
+        "響應式": 7.5,
+        "文案": 8,
+        "無障礙": 7.5,
+        "動畫與轉場": 7.5
+      },
+      "issues": [
+        "home-error desktop 行事曆說明卡周圍有 400px 以上的灰色空白",
+        "home-empty 行事曆仍只有 Google 的空資料系統字，沒有站方說明",
+        "mobile 浮動「詢問竹韻」按鈕蓋住 site-guide 與 home 的內文",
+        "chronology 時間軸字級約 10–13px，來源連結點擊範圍小，左側空白",
+        "portal、screen 仍有英文眉標，chronology 的「Club Portal」沒有解釋"
+      ]
+    },
+    "reference": {
+      "overall": 4.5,
+      "mean": 4.58,
+      "scores": {
+        "資訊層級": 5,
+        "字體排印": 5.5,
+        "色彩": 5,
+        "間距與版面": 4,
+        "一致性": 5,
+        "資訊密度": 4.5,
+        "導覽": 5.5,
+        "狀態與回饋": 3.5,
+        "響應式": 5,
+        "文案": 4,
+        "無障礙": 5,
+        "動畫與轉場": 3
+      },
+      "issues": [
+        "ref-cums-home desktop 社群嵌入讀取失敗後留下約 600px 空白並重複兩次",
+        "ref-yale-glee-events desktop CMS 範本說明文字直接公開",
+        "ref-mcu-harmonica-home 首屏被選單與登入表單佔據，看不到入社資訊",
+        "ref-mcu-harmonica-home desktop 圖片破圖只剩替代文字",
+        "ref-yale-glee-home desktop 右欄全空，未善用寬螢幕"
+      ]
+    },
+    "delta_overall": 2.5,
+    "delta_mean": 3.08
+  },
+  {
+    "round": "9",
+    "reviewer": "opus-5-5",
+    "file": "r9-opus-5-5.md",
+    "mapping": {
+      "A": "baseline",
+      "C": "new",
+      "B": "reference"
+    },
+    "baseline": {
+      "overall": 6.0,
+      "mean": 5.58,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6,
+        "色彩": 5,
+        "間距與版面": 6.5,
+        "一致性": 5.5,
+        "資訊密度": 6,
+        "導覽": 5.5,
+        "狀態與回饋": 4.5,
+        "響應式": 6.5,
+        "文案": 4.5,
+        "無障礙": 5.5,
+        "動畫與轉場": 5
+      },
+      "issues": [
+        "深色外觀截圖與淺色版逐位元相同，深色模式未生效（home/about/chronology/site-guide/portal/join/home-calendar）",
+        "home-error 行事曆只剩空白框、home-empty 只剩 Google 原生一行字，沒有說明與下一步",
+        "site-guide/chronology/about/discord 外露 GitHub Pages、Hugo、last-good、chronology_events、Hermes、英文 Discord 眉標等內部用語",
+        "Discord（深色＋綠鈕）、join（無 Logo 純文字）、主站三套樣式不一致；主站頁首缺行事曆與入社 CTA",
+        "screen-song 中段大片空白，正在演奏徽章與鍵盤提示字過小"
+      ]
+    },
+    "new": {
+      "overall": 8.0,
+      "mean": 8.0,
+      "scores": {
+        "資訊層級": 8.5,
+        "字體排印": 8,
+        "色彩": 8.5,
+        "間距與版面": 7.5,
+        "一致性": 7.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8,
+        "響應式": 8,
+        "文案": 8.5,
+        "無障礙": 7.5,
+        "動畫與轉場": 7.5
+      },
+      "issues": [
+        "home-empty 行事曆是 Google 原生空畫面加大片空白，home-error 錯誤卡下方留空框",
+        "手機版「詢問竹韻」浮動按鈕蓋住正文（site-guide、chronology-dark）",
+        "Discord 頁與 portal 的頁首、背景、元件和主站不一致",
+        "portal-song 照片下方有模糊色塊，portal-join 的模糊表單背景像鬼影",
+        "行事曆每列重複冗長的英文地址並被截斷"
+      ]
+    },
+    "reference": {
+      "overall": 5.5,
+      "mean": 5.75,
+      "scores": {
+        "資訊層級": 6,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 5.5,
+        "一致性": 6.5,
+        "資訊密度": 5.5,
+        "導覽": 6.5,
+        "狀態與回饋": 4,
+        "響應式": 5.5,
+        "文案": 6.5,
+        "無障礙": 6,
+        "動畫與轉場": 4.5
+      },
+      "issues": [
+        "CUMS 首頁 Twitter 外嵌沒載入，留下大片空白，Facebook 外掛重複出現",
+        "銘傳口琴社手機版只是桌面縮放，字與點擊目標過小",
+        "CUMS 與銘傳首頁沒有說明社團是什麼、怎麼參加",
+        "三站都沒有深色外觀，CUMS 與銘傳配色缺乏個性",
+        "Yale 內文只用到約 800 px，寬螢幕右側大片空白"
+      ]
+    },
+    "delta_overall": 2.0,
+    "delta_mean": 2.42
+  },
+  {
+    "round": "10",
+    "reviewer": "opus-5-5",
+    "file": "r10-opus-5-5.md",
+    "mapping": {
+      "B": "baseline",
+      "A": "new",
+      "C": "reference"
+    },
+    "baseline": {
+      "overall": 5.8,
+      "mean": 5.79,
+      "scores": {
+        "資訊層級": 7,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 6.5,
+        "一致性": 5.5,
+        "資訊密度": 6.5,
+        "導覽": 6,
+        "狀態與回饋": 4,
+        "響應式": 6.5,
+        "文案": 4.5,
+        "無障礙": 6,
+        "動畫與轉場": 4.5
+      },
+      "issues": [
+        "[狀態與回饋] home、chronology、about、site-guide：loading、error、empty 和正常狀態相同或只剩空白日曆框，沒有說明與下一步",
+        "[色彩] 所有 -dark 截圖和淺色版逐位元相同，深色外觀沒有生效",
+        "[文案] chronology、site-guide、about、footer：chronology_events、Hermes、GitHub Actions、last-good、Hugo、Asia/Taipei 等內部術語外露",
+        "[一致性／文案] discord、screen：Discord 綠 CTA 和英文眉標、導覽只有「演出 Portal」，投影標題寫成「演出投影畫面」",
+        "[響應式／導覽] home-menu-open、home-calendar mobile：浮動按鈕壓住 hero CTA 與頁尾文字，手機選單沒有加入 Discord 的 CTA"
+      ]
+    },
+    "new": {
+      "overall": 8.4,
+      "mean": 8.29,
+      "scores": {
+        "資訊層級": 9,
+        "字體排印": 8.5,
+        "色彩": 8.5,
+        "間距與版面": 8,
+        "一致性": 8.5,
+        "資訊密度": 8,
+        "導覽": 8.5,
+        "狀態與回饋": 8.5,
+        "響應式": 8.5,
+        "文案": 8.5,
+        "無障礙": 7.5,
+        "動畫與轉場": 7.5
+      },
+      "issues": [
+        "[響應式／無障礙] about、site-guide、home mobile/desktop：浮動「詢問竹韻」按鈕蓋住正文、標題與相鄰的「到 Discord 問活動」按鈕",
+        "[文案／資訊密度] home、home-dark、home-calendar：日曆 iframe 每列重複中英混雜的長地址，截斷後難以辨識",
+        "[狀態與回饋] home-empty desktop：日曆空狀態直接露出 Google 的「目前顯示…尋找更多」系統文字和大片白框，沒有自訂說明",
+        "[間距與版面] chronology、about desktop：左欄只放頂部目錄，下方大片空白，時間軸每則約 74px，密度低",
+        "[字體排印] about、chronology desktop：頁首副標第二行只剩「管道。」「時間線。」孤字"
+      ]
+    },
+    "reference": {
+      "overall": 5.4,
+      "mean": 5.42,
+      "scores": {
+        "資訊層級": 6.5,
+        "字體排印": 6.5,
+        "色彩": 6,
+        "間距與版面": 5.5,
+        "一致性": 5.5,
+        "資訊密度": 5.5,
+        "導覽": 6.5,
+        "狀態與回饋": 4,
+        "響應式": 4.5,
+        "文案": 5.5,
+        "無障礙": 5,
+        "動畫與轉場": 4
+      },
+      "issues": [
+        "[響應式] ref-mcu-harmonica-home mobile：桌面版等比縮小，字小到無法閱讀",
+        "[狀態與回饋／文案] ref-yale-glee-events：露出 CMS 範本佔位文字「Use the Calendar List Block…」",
+        "[響應式／狀態] ref-cums-home mobile：輪播以下約 1300px 空白，內容沒有渲染",
+        "[色彩／無障礙] ref-cums-home mobile：半透明白字標題疊在照片上，對比不足",
+        "[間距與版面] ref-yale-glee-about desktop：內容只佔左側約 800px，右側閒置"
+      ]
+    },
+    "delta_overall": 2.6,
+    "delta_mean": 2.5
+  }
+]

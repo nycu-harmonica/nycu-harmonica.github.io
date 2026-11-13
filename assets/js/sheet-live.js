@@ -295,6 +295,12 @@
     return 'https://docs.google.com/spreadsheets/d/' + config.sheetId + '/gviz/tq?' + params.toString();
   }
 
+  function networkError(message) {
+    var error = new Error(message);
+    error.reason = 'network';
+    return error;
+  }
+
   function fetchGviz(config, tab, options) {
     options = options || {};
     var doc = options.document || global.document;
@@ -320,8 +326,8 @@
       script.async = true;
       script.referrerPolicy = 'no-referrer';
       script.src = buildGvizUrl(config, tab, callbackName);
-      script.onerror = function () { finish(new Error('Google Sheet 載入失敗')); };
-      timer = global.setTimeout(function () { finish(new Error('Google Sheet 載入逾時')); }, options.timeoutMs || 10000);
+      script.onerror = function () { finish(networkError('Google Sheet 載入失敗')); };
+      timer = global.setTimeout(function () { finish(networkError('Google Sheet 載入逾時')); }, options.timeoutMs || 10000);
       doc.head.appendChild(script);
     });
   }
@@ -603,11 +609,28 @@
     renderGallery(doc, data.gallery_albums);
     renderAlbumPage(doc, data.gallery_albums);
     renderChronology(doc, data.chronology_events);
-    var status = doc.getElementById('sheet-live-status');
-    if (status) {
-      status.dataset.sheetMode = 'live';
-      status.textContent = 'Google Sheet 即時讀取：' + formatTaipei(fetchedAt) + '（Asia/Taipei）';
-    }
+    setSheetStatus(doc, 'live', function () {
+      return '社團公開資料已是最新（' + formatTaipei(fetchedAt).slice(11, 16) + ' 讀取）';
+    });
+  }
+
+  // 狀態列：loading → live，或保留建置時的備份並說明原因；已成功過就不再降級。
+  function setSheetStatus(doc, mode, text) {
+    if (!doc || typeof doc.querySelectorAll !== 'function') return;
+    doc.querySelectorAll('[data-sheet-status]').forEach(function (node) {
+      if (mode !== 'live' && node.dataset.sheetMode === 'live') return;
+      node.dataset.sheetMode = mode;
+      var target = (typeof node.querySelector === 'function' && node.querySelector('[data-status-text]')) || node;
+      target.textContent = text(node.dataset.fallbackTime ? node.dataset.fallbackTime + ' ' : '');
+    });
+  }
+
+  function fallbackStatus(error) {
+    return function (time) {
+      var shown = '先顯示 ' + time + '整理的備份資料';
+      if (error && error.reason === 'network') return '暫時連不上 Google 試算表，' + shown;
+      return 'Google 試算表的資料暫時無法使用，' + shown;
+    };
   }
 
   async function refreshSheetData(options) {
@@ -623,7 +646,8 @@
       (options.renderImpl || renderLiveData)(doc, data, options.fetchedAt || new Date());
       await refreshContribute(config, doc, options);
       return true;
-    } catch (_error) {
+    } catch (error) {
+      setSheetStatus(doc, 'fallback', fallbackStatus(error));
       return false;
     }
   }
@@ -639,6 +663,7 @@
       lastAttempt = Date.now();
       try { await refreshSheetData({ document: doc, config: config }); } finally { inFlight = false; }
     }
+    setSheetStatus(doc, 'loading', function () { return '正在同步社團公開資料…'; });
     run();
     global.setInterval(run, config.refreshMs);
     doc.addEventListener('visibilitychange', function () {

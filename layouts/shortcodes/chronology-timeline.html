@@ -8,6 +8,9 @@
 </aside>
 {{ end }}{{ end }}
 {{ $events := site.Data.generated.chronology_events | default (slice) }}
+{{ with site.Data.generated.last_sync }}{{ $synced := time.Format "2006/01/02" .updated_at }}
+<p class="data-status" data-sheet-status data-sheet-mode="fallback" data-fallback-time="{{ $synced }}" aria-live="polite"><span class="data-status-dot" aria-hidden="true"></span><span data-status-text>目前顯示 {{ $synced }} 整理的 {{ len $events }} 筆紀錄</span></p>
+{{ end }}
 <div class="chronology-timeline" aria-label="竹韻口琴社編年史時間線" data-sheet-chronology>
   <div class="chronology-list" data-sheet-chronology-list>
     {{ range sort $events "sort_date" "desc" }}

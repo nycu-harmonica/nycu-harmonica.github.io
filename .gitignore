@@ -10,3 +10,4 @@ __pycache__/
 
 # macOS
 .DS_Store
+docs/design-review/tools/node_modules

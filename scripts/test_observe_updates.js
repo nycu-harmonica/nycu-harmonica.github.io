@@ -79,7 +79,8 @@ async function testSuccessReplacesFallbackAtomically() {
   assert.equal(link.attributes.href, 'https://example.com/post/1');
   assert.equal(link.attributes.rel, 'noopener noreferrer');
   assert.equal(view.grid.dataset.observeMode, 'live');
-  assert.match(view.status.textContent, /^即時資料：2026\/07\/16 19:45（Asia\/Taipei）$/);
+  assert.match(view.status.textContent, /^已讀取最新動態（2026\/07\/16 19:45 更新）・/);
+  assert.equal(view.status.dataset.observeMode, 'live');
   const cardTime = view.grid.children[0].children[0].children[0].children[0];
   assert.equal(cardTime.textContent, '2026/07/16 19:30');
 }
@@ -93,6 +94,9 @@ async function testInvalidPayloadsKeepFallback() {
     payload([item({ sourceName: '其他口琴社' })]),
     payload([])
   ];
+  const expected = (value) => (Array.isArray(value.items) && value.items.length === 0
+    ? '觀測站目前沒有新的公開貼文，先顯示網站內建的動態'
+    : '暫時連不上臺灣口琴觀測站，先顯示網站內建的動態');
   for (const value of invalid) {
     const view = fixture();
     const changed = await observe.refreshObserveUpdates({
@@ -101,7 +105,8 @@ async function testInvalidPayloadsKeepFallback() {
     });
     assert.equal(changed, false);
     assert.deepEqual(view.grid.children, [view.fallback]);
-    assert.equal(view.status.textContent, '上次同步資料');
+    assert.equal(view.status.textContent, expected(value));
+    assert.equal(view.status.dataset.observeMode, 'fallback');
   }
 }
 
@@ -130,7 +135,7 @@ async function testActualBodyLimitAndMalformedJsonKeepFallback() {
     });
     assert.equal(changed, false);
     assert.deepEqual(view.grid.children, [view.fallback]);
-    assert.equal(view.status.textContent, '上次同步資料');
+    assert.equal(view.status.textContent, '暫時連不上臺灣口琴觀測站，先顯示網站內建的動態');
   }
 }
 

@@ -26,6 +26,10 @@ limit = 20
 changefreq = "weekly"
 priority = 0.5
 
+[markup.tableOfContents]
+startLevel = 2
+endLevel = 2
+
 [markup.goldmark.renderer]
 # Sheet 內文一律當純 Markdown,不允許 raw HTML(防呆與防注入)
 unsafe = false
@@ -61,6 +65,11 @@ maxQuestionChars = 500
 name = "首頁"
 pageRef = "/"
 weight = 10
+
+[[menus.main]]
+name = "行事曆"
+url = "/#calendar"
+weight = 20
 
 [[menus.main]]
 name = "編年史"

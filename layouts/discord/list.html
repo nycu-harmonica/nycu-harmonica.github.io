@@ -10,10 +10,13 @@
       <img src="{{ "images/bamboo-logo.webp" | relURL }}" width="36" height="36" alt="">
       <span>竹韻口琴社</span>
     </a>
-    <a href="{{ "/p/" | relURL }}">演出 Portal</a>
+    <span class="discord-topbar-links">
+      <a href="{{ "/" | relURL }}">官網首頁</a>
+      <a href="{{ "/p/" | relURL }}">演出節目單</a>
+    </span>
   </nav>
 
-  <section class="discord-invite" data-discord-card data-api-url="https://discord.com/api/v10/invites/uEQDCbnY8P?with_counts=true&amp;with_expiration=true">
+  <section class="discord-invite" data-discord-card data-live="loading" data-api-url="https://discord.com/api/v10/invites/uEQDCbnY8P?with_counts=true&amp;with_expiration=true">
     <div class="discord-banner" aria-hidden="true">
       <span class="discord-banner-note discord-banner-note-one">♪</span>
       <span class="discord-banner-note discord-banner-note-two">♫</span>
@@ -25,16 +28,16 @@
       <img class="discord-server-icon" src="{{ "images/bamboo-logo.webp" | relURL }}" width="128" height="128" alt="竹韻口琴社藍白識別圖">
 
       <div class="discord-heading">
-        <p class="discord-eyebrow">YOU'VE BEEN INVITED TO JOIN A SERVER</p>
-        <h1 data-discord-name data-seo-heading>加入陽明交大竹韻口琴社 Discord</h1>
+        <p class="discord-eyebrow">你受邀加入竹韻的 Discord 伺服器</p>
+        <h1 data-seo-heading>加入<span class="discord-name" data-discord-name>陽明交大竹韻口琴社</span> Discord</h1>
         <span class="discord-community-badge" title="Discord 社群伺服器">
           <span aria-hidden="true">✦</span> 社群伺服器
         </span>
       </div>
 
       <div class="discord-counts" aria-label="Discord 伺服器人數">
-        <span><i class="discord-status-online" aria-hidden="true"></i><strong data-discord-online>讀取中</strong> 位上線</span>
-        <span><i class="discord-status-member" aria-hidden="true"></i><strong data-discord-members>讀取中</strong> 位成員</span>
+        <span><i class="discord-status-online" aria-hidden="true"></i><strong data-discord-online>—</strong> 位上線</span>
+        <span><i class="discord-status-member" aria-hidden="true"></i><strong data-discord-members>—</strong> 位成員</span>
       </div>
 
       <p class="discord-description" data-discord-description>定期社課：週二晚上＠活動中心 1F 聯誼廳</p>
@@ -54,7 +57,7 @@
         </button>
       </div>
 
-      <p class="discord-live-status" role="status" aria-live="polite" data-discord-status>正在連線 Discord，取得最新伺服器資訊。</p>
+      <p class="discord-live-status" role="status" aria-live="polite" data-discord-status>正在向 Discord 取得目前人數…</p>
     </div>
   </section>
 
