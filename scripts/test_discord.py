@@ -59,7 +59,7 @@ def main() -> None:
     assert homepage_output.is_file(), "Missing homepage output"
     homepage = HomepageParser()
     homepage.feed(homepage_output.read_text(encoding="utf-8"))
-    assert len(homepage.join_links) == 2, "Homepage must render both Discord join buttons"
+    assert len(homepage.join_links) == 3, "Homepage must render all three Discord join buttons"
     assert all(link.get("href") == "/discord/" for link in homepage.join_links), "Homepage Discord buttons must use /discord/"
     assert all(link.get("target") is None for link in homepage.join_links), "Homepage Discord buttons must stay in the site"
     print("Discord invitation output check passed.")
