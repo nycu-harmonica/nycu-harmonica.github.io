@@ -10,16 +10,19 @@
 <meta property="og:description" content="{{ $desc | plainify | truncate 150 }}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ .Permalink }}">
-<meta property="og:site_name" content="{{ .Site.Title }}">
-<meta property="og:image" content="{{ "images/bamboo-logo.webp" | absURL }}">
-<meta property="og:image:width" content="320">
-<meta property="og:image:height" content="320">
-<meta property="og:image:alt" content="竹韻口琴社藍白識別圖">
-<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="{{ .Params.ogSiteName | default .Site.Title }}">
+{{- /* 個別頁面可用 front matter 的 ogImage 系列參數換成大圖預覽；未設定時沿用社徽。 */}}
+{{- $ogImage := .Params.ogImage | default "images/bamboo-logo.webp" }}
+{{- $ogAlt := .Params.ogImageAlt | default "竹韻口琴社藍白識別圖" }}
+<meta property="og:image" content="{{ $ogImage | absURL }}">
+<meta property="og:image:width" content="{{ .Params.ogImageWidth | default 320 }}">
+<meta property="og:image:height" content="{{ .Params.ogImageHeight | default 320 }}">
+<meta property="og:image:alt" content="{{ $ogAlt }}">
+<meta name="twitter:card" content="{{ if .Params.ogImage }}summary_large_image{{ else }}summary{{ end }}">
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $desc | plainify | truncate 150 }}">
-<meta name="twitter:image" content="{{ "images/bamboo-logo.webp" | absURL }}">
-<meta name="twitter:image:alt" content="竹韻口琴社藍白識別圖">
+<meta name="twitter:image" content="{{ $ogImage | absURL }}">
+<meta name="twitter:image:alt" content="{{ $ogAlt }}">
 <link rel="canonical" href="{{ .Permalink }}">
 <link rel="icon" href="{{ "favicon.png" | relURL }}" type="image/png">
 <link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">

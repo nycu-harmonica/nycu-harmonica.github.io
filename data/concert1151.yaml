@@ -1,0 +1,82 @@
+# 竹夢初聲｜2026 竹韻口琴社 × 清大口琴社聯合成發（/1151/）
+# 兩社共同主辦：頁面上凡提到主辦、社群連結，兩社都要並列、份量對等。
+# 場次時間與地點以活動海報為準；曲目來自籌備曲目表，僅列曲名、不列演出者。
+# 標題用的襯線字型是子集檔（static/fonts/1151/），只含頁面標題用到的字；
+# 改動 h1／h2／場次名稱／場次標籤時若出現新字，會自動退回系統字型，必要時請重新產生子集。
+title: 竹夢初聲
+kicker: 2026 口琴聯合成發
+english: NYCU × NTHU Harmonica Concert
+lead: 從交大的黃昏，吹到清大的夜晚。兩校口琴人同台，三場演出，等你來聽。
+free: true
+hosts:
+  - name: 竹韻口琴社
+    full: 國立陽明交通大學竹韻口琴社
+    school: 陽明交大
+    handle: nycu_harmonica
+    instagram: https://www.instagram.com/nycu_harmonica/
+    url: https://harmonica.nycu.club/
+  - name: 清大口琴社
+    full: 國立清華大學口琴社
+    school: 清大
+    handle: nthu_harmonica_club
+    instagram: https://www.instagram.com/nthu_harmonica_club/
+    url: https://www.facebook.com/nthuharmonica/
+events:
+  - id: pop-up
+    act: 第一場
+    title: 校園快閃
+    blurb: 下課順路停一下，用一個小時，先聽我們吹個開頭。
+    date: '2026-11-24'
+    weekday: 二
+    start: '17:00'
+    end: '18:00'
+    location: 交大小木屋
+    address: 國立陽明交通大學光復校區
+    map: 國立陽明交通大學 小木屋鬆餅
+    program:
+      - 萬水千山縱橫
+      - 狂暴之海 A Stormy Sea
+      - 宮崎駿組曲
+      - 加勒比海盜
+      - Ashes on Fire
+      - 海闊天空
+  - id: nycu
+    act: 第二場
+    title: 交大場
+    blurb: 重奏與大合奏之夜。兩校同台，把舞台吹得滿滿的。
+    date: '2026-12-04'
+    weekday: 五
+    start: '18:30'
+    end: '21:20'
+    location: 交大活動中心 2F 演藝廳
+    address: 國立陽明交通大學光復校區
+    map: 國立陽明交通大學 光復校區 學生活動中心
+    program:
+      - 骷髏之舞
+      - 港都夜雨
+      - 情熱大陸
+      - 屋頂上的提琴手
+      - 沙士散拍 Root Beer Rag
+      - 霍爾的移動城堡
+      - Oblivion
+      - 海闊天空
+  - id: nthu
+    act: 第三場
+    title: 清大場
+    blurb: 獨奏之夜。一人一首，把這學期練的曲子吹給你聽。
+    date: '2026-12-08'
+    weekday: 二
+    start: '19:00'
+    end: '21:00'
+    location: 清大湖畔一練
+    address: 國立清華大學
+    map_url: https://maps.app.goo.gl/PU8pwTK5FYBKNnx77
+    program:
+      - Moon River
+      - Summer
+      - Merry Christmas, Mr. Lawrence
+      - 青鳥
+      - 光陰的故事
+      - Proud of You
+      - 櫻桃小丸子
+      - 海闊天空

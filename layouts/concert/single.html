@@ -1,0 +1,155 @@
+{{ define "head" }}
+{{- $concert := site.Data.concert1151 }}
+{{- $page := . }}
+{{- $organizers := slice }}
+{{- range $concert.hosts }}{{ $organizers = $organizers | append (dict "@type" "Organization" "name" .full "url" .url) }}{{ end }}
+{{- $events := slice }}
+{{- range $concert.events }}
+  {{- $event := dict
+    "@type" "MusicEvent"
+    "name" (printf "%s｜%s" $concert.title .title)
+    "description" .blurb
+    "startDate" (printf "%sT%s:00+08:00" .date .start)
+    "endDate" (printf "%sT%s:00+08:00" .date .end)
+    "eventStatus" "https://schema.org/EventScheduled"
+    "eventAttendanceMode" "https://schema.org/OfflineEventAttendanceMode"
+    "isAccessibleForFree" ($concert.free | default false)
+    "url" $page.Permalink
+    "image" ("images/1151/og.jpg" | absURL)
+    "location" (dict "@type" "Place" "name" .location "address" .address)
+    "organizer" $organizers
+  }}
+  {{- $events = $events | append $event }}
+{{- end }}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $events | jsonify | safeJS }}</script>
+{{ end }}
+
+{{ define "main" }}
+{{- $concert := site.Data.concert1151 }}
+{{- $permalink := .Permalink }}
+<header class="concert-hero">
+  <div class="concert-hero__art" aria-hidden="true">
+    <img src="{{ "images/1151/artwork.webp" | relURL }}" width="1400" height="1983" alt="" fetchpriority="high" decoding="async">
+  </div>
+  <nav class="concert-top" aria-label="主辦社團">
+    <p>{{ range $i, $host := $concert.hosts }}{{ if $i }}<span aria-hidden="true"> × </span><span class="sr-only">與</span>{{ end }}<a href="{{ $host.url }}"{{ if not (hasPrefix $host.url site.BaseURL) }} target="_blank" rel="noopener"{{ end }}>{{ $host.name }}</a>{{ end }}</p>
+    <span lang="en">NYCU × NTHU</span>
+  </nav>
+  <div class="concert-hero__copy">
+    <h1 class="concert-title" aria-label="{{ $concert.title }}">
+      {{- range split $concert.title "" }}<span aria-hidden="true">{{ . }}</span>{{ end -}}
+    </h1>
+    <div class="concert-hero__aside">
+      <p class="concert-kicker">{{ $concert.kicker }}</p>
+      <p class="concert-english" lang="en">{{ $concert.english }}</p>
+      <p class="concert-lead">{{ $concert.lead }}</p>
+    </div>
+    <div class="concert-hero__cta">
+      <a class="concert-button" href="#shows">看三場時間地點
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m0 0-6-6m6 6 6-6"/></svg>
+      </a>
+      {{ if $concert.free }}<span class="concert-free">免費入場</span>{{ end }}
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="concert-shows" id="shows" aria-labelledby="shows-title">
+    <div class="concert-wrap">
+      <div class="concert-heading">
+        <p class="concert-eyebrow" lang="en">Shows</p>
+        <h2 id="shows-title">三場演出</h2>
+        <p>從黃昏到入夜，挑一場順路的來聽{{ if $concert.free }}，全部免費入場{{ end }}。</p>
+      </div>
+      <ol class="concert-list">
+        {{- range $concert.events }}
+        {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
+        {{- $end := time.AsTime (printf "%sT%s:00+08:00" .date .end) }}
+        {{- $summary := printf "%s｜%s" $concert.title .title }}
+        {{- $details := printf "%s共同主辦。活動頁：%s" (delimit (apply $concert.hosts "index" "." "full") " × ") $permalink }}
+        {{- $gcal := printf "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s/%s&location=%s&details=%s" (urlquery $summary) ($start.UTC.Format "20060102T150405Z") ($end.UTC.Format "20060102T150405Z") (urlquery (printf "%s（%s）" .location .address)) (urlquery $details) }}
+        <li class="concert-show" id="show-{{ .id }}" data-start="{{ $start.Format "2006-01-02T15:04:05-07:00" }}" data-end="{{ $end.Format "2006-01-02T15:04:05-07:00" }}">
+          <div class="concert-show__date">
+            <span class="concert-show__act">{{ .act }}</span>
+            <time datetime="{{ .date }}"><b>{{ $start.Format "1" }}<i>.</i>{{ $start.Format "02" }}</b><span>星期{{ .weekday }}</span></time>
+          </div>
+          <div class="concert-show__body">
+            <p class="concert-show__status" hidden></p>
+            <h3>{{ .title }}</h3>
+            <p class="concert-show__blurb">{{ .blurb }}</p>
+            <dl class="concert-show__meta">
+              <div>
+                <dt><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="sr-only">時間</span></dt>
+                <dd>{{ .start }} – {{ .end }}</dd>
+              </div>
+              <div>
+                <dt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.5-5.6 6.5-11a6.5 6.5 0 0 0-13 0c0 5.4 6.5 11 6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg><span class="sr-only">地點</span></dt>
+                <dd>{{ .location }}</dd>
+              </div>
+            </dl>
+            <ul class="concert-show__actions" aria-label="{{ .title }}的地圖與行事曆">
+              <li><a class="is-primary" href="{{ with .map_url }}{{ . }}{{ else }}https://www.google.com/maps/search/?api=1&amp;query={{ .map | urlquery }}{{ end }}" target="_blank" rel="noopener">地圖導航</a></li>
+              <li><a href="{{ $gcal }}" target="_blank" rel="noopener">加入 Google 日曆</a></li>
+              <li><a href="{{ printf "1151/%s.ics" .id | relURL }}" download>下載行事曆檔</a></li>
+            </ul>
+          </div>
+        </li>
+        {{- end }}
+      </ol>
+    </div>
+  </section>
+
+  <section class="concert-program" aria-labelledby="program-title">
+    <div class="concert-wrap">
+      <div class="concert-heading">
+        <p class="concert-eyebrow" lang="en">Programme</p>
+        <h2 id="program-title">節目搶先看</h2>
+        <p>三場的曲目都不太一樣。以下是排練中的部分曲目，實際演出以現場為準。</p>
+      </div>
+      <div class="concert-sets">
+        {{- range $concert.events }}
+        {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
+        <article class="concert-set">
+          <h3><span>{{ $start.Format "1.02" }}</span>{{ .title }}</h3>
+          <ol>
+            {{- range .program }}
+            <li>{{ . }}</li>
+            {{- end }}
+          </ol>
+        </article>
+        {{- end }}
+      </div>
+    </div>
+  </section>
+
+  <section class="concert-outro" aria-labelledby="outro-title">
+    <div class="concert-wrap concert-outro__grid">
+      <div>
+        <p class="concert-eyebrow" lang="en">See you there</p>
+        <h2 id="outro-title">我們現場見</h2>
+        <p>這場成發由兩社一起籌備。排練花絮與演出消息，兩邊的 Instagram 都會更新。</p>
+        <ul class="concert-hosts">
+          {{- range $concert.hosts }}
+          <li>
+            <a href="{{ .instagram }}" target="_blank" rel="noopener">
+              <span class="concert-hosts__school">{{ .school }}</span>
+              <strong>{{ .name }}</strong>
+              <span class="concert-hosts__handle">@{{ .handle }}</span>
+            </a>
+          </li>
+          {{- end }}
+        </ul>
+      </div>
+      <a class="concert-poster" href="{{ "images/1151/poster.webp" | relURL }}" target="_blank" rel="noopener">
+        <img src="{{ "images/1151/poster.webp" | relURL }}" width="1400" height="1980" alt="竹夢初聲活動海報，列出三場演出的日期、時間與場地。" loading="lazy" decoding="async">
+        <span>看完整海報</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="concert-footer">
+  <p>共同主辦｜{{ range $i, $host := $concert.hosts }}<span>{{ if $i }} × {{ end }}{{ $host.full }}</span>{{ end }}</p>
+  <p>場次資訊如有調整，會在這一頁更新。</p>
+</footer>
+{{ end }}

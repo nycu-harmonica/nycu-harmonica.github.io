@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  {{ partial "head.html" . }}
+  <meta name="theme-color" content="#1d2046">
+  <link rel="preload" href="{{ "fonts/1151/concert-serif.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  {{ with resources.Get "css/concert.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{ end }}
+  {{ block "head" . }}{{ end }}
+</head>
+<body class="concert-page">
+  <a class="concert-skip" href="#shows">跳到場次資訊</a>
+  {{ block "main" . }}{{ end }}
+  {{ with resources.Get "js/concert.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+  {{ end }}
+</body>
+</html>
