@@ -282,7 +282,7 @@
   letter-spacing: 0.32em;
   text-transform: uppercase;
 }
-.concert-page h2 {
+.concert-page main h2 {
   margin-top: 6px;
   font-family: var(--serif);
   font-size: clamp(34px, 8vw, 52px);
@@ -437,7 +437,7 @@
 
 .concert-program,
 .concert-outro,
-.concert-footer { color: #fff; }
+.concert-credits { color: #fff; }
 
 .concert-program {
   position: relative;
@@ -521,36 +521,13 @@
 .concert-hosts strong { font-family: var(--serif); font-size: 19px; letter-spacing: 0.08em; line-height: 1.4; }
 .concert-hosts__handle { font-size: 11px; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.72); overflow-wrap: anywhere; }
 
-.concert-poster {
-  justify-self: center;
-  display: grid;
-  gap: 14px;
-  justify-items: center;
-  width: min(230px, 62vw);
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.82);
-}
-.concert-poster img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  rotate: 3deg;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
-  transition: rotate 0.3s ease, transform 0.3s ease;
-}
-.concert-poster:hover { text-decoration: none; }
-.concert-poster:hover img { rotate: 0deg; transform: translateY(-4px); }
-.concert-page .concert-poster:focus-visible { border-radius: 12px; }
 
 @media (min-width: 760px) {
   .concert-outro { padding: 100px 0 120px; }
-  .concert-outro__grid { grid-template-columns: minmax(0, 1fr) 260px; gap: 72px; }
-  .concert-poster { width: 240px; }
 }
 
-.concert-footer {
-  padding: 26px 20px 40px;
+.concert-credits {
+  padding: 26px 20px 34px;
   background: var(--deep);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   text-align: center;
@@ -558,7 +535,7 @@
   line-height: 1.9;
   color: rgba(255, 255, 255, 0.72);
 }
-.concert-footer span { display: inline-block; }
+.concert-credits span { display: inline-block; }
 
 /* ---------- 動態 ---------- */
 
@@ -575,8 +552,7 @@
 @media (prefers-reduced-motion: reduce) {
   html:has(.concert-page) { scroll-behavior: auto; }
   .concert-title span { animation: none; }
-  .concert-button,
-  .concert-poster img { transition: none; }
+  .concert-button { transition: none; }
 }
 
 /* 列印或存成 PDF 時，尚未捲到的區塊也要完整顯示。 */
@@ -591,3 +567,6 @@
   }
   .concert-title span { animation: none; }
 }
+
+/* 共用頁尾的資料同步狀態由 sheet-live.js 更新；活動頁沒有載入它，所以不顯示這一行。 */
+.concert-page .data-status-footer { display: none; }

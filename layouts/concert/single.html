@@ -140,16 +140,15 @@
           {{- end }}
         </ul>
       </div>
-      <a class="concert-poster" href="{{ "images/1151/poster.webp" | relURL }}" target="_blank" rel="noopener">
-        <img src="{{ "images/1151/poster.webp" | relURL }}" width="1400" height="1980" alt="竹夢初聲活動海報，列出三場演出的日期、時間與場地。" loading="lazy" decoding="async">
-        <span>看完整海報</span>
-      </a>
     </div>
   </section>
 </main>
 
-<footer class="concert-footer">
+<div class="concert-credits">
   <p>共同主辦｜{{ range $i, $host := $concert.hosts }}<span>{{ if $i }} × {{ end }}{{ $host.full }}</span>{{ end }}</p>
   <p>場次資訊如有調整，會在這一頁更新。</p>
-</footer>
+</div>
+
+{{/* 頁尾沿用全站共用的 footer；共同主辦資訊留在上方那一列。 */}}
+{{ partial "footer.html" . }}
 {{ end }}
