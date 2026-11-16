@@ -1,52 +1,42 @@
 {
   "items": [
     {
-      "id": "post-55763e5a24cc41ba36f1be4e",
+      "id": "ig_nycu_harmonica:DfzU2vkAveH",
       "image": {
-        "height": 450,
-        "url": "https://harmonica.observe.tw/assets/feed-images/36e5cb12cc7eb8407cee.webp",
-        "width": 800
+        "height": 701,
+        "url": "https://chumei.observe.tw/assets/posts/fb_nycubmhc__1779492690842940.jpg",
+        "width": 526
       },
-      "link": "https://www.youtube.com/watch?v=CxUG95kHNdc",
-      "platform": "YouTube",
-      "posted_at_local": "2026/08/09 14:00",
-      "source": "陽明交大竹韻口琴社",
-      "title": "陽明交大竹韻口琴社｜復社紀念影片"
+      "link": "https://www.instagram.com/p/DfzU2vkAveH/",
+      "platform": "Instagram",
+      "posted_at_local": "2026/11/16 20:11",
+      "title": "【竹夢初聲｜陽明交大竹韻口琴社 × 清華大學口琴社 115-1 聯合成果發表音樂會】"
     },
     {
-      "id": "post-b1aed94442e7bac30c938bca",
-      "image": {
-        "height": 1920,
-        "url": "https://harmonica.observe.tw/assets/feed-images/a07dd519a366511f1829.webp",
-        "width": 1440
-      },
-      "link": "https://www.instagram.com/p/DbkYItixTKM/",
+      "id": "ig_nycu_harmonica:De3O6hijbra",
+      "link": "https://www.instagram.com/p/De3O6hijbra/",
       "platform": "Instagram",
-      "posted_at_local": "2026/08/03 14:48",
-      "source": "陽明交大竹韻口琴社",
-      "title": "活動詳情請見【竹韻，再次響起】"
+      "posted_at_local": "2026/10/24 12:05",
+      "title": "上週日，竹韻一起去聽天狼星的音樂會！🎶"
     },
     {
-      "id": "post-59ebe8a43281823106377cca",
+      "id": "ig_nycu_harmonica:DdOdb0riU1k",
       "image": {
-        "height": 1920,
-        "url": "https://harmonica.observe.tw/assets/feed-images/c8ff28b781c165fb81f8.webp",
-        "width": 1440
+        "height": 1200,
+        "url": "https://chumei.observe.tw/assets/posts/ig_nycu_harmonica__DdOdb0riU1k.jpg",
+        "width": 960
       },
-      "link": "https://www.instagram.com/p/DbgAQJ5gYor/",
+      "link": "https://www.instagram.com/p/DdOdb0riU1k/",
       "platform": "Instagram",
-      "posted_at_local": "2026/08/01 22:03",
-      "source": "陽明交大竹韻口琴社",
-      "title": "【我是誰，我在哪】"
+      "posted_at_local": "2026/09/13 19:31",
+      "title": "有在社團博覽會發現我們的蹤影嗎？👀"
     }
   ],
   "source": {
-    "id": 198,
-    "name": "陽明交大竹韻口琴社",
-    "page_url": "https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/",
-    "slug": "bamboo-melody-harmonica-club"
+    "id": 465,
+    "page_url": "https://chumei.observe.tw/org/465/"
   },
-  "source_generated_at": "2026-08-14T03:00:00.929166Z",
-  "source_url": "https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/",
-  "updated_at": "2026-08-14T11:39:45+08:00"
+  "source_generated_at": "2026-11-17T04:26:44+08:00",
+  "source_url": "https://chumei.observe.tw/org/465/",
+  "updated_at": "2026-11-17T04:54:30+08:00"
 }
