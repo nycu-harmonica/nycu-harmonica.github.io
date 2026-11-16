@@ -9,6 +9,22 @@
   font-style: normal;
   font-display: swap;
 }
+/* 海報標題「竹夢初聲」：Noto Serif TC Black，只含這四個字。 */
+@font-face {
+  font-family: "Concert Title";
+  src: url("/fonts/1151/concert-title.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+/* 海報場次資訊的手寫字：Potta One（SIL OFL），只含場次日期、時間、地點用到的字。 */
+@font-face {
+  font-family: "Concert Hand";
+  src: url("/fonts/1151/concert-hand.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 .concert-page {
   --night: #1d2046;
@@ -24,6 +40,8 @@
   --badge-past: #6a6582;
   /* 不支援 svh 的瀏覽器先用 vh，支援時於下方 @supports 覆寫。 */
   --screen-h: 100vh;
+  --title: "Concert Title", "Concert Serif", "Songti TC", "Noto Serif TC", serif;
+  --hand: "Concert Hand", "PingFang TC", "Noto Sans TC", sans-serif;
   --serif: "Concert Serif", "Songti TC", "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC", "PMingLiU", serif;
   /* 主視覺背景的垂直漸層，取樣自原圖，讓圖片兩側與上方可以無縫延伸。 */
   --sky: linear-gradient(to bottom, #626d8d 0%, #606c8d 5%, #6f728e 10%, #7e798f 15%, #8e7f91 20%, #9d8692 25%, #ac8c92 30%, #ba9294 35%, #ca9995 40%, #da9f96 45%, #e6a797 50%, #eab199 55%, #efbc9c 60%, #eec39c 65%, #f3cd9c 70%, #f4d49a 75%, #fce5a5 80%, #fce4a4 85%, #f8d9a3 90%, #f5cea1 95%, #f1c49e 100%);
@@ -96,65 +114,58 @@
 .concert-top > span { display: none; opacity: 0.72; font-size: 11px; letter-spacing: 0.22em; }
 
 .concert-hero__copy {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 22px;
-  align-items: end;
   width: min(100%, 600px);
   margin-inline: auto;
-  padding: 26px 22px 0;
+  padding: 30px 22px 0;
+  text-align: center;
 }
 
-/* 標題沿用海報的錯落直排：竹、初在左，夢、聲在右且往下錯開。 */
+/* 標題照海報定稿：橫排、粗明體、金到米白的漸層，加深色硬陰影。 */
 .concert-title {
-  display: grid;
-  grid-template-columns: repeat(2, 1em);
-  column-gap: 0.1em;
-  padding-bottom: 0.56em;
-  font-family: var(--serif);
-  font-size: clamp(60px, 19vw, 104px);
-  font-weight: 700;
-  line-height: 1.12;
-}
-.concert-title span {
-  --glow: #5f86ff;
-  display: block;
-  text-align: center;
-  text-shadow: 0 0 0.1em rgba(255, 255, 255, 0.5), 0 0 0.42em var(--glow), 0 0 0.9em var(--glow);
+  display: inline-block;
+  font-family: var(--title);
+  font-size: clamp(64px, 20vw, 112px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  background: linear-gradient(100deg, #d6a35c 0%, #e9c58f 34%, #f6e3c2 66%, #fffaf0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0.035em 0.045em 0 rgba(26, 24, 52, 0.85));
   animation: concert-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.concert-title span:nth-child(even) { transform: translateY(0.56em); }
-.concert-title span:nth-child(2) { --glow: #9a74ff; animation-delay: 0.12s; }
-.concert-title span:nth-child(3) { --glow: #ff8a8a; animation-delay: 0.24s; }
-.concert-title span:nth-child(4) { --glow: #ff8fb8; animation-delay: 0.36s; }
 
 @keyframes concert-rise {
-  from { opacity: 0; translate: 0 0.25em; filter: blur(6px); }
-  to { opacity: 1; translate: 0 0; filter: blur(0); }
+  from { opacity: 0; translate: 0 0.25em; }
+  to { opacity: 1; translate: 0 0; }
 }
 
-.concert-hero__aside { padding-bottom: 0.4em; }
 .concert-kicker {
-  font-size: 15px;
+  margin-top: 14px;
+  font-family: var(--serif);
+  font-size: 15.5px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.55;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  text-shadow: 0 0.06em 0 rgba(26, 24, 52, 0.6);
 }
-.concert-kicker span { display: inline-block; }
-/* 最窄的手機：縮小副標，讓「聯合成果發表音樂會」維持在同一行。 */
+.concert-kicker span { display: block; }
+/* 最窄的手機：縮小副標，讓兩行各自維持在同一行。 */
 @media (max-width: 359px) {
-  .concert-kicker { font-size: 12.5px; letter-spacing: 0; }
+  .concert-kicker { font-size: 13px; letter-spacing: 0; }
 }
 .concert-lead {
-  margin-top: 14px;
+  max-width: 24em;
+  margin: 14px auto 0;
   font-size: 14px;
   line-height: 1.85;
   color: rgba(255, 255, 255, 0.9);
 }
 
 .concert-hero__cta {
-  grid-column: 1 / -1;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   align-items: center;
   gap: 14px;
@@ -225,8 +236,8 @@
   }
   .concert-top { padding: 24px 36px 0; }
   .concert-top > span { display: inline; }
-  .concert-hero__copy { padding-top: 40px; column-gap: 32px; }
-  .concert-kicker { font-size: 18px; }
+  .concert-hero__copy { padding-top: 44px; }
+  .concert-kicker { font-size: 19px; }
   .concert-lead { font-size: 16px; }
 }
 
@@ -246,9 +257,12 @@
     width: min(640px, calc(100vw - var(--img-w) - var(--edge) - 4vw));
     margin: auto 0 auto var(--edge);
     padding: 0 0 4vh;
-    column-gap: 36px;
+    text-align: left;
   }
-  .concert-title { font-size: clamp(92px, 9vw, 148px); }
+  .concert-title { font-size: clamp(104px, 9vw, 150px); }
+  .concert-kicker { font-size: 21px; }
+  .concert-lead { margin-inline: 0; }
+  .concert-hero__cta { justify-content: flex-start; }
   .concert-hero__cta { margin-top: 34px; }
   .concert-hero__art {
     position: absolute;
@@ -325,14 +339,14 @@
 }
 .concert-show__date time { display: flex; align-items: baseline; gap: 12px; }
 .concert-show__date b {
-  font-family: var(--serif);
-  font-size: 54px;
-  font-weight: 700;
+  font-family: var(--hand);
+  font-size: 50px;
+  font-weight: 400;
   line-height: 1;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   font-variant-numeric: lining-nums;
 }
-.concert-show__date i { font-style: normal; color: var(--rose); margin-inline: 0.02em; }
+.concert-show__date i { font-style: normal; color: var(--rose); margin-inline: 0.04em; }
 .concert-show__date time span { font-size: 14px; letter-spacing: 0.12em; color: var(--ink-soft); }
 .concert-show__act {
   order: 2;
@@ -359,9 +373,9 @@
 }
 .concert-show__status[hidden] { display: none; }
 .concert-show h3 {
-  font-family: var(--serif);
+  font-family: var(--hand);
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.1em;
   line-height: 1.3;
 }
@@ -379,7 +393,7 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.concert-show__meta dd { font-size: 17px; font-weight: 700; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
+.concert-show__meta dd { font-family: var(--hand); font-size: 18px; font-weight: 400; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
 
 .concert-show__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .concert-show__actions a {
@@ -423,7 +437,7 @@
     border-right: 1px dashed #d9cdc4;
   }
   .concert-show__date time { flex-direction: column; gap: 8px; }
-  .concert-show__date b { font-size: 62px; }
+  .concert-show__date b { font-size: 56px; }
   .concert-show__act { order: 0; }
   .concert-show__body { padding: 34px 36px; }
   .concert-show__meta { grid-auto-flow: column; justify-content: start; gap: 28px; }
@@ -432,8 +446,7 @@
 /* ---------- 節目 ---------- */
 
 .concert-program,
-.concert-outro,
-.concert-credits { color: #fff; }
+.concert-outro { color: #fff; }
 
 .concert-program {
   position: relative;
@@ -465,7 +478,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
 }
-.concert-set h3 span { font-size: 15px; letter-spacing: 0.06em; color: var(--gold); }
+.concert-set h3 span { font-family: var(--hand); font-weight: 400; font-size: 16px; letter-spacing: 0.06em; color: var(--gold); }
 .concert-set ol { counter-reset: song; }
 .concert-set li {
   counter-increment: song;
@@ -500,22 +513,25 @@
 .concert-outro__grid { display: grid; gap: 48px; align-items: center; }
 .concert-outro h2 + p { margin-top: 14px; font-size: 15.5px; max-width: 26em; }
 /* 兩社並列、樣式完全相同，不分主從。 */
-.concert-hosts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 26px; max-width: 460px; }
+.concert-hosts { display: grid; gap: 12px; margin-top: 26px; max-width: 360px; }
 .concert-hosts a {
-  display: grid;
-  gap: 2px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
   height: 100%;
-  padding: 16px 16px 14px;
+  padding: 12px 18px 12px 12px;
   border: 1px solid rgba(255, 255, 255, 0.32);
-  border-radius: 16px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.07);
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 .concert-hosts a:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.7); transform: translateY(-2px); text-decoration: none; }
-.concert-page .concert-hosts a:focus-visible { border-radius: 16px; }
-.concert-hosts__school { font-size: 11.5px; letter-spacing: 0.2em; color: var(--gold); }
-.concert-hosts strong { font-family: var(--serif); font-size: 19px; letter-spacing: 0.08em; line-height: 1.4; }
-.concert-hosts__handle { font-size: 11px; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.72); overflow-wrap: anywhere; }
+.concert-page .concert-hosts a:focus-visible { border-radius: 999px; }
+/* 照海報：兩社 Instagram 頭像加全大寫帳號。 */
+.concert-hosts img { flex: none; width: 48px; height: 48px; border-radius: 50%; background: #fff; }
+.concert-hosts__text { display: grid; gap: 1px; min-width: 0; }
+.concert-hosts__school { font-size: 11.5px; letter-spacing: 0.16em; color: var(--gold); }
+.concert-hosts strong { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.4; overflow-wrap: anywhere; }
 
 
 @media (min-width: 760px) {
@@ -552,23 +568,25 @@
 .concert-staff__clubs dl { display: grid; gap: 10px; margin: 12px 0 0; }
 .concert-staff__clubs dt { min-width: 4.5em; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.72); }
 .concert-staff__clubs dd { margin: 0; }
+.concert-staff__members,
+.concert-staff__crew { margin-top: 48px; }
+.concert-staff__members ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; }
+.concert-staff__members li { font-size: 16px; letter-spacing: 0.08em; }
+.concert-staff__shows { display: grid; gap: 28px; margin-top: 18px; }
+.concert-staff__shows h4 { display: flex; align-items: baseline; gap: 10px; font-size: 15px; font-weight: 700; letter-spacing: 0.12em; }
+.concert-staff__shows h4 span { font-family: var(--hand); font-weight: 400; letter-spacing: 0.02em; color: var(--gold); }
+.concert-staff__shows dl { display: grid; gap: 8px; margin: 12px 0 0; }
+.concert-staff__shows dl > div { display: flex; align-items: baseline; gap: 14px; }
+.concert-staff__shows dt { min-width: 5em; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.72); }
+.concert-staff__shows dd { margin: 0; font-size: 15px; }
+.concert-staff__shows dd.is-pending { color: rgba(255, 255, 255, 0.5); letter-spacing: 0.12em; }
 
 @media (min-width: 760px) {
   .concert-staff { padding: 12px 0 130px; }
   .concert-staff__groups,
   .concert-staff__clubs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
+  .concert-staff__shows { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
 }
-
-.concert-credits {
-  padding: 26px 20px 34px;
-  background: var(--deep);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  text-align: center;
-  font-size: 12.5px;
-  line-height: 1.9;
-  color: rgba(255, 255, 255, 0.72);
-}
-.concert-credits span { display: inline-block; }
 
 /* ---------- 動態 ---------- */
 
@@ -584,7 +602,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   html:has(.concert-page) { scroll-behavior: auto; }
-  .concert-title span { animation: none; }
+  .concert-title { animation: none; }
   .concert-button { transition: none; }
 }
 
@@ -598,7 +616,7 @@
     translate: none;
     transition: none;
   }
-  .concert-title span { animation: none; }
+  .concert-title { animation: none; }
 }
 
 /* 共用頁尾的資料同步狀態由 sheet-live.js 更新；活動頁沒有載入它，所以不顯示這一行。 */

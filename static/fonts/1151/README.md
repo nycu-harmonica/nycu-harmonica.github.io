@@ -1,18 +1,18 @@
-# concert-serif.woff2
+# /1151/ 字型子集
 
-`/1151/` 標題用的 Noto Serif TC Bold（SIL OFL 1.1）子集，只含頁面上以襯線字顯示的字：
-h1／h2、場次名稱、場次標籤、主辦社團名稱，以及製作名單（Credits）的標題與姓名。
+三個檔案都只含頁面實際用到的字（皆為 SIL OFL 1.1）：
 
-新增字時，保留舊子集的所有字並加入新字，重新產生：
+| 檔案 | 來源字型 | 用途 |
+|---|---|---|
+| `concert-title.woff2` | Noto Serif TC Black | 主標「竹夢初聲」，照海報定稿 |
+| `concert-serif.woff2` | Noto Serif TC Bold | 副標、各區標題、社團名稱、製作名單姓名 |
+| `concert-hand.woff2` | Potta One | 場次日期、場次名稱、時間、地點（海報場次資訊的字） |
+
+改了 `data/concert1151.yaml`（新場次、地點、名單）之後，執行腳本重新產生；它會保留舊子集的字並補上新的字：
 
 ```sh
-curl -fsSL -o /tmp/NotoSerifTC-Bold.otf \
-  https://github.com/notofonts/noto-cjk/raw/main/Serif/SubsetOTF/TC/NotoSerifTC-Bold.otf
-uv run --with fonttools --with brotli python -c "
-from fontTools.ttLib import TTFont
-cm = TTFont('static/fonts/1151/concert-serif.woff2').getBestCmap()
-open('/tmp/subset-text.txt', 'w').write(''.join(map(chr, cm)) + '新增的字')"
-uv run --with fonttools --with brotli pyftsubset /tmp/NotoSerifTC-Bold.otf \
-  --text-file=/tmp/subset-text.txt --flavor=woff2 \
-  --output-file=static/fonts/1151/concert-serif.woff2
+uv run --with fonttools --with brotli --with pyyaml \
+  python scripts/subset_concert_fonts.py --sources /path/to/font/dir
 ```
+
+來源字型下載位置寫在 `scripts/subset_concert_fonts.py` 開頭。

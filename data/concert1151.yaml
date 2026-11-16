@@ -4,11 +4,10 @@
 # 標題用的襯線字型是子集檔（static/fonts/1151/），只含頁面標題用到的字；
 # 改動 h1／h2／場次名稱／場次標籤時若出現新字，會自動退回系統字型，必要時請重新產生子集。
 title: 竹夢初聲
-# 副標與海報定稿一致：海報上沒有英文活動名稱，頁面也不另外寫。
-# 分成兩段，換行時只會斷在兩段之間。
+# 副標與海報定稿一致：第一行兩社名稱、第二行活動全名；每行各自不換行斷句。
 kicker:
-  - 115 學年度第一學期
-  - 聯合成果發表音樂會
+  - 陽明交大竹韻口琴社 × 清華大學口琴社
+  - 115 學年度第一學期聯合成果發表音樂會
 lead: 從交大的黃昏，吹到清大的夜晚。兩校口琴人同台，三場演出，等你來聽。
 free: true
 hosts:
@@ -16,12 +15,14 @@ hosts:
     full: 國立陽明交通大學竹韻口琴社
     school: 陽明交大
     handle: nycu_harmonica
+    avatar: images/1151/ig-nycu.webp
     instagram: https://www.instagram.com/nycu_harmonica/
     url: https://harmonica.nycu.club/
   - name: 清大口琴社
     full: 國立清華大學口琴社
     school: 清大
     handle: nthu_harmonica_club
+    avatar: images/1151/ig-nthu.webp
     instagram: https://www.instagram.com/nthu_harmonica_club/
     url: https://www.facebook.com/nthuharmonica/
 events:
@@ -36,6 +37,13 @@ events:
     location: 交大小木屋
     address: 國立陽明交通大學光復校區
     map: 國立陽明交通大學 小木屋鬆餅
+    # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
+    staff:
+      - { role: 主持人, names: [] }
+      - { role: 音控, names: [] }
+      - { role: 燈控, names: [] }
+      - { role: 攝影錄影, names: [] }
+      - { role: 場務, names: [] }
     program:
       - 萬水千山縱橫
       - 狂暴之海 A Stormy Sea
@@ -54,6 +62,13 @@ events:
     location: 交大活動中心 2F 演藝廳
     address: 國立陽明交通大學光復校區
     map: 國立陽明交通大學 光復校區 學生活動中心
+    # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
+    staff:
+      - { role: 主持人, names: [] }
+      - { role: 音控, names: [] }
+      - { role: 燈控, names: [] }
+      - { role: 攝影錄影, names: [] }
+      - { role: 場務, names: [] }
     program:
       - 骷髏之舞
       - 港都夜雨
@@ -74,6 +89,13 @@ events:
     location: 清大湖畔一練
     address: 國立清華大學
     map_url: https://maps.app.goo.gl/PU8pwTK5FYBKNnx77
+    # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
+    staff:
+      - { role: 主持人, names: [] }
+      - { role: 音控, names: [] }
+      - { role: 燈控, names: [] }
+      - { role: 攝影錄影, names: [] }
+      - { role: 場務, names: [] }
     program:
       - Moon River
       - Summer
@@ -83,8 +105,9 @@ events:
       - Proud of You
       - 櫻桃小丸子
       - 海闊天空
-# 製作名單：只列社長確認可公開的角色。工作分工（音控、場務、主持等）不是 Credits，不列。
-# 姓名會用到標題襯線字型；新增或改名時記得重新產生字型子集（見 static/fonts/1151/README.md）。
+# 製作名單：只列社長確認可公開的角色。
+# 參與社員取自「115-1 聯合成發相關事項調查」表單：三場中任一場回答會參加者（去除重複填寫）。
+# 姓名會用到標題襯線字型；新增或改名時記得重新產生字型子集（scripts/subset_concert_fonts.py）。
 credits:
   groups:
     - title: 指導老師
@@ -104,12 +127,19 @@ credits:
         people:
           - { role: 社長, name: 洪軾凱 }
           - { role: 副社長, name: 張凱鈞 }
-          - { role: 行政, name: 洪乙恩 }
           - { role: 教學, name: 李明哲 }
-          - { role: 技術長, name: 毛宥鈞 }
           - { role: 活動長, name: 羅瑋翔 }
+          - { role: 行政, name: 洪乙恩 }
+          - { role: 技術長, name: 毛宥鈞 }
       - name: 清大口琴社
         people:
           - { role: 社長, name: 阮佳寧 }
-          - { role: 副社長, name: 石頭 }
+          - { role: 副社長, name: 黃奕瑞 }
           - { role: 幹部, name: 陳昱銘 }
+  members:
+    title: 參與社員
+    clubs:
+      - name: 竹韻口琴社
+        names: [洪軾凱, 吳冠廷, 李明哲, 羅瑋翔, 黃奕鈞, 張凱鈞, 黃靖恩, 施禹平, 蔡培婷, 洪乙恩, 翁詠筑, 白柏毅, 曹宸皓, 廖傑克]
+      - name: 清大口琴社
+        names: [魏承瀚, 阮佳寧, 郭文豪, 馬皜展, 李妍蓁, 李玲萱, 黃奕瑞, 陳昱銘, 陳郁璇, 許恩齊, 宋福原]

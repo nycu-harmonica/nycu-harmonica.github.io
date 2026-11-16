@@ -36,13 +36,9 @@
     <span lang="en">NYCU × NTHU</span>
   </nav>
   <div class="concert-hero__copy">
-    <h1 class="concert-title" aria-label="{{ $concert.title }}">
-      {{- range split $concert.title "" }}<span aria-hidden="true">{{ . }}</span>{{ end -}}
-    </h1>
-    <div class="concert-hero__aside">
-      <p class="concert-kicker">{{ range $concert.kicker }}<span>{{ . }}</span>{{ end }}</p>
-      <p class="concert-lead">{{ $concert.lead }}</p>
-    </div>
+    <h1 class="concert-title">{{ $concert.title }}</h1>
+    <p class="concert-kicker">{{ range $concert.kicker }}<span>{{ . }}</span>{{ end }}</p>
+    <p class="concert-lead">{{ $concert.lead }}</p>
     <div class="concert-hero__cta">
       <a class="concert-button" href="#shows">看三場時間地點
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m0 0-6-6m6 6 6-6"/></svg>
@@ -70,7 +66,7 @@
         <li class="concert-show" id="show-{{ .id }}" data-start="{{ $start.Format "2006-01-02T15:04:05-07:00" }}" data-end="{{ $end.Format "2006-01-02T15:04:05-07:00" }}">
           <div class="concert-show__date">
             <span class="concert-show__act">{{ .act }}</span>
-            <time datetime="{{ .date }}"><b>{{ $start.Format "1" }}<i>.</i>{{ $start.Format "02" }}</b><span>星期{{ .weekday }}</span></time>
+            <time datetime="{{ .date }}"><b>{{ $start.Format "1" }}<i>/</i>{{ $start.Format "02" }}</b><span>星期{{ .weekday }}</span></time>
           </div>
           <div class="concert-show__body">
             <p class="concert-show__status" hidden></p>
@@ -109,7 +105,7 @@
         {{- range $concert.events }}
         {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
         <article class="concert-set">
-          <h3><span>{{ $start.Format "1.02" }}</span>{{ .title }}</h3>
+          <h3><span>{{ $start.Format "1/02" }}</span>{{ .title }}</h3>
           <ol>
             {{- range .program }}
             <li>{{ . }}</li>
@@ -131,9 +127,11 @@
           {{- range $concert.hosts }}
           <li>
             <a href="{{ .instagram }}" target="_blank" rel="noopener">
-              <span class="concert-hosts__school">{{ .school }}</span>
-              <strong>{{ .name }}</strong>
-              <span class="concert-hosts__handle">@{{ .handle }}</span>
+              <img src="{{ .avatar | relURL }}" width="96" height="96" alt="" loading="lazy" decoding="async">
+              <span class="concert-hosts__text">
+                <span class="concert-hosts__school">{{ .school }}・{{ .name }}</span>
+                <strong lang="en">@{{ upper .handle }}</strong>
+              </span>
             </a>
           </li>
           {{- end }}
@@ -178,16 +176,44 @@
         </div>
       </section>
       {{- end }}
+      {{- with .members }}
+      <section class="concert-staff__members">
+        <h3>{{ .title }}</h3>
+        <div class="concert-staff__clubs">
+          {{- range .clubs }}
+          <div>
+            <h4>{{ .name }}</h4>
+            <ul>
+              {{- range .names }}
+              <li>{{ . }}</li>
+              {{- end }}
+            </ul>
+          </div>
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+      <section class="concert-staff__crew">
+        <h3>各場工作人員</h3>
+        <div class="concert-staff__shows">
+          {{- range $concert.events }}
+          {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
+          <div>
+            <h4><span>{{ $start.Format "1/02" }}</span>{{ .title }}</h4>
+            <dl>
+              {{- range .staff }}
+              <div><dt>{{ .role }}</dt><dd{{ if not .names }} class="is-pending"{{ end }}>{{ with .names }}{{ delimit . "、" }}{{ else }}待定{{ end }}</dd></div>
+              {{- end }}
+            </dl>
+          </div>
+          {{- end }}
+        </div>
+      </section>
     </div>
   </section>
   {{- end }}
 </main>
 
-<div class="concert-credits">
-  <p>共同主辦｜{{ range $i, $host := $concert.hosts }}<span>{{ if $i }} × {{ end }}{{ $host.full }}</span>{{ end }}</p>
-  <p>場次資訊如有調整，會在這一頁更新。</p>
-</div>
-
-{{/* 頁尾沿用全站共用的 footer；共同主辦資訊留在上方那一列。 */}}
+{{/* 頁尾沿用全站共用的 footer。 */}}
 {{ partial "footer.html" . }}
 {{ end }}
