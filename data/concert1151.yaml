@@ -116,8 +116,9 @@ credits:
     roles:
       - { role: 聯合總召, names: [洪軾凱, 黃奕瑞] }
       - { role: 主視覺設計, names: [陳昱銘] }
+      - { role: 網站設計, names: [洪軾凱] }
       - { role: 曲目統籌, names: [李明哲] }
-      - { role: 宣傳與內容統籌, names: [張凱鈞] }
+      - { role: 社群宣傳, names: [張凱鈞] }
       - { role: 技術／音控統籌, names: [毛宥鈞] }
       - { role: 財務, names: [洪乙恩] }
   # 兩社各一塊：指導老師在最上面，接著幹部。
