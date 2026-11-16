@@ -189,6 +189,23 @@
         </section>
         {{- end }}
       </div>
+      {{- with .members }}
+      <section class="concert-staff__members">
+        <h3>{{ .title }}</h3>
+        <div class="concert-staff__clubs">
+          {{- range .clubs }}
+          <div>
+            <h4>{{ .name }}</h4>
+            <ul>
+              {{- range .names }}
+              <li>{{ . }}</li>
+              {{- end }}
+            </ul>
+          </div>
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
       {{- with .officers }}
       <section class="concert-staff__officers">
         <h3>{{ .title }}</h3>
@@ -216,23 +233,6 @@
           <li><a href="{{ .url }}" target="_blank" rel="noopener"><strong>{{ .name }}</strong></a>{{ with $shows }}<span>{{ delimit . "、" }}</span>{{ end }}</li>
           {{- end }}
         </ul>
-      </section>
-      {{- end }}
-      {{- with .members }}
-      <section class="concert-staff__members">
-        <h3>{{ .title }}</h3>
-        <div class="concert-staff__clubs">
-          {{- range .clubs }}
-          <div>
-            <h4>{{ .name }}</h4>
-            <ul>
-              {{- range .names }}
-              <li>{{ . }}</li>
-              {{- end }}
-            </ul>
-          </div>
-          {{- end }}
-        </div>
       </section>
       {{- end }}
     </div>

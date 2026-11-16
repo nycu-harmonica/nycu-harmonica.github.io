@@ -27,7 +27,7 @@ FONT_DIR = ROOT / "static" / "fonts" / "1151"
 DATA = ROOT / "data" / "concert1151.yaml"
 
 # Headings written directly in layouts/concert/single.html that use the serif.
-TEMPLATE_SERIF = "三場演出節目搶先看我們現場見製作名單參與社員各場工作人員第一二三場贊助單位"
+TEMPLATE_SERIF = "三場演出節目搶先看我們現場見製作名單演出人員各場工作人員第一二三場贊助單位"
 
 
 def collect(data: dict) -> dict[str, str]:
