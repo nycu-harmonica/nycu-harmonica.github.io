@@ -7,8 +7,6 @@ file now needs, so running it again never drops a glyph a template uses.
 Source fonts (SIL OFL 1.1), download once:
   NotoSerifTC-Bold.otf / NotoSerifTC-Black.otf
     https://github.com/notofonts/noto-cjk/raw/main/Serif/SubsetOTF/TC/
-  PottaOne-Regular.ttf
-    https://github.com/google/fonts/raw/main/ofl/pottaone/PottaOne-Regular.ttf
 
 Usage:
   uv run --with fonttools --with brotli --with pyyaml \\
@@ -18,7 +16,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-from datetime import date
 from pathlib import Path
 
 import yaml
@@ -30,21 +27,12 @@ FONT_DIR = ROOT / "static" / "fonts" / "1151"
 DATA = ROOT / "data" / "concert1151.yaml"
 
 # Headings written directly in layouts/concert/single.html that use the serif.
-TEMPLATE_SERIF = "三場演出節目搶先看我們現場見製作名單參與社員各場工作人員第一二三場"
-
-
-def event_dates(event: dict) -> str:
-    d = date.fromisoformat(event["date"])
-    return f"{d.month}/{d.day:02d}"
+TEMPLATE_SERIF = "三場演出節目搶先看我們現場見製作名單參與社員各場工作人員第一二三場贊助單位"
 
 
 def collect(data: dict) -> dict[str, str]:
     events = data["events"]
     credits = data.get("credits", {})
-
-    hand = "0123456789/:–-"
-    for e in events:
-        hand += event_dates(e) + e["title"] + e["start"] + e["end"] + e["location"]
 
     serif = TEMPLATE_SERIF + "".join(data.get("kicker", []))
     serif += "".join(h["name"] + h["full"] for h in data["hosts"])
@@ -55,11 +43,12 @@ def collect(data: dict) -> dict[str, str]:
     serif += officers.get("title", "")
     serif += "".join(p["name"] for c in officers.get("clubs", []) for p in c["people"])
     serif += credits.get("members", {}).get("title", "")
+    serif += credits.get("production", {}).get("title", "")
+    serif += "".join(s["name"] for s in data.get("sponsors", []))
 
     return {
         "concert-title.woff2": data["title"],
         "concert-serif.woff2": serif,
-        "concert-hand.woff2": hand,
     }
 
 
@@ -71,7 +60,6 @@ def main() -> None:
     sources = {
         "concert-title.woff2": args.sources / "NotoSerifTC-Black.otf",
         "concert-serif.woff2": args.sources / "NotoSerifTC-Bold.otf",
-        "concert-hand.woff2": args.sources / "PottaOne-Regular.ttf",
     }
     texts = collect(yaml.safe_load(DATA.read_text(encoding="utf-8")))
 

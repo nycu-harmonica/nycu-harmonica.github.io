@@ -25,6 +25,12 @@ hosts:
     avatar: images/1151/ig-nthu.webp
     instagram: https://www.instagram.com/nthu_harmonica_club/
     url: https://www.facebook.com/nthuharmonica/
+# 贊助單位：校友總會一般型活動經費補助，企劃只對應 12/4 交大場（shows 填場次 id）。
+# 校友總會未公布正式英文名稱，不自行翻譯；logo 須依其規範，目前不放。
+sponsors:
+  - name: 國立陽明交通大學校友總會
+    url: https://nycuaa.org/
+    shows: [nycu]
 events:
   - id: pop-up
     act: 第一場
@@ -39,11 +45,14 @@ events:
     map: 國立陽明交通大學 小木屋鬆餅
     # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
     staff:
+      - { role: 舞台監督, names: [] }
       - { role: 主持人, names: [] }
       - { role: 音控, names: [] }
       - { role: 燈控, names: [] }
-      - { role: 攝影錄影, names: [] }
+      - { role: 攝影, names: [] }
+      - { role: 錄影, names: [] }
       - { role: 場務, names: [] }
+      - { role: 前台接待, names: [] }
     program:
       - 萬水千山縱橫
       - 狂暴之海 A Stormy Sea
@@ -64,11 +73,14 @@ events:
     map: 國立陽明交通大學 光復校區 學生活動中心
     # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
     staff:
+      - { role: 舞台監督, names: [] }
       - { role: 主持人, names: [] }
       - { role: 音控, names: [] }
       - { role: 燈控, names: [] }
-      - { role: 攝影錄影, names: [] }
+      - { role: 攝影, names: [] }
+      - { role: 錄影, names: [] }
       - { role: 場務, names: [] }
+      - { role: 前台接待, names: [] }
     program:
       - 骷髏之舞
       - 港都夜雨
@@ -91,11 +103,14 @@ events:
     map_url: https://maps.app.goo.gl/PU8pwTK5FYBKNnx77
     # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
     staff:
+      - { role: 舞台監督, names: [] }
       - { role: 主持人, names: [] }
       - { role: 音控, names: [] }
       - { role: 燈控, names: [] }
-      - { role: 攝影錄影, names: [] }
+      - { role: 攝影, names: [] }
+      - { role: 錄影, names: [] }
       - { role: 場務, names: [] }
+      - { role: 前台接待, names: [] }
     program:
       - Moon River
       - Summer
@@ -109,6 +124,16 @@ events:
 # 參與社員取自「115-1 聯合成發相關事項調查」表單：三場中任一場回答會參加者（去除重複填寫）。
 # 姓名會用到標題襯線字型；新增或改名時記得重新產生字型子集（scripts/subset_concert_fonts.py）。
 credits:
+  # 整體製作職位尚未決定；名單確定後填入 names，空的會顯示「待定」。
+  production:
+    title: 製作團隊
+    roles:
+      - { role: 總召, names: [] }
+      - { role: 音樂總監, names: [] }
+      - { role: 執行製作, names: [] }
+      - { role: 節目統籌, names: [] }
+      - { role: 宣傳, names: [] }
+      - { role: 財務, names: [] }
   groups:
     - title: 指導老師
       people:

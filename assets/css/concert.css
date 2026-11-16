@@ -17,14 +17,6 @@
   font-style: normal;
   font-display: swap;
 }
-/* 海報場次資訊的手寫字：Potta One（SIL OFL），只含場次日期、時間、地點用到的字。 */
-@font-face {
-  font-family: "Concert Hand";
-  src: url("/fonts/1151/concert-hand.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 
 .concert-page {
   --night: #1d2046;
@@ -41,7 +33,6 @@
   /* 不支援 svh 的瀏覽器先用 vh，支援時於下方 @supports 覆寫。 */
   --screen-h: 100vh;
   --title: "Concert Title", "Concert Serif", "Songti TC", "Noto Serif TC", serif;
-  --hand: "Concert Hand", "PingFang TC", "Noto Sans TC", sans-serif;
   --serif: "Concert Serif", "Songti TC", "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC", "PMingLiU", serif;
   /* 主視覺背景的垂直漸層，取樣自原圖，讓圖片兩側與上方可以無縫延伸。 */
   --sky: linear-gradient(to bottom, #626d8d 0%, #606c8d 5%, #6f728e 10%, #7e798f 15%, #8e7f91 20%, #9d8692 25%, #ac8c92 30%, #ba9294 35%, #ca9995 40%, #da9f96 45%, #e6a797 50%, #eab199 55%, #efbc9c 60%, #eec39c 65%, #f3cd9c 70%, #f4d49a 75%, #fce5a5 80%, #fce4a4 85%, #f8d9a3 90%, #f5cea1 95%, #f1c49e 100%);
@@ -339,14 +330,14 @@
 }
 .concert-show__date time { display: flex; align-items: baseline; gap: 12px; }
 .concert-show__date b {
-  font-family: var(--hand);
-  font-size: 50px;
-  font-weight: 400;
+  font-family: var(--serif);
+  font-size: 54px;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
   font-variant-numeric: lining-nums;
 }
-.concert-show__date i { font-style: normal; color: var(--rose); margin-inline: 0.04em; }
+.concert-show__date i { font-style: normal; color: var(--rose); margin-inline: 0.02em; }
 .concert-show__date time span { font-size: 14px; letter-spacing: 0.12em; color: var(--ink-soft); }
 .concert-show__act {
   order: 2;
@@ -373,9 +364,9 @@
 }
 .concert-show__status[hidden] { display: none; }
 .concert-show h3 {
-  font-family: var(--hand);
+  font-family: var(--serif);
   font-size: 30px;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.1em;
   line-height: 1.3;
 }
@@ -393,7 +384,7 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.concert-show__meta dd { font-family: var(--hand); font-size: 18px; font-weight: 400; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
+.concert-show__meta dd { font-size: 17px; font-weight: 700; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
 
 .concert-show__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .concert-show__actions a {
@@ -437,7 +428,7 @@
     border-right: 1px dashed #d9cdc4;
   }
   .concert-show__date time { flex-direction: column; gap: 8px; }
-  .concert-show__date b { font-size: 56px; }
+  .concert-show__date b { font-size: 62px; }
   .concert-show__act { order: 0; }
   .concert-show__body { padding: 34px 36px; }
   .concert-show__meta { grid-auto-flow: column; justify-content: start; gap: 28px; }
@@ -478,7 +469,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
 }
-.concert-set h3 span { font-family: var(--hand); font-weight: 400; font-size: 16px; letter-spacing: 0.06em; color: var(--gold); }
+.concert-set h3 span { font-size: 15px; letter-spacing: 0.06em; color: var(--gold); }
 .concert-set ol { counter-reset: song; }
 .concert-set li {
   counter-increment: song;
@@ -555,7 +546,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
 }
-.concert-staff__groups { display: grid; gap: 36px; margin-top: 44px; }
+.concert-staff__groups { display: grid; gap: 36px; }
 .concert-staff__group ul { display: grid; gap: 14px; margin-top: 16px; }
 .concert-staff__group li,
 .concert-staff__clubs dl > div { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; }
@@ -570,11 +561,23 @@
 .concert-staff__clubs dd { margin: 0; }
 .concert-staff__members,
 .concert-staff__crew { margin-top: 48px; }
+.concert-staff__crew:first-of-type { margin-top: 44px; }
+.concert-staff__groups { margin-top: 48px; }
+.concert-staff__roles { display: grid; gap: 8px 36px; margin: 16px 0 0; }
+.concert-staff__roles > div { display: flex; align-items: baseline; gap: 14px; }
+.concert-staff__roles dt { min-width: 5em; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.72); }
+.concert-staff__roles dd { margin: 0; font-size: 15px; }
+.concert-staff__roles dd.is-pending { color: rgba(255, 255, 255, 0.5); letter-spacing: 0.12em; }
+.concert-staff__sponsors { margin-top: 48px; }
+.concert-staff__sponsors ul { display: grid; gap: 12px; margin-top: 16px; }
+.concert-staff__sponsors li { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; }
+.concert-staff__sponsors a:hover strong { text-decoration: underline; text-underline-offset: 5px; }
+.concert-staff__sponsors li span { font-size: 12px; letter-spacing: 0.16em; color: var(--gold); }
 .concert-staff__members ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; }
 .concert-staff__members li { font-size: 16px; letter-spacing: 0.08em; }
 .concert-staff__shows { display: grid; gap: 28px; margin-top: 18px; }
 .concert-staff__shows h4 { display: flex; align-items: baseline; gap: 10px; font-size: 15px; font-weight: 700; letter-spacing: 0.12em; }
-.concert-staff__shows h4 span { font-family: var(--hand); font-weight: 400; letter-spacing: 0.02em; color: var(--gold); }
+.concert-staff__shows h4 span { letter-spacing: 0.04em; color: var(--gold); }
 .concert-staff__shows dl { display: grid; gap: 8px; margin: 12px 0 0; }
 .concert-staff__shows dl > div { display: flex; align-items: baseline; gap: 14px; }
 .concert-staff__shows dt { min-width: 5em; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.72); }
@@ -586,6 +589,7 @@
   .concert-staff__groups,
   .concert-staff__clubs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
   .concert-staff__shows { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
+  .concert-staff__roles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 /* ---------- 動態 ---------- */

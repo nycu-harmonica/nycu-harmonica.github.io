@@ -19,6 +19,10 @@
     "location" (dict "@type" "Place" "name" .location "address" .address)
     "organizer" $organizers
   }}
+  {{- $id := .id }}
+  {{- $sponsors := slice }}
+  {{- range $concert.sponsors }}{{ if in .shows $id }}{{ $sponsors = $sponsors | append (dict "@type" "Organization" "name" .name "url" .url) }}{{ end }}{{ end }}
+  {{- with $sponsors }}{{ $event = merge $event (dict "sponsor" .) }}{{ end }}
   {{- $events = $events | append $event }}
 {{- end }}
 <script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $events | jsonify | safeJS }}</script>
@@ -66,7 +70,7 @@
         <li class="concert-show" id="show-{{ .id }}" data-start="{{ $start.Format "2006-01-02T15:04:05-07:00" }}" data-end="{{ $end.Format "2006-01-02T15:04:05-07:00" }}">
           <div class="concert-show__date">
             <span class="concert-show__act">{{ .act }}</span>
-            <time datetime="{{ .date }}"><b>{{ $start.Format "1" }}<i>/</i>{{ $start.Format "02" }}</b><span>星期{{ .weekday }}</span></time>
+            <time datetime="{{ .date }}"><b>{{ $start.Format "1" }}<i>.</i>{{ $start.Format "02" }}</b><span>星期{{ .weekday }}</span></time>
           </div>
           <div class="concert-show__body">
             <p class="concert-show__status" hidden></p>
@@ -105,7 +109,7 @@
         {{- range $concert.events }}
         {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
         <article class="concert-set">
-          <h3><span>{{ $start.Format "1/02" }}</span>{{ .title }}</h3>
+          <h3><span>{{ $start.Format "1.02" }}</span>{{ .title }}</h3>
           <ol>
             {{- range .program }}
             <li>{{ . }}</li>
@@ -147,6 +151,32 @@
         <p class="concert-eyebrow" lang="en">Credits</p>
         <h2 id="credits-title">製作名單</h2>
       </div>
+      {{- with .production }}
+      <section class="concert-staff__crew">
+        <h3>{{ .title }}</h3>
+        <dl class="concert-staff__roles">
+          {{- range .roles }}
+          <div><dt>{{ .role }}</dt><dd{{ if not .names }} class="is-pending"{{ end }}>{{ with .names }}{{ delimit . "、" }}{{ else }}待定{{ end }}</dd></div>
+          {{- end }}
+        </dl>
+      </section>
+      {{- end }}
+      <section class="concert-staff__crew">
+        <h3>各場工作人員</h3>
+        <div class="concert-staff__shows">
+          {{- range $concert.events }}
+          {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
+          <div>
+            <h4><span>{{ $start.Format "1.02" }}</span>{{ .title }}</h4>
+            <dl>
+              {{- range .staff }}
+              <div><dt>{{ .role }}</dt><dd{{ if not .names }} class="is-pending"{{ end }}>{{ with .names }}{{ delimit . "、" }}{{ else }}待定{{ end }}</dd></div>
+              {{- end }}
+            </dl>
+          </div>
+          {{- end }}
+        </div>
+      </section>
       <div class="concert-staff__groups">
         {{- range .groups }}
         <section class="concert-staff__group">
@@ -176,6 +206,18 @@
         </div>
       </section>
       {{- end }}
+      {{- with $concert.sponsors }}
+      <section class="concert-staff__sponsors">
+        <h3>贊助單位</h3>
+        <ul>
+          {{- range . }}
+          {{- $shows := slice }}
+          {{- range $id := .shows }}{{ range where $concert.events "id" $id }}{{ $shows = $shows | append (printf "%s %s" ((time.AsTime .date).Format "1.02") .title) }}{{ end }}{{ end }}
+          <li><a href="{{ .url }}" target="_blank" rel="noopener"><strong>{{ .name }}</strong></a>{{ with $shows }}<span>{{ delimit . "、" }}</span>{{ end }}</li>
+          {{- end }}
+        </ul>
+      </section>
+      {{- end }}
       {{- with .members }}
       <section class="concert-staff__members">
         <h3>{{ .title }}</h3>
@@ -193,22 +235,6 @@
         </div>
       </section>
       {{- end }}
-      <section class="concert-staff__crew">
-        <h3>各場工作人員</h3>
-        <div class="concert-staff__shows">
-          {{- range $concert.events }}
-          {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
-          <div>
-            <h4><span>{{ $start.Format "1/02" }}</span>{{ .title }}</h4>
-            <dl>
-              {{- range .staff }}
-              <div><dt>{{ .role }}</dt><dd{{ if not .names }} class="is-pending"{{ end }}>{{ with .names }}{{ delimit . "、" }}{{ else }}待定{{ end }}</dd></div>
-              {{- end }}
-            </dl>
-          </div>
-          {{- end }}
-        </div>
-      </section>
     </div>
   </section>
   {{- end }}
