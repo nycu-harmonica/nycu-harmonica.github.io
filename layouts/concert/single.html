@@ -170,7 +170,7 @@
             <h4><span>{{ $start.Format "1.02" }}</span>{{ .title }}</h4>
             <dl>
               {{- range .staff }}
-              <div><dt>{{ .role }}</dt><dd{{ if not .names }} class="is-pending"{{ end }}>{{ with .names }}{{ delimit . "、" }}{{ else }}待定{{ end }}</dd></div>
+              <div><dt>{{ .role }}</dt><dd{{ if not .names }} class="is-pending"{{ end }}>{{ with .names }}{{ range $i, $n := . }}{{ if $i }}、{{ end }}<span>{{ $n }}</span>{{ end }}{{ else }}待定{{ end }}</dd></div>
               {{- end }}
             </dl>
           </div>

@@ -587,7 +587,8 @@
 .concert-staff__shows dl { display: grid; gap: 8px; margin: 12px 0 0; }
 .concert-staff__shows dl > div { display: flex; align-items: baseline; gap: 14px; }
 .concert-staff__shows dt { min-width: 5em; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.72); }
-.concert-staff__shows dd { margin: 0; font-size: 15px; }
+.concert-staff__shows dd { margin: 0; font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.8; }
+.concert-staff__shows dd span { white-space: nowrap; }
 .concert-staff__shows dd.is-pending { color: rgba(255, 255, 255, 0.5); letter-spacing: 0.12em; }
 
 @media (min-width: 760px) {

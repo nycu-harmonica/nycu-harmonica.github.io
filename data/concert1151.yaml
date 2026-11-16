@@ -61,13 +61,15 @@ events:
     location: 交大活動中心 2F 演藝廳
     address: 國立陽明交通大學光復校區
     map: 國立陽明交通大學 光復校區 學生活動中心
-    # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
+    # 職位確定後填入 names，空的會顯示「待定」。工作人員取自聯合成發調查表單：該場會出席且勾選願意幫忙者（已列其他職位者不重複）。
     staff:
       - { role: 舞台監督, names: [] }
       - { role: 主持人, names: [] }
       - { role: 音控, names: [] }
       - { role: 燈控, names: [] }
-      - { role: 工作人員, names: [] }
+      - { role: 攝影, names: [陳奕翔老師] }
+      - { role: 錄影, names: [陳昱銘] }
+      - { role: 工作人員, names: [白柏毅, 吳冠廷, 李明哲, 李玲萱, 阮佳寧, 施禹平, 洪乙恩, 洪軾凱, 翁詠筑, 馬皜展, 張凱鈞, 許恩齊, 陳郁璇, 黃奕瑞, 黃靖恩, 廖傑克, 蔡培婷, 魏承瀚, 羅瑋翔] }
     program:
       - 骷髏之舞
       - 港都夜雨
@@ -88,13 +90,15 @@ events:
     location: 清大湖畔一練
     address: 國立清華大學
     map_url: https://maps.app.goo.gl/PU8pwTK5FYBKNnx77
-    # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
+    # 職位確定後填入 names，空的會顯示「待定」。工作人員取自聯合成發調查表單：該場會出席且勾選願意幫忙者（已列其他職位者不重複）。
     staff:
       - { role: 舞台監督, names: [] }
       - { role: 主持人, names: [] }
       - { role: 音控, names: [] }
       - { role: 燈控, names: [] }
-      - { role: 工作人員, names: [] }
+      - { role: 攝影, names: [陳奕翔老師] }
+      - { role: 錄影, names: [陳昱銘] }
+      - { role: 工作人員, names: [李妍蓁, 李明哲, 李玲萱, 阮佳寧, 洪軾凱, 翁詠筑, 馬皜展, 張凱鈞, 曹宸皓, 郭文豪, 陳郁璇, 黃奕鈞, 黃奕瑞, 黃靖恩, 廖傑克, 蔡培婷, 羅瑋翔] }
     program:
       - Moon River
       - Summer
