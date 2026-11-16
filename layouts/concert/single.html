@@ -177,18 +177,6 @@
           {{- end }}
         </div>
       </section>
-      <div class="concert-staff__groups">
-        {{- range .groups }}
-        <section class="concert-staff__group">
-          <h3>{{ .title }}</h3>
-          <ul>
-            {{- range .people }}
-            <li><strong>{{ .name }}</strong>{{ with .club }}<span>{{ . }}</span>{{ end }}</li>
-            {{- end }}
-          </ul>
-        </section>
-        {{- end }}
-      </div>
       {{- with .members }}
       <section class="concert-staff__members">
         <h3>{{ .title }}</h3>
@@ -207,21 +195,18 @@
       </section>
       {{- end }}
       {{- with .officers }}
-      <section class="concert-staff__officers">
-        <h3>{{ .title }}</h3>
-        <div class="concert-staff__clubs">
-          {{- range .clubs }}
-          <div>
-            <h4>{{ .name }}</h4>
-            <dl>
-              {{- range .people }}
-              <div><dt>{{ .role }}</dt><dd>{{ .name }}</dd></div>
-              {{- end }}
-            </dl>
-          </div>
-          {{- end }}
-        </div>
-      </section>
+      <div class="concert-staff__clubs concert-staff__officers">
+        {{- range .clubs }}
+        <section>
+          <h3>{{ .name }}</h3>
+          <dl>
+            {{- range .people }}
+            <div><dt>{{ .role }}</dt><dd>{{ .name }}</dd></div>
+            {{- end }}
+          </dl>
+        </section>
+        {{- end }}
+      </div>
       {{- end }}
       {{- with $concert.sponsors }}
       <section class="concert-staff__sponsors">

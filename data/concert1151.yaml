@@ -115,27 +115,17 @@ credits:
     title: 製作團隊
     roles:
       - { role: 聯合總召, names: [洪軾凱, 黃奕瑞] }
-      - { role: 清大窗口, names: [陳昱銘] }
+      - { role: 主視覺設計, names: [陳昱銘] }
       - { role: 曲目統籌, names: [李明哲] }
       - { role: 宣傳與內容統籌, names: [張凱鈞] }
       - { role: 技術／音控統籌, names: [毛宥鈞] }
       - { role: 財務, names: [洪乙恩] }
-  groups:
-    - title: 指導老師
-      people:
-        - name: 陳彥銘老師
-          club: 竹韻口琴社
-        - name: 陳Q老師
-          club: 清大口琴社
-    - title: 主視覺設計
-      people:
-        - name: 陳昱銘
-          club: 清大口琴社
+  # 兩社各一塊：指導老師在最上面，接著幹部。
   officers:
-    title: 幹部
     clubs:
       - name: 竹韻口琴社
         people:
+          - { role: 指導老師, name: 陳彥銘老師 }
           - { role: 社長, name: 洪軾凱 }
           - { role: 副社長, name: 張凱鈞 }
           - { role: 教學, name: 李明哲 }
@@ -144,6 +134,7 @@ credits:
           - { role: 技術長, name: 毛宥鈞 }
       - name: 清大口琴社
         people:
+          - { role: 指導老師, name: 陳Q老師 }
           - { role: 社長, name: 阮佳寧 }
           - { role: 副社長, name: 黃奕瑞 }
           - { role: 幹部, name: 陳昱銘 }
