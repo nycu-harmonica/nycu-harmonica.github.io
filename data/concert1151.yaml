@@ -43,16 +43,6 @@ events:
     location: 交大小木屋
     address: 國立陽明交通大學光復校區
     map: 國立陽明交通大學 小木屋鬆餅
-    # 現場工作人員尚未決定；名單確定後填入 names，空的會顯示「待定」。
-    staff:
-      - { role: 舞台監督, names: [] }
-      - { role: 主持人, names: [] }
-      - { role: 音控, names: [] }
-      - { role: 燈控, names: [] }
-      - { role: 攝影, names: [] }
-      - { role: 錄影, names: [] }
-      - { role: 場務, names: [] }
-      - { role: 前台接待, names: [] }
     program:
       - 萬水千山縱橫
       - 狂暴之海 A Stormy Sea

@@ -588,7 +588,7 @@
   .concert-staff { padding: 12px 0 130px; }
   .concert-staff__groups,
   .concert-staff__clubs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
-  .concert-staff__shows { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
+  .concert-staff__shows { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
   .concert-staff__roles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 

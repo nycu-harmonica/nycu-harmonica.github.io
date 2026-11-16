@@ -164,7 +164,7 @@
       <section class="concert-staff__crew">
         <h3>各場工作人員</h3>
         <div class="concert-staff__shows">
-          {{- range $concert.events }}
+          {{- range where $concert.events "staff" "!=" nil }}
           {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
           <div>
             <h4><span>{{ $start.Format "1.02" }}</span>{{ .title }}</h4>
