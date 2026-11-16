@@ -120,6 +120,11 @@
       <p class="concert-outro__lead">拍照、發限動時，加上 hashtag 並標記兩社</p>
       <button type="button" class="concert-tag" data-copy="#{{ . }}"><span>#{{ . }}</span><small data-copy-label hidden>點一下複製</small></button>
       {{- end }}
+      {{- with $concert.poster }}
+      <a class="concert-download" href="{{ . | relURL }}" download="{{ $concert.title }}海報.jpg">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>下載海報
+      </a>
+      {{- end }}
       <ul class="concert-hosts">
         {{- range $concert.hosts }}
         <li>

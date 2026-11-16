@@ -11,6 +11,8 @@ kicker:
 free: true
 # 「我們現場見」請觀眾發文時加上的 hashtag（不含 #）。
 hashtag: 竹夢初聲
+# 「我們現場見」的下載海報：陳昱銘設計的定稿，由 PDF 轉成 JPG（長邊 2000px）。
+poster: images/1151/poster.jpg
 hosts:
   - name: 竹韻口琴社
     full: 國立陽明交通大學竹韻口琴社
