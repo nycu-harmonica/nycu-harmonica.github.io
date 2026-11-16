@@ -67,10 +67,7 @@ events:
       - { role: 主持人, names: [] }
       - { role: 音控, names: [] }
       - { role: 燈控, names: [] }
-      - { role: 攝影, names: [] }
-      - { role: 錄影, names: [] }
-      - { role: 場務, names: [] }
-      - { role: 前台接待, names: [] }
+      - { role: 工作人員, names: [] }
     program:
       - 骷髏之舞
       - 港都夜雨
@@ -97,10 +94,7 @@ events:
       - { role: 主持人, names: [] }
       - { role: 音控, names: [] }
       - { role: 燈控, names: [] }
-      - { role: 攝影, names: [] }
-      - { role: 錄影, names: [] }
-      - { role: 場務, names: [] }
-      - { role: 前台接待, names: [] }
+      - { role: 工作人員, names: [] }
     program:
       - Moon River
       - Summer
@@ -115,15 +109,15 @@ events:
 # 洪乙恩不上台，改列製作團隊的財務。
 # 姓名會用到標題襯線字型；新增或改名時記得重新產生字型子集（scripts/subset_concert_fonts.py）。
 credits:
-  # 整體製作職位尚未決定；名單確定後填入 names，空的會顯示「待定」。
+  # 製作團隊：依兩社實際分工（recording-todos T182–T211），社長確認。
   production:
     title: 製作團隊
     roles:
-      - { role: 總召, names: [] }
-      - { role: 音樂總監, names: [] }
-      - { role: 執行製作, names: [] }
-      - { role: 節目統籌, names: [] }
-      - { role: 宣傳, names: [] }
+      - { role: 聯合總召, names: [洪軾凱, 黃奕瑞] }
+      - { role: 清大窗口, names: [陳昱銘] }
+      - { role: 曲目統籌, names: [李明哲] }
+      - { role: 宣傳與內容統籌, names: [洪軾凱] }
+      - { role: 技術／音控統籌, names: [毛宥鈞] }
       - { role: 財務, names: [洪乙恩] }
   groups:
     - title: 指導老師

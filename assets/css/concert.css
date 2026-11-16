@@ -565,7 +565,7 @@
 .concert-staff__groups { margin-top: 48px; }
 .concert-staff__roles { display: grid; gap: 8px 36px; margin: 16px 0 0; }
 .concert-staff__roles > div { display: flex; align-items: baseline; gap: 14px; }
-.concert-staff__roles dt { min-width: 5em; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.72); }
+.concert-staff__roles dt { flex: none; width: 8.6em; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.72); }
 .concert-staff__roles dd { margin: 0; font-size: 15px; }
 .concert-staff__roles dd.is-pending { color: rgba(255, 255, 255, 0.5); letter-spacing: 0.12em; }
 .concert-staff__sponsors { margin-top: 48px; }
