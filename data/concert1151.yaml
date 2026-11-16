@@ -45,13 +45,39 @@ events:
     location: 交大小木屋
     address: 國立陽明交通大學光復校區
     map: 國立陽明交通大學 小木屋鬆餅
+    # 曲目順序與演出人員取自「2026 竹韻 × 清大聯合成發｜曲目表」的「11/24 交大小木屋快閃」分頁。
+    # 半音階依 Ch.1–Ch.4 順序；低音 = DB。
     program:
-      - 萬水千山縱橫
-      - 狂暴之海 A Stormy Sea
-      - 宮崎駿組曲
-      - 加勒比海盜
-      - Ashes on Fire
-      - 海闊天空
+      - title: 萬水千山縱橫
+        parts:
+          - { part: 半音階, names: [蔡培婷, 洪軾凱, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: 狂暴之海 A Stormy Sea
+        parts:
+          - { part: 半音階, names: [蔡培婷, 洪軾凱] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: 宮崎駿組曲
+        parts:
+          - { part: 半音階, names: [蔡培婷, 洪軾凱, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: 加勒比海盜
+        parts:
+          - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: Ashes on Fire
+        parts:
+          - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: 海闊天空
+        parts:
+          - { part: 半音階, names: [翁詠筑, 廖傑克, 洪軾凱, 蔡培婷] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
   - id: nycu
     act: 第二場
     title: 陽明交大演藝廳

@@ -486,6 +486,12 @@
 .concert-program .concert-program__perf { color: var(--ink); }
 .concert-program__perf b { margin-right: 10px; font-size: 12px; letter-spacing: 0.14em; color: var(--rose); }
 .concert-program__perf span { white-space: nowrap; }
+/* 依樂器分組的演出人員：半音階／低音／和弦。 */
+.concert-program__parts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 10px; margin: 4px 0 0; font-size: 14px; line-height: 1.75; }
+.concert-program__parts > div { display: contents; }
+.concert-program__parts dt { font-size: 12px; letter-spacing: 0.1em; color: var(--rose); line-height: 2.05; }
+.concert-program__parts dd { margin: 0; color: var(--ink); }
+.concert-program__parts span { white-space: nowrap; }
 
 @media (min-width: 760px) {
   .concert-tabs { max-width: 640px; }

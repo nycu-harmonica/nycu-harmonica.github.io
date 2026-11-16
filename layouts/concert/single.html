@@ -102,7 +102,13 @@
             <div>
               <h4>{{ $s.title }}</h4>
               {{- with $s.note }}<p>{{ . }}</p>{{ end }}
-              {{- with $s.performers }}<p class="concert-program__perf"><b>演出</b>{{ range $k, $n := . }}{{ if $k }}、{{ end }}<span>{{ $n }}</span>{{ end }}</p>{{ end }}
+              {{- with $s.parts }}
+              <dl class="concert-program__parts">
+                {{- range . }}
+                <div><dt>{{ .part }}</dt><dd>{{ range $k, $n := .names }}{{ if $k }}、{{ end }}<span>{{ $n }}</span>{{ end }}</dd></div>
+                {{- end }}
+              </dl>
+              {{- else }}{{ with $s.performers }}<p class="concert-program__perf"><b>演出</b>{{ range $k, $n := . }}{{ if $k }}、{{ end }}<span>{{ $n }}</span>{{ end }}</p>{{ end }}{{ end }}
             </div>
           </li>
           {{- end }}
