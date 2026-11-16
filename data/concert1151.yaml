@@ -125,7 +125,7 @@ credits:
     clubs:
       - name: 竹韻口琴社
         people:
-          - { role: 指導老師, name: 陳彥銘老師 }
+          - { role: 指導老師, name: 陳彥銘教授 }
           - { role: 社長, name: 洪軾凱 }
           - { role: 副社長, name: 張凱鈞 }
           - { role: 教學, name: 李明哲 }
@@ -134,7 +134,7 @@ credits:
           - { role: 技術長, name: 毛宥鈞 }
       - name: 清大口琴社
         people:
-          - { role: 指導老師, name: 陳Q老師 }
+          - { role: 指導老師, name: 陳奕翔老師 }
           - { role: 社長, name: 阮佳寧 }
           - { role: 副社長, name: 黃奕瑞 }
           - { role: 幹部, name: 陳昱銘 }
