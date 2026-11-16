@@ -8,7 +8,6 @@ title: 竹夢初聲
 kicker:
   - 陽明交大竹韻口琴社 × 清華大學口琴社
   - 115 學年度第一學期聯合成果發表音樂會
-lead: 從交大的黃昏，吹到清大的夜晚。兩校口琴人同台，三場演出，等你來聽。
 free: true
 hosts:
   - name: 竹韻口琴社
@@ -35,7 +34,6 @@ events:
   - id: pop-up
     act: 第一場
     title: 校園快閃
-    blurb: 下課順路停一下，用一個小時，先聽我們吹個開頭。
     date: '2026-11-24'
     weekday: 二
     start: '17:00'
@@ -53,7 +51,6 @@ events:
   - id: nycu
     act: 第二場
     title: 交大場
-    blurb: 重奏與大合奏之夜。兩校同台，把舞台吹得滿滿的。
     date: '2026-12-04'
     weekday: 五
     start: '18:30'
@@ -82,7 +79,6 @@ events:
   - id: nthu
     act: 第三場
     title: 清大場
-    blurb: 獨奏之夜。一人一首，把這學期練的曲子吹給你聽。
     date: '2026-12-08'
     weekday: 二
     start: '19:00'
