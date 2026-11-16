@@ -3,7 +3,7 @@
 國立陽明交通大學竹韻口琴社官網:<https://harmonica.nycu.club/>。
 
 - 靜態網站:[Hugo](https://gohugo.io/)(extended)+ GitHub Pages,無付費服務依賴
-- 目前內容來源：瀏覽器即時讀取公開 Google Sheet（編年史與社群連結）＋公開 Google Calendar（首頁完整活動時程）＋臺灣口琴觀測站公開 API（首頁竹韻公開社群動態）；相片與相簿由[竹韻 Facebook 相片](https://www.facebook.com/nycubmhc/photos/)維護
+- 目前內容來源：瀏覽器即時讀取公開 Google Sheet（編年史與社群連結）＋公開 Google Calendar（首頁完整活動時程）＋竹梅活動觀測站公開 API（首頁竹韻公開社群動態）；相片與相簿由[竹韻 Facebook 相片](https://www.facebook.com/nycubmhc/photos/)維護
 - repo 內公開 CSV 是 last-good 快照,供 Sheet 暫時無法讀取或瀏覽器停用 JavaScript 時 fallback
 - 「詢問竹韻」介面仍由 GitHub Pages 靜態提供；只有送出問題時才呼叫隔離的公開問答 endpoint
 
@@ -43,7 +43,7 @@ Hugo 靜態 HTML + repo CSV/JSON last-good 快照(fallback)
 
 Google Sheet 不需 API key。前端透過 Google Visualization JSONP 讀取公開工作表,避免跨網域限制；三個 tab 採原子更新,不會顯示只成功一部分的資料。Sheet 修改後,新開頁面會立即讀到；已開啟頁面最慢約 60 秒更新。GitHub Pages 是靜態網站,Google 沒有提供推播給頁面的機制,因此 60 秒輪詢是目前的即時邊界。
 
-首頁也會由訪客的瀏覽器直接讀取臺灣口琴觀測站的竹韻專用公開 API（`/api/source/198.json`），新貼文不需要重新部署官網即可顯示。前端只接受竹韻來源 metadata 與最小必要欄位，成功驗證後才替換卡片；API 失效或資料不合法時，會保留 Hugo 已輸出的 `data/generated/observe_updates.json` 備援內容。
+首頁也會由訪客的瀏覽器直接讀取竹梅活動觀測站的竹韻專用公開 API（`https://chumei.observe.tw/api/org/465.json`），新貼文不需要重新部署官網即可顯示。前端只接受竹韻來源 metadata 與最小必要欄位，成功驗證後才替換卡片；API 失效或資料不合法時，會保留 Hugo 已輸出的 `data/generated/observe_updates.json` 備援內容。
 
 `scripts/sync_observe.py` 只用於網站管理員手動更新 committed fallback，不在定期同步 workflow 內執行。相同貼文不會只因 API 生成時間改變而重寫快照。
 
@@ -66,7 +66,7 @@ Google Sheet 不需 API key。前端透過 Google Visualization JSONP 讀取公�
 
 ```sh
 python3 scripts/test_sync_sheet.py          # 自測(零依賴)
-python3 scripts/test_sync_observe.py        # 觀測站同步與 last-good 自測
+python3 scripts/test_sync_observe.py        # 竹梅動態同步與 last-good 自測
 node scripts/test_observe_updates.js        # 首頁即時 API 驗證與 fallback 自測
 node scripts/test_sheet_live.js             # Sheet 即時讀取、欄位驗證與原子更新自測
 python3 scripts/check_public_content.py     # 公開資料隱私與欄位檢查
@@ -74,7 +74,7 @@ python3 scripts/test_portal.py              # 建置後檢查演出 Portal 與�
 python3 scripts/sync_sheet.py --offline     # 用 repo 內 CSV 快照重建所有生成內容
 python3 scripts/sync_sheet.py               # 手動更新 repo last-good 快照
 python3 scripts/sync_sheet.py --strict      # 手動更新快照的嚴格模式
-python3 scripts/sync_observe.py             # 手動更新觀測站近期動態 fallback
+python3 scripts/sync_observe.py             # 手動更新竹梅近期動態 fallback
 ```
 
 `scripts/sources.json` 存 Sheet ID 與各工作表 gid(皆為公開資訊,可入 repo),Hugo 會把設定放進每頁的公開 JSON config。`sheet_id` 未設定時,手動同步腳本會自動使用離線模式。

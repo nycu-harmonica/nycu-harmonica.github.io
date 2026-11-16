@@ -46,7 +46,7 @@
       <p class="section-kicker">近期動態</p>
       <h2 id="updates-title">竹韻最近在做什麼</h2>
     </div>
-    <a class="more-link" href="https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/" target="_blank" rel="noopener noreferrer">看全部動態<span aria-hidden="true"> ↗</span></a>
+    <a class="more-link" href="https://chumei.observe.tw/org/465/" target="_blank" rel="noopener noreferrer">看全部動態<span aria-hidden="true"> ↗</span></a>
   </div>
   {{ $observe := site.Data.generated.observe_updates }}
   {{ $fallbackTime := "" }}{{ with $observe }}{{ $fallbackTime = time.Format "2006/01/02" (time.In "Asia/Taipei" (time.AsTime .source_generated_at)) }}{{ end }}
@@ -58,7 +58,7 @@
     {{ end }}
   </div>
   <p class="data-status" id="observe-updates-status" data-observe-mode="fallback" data-fallback-time="{{ $fallbackTime }}" aria-live="polite">
-    <span class="data-status-dot" aria-hidden="true"></span><span data-status-text>{{ with $fallbackTime }}目前顯示 {{ . }} 同步的動態{{ else }}目前顯示網站內建的動態{{ end }}・資料來自臺灣口琴觀測站，內容以原始貼文為準</span>
+    <span class="data-status-dot" aria-hidden="true"></span><span data-status-text>{{ with $fallbackTime }}目前顯示 {{ . }} 同步的動態{{ else }}目前顯示網站內建的動態{{ end }}・資料來自竹梅活動觀測站，內容以原始貼文為準</span>
   </p>
 </section>
 

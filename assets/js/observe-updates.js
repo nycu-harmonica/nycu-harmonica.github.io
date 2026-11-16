@@ -1,13 +1,11 @@
-// 即時載入觀測站竹韻來源 API；靜態 HTML 永遠保留為失敗時的備援。
+// 即時載入竹梅活動觀測站的竹韻最新貼文 API；靜態 HTML 永遠保留為失敗時的備援。
 (function (global) {
   'use strict';
 
-  var API_URL = 'https://harmonica.observe.tw/api/source/198.json';
-  var OBSERVE_ASSET_PREFIX = 'https://harmonica.observe.tw/assets/';
-  var SOURCE_URL = 'https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/';
-  var SOURCE_ID = 198;
-  var SOURCE_SLUG = 'bamboo-melody-harmonica-club';
-  var SOURCE_NAME = '陽明交大竹韻口琴社';
+  var API_URL = 'https://chumei.observe.tw/api/org/465.json';
+  var OBSERVE_ASSET_PREFIX = 'https://chumei.observe.tw/assets/';
+  var SOURCE_URL = 'https://chumei.observe.tw/org/465/';
+  var SOURCE_ID = 465;
   var MAX_ITEMS = 3;
   var MAX_TITLE_LENGTH = 140;
   var MAX_RESPONSE_BYTES = 1024 * 1024;
@@ -78,13 +76,13 @@
     return bytes;
   }
 
+  // 竹梅的單位名稱可能調整顯示寫法，所以只認編號與頁面網址。
   function validateSource(source) {
     if (!source || typeof source !== 'object' ||
-        source.id !== SOURCE_ID || source.slug !== SOURCE_SLUG ||
-        source.name !== SOURCE_NAME || source.pageUrl !== SOURCE_URL) {
+        source.id !== SOURCE_ID || source.pageUrl !== SOURCE_URL) {
       throw new Error('來源 metadata 不符合竹韻來源');
     }
-    return { id: SOURCE_ID, slug: SOURCE_SLUG, name: SOURCE_NAME, pageUrl: SOURCE_URL };
+    return { id: SOURCE_ID, pageUrl: SOURCE_URL };
   }
 
   // 只接受觀測站自己快取的圖片;平台原始 CDN 網址會過期,也會把訪客請求送去第三方。
@@ -103,20 +101,18 @@
   }
 
   function normalizeItem(row) {
-    if (!row || typeof row !== 'object' || row.sourceName !== SOURCE_NAME) return null;
+    if (!row || typeof row !== 'object') return null;
     var id = String(row.id || '').trim();
     var title = compactText(row.title, MAX_TITLE_LENGTH, true);
-    var source = compactText(row.sourceName, 80, false);
     var platform = compactText(row.platform, 40, false);
     var url = validHttpsUrl(row.url);
     var published;
     try { published = parseTimestamp(row.publishedAt, 'publishedAt'); } catch (_error) { return null; }
-    if (!ITEM_ID_RE.test(id) || !title || !source || !platform || !url) return null;
+    if (!ITEM_ID_RE.test(id) || !title || !platform || !url) return null;
     return {
       id: id,
       title: title,
       url: url,
-      sourceName: source,
       platform: platform,
       image: normalizeImage(row.image),
       publishedAt: row.publishedAt,
@@ -128,7 +124,7 @@
     if (!payload || typeof payload !== 'object' || payload.schemaVersion !== 1) {
       throw new Error('API schemaVersion 不是 1');
     }
-    var source = validateSource(payload.source);
+    var source = validateSource(payload.org);
     parseTimestamp(payload.generatedAt, 'generatedAt');
     if (!Array.isArray(payload.items)) throw new Error('API 缺少 items');
     var items = [];
@@ -205,7 +201,7 @@
     setStatus(status, 'live', '已讀取最新動態（' + formatTaipei(normalized.generatedAt) + ' 更新）・' + SOURCE_NOTE);
   }
 
-  var SOURCE_NOTE = '資料來自臺灣口琴觀測站，內容以原始貼文為準';
+  var SOURCE_NOTE = '資料來自竹梅活動觀測站，內容以原始貼文為準';
 
   // 狀態列分成 loading / live / fallback 三種；訪客永遠看得到目前畫面是哪一份資料。
   function setStatus(status, mode, text) {
@@ -217,8 +213,8 @@
   function fallbackText(status, reason) {
     var time = status.dataset && status.dataset.fallbackTime;
     var shown = time ? '先顯示 ' + time + ' 同步的動態' : '先顯示網站內建的動態';
-    if (reason === 'empty') return '觀測站目前沒有新的公開貼文，' + shown;
-    return '暫時連不上臺灣口琴觀測站，' + shown;
+    if (reason === 'empty') return '竹梅活動觀測站目前沒有收錄到貼文，' + shown;
+    return '暫時連不上竹梅活動觀測站，' + shown;
   }
 
   async function refreshObserveUpdates(options) {
@@ -235,7 +231,7 @@
     var clearTimer = options.clearTimeoutImpl || global.clearTimeout;
     var controller = new AbortControllerImpl();
     var timer = setTimer(function () { controller.abort(); }, options.timeoutMs || 8000);
-    setStatus(status, 'loading', '正在讀取觀測站的最新動態…');
+    setStatus(status, 'loading', '正在讀取最新動態…');
     try {
       var response = await fetchImpl(API_URL, {
         method: 'GET', mode: 'cors', credentials: 'omit', cache: 'no-cache',

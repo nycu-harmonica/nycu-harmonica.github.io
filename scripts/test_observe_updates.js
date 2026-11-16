@@ -28,7 +28,7 @@ class FakeDocument {
 function item(overrides = {}) {
   return Object.assign({
     id: 'post-1234abcd', title: '社團成果發表~', excerpt: '不可顯示',
-    url: 'https://example.com/post/1', sourceName: '陽明交大竹韻口琴社',
+    url: 'https://example.com/post/1',
     platform: 'Instagram', publishedAt: '2026-07-16T11:30:00Z'
   }, overrides);
 }
@@ -37,10 +37,7 @@ function payload(items = [item()]) {
   return {
     schemaVersion: 1,
     generatedAt: '2026-07-16T11:45:00Z',
-    source: {
-      id: 198, slug: 'bamboo-melody-harmonica-club', name: '陽明交大竹韻口琴社',
-      pageUrl: 'https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/'
-    },
+    org: { id: 465, name: '交大竹韻口琴社', pageUrl: 'https://chumei.observe.tw/org/465/' },
     items
   };
 }
@@ -88,15 +85,15 @@ async function testSuccessReplacesFallbackAtomically() {
 async function testInvalidPayloadsKeepFallback() {
   const invalid = [
     Object.assign(payload(), { schemaVersion: 2 }),
-    Object.assign(payload(), { source: Object.assign({}, payload().source, { id: 71 }) }),
+    Object.assign(payload(), { org: Object.assign({}, payload().org, { id: 71 }) }),
+    Object.assign(payload(), { org: Object.assign({}, payload().org, { pageUrl: 'https://example.com/' }) }),
     payload([item({ url: 'javascript:alert(1)' })]),
     payload([item({ title: '<img src=x onerror=alert(1)>' })]),
-    payload([item({ sourceName: '其他口琴社' })]),
     payload([])
   ];
   const expected = (value) => (Array.isArray(value.items) && value.items.length === 0
-    ? '觀測站目前沒有新的公開貼文，先顯示網站內建的動態'
-    : '暫時連不上臺灣口琴觀測站，先顯示網站內建的動態');
+    ? '竹梅活動觀測站目前沒有收錄到貼文，先顯示網站內建的動態'
+    : '暫時連不上竹梅活動觀測站，先顯示網站內建的動態');
   for (const value of invalid) {
     const view = fixture();
     const changed = await observe.refreshObserveUpdates({
@@ -135,7 +132,7 @@ async function testActualBodyLimitAndMalformedJsonKeepFallback() {
     });
     assert.equal(changed, false);
     assert.deepEqual(view.grid.children, [view.fallback]);
-    assert.equal(view.status.textContent, '暫時連不上臺灣口琴觀測站，先顯示網站內建的動態');
+    assert.equal(view.status.textContent, '暫時連不上竹梅活動觀測站，先顯示網站內建的動態');
   }
 }
 
@@ -152,7 +149,7 @@ async function testTimeoutKeepsFallback() {
 }
 
 async function testRendersObserveHostedImageAndRejectsForeignOnes() {
-  const image = { url: 'https://harmonica.observe.tw/assets/feed-images/ok.webp', width: 1440, height: 1920 };
+  const image = { url: 'https://chumei.observe.tw/assets/posts/ok.jpg', width: 1440, height: 1920 };
   const view = fixture();
   await observe.refreshObserveUpdates({
     document: view.document, grid: view.grid, status: view.status,
@@ -175,9 +172,9 @@ async function testRendersObserveHostedImageAndRejectsForeignOnes() {
 
   for (const unsafe of [
     { url: 'https://scontent.cdninstagram.com/v/expiring.jpg' },
-    { url: 'http://harmonica.observe.tw/assets/feed-images/ok.webp' },
-    { url: 'https://harmonica.observe.tw.evil.example/assets/x.webp' },
-    { url: 'https://harmonica.observe.tw/source/198/' },
+    { url: 'http://chumei.observe.tw/assets/posts/ok.jpg' },
+    { url: 'https://chumei.observe.tw.evil.example/assets/x.jpg' },
+    { url: 'https://chumei.observe.tw/org/465/' },
     'not-an-object'
   ]) {
     const rejected = fixture();

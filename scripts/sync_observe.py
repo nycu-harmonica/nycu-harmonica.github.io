@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Manually refresh the last-good fallback from Harmonica Observe's source API."""
+"""Manually refresh the last-good fallback from Chumei's per-organisation posts API."""
 
 from __future__ import annotations
 
@@ -16,18 +16,16 @@ from urllib.parse import urlparse
 from sync_sheet import normalize_display_text
 
 
-API_URL = "https://harmonica.observe.tw/api/source/198.json"
-SOURCE_URL = "https://harmonica.observe.tw/source/198-bamboo-melody-harmonica-club/"
-SOURCE_ID = 198
-SOURCE_SLUG = "bamboo-melody-harmonica-club"
-SOURCE_NAME = "陽明交大竹韻口琴社"
+API_URL = "https://chumei.observe.tw/api/org/465.json"
+SOURCE_URL = "https://chumei.observe.tw/org/465/"
+SOURCE_ID = 465
 MAX_RESPONSE_BYTES = 1024 * 1024
 MAX_ITEMS = 3
 MAX_TITLE_LENGTH = 140
 TAIPEI = timezone(timedelta(hours=8))
 ITEM_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
-OBSERVE_ASSET_PREFIX = "https://harmonica.observe.tw/assets/"
-REQUIRED_ITEM_KEYS = frozenset({"id", "title", "source", "platform", "posted_at_local", "link"})
+OBSERVE_ASSET_PREFIX = "https://chumei.observe.tw/assets/"
+REQUIRED_ITEM_KEYS = frozenset({"id", "title", "platform", "posted_at_local", "link"})
 OPTIONAL_ITEM_KEYS = frozenset({"image"})
 
 
@@ -75,28 +73,24 @@ def parse_timestamp(value: object, label: str) -> datetime:
 def expected_source() -> dict:
     return {
         "id": SOURCE_ID,
-        "slug": SOURCE_SLUG,
-        "name": SOURCE_NAME,
         "page_url": SOURCE_URL,
     }
 
 
 def validate_source(value: object) -> dict:
     if not isinstance(value, dict):
-        raise ObserveSyncError("API 缺少 source metadata")
+        raise ObserveSyncError("API 缺少 org metadata")
     if (
         type(value.get("id")) is not int
         or value.get("id") != SOURCE_ID
-        or value.get("slug") != SOURCE_SLUG
-        or value.get("name") != SOURCE_NAME
         or value.get("pageUrl") != SOURCE_URL
     ):
-        raise ObserveSyncError("API source metadata 不符合竹韻來源")
+        raise ObserveSyncError("API org metadata 不符合竹韻")
     return expected_source()
 
 
 def normalize_image(value: object) -> dict | None:
-    """只接受觀測站自己快取的圖片,平台原始 CDN 網址會過期也會外流訪客請求。"""
+    """只接受竹梅自己快取的圖片,平台原始 CDN 網址會過期也會外流訪客請求。"""
     if not isinstance(value, dict):
         return None
     url = valid_https_url(value.get("url"))
@@ -112,25 +106,23 @@ def normalize_image(value: object) -> dict | None:
 
 
 def normalize_item(row: object) -> dict[str, str] | None:
-    if not isinstance(row, dict) or row.get("sourceName") != SOURCE_NAME:
+    if not isinstance(row, dict):
         return None
     item_id = str(row.get("id") or "").strip()
     if not ITEM_ID_RE.fullmatch(item_id):
         return None
     title = compact_text(row.get("title"), max_length=MAX_TITLE_LENGTH, truncate=True)
-    source = compact_text(row.get("sourceName"), max_length=80)
     platform = compact_text(row.get("platform"), max_length=40)
     link = valid_https_url(row.get("url"))
     try:
         published = parse_timestamp(row.get("publishedAt"), "publishedAt")
     except ObserveSyncError:
         return None
-    if not all((title, source, platform, link)):
+    if not all((title, platform, link)):
         return None
     item = {
         "id": item_id,
         "title": title,
-        "source": source,
         "platform": platform,
         "posted_at_local": published.astimezone(TAIPEI).strftime("%Y/%m/%d %H:%M"),
         "link": link,
@@ -146,7 +138,7 @@ def snapshot_from_payload(payload: object, *, updated_at: datetime) -> dict:
         raise ObserveSyncError("API 回應不是 JSON object")
     if type(payload.get("schemaVersion")) is not int or payload.get("schemaVersion") != 1:
         raise ObserveSyncError("API schemaVersion 不是 1")
-    source = validate_source(payload.get("source"))
+    source = validate_source(payload.get("org"))
     source_generated_at = str(payload.get("generatedAt") or "").strip()
     parse_timestamp(source_generated_at, "generatedAt")
     rows = payload.get("items")
@@ -206,7 +198,6 @@ def validate_existing_snapshot(value: object) -> bool:
         probe = {
             "id": item_id,
             "title": item.get("title"),
-            "sourceName": item.get("source"),
             "platform": item.get("platform"),
             "publishedAt": str(item.get("posted_at_local") or "").replace("/", "-").replace(" ", "T") + ":00+08:00",
             "url": link,
@@ -266,17 +257,17 @@ def sync(path: Path, *, fetcher=fetch_payload, now: datetime | None = None) -> t
         snapshot = snapshot_from_payload(fetcher(), updated_at=now or datetime.now(TAIPEI))
     except ObserveSyncError as error:
         if existing is not None:
-            return False, f"觀測站同步失敗，沿用 last-good 快照：{error}"
+            return False, f"竹梅同步失敗，沿用 last-good 快照：{error}"
         raise
     if existing is not None and all(
         existing.get(field) == snapshot.get(field) for field in ("source_url", "source", "items")
     ):
-        return False, "觀測站資料沒有變更。"
-    return write_snapshot(path, snapshot), "觀測站 last-good 快照已更新。"
+        return False, "竹梅資料沒有變更。"
+    return write_snapshot(path, snapshot), "竹梅 last-good 快照已更新。"
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="手動更新臺灣口琴觀測站竹韻動態備援快照")
+    parser = argparse.ArgumentParser(description="手動更新竹梅活動觀測站竹韻動態備援快照")
     parser.add_argument("--output", default="data/generated/observe_updates.json")
     parser.add_argument("--root", default="")
     args = parser.parse_args(argv)
@@ -284,7 +275,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         _changed, message = sync(root / args.output)
     except ObserveSyncError as error:
-        print(f"ERROR：觀測站同步失敗且沒有可用快照：{error}", file=sys.stderr)
+        print(f"ERROR：竹梅同步失敗且沒有可用快照：{error}", file=sys.stderr)
         return 1
     print(message)
     return 0

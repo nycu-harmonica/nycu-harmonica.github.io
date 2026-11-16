@@ -21,7 +21,6 @@ def valid_item(**overrides):
         "title": "社團成果發表~",
         "excerpt": "此欄不得存入 snapshot",
         "url": "https://example.com/posts/1",
-        "sourceName": so.SOURCE_NAME,
         "platform": "Instagram",
         "publishedAt": "2026-07-16T11:30:00Z",
     }
@@ -33,10 +32,9 @@ def payload(items, **overrides):
     value = {
         "schemaVersion": 1,
         "generatedAt": "2026-07-16T11:45:00Z",
-        "source": {
+        "org": {
             "id": so.SOURCE_ID,
-            "slug": so.SOURCE_SLUG,
-            "name": so.SOURCE_NAME,
+            "name": "交大竹韻口琴社",
             "pageUrl": so.SOURCE_URL,
         },
         "items": items,
@@ -50,7 +48,6 @@ def test_normalizes_minimal_safe_fields_and_taipei_time():
     assert snapshot["items"] == [{
         "id": "post-1234abcd",
         "title": "社團成果發表～",
-        "source": so.SOURCE_NAME,
         "platform": "Instagram",
         "posted_at_local": "2026/07/16 19:30",
         "link": "https://example.com/posts/1",
@@ -60,11 +57,11 @@ def test_normalizes_minimal_safe_fields_and_taipei_time():
 
 def test_keeps_only_observe_hosted_images_and_round_trips_snapshot():
     cached = valid_item(
-        image={"url": "https://harmonica.observe.tw/assets/feed-images/ok.webp", "width": 1440, "height": 1920}
+        image={"url": "https://chumei.observe.tw/assets/posts/ok.jpg", "width": 1440, "height": 1920}
     )
     snapshot = so.snapshot_from_payload(payload([cached]), updated_at=NOW)
     assert snapshot["items"][0]["image"] == {
-        "url": "https://harmonica.observe.tw/assets/feed-images/ok.webp",
+        "url": "https://chumei.observe.tw/assets/posts/ok.jpg",
         "width": 1440,
         "height": 1920,
     }
@@ -73,9 +70,9 @@ def test_keeps_only_observe_hosted_images_and_round_trips_snapshot():
 
     for unsafe in (
         {"url": "https://scontent.cdninstagram.com/v/expiring.jpg"},
-        {"url": "http://harmonica.observe.tw/assets/feed-images/ok.webp"},
-        {"url": "https://harmonica.observe.tw.evil.example/assets/x.webp"},
-        {"url": "https://harmonica.observe.tw/source/198/"},
+        {"url": "http://chumei.observe.tw/assets/posts/ok.jpg"},
+        {"url": "https://chumei.observe.tw.evil.example/assets/x.jpg"},
+        {"url": "https://chumei.observe.tw/org/465/"},
         "not-an-object",
     ):
         item = so.snapshot_from_payload(payload([valid_item(image=unsafe)]), updated_at=NOW)["items"][0]
@@ -83,10 +80,10 @@ def test_keeps_only_observe_hosted_images_and_round_trips_snapshot():
 
     # 尺寸不完整時仍保留圖片,只是不輸出 width/height。
     partial = so.snapshot_from_payload(
-        payload([valid_item(image={"url": "https://harmonica.observe.tw/assets/feed-images/ok.webp", "width": 0})]),
+        payload([valid_item(image={"url": "https://chumei.observe.tw/assets/posts/ok.jpg", "width": 0})]),
         updated_at=NOW,
     )
-    assert partial["items"][0]["image"] == {"url": "https://harmonica.observe.tw/assets/feed-images/ok.webp"}
+    assert partial["items"][0]["image"] == {"url": "https://chumei.observe.tw/assets/posts/ok.jpg"}
     assert so.validate_existing_snapshot(partial)
 
 
@@ -99,10 +96,10 @@ def test_snapshot_with_unknown_item_key_is_rejected():
 def test_rejects_foreign_or_invalid_source_metadata():
     mutations = [
         {"schemaVersion": 2},
-        {"source": {"id": 71, "slug": so.SOURCE_SLUG, "name": so.SOURCE_NAME, "pageUrl": so.SOURCE_URL}},
-        {"source": {"id": so.SOURCE_ID, "slug": "foreign", "name": so.SOURCE_NAME, "pageUrl": so.SOURCE_URL}},
-        {"source": {"id": so.SOURCE_ID, "slug": so.SOURCE_SLUG, "name": "其他口琴社", "pageUrl": so.SOURCE_URL}},
-        {"source": {"id": so.SOURCE_ID, "slug": so.SOURCE_SLUG, "name": so.SOURCE_NAME, "pageUrl": "https://example.com/"}},
+        {"org": {"id": 71, "pageUrl": so.SOURCE_URL}},
+        {"org": {"id": "465", "pageUrl": so.SOURCE_URL}},
+        {"org": {"id": so.SOURCE_ID, "pageUrl": "https://example.com/"}},
+        {"org": None},
     ]
     for mutation in mutations:
         value = payload([valid_item()])
@@ -119,7 +116,6 @@ def test_filters_unsafe_or_missing_item_fields():
         valid_item(id="bad id"),
         valid_item(title="<b>不可信 HTML</b>"),
         valid_item(url="http://example.com/insecure"),
-        valid_item(sourceName="其他口琴社"),
         valid_item(platform=""),
         valid_item(publishedAt="not-a-date"),
         valid_item(),
@@ -206,7 +202,7 @@ def test_generation_time_does_not_churn_unchanged_items():
         original_bytes = path.read_bytes()
         later = payload([valid_item()], generatedAt="2026-07-17T01:45:00Z")
         changed, message = so.sync(path, fetcher=lambda: later, now=datetime(2026, 7, 17, tzinfo=timezone.utc))
-        assert changed is False and message == "觀測站資料沒有變更。"
+        assert changed is False and message == "竹梅資料沒有變更。"
         assert path.read_bytes() == original_bytes
 
 
