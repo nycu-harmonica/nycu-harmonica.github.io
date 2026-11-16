@@ -40,8 +40,7 @@
       {{- range split $concert.title "" }}<span aria-hidden="true">{{ . }}</span>{{ end -}}
     </h1>
     <div class="concert-hero__aside">
-      <p class="concert-kicker">{{ $concert.kicker }}</p>
-      <p class="concert-english" lang="en">{{ $concert.english }}</p>
+      <p class="concert-kicker">{{ range $concert.kicker }}<span>{{ . }}</span>{{ end }}</p>
       <p class="concert-lead">{{ $concert.lead }}</p>
     </div>
     <div class="concert-hero__cta">

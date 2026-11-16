@@ -140,13 +140,10 @@
   letter-spacing: 0.08em;
   line-height: 1.55;
 }
-.concert-english {
-  margin-top: 6px;
-  font-size: 10.5px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  line-height: 1.6;
-  color: var(--gold);
+.concert-kicker span { display: inline-block; }
+/* 最窄的手機：縮小副標，讓「聯合成果發表音樂會」維持在同一行。 */
+@media (max-width: 359px) {
+  .concert-kicker { font-size: 12.5px; letter-spacing: 0; }
 }
 .concert-lead {
   margin-top: 14px;
@@ -230,7 +227,6 @@
   .concert-top > span { display: inline; }
   .concert-hero__copy { padding-top: 40px; column-gap: 32px; }
   .concert-kicker { font-size: 18px; }
-  .concert-english { font-size: 12px; }
   .concert-lead { font-size: 16px; }
 }
 
