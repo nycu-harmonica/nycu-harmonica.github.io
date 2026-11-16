@@ -83,3 +83,33 @@ events:
       - Proud of You
       - 櫻桃小丸子
       - 海闊天空
+# 製作名單：只列社長確認可公開的角色。工作分工（音控、場務、主持等）不是 Credits，不列。
+# 姓名會用到標題襯線字型；新增或改名時記得重新產生字型子集（見 static/fonts/1151/README.md）。
+credits:
+  groups:
+    - title: 指導老師
+      people:
+        - name: 陳彥銘老師
+          club: 竹韻口琴社
+        - name: 陳Q老師
+          club: 清大口琴社
+    - title: 主視覺設計
+      people:
+        - name: 陳昱銘
+          club: 清大口琴社
+  officers:
+    title: 幹部
+    clubs:
+      - name: 竹韻口琴社
+        people:
+          - { role: 社長, name: 洪軾凱 }
+          - { role: 副社長, name: 張凱鈞 }
+          - { role: 行政, name: 洪乙恩 }
+          - { role: 教學, name: 李明哲 }
+          - { role: 技術長, name: 毛宥鈞 }
+          - { role: 活動長, name: 羅瑋翔 }
+      - name: 清大口琴社
+        people:
+          - { role: 社長, name: 阮佳寧 }
+          - { role: 副社長, name: 石頭 }
+          - { role: 幹部, name: 陳昱銘 }

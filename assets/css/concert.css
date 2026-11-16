@@ -522,6 +522,43 @@
   .concert-outro { padding: 100px 0 120px; }
 }
 
+/* ---------- 製作名單 ---------- */
+/* 接在「我們現場見」之後，延續同一片夜色；兩社並列、份量對等。 */
+
+.concert-staff {
+  padding: 8px 0 96px;
+  background: var(--deep);
+  color: #fff;
+}
+.concert-staff .concert-eyebrow { color: var(--gold); }
+.concert-staff h3 {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.34);
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.concert-staff__groups { display: grid; gap: 36px; margin-top: 44px; }
+.concert-staff__group ul { display: grid; gap: 14px; margin-top: 16px; }
+.concert-staff__group li,
+.concert-staff__clubs dl > div { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; }
+.concert-staff strong,
+.concert-staff dd { font-family: var(--serif); font-size: 19px; font-weight: 700; letter-spacing: 0.08em; line-height: 1.4; }
+.concert-staff__group li span { font-size: 12px; letter-spacing: 0.16em; color: var(--gold); }
+.concert-staff__officers { margin-top: 48px; }
+.concert-staff__clubs { display: grid; gap: 32px; margin-top: 18px; }
+.concert-staff__clubs h4 { font-size: 12.5px; font-weight: 700; letter-spacing: 0.2em; color: var(--gold); }
+.concert-staff__clubs dl { display: grid; gap: 10px; margin: 12px 0 0; }
+.concert-staff__clubs dt { min-width: 4.5em; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.72); }
+.concert-staff__clubs dd { margin: 0; }
+
+@media (min-width: 760px) {
+  .concert-staff { padding: 12px 0 130px; }
+  .concert-staff__groups,
+  .concert-staff__clubs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
+}
+
 .concert-credits {
   padding: 26px 20px 34px;
   background: var(--deep);

@@ -141,6 +141,46 @@
       </div>
     </div>
   </section>
+
+  {{- with $concert.credits }}
+  <section class="concert-staff" id="credits" aria-labelledby="credits-title">
+    <div class="concert-wrap">
+      <div class="concert-heading">
+        <p class="concert-eyebrow" lang="en">Credits</p>
+        <h2 id="credits-title">製作名單</h2>
+      </div>
+      <div class="concert-staff__groups">
+        {{- range .groups }}
+        <section class="concert-staff__group">
+          <h3>{{ .title }}</h3>
+          <ul>
+            {{- range .people }}
+            <li><strong>{{ .name }}</strong>{{ with .club }}<span>{{ . }}</span>{{ end }}</li>
+            {{- end }}
+          </ul>
+        </section>
+        {{- end }}
+      </div>
+      {{- with .officers }}
+      <section class="concert-staff__officers">
+        <h3>{{ .title }}</h3>
+        <div class="concert-staff__clubs">
+          {{- range .clubs }}
+          <div>
+            <h4>{{ .name }}</h4>
+            <dl>
+              {{- range .people }}
+              <div><dt>{{ .role }}</dt><dd>{{ .name }}</dd></div>
+              {{- end }}
+            </dl>
+          </div>
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+    </div>
+  </section>
+  {{- end }}
 </main>
 
 <div class="concert-credits">
