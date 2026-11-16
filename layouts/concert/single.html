@@ -53,17 +53,21 @@
 <main id="main">
   <section class="concert-shows" id="shows" aria-labelledby="shows-title">
     <div class="concert-wrap">
-      <div class="concert-heading">
-        <h2 id="shows-title">三場演出</h2>
+      <h2 class="sr-only" id="shows-title">場次與曲目</h2>
+      <div class="concert-tabs" role="tablist" aria-label="選擇場次">
+        {{- range $i, $e := $concert.events }}
+        {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
+        <a class="concert-tab" role="tab" id="tab-{{ .id }}" href="#show-{{ .id }}" aria-controls="panel-{{ .id }}" aria-selected="{{ if eq $i 0 }}true{{ else }}false{{ end }}" tabindex="{{ if eq $i 0 }}0{{ else }}-1{{ end }}"><b>{{ $start.Format "1.02" }}</b><span>{{ .title }}</span></a>
+        {{- end }}
       </div>
-      <ol class="concert-list">
-        {{- range $concert.events }}
+      {{- range $i, $e := $concert.events }}
+      <div class="concert-panel" role="tabpanel" id="panel-{{ .id }}" aria-labelledby="tab-{{ .id }}" tabindex="0"{{ if ne $i 0 }} data-inactive{{ end }}>
         {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
         {{- $end := time.AsTime (printf "%sT%s:00+08:00" .date .end) }}
         {{- $summary := printf "%s｜%s" $concert.title .title }}
         {{- $details := printf "%s共同主辦。活動頁：%s" (delimit (apply $concert.hosts "index" "." "full") " × ") $permalink }}
         {{- $gcal := printf "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s/%s&location=%s&details=%s" (urlquery $summary) ($start.UTC.Format "20060102T150405Z") ($end.UTC.Format "20060102T150405Z") (urlquery (printf "%s（%s）" .location .address)) (urlquery $details) }}
-        <li class="concert-show" id="show-{{ .id }}" data-start="{{ $start.Format "2006-01-02T15:04:05-07:00" }}" data-end="{{ $end.Format "2006-01-02T15:04:05-07:00" }}">
+        <div class="concert-show" id="show-{{ .id }}" data-start="{{ $start.Format "2006-01-02T15:04:05-07:00" }}" data-end="{{ $end.Format "2006-01-02T15:04:05-07:00" }}">
           <div class="concert-show__date">
             <span class="concert-show__act">{{ .act }}</span>
             <time datetime="{{ .date }}"><b>{{ $start.Format "1" }}<i>.</i>{{ $start.Format "02" }}</b><span>星期{{ .weekday }}</span></time>
@@ -87,51 +91,48 @@
               <li><a href="{{ printf "1151/%s.ics" .id | relURL }}" download>下載行事曆檔</a></li>
             </ul>
           </div>
-        </li>
-        {{- end }}
-      </ol>
-    </div>
-  </section>
-
-  <section class="concert-program" aria-labelledby="program-title">
-    <div class="concert-wrap">
-      <div class="concert-heading">
-        <h2 id="program-title">節目搶先看</h2>
-      </div>
-      <div class="concert-sets">
-        {{- range $concert.events }}
-        {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
-        <article class="concert-set">
-          <h3><span>{{ $start.Format "1.02" }}</span>{{ .title }}</h3>
-          <ol>
-            {{- range .program }}
-            <li>{{ . }}</li>
-            {{- end }}
-          </ol>
-        </article>
+        </div>
+        {{- with .program }}
+        <h3 class="concert-program__title">曲目</h3>
+        <ol class="concert-program">
+          {{- range $j, $song := . }}
+          {{- $s := cond (reflect.IsMap $song) $song (dict "title" $song) }}
+          <li>
+            <span class="concert-program__num">{{ printf "%02d" (add $j 1) }}</span>
+            <div>
+              <h4>{{ $s.title }}</h4>
+              {{- with $s.note }}<p>{{ . }}</p>{{ end }}
+              {{- with $s.performers }}<p class="concert-program__perf"><b>演出</b>{{ range $k, $n := . }}{{ if $k }}、{{ end }}<span>{{ $n }}</span>{{ end }}</p>{{ end }}
+            </div>
+          </li>
+          {{- end }}
+        </ol>
         {{- end }}
       </div>
+      {{- end }}
     </div>
   </section>
 
   <section class="concert-outro" aria-labelledby="outro-title">
     <div class="concert-wrap concert-outro__grid">
-      <div>
-        <h2 id="outro-title">我們現場見</h2>
-        <ul class="concert-hosts">
-          {{- range $concert.hosts }}
-          <li>
-            <a href="{{ .instagram }}" target="_blank" rel="noopener">
-              <img src="{{ .avatar | relURL }}" width="96" height="96" alt="" loading="lazy" decoding="async">
-              <span class="concert-hosts__text">
-                <span class="concert-hosts__school">{{ .school }}・{{ .name }}</span>
-                <strong lang="en">@{{ upper .handle }}</strong>
-              </span>
-            </a>
-          </li>
-          {{- end }}
-        </ul>
-      </div>
+      <h2 id="outro-title">我們現場見</h2>
+      {{- with $concert.hashtag }}
+      <p class="concert-outro__lead">拍照、發限動時，加上 hashtag 並標記兩社</p>
+      <button type="button" class="concert-tag" data-copy="#{{ . }}"><span>#{{ . }}</span><small data-copy-label hidden>點一下複製</small></button>
+      {{- end }}
+      <ul class="concert-hosts">
+        {{- range $concert.hosts }}
+        <li>
+          <a href="{{ .instagram }}" target="_blank" rel="noopener">
+            <img src="{{ .avatar | relURL }}" width="96" height="96" alt="" loading="lazy" decoding="async">
+            <span class="concert-hosts__text">
+              <span class="concert-hosts__school">{{ .school }}・{{ .name }}</span>
+              <strong lang="en">@{{ upper .handle }}</strong>
+            </span>
+          </a>
+        </li>
+        {{- end }}
+      </ul>
     </div>
   </section>
 

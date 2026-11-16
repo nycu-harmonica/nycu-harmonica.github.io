@@ -300,14 +300,7 @@
   padding: 72px 0 96px;
   scroll-margin-top: 0;
   /* 接續主視覺底部的暖色，一路暗到入夜。 */
-  background: linear-gradient(to bottom, #f1c49e 0%, #f0bd9c 10%, #e6a797 26%, #cf9a95 42%, #ac8c92 58%, #857b90 72%, #626d8d 86%, #3d446f 100%);
-}
-.concert-shows .concert-eyebrow { color: #8a4a52; }
-
-.concert-list {
-  display: grid;
-  gap: 22px;
-  margin-top: 36px;
+  background: linear-gradient(to bottom, #f1c49e 0%, #f0bd9c 10%, #e6a797 26%, #cf9a95 42%, #ac8c92 58%, #857b90 72%, #626d8d 80%, #3d446f 92%, var(--night) 100%);
 }
 
 .concert-show {
@@ -413,7 +406,6 @@
 
 @media (min-width: 760px) {
   .concert-shows { padding: 110px 0 140px; }
-  .concert-list { gap: 28px; margin-top: 48px; }
   .concert-show {
     grid-template-columns: 210px minmax(0, 1fr);
     gap: 0;
@@ -435,77 +427,116 @@
   .concert-show__meta { grid-auto-flow: column; justify-content: start; gap: 28px; }
 }
 
-/* ---------- 節目 ---------- */
+/* ---------- 場次分頁與曲目 ---------- */
+/* 一次看一場：分頁切換場次，卡片下方接這場的曲目。沒有 JavaScript 時三場依序全部列出。 */
 
-.concert-program,
-.concert-outro { color: #fff; }
-
-.concert-program {
-  position: relative;
-  padding: 80px 0 90px;
-  background:
-    radial-gradient(1.5px 1.5px at 12% 18%, rgba(255, 255, 255, 0.8) 50%, transparent 51%),
-    radial-gradient(1px 1px at 78% 9%, rgba(255, 255, 255, 0.7) 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 64% 34%, rgba(255, 255, 255, 0.55) 50%, transparent 51%),
-    radial-gradient(1px 1px at 28% 52%, rgba(255, 255, 255, 0.6) 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 90% 61%, rgba(255, 255, 255, 0.7) 50%, transparent 51%),
-    radial-gradient(1px 1px at 8% 79%, rgba(255, 255, 255, 0.55) 50%, transparent 51%),
-    radial-gradient(1px 1px at 52% 88%, rgba(255, 255, 255, 0.6) 50%, transparent 51%),
-    linear-gradient(to bottom, #3d446f 0%, #2a2e5a 38%, var(--night) 100%);
+.concert-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 6px;
+  border-radius: 20px;
+  background: rgba(255, 250, 241, 0.45);
 }
-.concert-program .concert-eyebrow,
-.concert-outro .concert-eyebrow { color: var(--gold); }
-.concert-program .concert-heading > p:last-child,
-.concert-outro p { color: rgba(255, 255, 255, 0.82); }
+.concert-tab {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 2px;
+  min-height: 64px;
+  padding: 8px 4px;
+  border-radius: 14px;
+  color: var(--ink);
+  text-align: center;
+  transition: background 0.2s ease;
+}
+.concert-tab:hover { background: rgba(255, 250, 241, 0.5); text-decoration: none; }
+.concert-tab b { font-family: var(--serif); font-size: 22px; line-height: 1.15; font-variant-numeric: lining-nums; }
+.concert-tab span { font-size: clamp(10.5px, 3.2vw, 12.5px); letter-spacing: 0; line-height: 1.35; white-space: nowrap; }
+.concert-tab[aria-selected="true"] { background: var(--cream); box-shadow: 0 6px 18px rgba(52, 38, 70, 0.16); }
+.concert-tab[aria-selected="true"] b { color: var(--rose); }
+.concert-page .concert-tab:focus-visible { border-radius: 14px; }
 
-.concert-sets { display: grid; gap: 40px; margin-top: 44px; }
-.concert-set h3 {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.34);
-  font-family: var(--serif);
-  font-size: 22px;
+.concert-panel {
+  margin-top: 16px;
+  border-radius: 22px;
+  background: var(--cream);
+  box-shadow: 0 18px 44px rgba(52, 38, 70, 0.18);
+  scroll-margin-top: 16px;
+}
+.concert-panel + .concert-panel { margin-top: 22px; }
+.concert-tabs-ready .concert-panel[data-inactive] { display: none; }
+.concert-tabs-ready .concert-panel { margin-top: 16px; }
+.concert-panel .concert-show { background: transparent; box-shadow: none; }
+.concert-panel:has(.is-next),
+.concert-panel:has(.is-live) { box-shadow: 0 0 0 3px var(--rose), 0 18px 44px rgba(52, 38, 70, 0.22); }
+.concert-panel:has(.is-past) { background: rgba(255, 250, 241, 0.82); }
+
+.concert-program__title {
+  padding: 4px 22px 0;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
 }
-.concert-set h3 span { font-size: 15px; letter-spacing: 0.06em; color: var(--gold); }
-.concert-set ol { counter-reset: song; }
-.concert-set li {
-  counter-increment: song;
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  padding: 11px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  font-size: 15.5px;
-  line-height: 1.5;
-}
-.concert-set li::before {
-  content: counter(song, decimal-leading-zero);
-  flex: none;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.5);
-  font-variant-numeric: tabular-nums;
-}
+.concert-program { display: grid; margin: 8px 22px 0; padding-bottom: 14px; }
+.concert-program li { display: flex; gap: 14px; padding: 13px 0; border-top: 1px solid #ece2d8; }
+.concert-program__num { flex: none; width: 1.8em; padding-top: 4px; font-size: 11px; letter-spacing: 0.1em; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.concert-program h4 { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.5; }
+.concert-program p { margin-top: 4px; font-size: 14px; line-height: 1.75; color: var(--ink-soft); }
+.concert-program .concert-program__perf { color: var(--ink); }
+.concert-program__perf b { margin-right: 10px; font-size: 12px; letter-spacing: 0.14em; color: var(--rose); }
+.concert-program__perf span { white-space: nowrap; }
 
-@media (min-width: 820px) {
-  .concert-program { padding: 120px 0 130px; }
-  .concert-sets { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px; margin-top: 56px; }
+@media (min-width: 760px) {
+  .concert-tabs { max-width: 640px; }
+  .concert-tab b { font-size: 26px; }
+  .concert-tab span { font-size: 13px; }
+  .concert-program__title { padding: 6px 36px 0; }
+  .concert-program { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; margin: 8px 36px 0; padding-bottom: 22px; }
 }
 
 /* ---------- 收尾 ---------- */
 
 .concert-outro {
-  padding: 70px 0 90px;
+  padding: 64px 0 90px;
   background: linear-gradient(to bottom, var(--night) 0%, var(--deep) 100%);
+  color: #fff;
+  text-align: center;
 }
-.concert-outro__grid { display: grid; gap: 48px; align-items: center; }
-.concert-outro h2 + p { margin-top: 14px; font-size: 15.5px; max-width: 26em; }
+.concert-outro__grid { display: grid; justify-items: center; }
+.concert-outro__lead { margin-top: 12px; font-size: 15px; color: rgba(255, 255, 255, 0.82); }
+/* 請觀眾發文時加的 hashtag，用標題字與金色漸層呼應主視覺；點一下複製。 */
+.concert-tag {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  margin-top: 18px;
+  padding: 10px 26px 12px;
+  border: 1px dashed rgba(248, 217, 163, 0.55);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.concert-tag:hover { background: rgba(255, 255, 255, 0.09); border-color: var(--gold); }
+.concert-page .concert-tag:focus-visible { border-radius: 20px; }
+.concert-tag span {
+  font-family: var(--title);
+  font-size: clamp(40px, 12vw, 60px);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  background: linear-gradient(100deg, #d6a35c 0%, #e9c58f 34%, #f6e3c2 66%, #fffaf0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.concert-tag small { font-size: 12px; letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.7); }
+.concert-tag.is-copied small { color: var(--gold); }
 /* 兩社並列、樣式完全相同，不分主從。 */
-.concert-hosts { display: grid; gap: 12px; margin-top: 26px; max-width: 360px; }
+.concert-hosts { display: grid; gap: 12px; width: min(100%, 360px); margin-top: 28px; text-align: left; }
 .concert-hosts a {
   display: flex;
   align-items: center;
@@ -526,8 +557,11 @@
 .concert-hosts strong { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.4; overflow-wrap: anywhere; }
 
 
+@media (min-width: 640px) {
+  .concert-hosts { grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(100%, 640px); }
+}
 @media (min-width: 760px) {
-  .concert-outro { padding: 100px 0 120px; }
+  .concert-outro { padding: 90px 0 110px; }
 }
 
 /* ---------- 製作名單 ---------- */
@@ -602,8 +636,7 @@
 /* ---------- 動態 ---------- */
 
 .concert-motion .concert-heading,
-.concert-motion .concert-show,
-.concert-motion .concert-set,
+.concert-motion .concert-panel,
 .concert-motion .concert-outro__grid > * {
   opacity: 0;
   translate: 0 22px;
@@ -620,8 +653,7 @@
 /* 列印或存成 PDF 時，尚未捲到的區塊也要完整顯示。 */
 @media print {
   .concert-motion .concert-heading,
-  .concert-motion .concert-show,
-  .concert-motion .concert-set,
+  .concert-motion .concert-panel,
   .concert-motion .concert-outro__grid > * {
     opacity: 1;
     translate: none;

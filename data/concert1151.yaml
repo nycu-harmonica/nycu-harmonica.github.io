@@ -9,6 +9,8 @@ kicker:
   - 陽明交大竹韻口琴社 × 清華大學口琴社
   - 115 學年度第一學期聯合成果發表音樂會
 free: true
+# 「我們現場見」請觀眾發文時加上的 hashtag（不含 #）。
+hashtag: 竹夢初聲
 hosts:
   - name: 竹韻口琴社
     full: 國立陽明交通大學竹韻口琴社
@@ -24,7 +26,7 @@ hosts:
     avatar: images/1151/ig-nthu.webp
     instagram: https://www.instagram.com/nthu_harmonica_club/
     url: https://www.facebook.com/nthuharmonica/
-# 贊助單位：校友總會一般型活動經費補助，企劃只對應 12/4 交大場（shows 填場次 id）。
+# 贊助單位：校友總會一般型活動經費補助，企劃只對應 12/4 陽明交大演藝廳場（shows 填場次 id）。
 # 校友總會未公布正式英文名稱，不自行翻譯；logo 須依其規範，目前不放。
 sponsors:
   - name: 國立陽明交通大學校友總會
@@ -33,7 +35,7 @@ sponsors:
 events:
   - id: pop-up
     act: 第一場
-    title: 校園快閃
+    title: 小木屋快閃
     date: '2026-11-24'
     weekday: 二
     start: '17:00'
@@ -50,7 +52,7 @@ events:
       - 海闊天空
   - id: nycu
     act: 第二場
-    title: 交大場
+    title: 陽明交大演藝廳
     date: '2026-12-04'
     weekday: 五
     start: '18:30'
@@ -78,7 +80,7 @@ events:
       - 海闊天空
   - id: nthu
     act: 第三場
-    title: 清大場
+    title: 清大湖畔一練
     date: '2026-12-08'
     weekday: 二
     start: '19:00'
