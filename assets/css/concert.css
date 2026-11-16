@@ -107,7 +107,8 @@
 .concert-hero__copy {
   width: min(100%, 600px);
   margin-inline: auto;
-  padding: 30px 22px 0;
+  /* 高的手機上，標題往下移到夜空與插畫之間的中段；矮的手機維持 30px。 */
+  padding: clamp(30px, calc(var(--screen-h) * 0.33 - 180px), 130px) 22px 0;
   text-align: center;
 }
 
