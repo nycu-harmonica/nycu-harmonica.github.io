@@ -92,19 +92,24 @@
             </ul>
           </div>
         </div>
+        {{- $unordered := .program_unordered }}
         {{- with .program }}
-        <h3 class="concert-program__title">曲目</h3>
-        <ol class="concert-program">
+        <h3 class="concert-program__title">曲目{{ if $unordered }}<small>演出順序尚未公布</small>{{ end }}</h3>
+        <ol class="concert-program{{ if $unordered }} is-unordered{{ end }}">
           {{- range $j, $song := . }}
           {{- $s := cond (reflect.IsMap $song) $song (dict "title" $song) }}
           {{- if $s.pending }}
           <li class="is-pending"><span class="concert-program__num" aria-hidden="true">…</span><div><h4>{{ $s.title }}</h4></div></li>
           {{- continue }}
           {{- end }}
-          <li>
+          <li{{ if $s.finale }} class="is-finale"{{ end }}>
+            {{- if $unordered }}
+            <span class="concert-program__num" aria-hidden="true">・</span>
+            {{- else }}
             <span class="concert-program__num">{{ printf "%02d" (add $j 1) }}</span>
+            {{- end }}
             <div>
-              <h4>{{ $s.title }}</h4>
+              <h4>{{ $s.title }}{{ if $s.finale }}<span class="concert-program__badge">壓軸</span>{{ end }}</h4>
               {{- with $s.note }}<p>{{ . }}</p>{{ end }}
               {{- with $s.parts }}
               <dl class="concert-program__parts">
