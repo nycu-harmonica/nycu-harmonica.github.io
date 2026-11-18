@@ -104,7 +104,7 @@ events:
       - { role: 工作人員, names: [白柏毅, 吳冠廷, 李玲萱, 阮佳寧, 施禹平, 翁詠筑, 馬皜展, 許恩齊, 陳郁璇, 黃靖恩, 廖傑克, 蔡培婷, 魏承瀚] }
     # 曲目與演出人員取自曲目表「12/4 交大場」分頁。
     # 演出順序尚未決定（unordered：不顯示序號）；海闊天空為壓軸，當天會上台的所有人都上台：會吹低音或和弦口琴的人吹自己的樂器，其餘吹半音階（調查表單 12/4 會出席 + 曲目表 12/4 分頁，排除不上台者）。
-    # 港都夜雨、W.F. Bach Duet 與標 * 的曲目尚未確定，以「敬請期待」帶過。
+    # 港都夜雨與標 * 的曲目（含 La La Land）尚未確定，以「敬請期待」帶過；W.F. Bach Duet 改到 12/8。李明哲擔任海闊天空指揮。
     program_unordered: true
     program:
       - title: 狂暴之海 A Stormy Sea
@@ -132,14 +132,14 @@ events:
           - { part: 半音階, names: [蔡培婷, 洪軾凱, 翁詠筑] }
           - { part: 低音, names: [李明哲] }
           - { part: 和弦, names: [羅瑋翔] }
-      - title: La La Land Medley
-        parts:
-          - { part: 半音階, names: [白柏毅, 廖傑克, 翁詠筑] }
-          - { part: 低音, names: [李明哲] }
-          - { part: 和弦, names: [羅瑋翔] }
       - title: Intermezzo Giocoso
         parts:
           - { part: 半音階, names: [蔡培婷, 白柏毅] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: Merry Christmas, Mr. Lawrence
+        parts:
+          - { part: 半音階, names: [蔡培婷, 廖傑克, 翁詠筑] }
           - { part: 低音, names: [李明哲] }
           - { part: 和弦, names: [羅瑋翔] }
       - title: 屋頂上的提琴手
@@ -172,12 +172,18 @@ events:
           - { part: 半音階, names: [黃薪翰, 賴蓓郁, 許恩齊] }
           - { part: 低音, names: [陳昕渝] }
           - { part: 和弦, names: [黃奕瑞] }
+      - title: 勇者
+        parts:
+          - { part: 半音階, names: [洪軾凱] }
+          - { part: 低音, names: [陳昕渝] }
+          - { part: 和弦, names: [吳冠廷] }
       - { title: 敬請期待, pending: true }
       - title: 海闊天空
         finale: true
         parts:
+          - { part: 指揮, names: [李明哲] }
           - { part: 半音階, names: [白柏毅, 宋福原, 李玲萱, 阮佳寧, 施禹平, 洪軾凱, 翁詠筑, 馬皜展, 張凱鈞, 許恩齊, 黃靖恩, 黃薪翰, 廖傑克, 蔡培婷, 賴蓓郁] }
-          - { part: 低音, names: [李明哲, 陳昕渝, 陳郁璇, 魏承瀚] }
+          - { part: 低音, names: [陳昕渝, 陳郁璇, 魏承瀚] }
           - { part: 和弦, names: [吳冠廷, 陳昱銘, 黃奕瑞, 羅瑋翔] }
   - id: nthu
     act: 第三場
@@ -199,7 +205,7 @@ events:
       - { role: 錄影, names: [陳昱銘] }
       - { role: 工作人員, names: [吳冠廷, 李妍蓁, 李玲萱, 阮佳寧, 翁詠筑, 馬皜展, 曹宸皓, 郭文豪, 陳郁璇, 黃奕鈞, 黃靖恩, 廖傑克, 蔡培婷] }
     # 曲目與演出者取自曲目表「12/8 清大場」分頁。演出順序尚未決定；海闊天空為壓軸，當天上台的人全員參加，
-    # 會吹低音或和弦口琴的人吹自己的樂器。Moon River（演出者表單填不參加）、童話與隱形的翅膀（範例曲）及尚未選曲者的獨奏，以「敬請期待」帶過。
+    # 會吹低音或和弦口琴的人吹自己的樂器，李明哲擔任指揮。Moon River（演出者表單填不參加）、童話與隱形的翅膀（範例曲）及尚未選曲者的獨奏，以「敬請期待」帶過。
     program_unordered: true
     program:
       - title: 有一種悲傷
@@ -222,12 +228,15 @@ events:
         performers: [毛宥鈞]
       - title: 櫻桃小丸子
         performers: [黃奕鈞]
+      - title: 'W.F. Bach: Duet No. 4 in F Major, F. 57'
+        performers: [洪軾凱, 吳冠廷]
       - { title: 敬請期待, pending: true }
       - title: 海闊天空
         finale: true
         parts:
+          - { part: 指揮, names: [李明哲] }
           - { part: 半音階, names: [毛宥鈞, 王俊閔, 王瑞蘋, 余榮恩, 李妍蓁, 李欣螢, 李玲萱, 阮佳寧, 洪軾凱, 翁詠筑, 馬皜展, 張凱鈞, 曹宸皓, 郭文豪, 郭庭郡, 陳月樺, 陳睿哲, 黃奕鈞, 黃靖恩, 楊皓程, 廖宏祐, 廖傑克, 蔡培婷] }
-          - { part: 低音, names: [李明哲, 陳郁璇] }
+          - { part: 低音, names: [陳郁璇] }
           - { part: 和弦, names: [吳冠廷, 陳昱銘, 黃奕瑞, 羅瑋翔] }
 # 製作名單：只列社長確認可公開的角色。
 # 演出人員取自「115-1 聯合成發相關事項調查」表單：三場中任一場回答會參加者（去除重複填寫）；
