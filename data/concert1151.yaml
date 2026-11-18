@@ -73,6 +73,11 @@ events:
           - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
           - { part: 低音, names: [李明哲] }
           - { part: 和弦, names: [羅瑋翔] }
+      - title: Merry Christmas, Mr. Lawrence
+        parts:
+          - { part: 半音階, names: [蔡培婷, 廖傑克, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
       - title: 海闊天空
         parts:
           - { part: 半音階, names: [翁詠筑, 廖傑克, 洪軾凱, 蔡培婷] }
@@ -97,15 +102,84 @@ events:
       - { role: 攝影, names: [陳奕翔老師] }
       - { role: 錄影, names: [陳昱銘] }
       - { role: 工作人員, names: [白柏毅, 吳冠廷, 李玲萱, 阮佳寧, 施禹平, 翁詠筑, 馬皜展, 許恩齊, 陳郁璇, 黃靖恩, 廖傑克, 蔡培婷, 魏承瀚] }
+    # 曲目與演出人員取自曲目表「12/4 交大場」分頁；標 * 的未定曲目與未命名曲目不列，以「敬請期待」帶過。
     program:
-      - 骷髏之舞
-      - 港都夜雨
-      - 情熱大陸
-      - 屋頂上的提琴手
-      - 沙士散拍 Root Beer Rag
-      - 霍爾的移動城堡
-      - Oblivion
-      - 海闊天空
+      - title: 狂暴之海 A Stormy Sea
+        parts:
+          - { part: 半音階, names: [蔡培婷, 洪軾凱] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: 加勒比海盜
+        parts:
+          - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: Ashes on Fire
+        parts:
+          - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: 港都夜雨
+        parts:
+          - { part: 和弦, names: [吳冠廷] }
+      - title: 情熱大陸
+        parts:
+          - { part: 半音階, names: [廖傑克, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: 萬水千山縱橫
+        parts:
+          - { part: 半音階, names: [蔡培婷, 洪軾凱, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: La La Land Medley
+        parts:
+          - { part: 半音階, names: [白柏毅, 廖傑克, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: Intermezzo Giocoso
+        parts:
+          - { part: 半音階, names: [蔡培婷, 白柏毅] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: 屋頂上的提琴手
+        parts:
+          - { part: 半音階, names: [黃奕瑞, 阮佳寧] }
+          - { part: 低音, names: [陳郁璇] }
+          - { part: 和弦, names: [陳昱銘] }
+      - title: 沙士散拍 Root Beer Rag
+        parts:
+          - { part: 半音階, names: [陳郁璇, 馬皜展] }
+          - { part: 低音, names: [魏承瀚] }
+          - { part: 和弦, names: [黃奕瑞] }
+      - title: 名偵探柯南
+        parts:
+          - { part: 半音階, names: [黃奕瑞, 馬皜展, 宋福原] }
+          - { part: 低音, names: [魏承瀚] }
+          - { part: 和弦, names: [陳昱銘] }
+      - title: 火之墨西哥
+        parts:
+          - { part: 半音階, names: [馬皜展, 陳郁璇] }
+          - { part: 低音, names: [陳昕渝] }
+          - { part: 和弦, names: [陳昱銘] }
+      - title: 霍爾的移動城堡
+        parts:
+          - { part: 半音階, names: [賴蓓郁, 黃薪翰, 阮佳寧] }
+          - { part: 低音, names: [魏承瀚] }
+          - { part: 和弦, names: [陳昱銘] }
+      - title: 出埃及記
+        parts:
+          - { part: 半音階, names: [黃薪翰, 賴蓓郁, 許恩齊] }
+          - { part: 低音, names: [陳昕渝] }
+          - { part: 和弦, names: [黃奕瑞] }
+      - title: 海闊天空
+        parts:
+          - { part: 半音階, names: [李玲萱, 翁詠筑, 阮佳寧, 廖傑克, 洪軾凱, 蔡培婷] }
+          - { part: 和弦, names: [吳冠廷, 羅瑋翔] }
+      - title: 'W.F. Bach: Duet No. 4 in F Major, F. 57'
+        parts:
+          - { part: 半音階, names: [洪軾凱, 吳冠廷] }
+      - { title: 敬請期待, pending: true }
   - id: nthu
     act: 第三場
     title: 清大湖畔一練
@@ -136,7 +210,7 @@ events:
       - 海闊天空
 # 製作名單：只列社長確認可公開的角色。
 # 演出人員取自「115-1 聯合成發相關事項調查」表單：三場中任一場回答會參加者（去除重複填寫）；
-# 洪乙恩不上台，改列製作團隊的財務。
+# 洪乙恩不上台，改列製作團隊的財務。賴蓓郁、陳昕渝、黃薪翰取自曲目表 12/4 分頁。
 # 演出人員依姓氏筆畫排列（教育部標準字體，左「阝」計 3 畫）；同姓再依名字筆畫。
 # 姓名會用到標題襯線字型；新增或改名時記得重新產生字型子集（scripts/subset_concert_fonts.py）。
 credits:
@@ -182,4 +256,4 @@ credits:
       - name: 竹韻口琴社
         names: [白柏毅, 吳冠廷, 李明哲, 施禹平, 洪軾凱, 翁詠筑, 張凱鈞, 曹宸皓, 黃奕鈞, 黃靖恩, 廖傑克, 蔡培婷, 羅瑋翔]
       - name: 清大口琴社
-        names: [宋福原, 李妍蓁, 李玲萱, 阮佳寧, 馬皜展, 許恩齊, 郭文豪, 陳昱銘, 陳郁璇, 黃奕瑞, 魏承瀚]
+        names: [宋福原, 李妍蓁, 李玲萱, 阮佳寧, 馬皜展, 許恩齊, 郭文豪, 陳昕渝, 陳昱銘, 陳郁璇, 黃奕瑞, 黃薪翰, 賴蓓郁, 魏承瀚]

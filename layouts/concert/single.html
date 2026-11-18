@@ -97,6 +97,10 @@
         <ol class="concert-program">
           {{- range $j, $song := . }}
           {{- $s := cond (reflect.IsMap $song) $song (dict "title" $song) }}
+          {{- if $s.pending }}
+          <li class="is-pending"><span class="concert-program__num" aria-hidden="true">…</span><div><h4>{{ $s.title }}</h4></div></li>
+          {{- continue }}
+          {{- end }}
           <li>
             <span class="concert-program__num">{{ printf "%02d" (add $j 1) }}</span>
             <div>
