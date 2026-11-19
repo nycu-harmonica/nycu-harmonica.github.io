@@ -244,7 +244,7 @@
         {{- with .orgs }}
         <ul class="concert-staff__thanks-orgs">
           {{- range . }}
-          <li><strong>{{ . }}</strong></li>
+          <li><strong>{{ range $k, $part := split . " " }}{{ if $k }}<wbr>{{ end }}{{ $part }}{{ end }}</strong></li>
           {{- end }}
         </ul>
         {{- end }}
