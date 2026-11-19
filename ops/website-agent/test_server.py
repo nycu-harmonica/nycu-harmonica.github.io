@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import base64
+import hashlib
 import json
 from datetime import datetime
 from pathlib import Path
@@ -9,7 +11,16 @@ import tempfile
 import unittest
 from unittest import mock
 
-from server import HermesClient, KnowledgeBase, RequestLimiter, TAIPEI, normalise_history, parse_calendar_events
+from server import (
+    DailyTokenBudget,
+    HermesClient,
+    KnowledgeBase,
+    ProofOfWork,
+    RequestLimiter,
+    TAIPEI,
+    normalise_history,
+    parse_calendar_events,
+)
 
 
 class HermesClientTests(unittest.TestCase):
@@ -36,6 +47,69 @@ class HermesClientTests(unittest.TestCase):
                 if reason == "length":
                     payload["hermes"] = {"completed": False, "partial": True, "failed": False}
                 self.assertEqual(self.ask_with_response(payload), "竹韻以口琴合奏演出。")
+
+
+    def test_usage_is_reported_when_present(self):
+        settings = mock.Mock(hermes_url="http://127.0.0.1:8643/v1/chat/completions", request_timeout_seconds=10)
+        client = HermesClient(settings)
+        for usage, expected in (({"total_tokens": 812}, 812), ({}, None), ({"total_tokens": "x"}, None)):
+            with self.subTest(usage=usage), mock.patch.object(client, "_api_key", return_value="synthetic-test-key"), \
+                    mock.patch("server.request.urlopen") as urlopen:
+                payload = {"choices": [{"message": {"content": "好"}, "finish_reason": "stop"}], "usage": usage}
+                urlopen.return_value.__enter__.return_value.read.return_value = json.dumps(payload).encode()
+                self.assertEqual(client.ask_with_usage("問", [], "指示", "資料"), ("好", expected))
+
+
+def solve(challenge: dict) -> str:
+    for number in range(challenge["maxnumber"] + 1):
+        if hashlib.sha256(f"{challenge['salt']}{number}".encode()).hexdigest() == challenge["challenge"]:
+            fields = {key: challenge[key] for key in ("algorithm", "challenge", "salt", "signature")}
+            return base64.b64encode(json.dumps({**fields, "number": number}).encode()).decode()
+    raise AssertionError("unsolvable challenge")
+
+
+class ProofOfWorkTests(unittest.TestCase):
+    def test_solved_challenge_is_accepted_once(self) -> None:
+        pow_ = ProofOfWork(max_number=500)
+        proof = solve(pow_.create(now=1000))
+        self.assertTrue(pow_.verify(proof, now=1001))
+        self.assertFalse(pow_.verify(proof, now=1002))
+
+    def test_expired_forged_and_malformed_proofs_are_rejected(self) -> None:
+        pow_ = ProofOfWork(max_number=500)
+        challenge = pow_.create(now=1000)
+        self.assertFalse(pow_.verify(solve(challenge), now=1000 + 601))
+        # Signed by a different server key.
+        self.assertFalse(pow_.verify(solve(ProofOfWork(max_number=500).create(now=1000)), now=1001))
+        # Self-made challenge with a made-up signature.
+        forged = dict(challenge, salt="abc?expires=9999", signature="0" * 64)
+        forged["challenge"] = hashlib.sha256(b"abc?expires=99990").hexdigest()
+        self.assertFalse(pow_.verify(solve(forged), now=1001))
+        # Wrong number.
+        data = json.loads(base64.b64decode(solve(challenge)))
+        data["number"] = (data["number"] + 1) % 501
+        self.assertFalse(pow_.verify(base64.b64encode(json.dumps(data).encode()).decode(), now=1001))
+        for bad in (None, "", "not base64!", base64.b64encode(b"[]").decode(), "A" * 2000):
+            with self.subTest(bad=bad):
+                self.assertFalse(pow_.verify(bad, now=1001))
+
+
+class DailyTokenBudgetTests(unittest.TestCase):
+    def test_budget_persists_and_resets_on_a_new_day(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "usage.json"
+            budget = DailyTokenBudget(path, limit=1000)
+            self.assertFalse(budget.exhausted())
+            budget.add(600)
+            # A new instance (service restart) keeps today's total.
+            restarted = DailyTokenBudget(path, limit=1000)
+            self.assertEqual(restarted.used(), 600)
+            restarted.add(400)
+            self.assertTrue(restarted.exhausted())
+            path.write_text(json.dumps({"date": "2000-01-01", "tokens": 99999}))
+            self.assertEqual(restarted.used(), 0)
+            path.write_text("corrupt")
+            self.assertEqual(restarted.used(), 0)
 
 
 class RequestLimiterTests(unittest.TestCase):

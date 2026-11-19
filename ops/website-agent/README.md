@@ -14,12 +14,14 @@ GitHub Pages -> public facade /ask -> localhost Hermes API -> local AI gateway (
 - facade 每次請求都送新的 `X-Hermes-Session-Id`。否則 Hermes 依訊息內容推導 session，相同問題的訪客會共用 session，一次失敗就讓該 session 被暫停（HTTP 409），之後同一句問題永遠失敗。
 - `ai-kot-gg-luna` 因既有憑證回傳 401 而保留但停用，`fallback_providers` 為空；不再重試該遠端或取得其他 profile 的憑證。gateway 失敗仍回傳 HTTP 503 `agent_unavailable`，公開資料直接回答仍可使用。
 - Hermes API 只監聽 `127.0.0.1:8643`，bearer key 不會傳給瀏覽器。
-- 公開 facade 只監聽 `127.0.0.1:8788`，只提供 `POST /ask` 與 `GET /health`。
+- 公開 facade 只監聽 `127.0.0.1:8788`，只提供 `POST /ask`、`GET /challenge` 與 `GET /health`。
 - facade 只讀官網 repo 中的公開頁面、公開 Google Sheet 及 repo last-good fallback。
 - facade 也會讀取公開 Google Calendar 的 ICS，展開重複活動與例外，只保留活動名稱、日期時間與地點；不把活動描述或行政細節送進模型。
 - 不讀 `shared/`、`private/`、Discord、Gmail、Drive、Hermes 記憶或任何 OAuth/token 檔案。
 - 記憶與使用者偏好注入明確停用；`no_mcp`、停用工具清單、standalone gateway 與單一並行請求維持隔離。provider request/stale timeout 為 55 秒，停用自動復原循環，facade 的 75 秒等待上限不變。
 - 每題最多 500 字、回答最多 250 tokens；單 IP 與全站每日都有上限。
+- 會呼叫模型的問題需要 ALTCHA 相容的 proof-of-work：瀏覽器開啟問答時先向 `GET /challenge` 取得 HMAC 簽章的題目並在背景解題，送出時把結果放在 `altcha` 欄位。每個解答只能用一次、10 分鐘過期；簽章金鑰只存在記憶體，服務重啟後舊題目失效，前端會自動重拿一次。直接回答的常見問題不需要。這只提高大量自動請求的成本，擋不住刻意的攻擊者，真正的額度上限是下一項。
+- 每日 token 預算（`DAILY_TOKEN_BUDGET`，預設 500,000，依臺北時間換日）。用量以 Hermes 回傳的 `usage.total_tokens` 累計，沒有回傳就以送出字數估算；逾時的請求也照估算扣，連不上或被拒的請求不扣。累計值寫在 runtime 目錄的 `daily-usage.json`，重啟不歸零。用完後回傳 HTTP 429 `budget_exhausted`，直接回答的常見問題仍可使用。
 - 前端使用 vendored Deep Chat 2.5.0 Web Component（MIT），只在訪客開啟問答時載入；最多帶入最近 4 則短訊息，不使用瀏覽器儲存。
 - 「如何加入／社課時間地點／近期活動」由公開資料直接產生回答，不呼叫模型；其他問題才轉給 Hermes，並帶入相同的近期公開活動摘要。
 

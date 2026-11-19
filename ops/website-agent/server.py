@@ -9,14 +9,18 @@ forwards one stateless turn to the localhost-only Hermes API server.
 from __future__ import annotations
 
 from collections import defaultdict, deque
+import base64
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import hashlib
+import hmac
 import json
 import logging
 import os
 from pathlib import Path
 import re
+import secrets
 import threading
 import time
 import tomllib
@@ -42,6 +46,8 @@ VISITOR_EVENT_EXCLUDES = ("幹部", "截止", "確認", "預備期", "彩排")
 CALENDAR_LOOKAHEAD_DAYS = 180
 MAX_CALENDAR_EVENTS = 128
 ICSFields = dict[str, list[tuple[str, str]]]
+ALTCHA_TTL_SECONDS = 600
+MAX_ALTCHA_PAYLOAD_CHARS = 1024
 
 
 @dataclass(frozen=True)
@@ -57,6 +63,9 @@ class Settings:
     per_ip_window_seconds: int
     daily_limit: int
     request_timeout_seconds: int
+    daily_token_budget: int = 500_000
+    usage_file: Path = Path("daily-usage.json")
+    altcha_max_number: int = 100_000
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -91,6 +100,9 @@ class Settings:
             per_ip_window_seconds=int(os.getenv("PER_IP_WINDOW_SECONDS", "600")),
             daily_limit=int(os.getenv("DAILY_LIMIT", "300")),
             request_timeout_seconds=int(os.getenv("REQUEST_TIMEOUT_SECONDS", "75")),
+            daily_token_budget=int(os.getenv("DAILY_TOKEN_BUDGET", "500000")),
+            usage_file=Path(os.getenv("USAGE_FILE", str(here / "daily-usage.json"))).expanduser(),
+            altcha_max_number=int(os.getenv("ALTCHA_MAX_NUMBER", "100000")),
         )
 
 
@@ -123,6 +135,109 @@ class RequestLimiter:
             recent.append(current)
             self._daily_count += 1
             return True, "ok"
+
+
+class ProofOfWork:
+    """ALTCHA-compatible proof-of-work (SHA-256, HMAC-signed, single use).
+
+    The key lives only in memory: a restart invalidates outstanding challenges
+    and the browser simply fetches a new one.
+    """
+
+    def __init__(self, max_number: int, ttl_seconds: int = ALTCHA_TTL_SECONDS, key: bytes | None = None):
+        self.max_number = max_number
+        self.ttl_seconds = ttl_seconds
+        self._key = key or secrets.token_bytes(32)
+        self._used: dict[str, float] = {}
+        self._lock = threading.Lock()
+
+    def _sign(self, challenge: str) -> str:
+        return hmac.new(self._key, challenge.encode(), hashlib.sha256).hexdigest()
+
+    def create(self, now: float | None = None) -> dict[str, Any]:
+        expires = int((time.time() if now is None else now) + self.ttl_seconds)
+        salt = f"{secrets.token_hex(12)}?expires={expires}"
+        number = secrets.randbelow(self.max_number + 1)
+        challenge = hashlib.sha256(f"{salt}{number}".encode()).hexdigest()
+        return {
+            "algorithm": "SHA-256",
+            "challenge": challenge,
+            "maxnumber": self.max_number,
+            "salt": salt,
+            "signature": self._sign(challenge),
+        }
+
+    def verify(self, payload: Any, now: float | None = None) -> bool:
+        current = time.time() if now is None else now
+        if not isinstance(payload, str) or not 0 < len(payload) <= MAX_ALTCHA_PAYLOAD_CHARS:
+            return False
+        try:
+            data = json.loads(base64.b64decode(payload, validate=True).decode("utf-8"))
+            salt, number = data["salt"], data["number"]
+            challenge, signature = data["challenge"], data["signature"]
+            if data.get("algorithm") != "SHA-256":
+                return False
+            if not all(isinstance(value, str) for value in (salt, challenge, signature)):
+                return False
+            if not isinstance(number, int) or isinstance(number, bool):
+                return False
+            expires = int(parse.parse_qs(salt.split("?", 1)[1])["expires"][0])
+        except (ValueError, KeyError, IndexError, TypeError, UnicodeDecodeError):
+            return False
+        if not 0 <= number <= self.max_number or current > expires:
+            return False
+        expected = hashlib.sha256(f"{salt}{number}".encode()).hexdigest()
+        if not hmac.compare_digest(expected, challenge):
+            return False
+        if not hmac.compare_digest(self._sign(challenge), signature):
+            return False
+        with self._lock:
+            for used, used_expires in list(self._used.items()):
+                if used_expires < current:
+                    del self._used[used]
+            if signature in self._used:
+                return False
+            self._used[signature] = expires
+        return True
+
+
+class DailyTokenBudget:
+    """Daily model-token budget (Asia/Taipei day) that survives restarts."""
+
+    def __init__(self, path: Path, limit: int):
+        self.path = path
+        self.limit = limit
+        self._lock = threading.Lock()
+
+    @staticmethod
+    def _today() -> str:
+        return datetime.now(TAIPEI).date().isoformat()
+
+    def _used_today(self) -> int:
+        try:
+            data = json.loads(self.path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return 0
+        if not isinstance(data, dict) or data.get("date") != self._today():
+            return 0
+        tokens = data.get("tokens")
+        return tokens if isinstance(tokens, int) and tokens >= 0 else 0
+
+    def used(self) -> int:
+        with self._lock:
+            return self._used_today()
+
+    def exhausted(self) -> bool:
+        return self.used() >= self.limit
+
+    def add(self, tokens: int) -> int:
+        with self._lock:
+            total = self._used_today() + max(0, int(tokens))
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            temporary = self.path.with_name(self.path.name + ".tmp")
+            temporary.write_text(json.dumps({"date": self._today(), "tokens": total}), encoding="utf-8")
+            os.replace(temporary, self.path)
+            return total
 
 
 def normalise_history(value: Any) -> list[dict[str, str]]:
@@ -624,6 +739,16 @@ class HermesClient:
         system_prompt: str,
         context: str,
     ) -> str:
+        return self.ask_with_usage(question, history, system_prompt, context)[0]
+
+    def ask_with_usage(
+        self,
+        question: str,
+        history: list[dict[str, str]],
+        system_prompt: str,
+        context: str,
+    ) -> tuple[str, int | None]:
+        """Return the answer and Hermes' reported total tokens (None if absent)."""
         payload = {
             "model": "website",
             "stream": False,
@@ -669,7 +794,11 @@ class HermesClient:
         answer = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", str(answer)).strip()
         if not answer:
             raise RuntimeError("Hermes returned an empty answer")
-        return answer[:MAX_ANSWER_CHARS]
+        usage = result.get("usage") or {}
+        tokens = usage.get("total_tokens") if isinstance(usage, dict) else None
+        if not isinstance(tokens, int) or isinstance(tokens, bool) or tokens < 0:
+            tokens = None
+        return answer[:MAX_ANSWER_CHARS], tokens
 
     def healthy(self) -> bool:
         health_url = self.settings.hermes_url.split("/v1/", 1)[0] + "/health"
@@ -692,6 +821,8 @@ class WebsiteAgentServer(ThreadingHTTPServer):
         )
         self.knowledge = KnowledgeBase(settings.site_root, cache_seconds=300)
         self.hermes = HermesClient(settings)
+        self.proof_of_work = ProofOfWork(settings.altcha_max_number)
+        self.token_budget = DailyTokenBudget(settings.usage_file, settings.daily_token_budget)
         self.system_prompt = settings.system_prompt_file.read_text(encoding="utf-8").strip()
         self.inference_lock = threading.Lock()
         super().__init__((settings.host, settings.port), WebsiteAgentHandler)
@@ -755,6 +886,12 @@ class WebsiteAgentHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self) -> None:  # noqa: N802
+        if self.path == "/challenge":
+            if not self._origin_allowed():
+                self._send_json(403, {"error": "origin_not_allowed"}, allow_cors=False)
+                return
+            self._send_json(200, self.server.proof_of_work.create())
+            return
         if self.path != "/health":
             self._send_json(404, {"error": "not_found"}, allow_cors=False)
             return
@@ -800,6 +937,7 @@ class WebsiteAgentHandler(BaseHTTPRequestHandler):
             question = re.sub(r"[\x00-\x1f\x7f]", " ", str(data.get("question", "")))
             question = re.sub(r"\s+", " ", question).strip()
             history = normalise_history(data.get("history"))
+            proof = data.get("altcha")
         except (UnicodeDecodeError, json.JSONDecodeError, AttributeError):
             self._send_json(400, {"error": "invalid_json"})
             return
@@ -815,20 +953,49 @@ class WebsiteAgentHandler(BaseHTTPRequestHandler):
             LOG.info("public-data shortcut completed in %.2fs", time.monotonic() - started)
             self._send_json(200, {"answer": answer, "sources": sources})
             return
+        # Only model calls cost tokens, so only they need proof-of-work and budget.
+        if not self.server.proof_of_work.verify(proof):
+            self._send_json(
+                403,
+                {"error": "challenge_failed", "message": "驗證逾時，請再送出一次。"},
+            )
+            return
+        if self.server.token_budget.exhausted():
+            LOG.warning("daily token budget exhausted")
+            self._send_json(
+                429,
+                {
+                    "error": "budget_exhausted",
+                    "message": "今天的 AI 問答額度已用完，請明天再試，或查看官網行事曆與 Instagram。",
+                },
+            )
+            return
         if not self.server.inference_lock.acquire(blocking=False):
             self._send_json(
                 429,
                 {"error": "busy", "message": "目前有人正在詢問，請稍後再試。"},
             )
             return
+        context = self.server.knowledge.get()
+        # Without a reported count, assume about one token per character sent,
+        # plus the answer cap, so the budget never under-counts.
+        estimate = (
+            len(self.server.system_prompt) + len(context) + len(question)
+            + sum(len(message["content"]) for message in history) + 250
+        )
         try:
-            answer = self.server.hermes.ask(
+            answer, tokens = self.server.hermes.ask_with_usage(
                 question,
                 history,
                 self.server.system_prompt,
-                self.server.knowledge.get(),
+                context,
             )
         except (error.URLError, TimeoutError, RuntimeError, OSError, ValueError) as exc:
+            # A timeout may still have spent upstream tokens; a refused
+            # connection or rejected request did not, so an outage cannot
+            # drain the budget.
+            if isinstance(exc, TimeoutError) or isinstance(getattr(exc, "reason", None), TimeoutError):
+                self.server.token_budget.add(estimate)
             LOG.warning("agent request failed after %.2fs: %s", time.monotonic() - started, exc)
             self._send_json(
                 503,
@@ -840,7 +1007,14 @@ class WebsiteAgentHandler(BaseHTTPRequestHandler):
             return
         finally:
             self.server.inference_lock.release()
-        LOG.info("agent request completed in %.2fs", time.monotonic() - started)
+        used = self.server.token_budget.add(tokens if tokens is not None else estimate)
+        LOG.info(
+            "agent request completed in %.2fs (%s tokens, %d/%d today)",
+            time.monotonic() - started,
+            tokens if tokens is not None else f"~{estimate}",
+            used,
+            self.server.settings.daily_token_budget,
+        )
         self._send_json(
             200,
             {

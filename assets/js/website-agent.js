@@ -35,7 +35,59 @@
   }
 
   var maxQuestionChars = Number(config.maxQuestionChars) || 500;
+  var challengeUrl = new URL('challenge', config.endpoint).href;
   var componentPromise;
+  var proofPromise = null;
+
+  // ALTCHA-compatible proof-of-work: find the number whose SHA-256 with the
+  // salt matches the signed challenge. Runs in the background while the
+  // visitor types; only questions that reach the AI model need it.
+  async function sha256Hex(text) {
+    var digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.prototype.map.call(new Uint8Array(digest), function (byte) {
+      return byte.toString(16).padStart(2, '0');
+    }).join('');
+  }
+
+  async function solveChallenge(challenge) {
+    var batch = 1000;
+    for (var start = 0; start <= challenge.maxnumber; start += batch) {
+      var attempts = [];
+      for (var n = start; n < start + batch && n <= challenge.maxnumber; n += 1) {
+        attempts.push(sha256Hex(challenge.salt + n));
+      }
+      var hashes = await Promise.all(attempts);
+      var found = hashes.indexOf(challenge.challenge);
+      if (found !== -1) {
+        return btoa(JSON.stringify({
+          algorithm: challenge.algorithm,
+          challenge: challenge.challenge,
+          number: start + found,
+          salt: challenge.salt,
+          signature: challenge.signature
+        }));
+      }
+    }
+    throw new Error('challenge unsolved');
+  }
+
+  function prepareProof() {
+    if (!window.crypto || !crypto.subtle) return Promise.resolve('');
+    proofPromise = fetch(challengeUrl, { mode: 'cors', cache: 'no-store', credentials: 'omit' })
+      .then(function (response) {
+        if (!response.ok) throw new Error('challenge unavailable');
+        return response.json();
+      })
+      .then(solveChallenge)
+      .catch(function () { return ''; });
+    return proofPromise;
+  }
+
+  function takeProof() {
+    var current = proofPromise || prepareProof();
+    proofPromise = null;
+    return current;
+  }
 
   function setSources(items) {
     sources.replaceChildren();
@@ -78,17 +130,25 @@
     var controller = new AbortController();
     signals.stopClicked.listener = function () { controller.abort(); };
     var timeout = window.setTimeout(function () { controller.abort(); }, 60000);
-    try {
-      var response = await fetch(config.endpoint, {
+    function send(proof) {
+      return fetch(config.endpoint, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-store',
         credentials: 'omit',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: latest.text, history: messages.slice(0, -1) }),
+        body: JSON.stringify({ question: latest.text, history: messages.slice(0, -1), altcha: proof }),
         signal: controller.signal
       });
+    }
+    try {
+      var response = await send(await takeProof());
       var payload = await response.json().catch(function () { return {}; });
+      if (response.status === 403 && payload.error === 'challenge_failed') {
+        // Expired or already-used proof (e.g. after a server restart): retry once.
+        response = await send(await takeProof());
+        payload = await response.json().catch(function () { return {}; });
+      }
       if (!response.ok) {
         throw new Error(payload.message || '竹韻問答目前暫時無法使用。');
       }
@@ -105,6 +165,7 @@
       await signals.onResponse({ error: message });
     } finally {
       window.clearTimeout(timeout);
+      prepareProof();
     }
   }
 
@@ -154,7 +215,9 @@
     if (!componentPromise) {
       componentPromise = import(config.componentUrl).then(function () {
         return customElements.whenDefined('deep-chat');
-      }).then(configureChat).catch(function () {
+      }).then(configureChat).then(function () {
+        if (!proofPromise) prepareProof();
+      }).catch(function () {
         loading.textContent = '問答介面目前無法載入，請稍後再試。';
         throw new Error('Deep Chat failed to load');
       });

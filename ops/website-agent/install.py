@@ -205,6 +205,9 @@ def main() -> None:
             "ALLOWED_ORIGINS": "https://harmonica.nycu.club,http://127.0.0.1:1313,http://localhost:1313",
             "WEBSITE_AGENT_HOST": "127.0.0.1",
             "WEBSITE_AGENT_PORT": "8788",
+            # Daily cap on model tokens; the running total lives in
+            # website-agent-runtime/daily-usage.json and survives restarts.
+            "DAILY_TOKEN_BUDGET": "500000",
         },
         "StandardOutPath": str(logs / f"{LABEL}.log"),
         "StandardErrorPath": str(logs / f"{LABEL}.error.log"),
