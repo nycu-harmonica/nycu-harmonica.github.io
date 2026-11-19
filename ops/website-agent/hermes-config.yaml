@@ -1,6 +1,6 @@
 model:
   # Routed through the local AI gateway (CLIProxyAPI); the alias is owned by
-  # ~/Projects/ai-gateway/model-policy.json. Previous local route kept below.
+  # ~/Projects/ai-gateway/model-policy.json.
   default: sky-fast
   provider: custom:ai-gateway-sky-fast
   base_url: ""
@@ -28,21 +28,8 @@ providers:
     extra_body:
       max_tokens: 250
       temperature: 0.2
-  ollama-qwen35-local:
-    # Dedicated service: Q4 KV, one slot, no global Ollama setting changes.
-    api: http://127.0.0.1:11435/v1
-    key_env: OLLAMA_API_KEY
-    transport: chat_completions
-    default_model: qwen3.5:9b
-    context_length: 65536
-    extra_body:
-      think: false
-      keep_alive: 30s
-      # The gateway does not forward the facade's generation limit.
-      max_tokens: 250
-      temperature: 0.2
 
-# Use the verified local route directly; do not retry a known invalid remote key.
+# Use the gateway route directly; do not retry a known invalid remote key.
 fallback_providers: []
 
 # Explicitly empty capability surface. no_mcp prevents globally configured MCP

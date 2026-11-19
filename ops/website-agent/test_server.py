@@ -392,12 +392,10 @@ END:VEVENT"""
 
 
 class ProfileConfigTests(unittest.TestCase):
-    def test_local_profile_has_real_context_and_bounded_isolated_runtime(self) -> None:
+    def test_profile_routes_to_gateway_and_stays_isolated(self) -> None:
         import hermes_yaml as yaml
-        import install
 
         config = yaml.safe_load((Path(__file__).parent / "hermes-config.yaml").read_text())
-        service = install.ollama_service("/test/ollama")["EnvironmentVariables"]
         # Primary route: the local AI gateway's sky-fast alias.
         gateway = config["providers"]["ai-gateway-sky-fast"]
         self.assertEqual(config["model"]["default"], "sky-fast")
@@ -406,21 +404,13 @@ class ProfileConfigTests(unittest.TestCase):
         self.assertEqual(gateway["key_env"], "AI_GATEWAY_API_KEY")
         self.assertEqual(gateway["extra_body"]["max_tokens"], 250)
         self.assertGreaterEqual(config["model"]["context_length"], 64000)
-        # Retained (unused) local route stays consistent with the Ollama service.
-        provider = config["providers"]["ollama-qwen35-local"]
-        self.assertEqual(provider["default_model"], install.LOCAL_MODEL)
-        self.assertEqual(provider["api"], "http://" + service["OLLAMA_HOST"] + "/v1")
-        self.assertEqual(provider["context_length"], int(service["OLLAMA_CONTEXT_LENGTH"]))
         self.assertEqual(config["agent"]["reasoning_effort"], "none")
         self.assertEqual(config["agent"]["auto_recovery_cycles"], 0)
-        self.assertEqual(provider["extra_body"]["max_tokens"], 250)
+        self.assertNotIn("ollama-qwen35-local", config["providers"])
         self.assertEqual(config["fallback_providers"], [])
         self.assertFalse(config["providers"]["ai-kot-gg-luna"]["enabled"])
         self.assertTrue(config["gateway"]["standalone"])
         self.assertEqual(config["gateway"]["api_server"]["max_concurrent_runs"], 1)
-        self.assertEqual(service["OLLAMA_NUM_PARALLEL"], "1")
-        self.assertEqual(service["OLLAMA_KV_CACHE_TYPE"], "q4_0")
-        self.assertEqual(service["OLLAMA_KEEP_ALIVE"], "30s")
         self.assertEqual(config["platform_toolsets"]["api_server"], ["no_mcp"])
         self.assertFalse(config["memory"]["memory_enabled"])
         self.assertFalse(config["memory"]["user_profile_enabled"])

@@ -10,11 +10,9 @@ GitHub Pages -> public facade /ask -> localhost Hermes API -> local AI gateway (
 
 - `website` 是獨立 Hermes profile，不共用 Bamboo Discord session 或工具。
 - 主模型是本機 AI gateway（CLIProxyAPI，`127.0.0.1:8317`）的 `sky-fast` 別名，使用 `custom:ai-gateway-sky-fast` 與 250-token 輸出上限；別名對應的實際模型由 `~/Projects/ai-gateway/model-policy.json` 管理。Hermes profile `.env` 需要 `AI_GATEWAY_API_KEY`（`~/.config/ai-gateway/clients.env` 的 `harmonica` client key，不進 repo）。上限同時放在 provider 的 `extra_body.max_tokens`，因為目前 Hermes gateway 不會轉傳 facade 的 `max_tokens`。
-- 2026-11-20 起改用 `sky-fast`：本機 `qwen3.5:9b` 在主機負載高時會超過 55 秒逾時。以下 Ollama 說明保留為舊路線紀錄，`ollama-qwen35-local` provider 仍留在設定中但未使用。
+- 新版 Hermes 要求至少 64,000-token context，profile 設為 65,536。本機不使用任何本地模型（2026-11-20 起移除原本的 Ollama `qwen3.5:9b` 路線，它在主機負載高時會逾時）。
 - facade 每次請求都送新的 `X-Hermes-Session-Id`。否則 Hermes 依訊息內容推導 session，相同問題的訪客會共用 session，一次失敗就讓該 session 被暫停（HTTP 409），之後同一句問題永遠失敗。
-- 新版 Hermes 要求至少 64,000-token context。網站專用 Ollama 在 `127.0.0.1:11435` 真正配置 65,536 context、Flash Attention、Q4 KV cache、單一模型／單一並行槽；不更改原本 `11434` 的 Ollama 設定。模型閒置 30 秒後卸載，避免長期占用這台 16 GB 主機的記憶體。
-- `OLLAMA_CONTEXT_LENGTH=65536` 必須存在於網站 Ollama LaunchAgent；只改 Hermes 的 `context_length` 或 request `options.num_ctx` 不足，Ollama 的 OpenAI 相容 API 會忽略後者。模型檔標示的 262,144 是支援上限，不是實際配置。
-- `ai-kot-gg-luna` 因既有憑證回傳 401 而保留但停用，`fallback_providers` 為空；不再重試該遠端或取得其他 profile 的憑證。本機失敗仍回傳 HTTP 503 `agent_unavailable`，公開資料直接回答仍可使用。
+- `ai-kot-gg-luna` 因既有憑證回傳 401 而保留但停用，`fallback_providers` 為空；不再重試該遠端或取得其他 profile 的憑證。gateway 失敗仍回傳 HTTP 503 `agent_unavailable`，公開資料直接回答仍可使用。
 - Hermes API 只監聽 `127.0.0.1:8643`，bearer key 不會傳給瀏覽器。
 - 公開 facade 只監聽 `127.0.0.1:8788`，只提供 `POST /ask` 與 `GET /health`。
 - facade 只讀官網 repo 中的公開頁面、公開 Google Sheet 及 repo last-good fallback。
@@ -27,7 +25,7 @@ GitHub Pages -> public facade /ask -> localhost Hermes API -> local AI gateway (
 
 ## 安裝與啟動
 
-需求：**Python >= 3.11**（使用標準庫 `tomllib`）、同一 Python 環境中的 **python-dateutil**、Hermes，以及已安裝的 **Ollama 與 `qwen3.5:9b`**。安裝時本機 `11434` 或網站 `11435` 的 Ollama 必須可回應 `/api/show`，供 installer 確認模型架構與 context 上限；不會下載模型，也不需要遠端 API key。建議使用已有 dateutil 的 Hermes venv；macOS 內建 `python3` 可能仍是 3.9，不能用來執行本服務。Installer 會在修改任何檔案前檢查版本、依賴與既有模型。
+需求：**Python >= 3.11**（使用標準庫 `tomllib`）、同一 Python 環境中的 **python-dateutil**、Hermes，以及本機 AI gateway 的 `harmonica` client key（`~/.config/ai-gateway/clients.env`；沒有的話先加一行並執行 `~/Projects/ai-gateway/apply.py`）。Installer 會把它寫進 profile `.env` 的 `AI_GATEWAY_API_KEY`。建議使用已有 dateutil 的 Hermes venv；macOS 內建 `python3` 可能仍是 3.9，不能用來執行本服務。Installer 會在修改任何檔案前檢查版本、依賴與 gateway key。
 
 ```sh
 "$HOME/.hermes/bamboo-runtime/bin/python" ops/website-agent/install.py
@@ -38,13 +36,11 @@ curl -fsS http://127.0.0.1:8788/health
 
 1. 把 `hermes-config.yaml` 與 `SOUL.md` 安裝到 `~/.hermes/profiles/website/`。
 2. 產生只存在本機 profile 的隨機 API key。
-3. 安裝並啟動 `club.nycu.harmonica.website-ollama`，僅使用既有 `~/.ollama/models` 的模型；所有記憶體與 context 設定只套用到此服務。接著啟動專用的 `club.nycu.harmonica.website-hermes` gateway。它刻意不使用 Hermes 的 secondary-profile multiplexer，讓 localhost API 可以獨立綁定 `8643`。
+3. 移除舊的 `club.nycu.harmonica.website-ollama` 服務（若仍存在），接著啟動專用的 `club.nycu.harmonica.website-hermes` gateway。它刻意不使用 Hermes 的 secondary-profile multiplexer，讓 localhost API 可以獨立綁定 `8643`。
 4. 把 façade 程式與其必要的公開頁面、Sheet 設定、公開 fallback 複製到隔離 profile 的 runtime snapshot；這是為了避開 macOS 對 LaunchAgent 讀取 `~/Documents` 的背景權限限制，不包含 `shared/`、`private/` 或憑證。
 5. 安裝 `club.nycu.harmonica.website-agent` launchd 服務。網站程式或公開靜態文字變更後需重跑 installer；Google Sheet 內容仍由 façade 即時讀取，不需重裝。
 
 Hermes backend 與 facade 都使用執行 installer 時的 Python 與該環境的 Hermes 安裝，不再固定到舊 core 目錄。LaunchAgent 保留 venv Python 路徑，以便服務也能載入相同依賴。`--no-start` 仍會更新本機檔案與設定，只是不啟動服務；它不是 dry run。
-
-16 GB 主機上的初步測量：此 hybrid 模型在 65,536 context 下的 Q4 KV buffer 約 576 MiB，recurrent state 約 50 MiB，實際模型 allocation 約 6 GiB（另有作業系統與其他程式）。這只驗證了網站短上下文問答與完整 context 配置，不代表已驗證 64K 長文品質或高併發。若主機持續 swap 或問答超時，應停用網站模型服務；不要直接擴大 context 或改用 FP16 KV。既有 `qwen3:4b` 是 Thinking-2507 版本，短測試會把輸出預算用在推理文字，因此未選用。
 
 ### 公開行事曆與社課回答
 
@@ -64,7 +60,7 @@ curl -sS -X POST http://127.0.0.1:8788/ask \
   --data '{"question":"我要怎麼加入竹韻？"}'
 ```
 
-健康檢查與入社／社課直接回答不代表模型可用；還要以 plist `ALLOWED_ORIGINS` 中的 Origin 呼叫 `/ask`，例如問「請用一句話說明竹韻這個社團的特色。」並確認收到實質回答。回答後 30 秒內查看 `http://127.0.0.1:11435/api/ps`，確認 `qwen3.5:9b` 的 `context_length` 為 `65536`。新版 Hermes 可能以 HTTP 200 搭配 `finish_reason: error` 或 `hermes.failed` 回傳失敗；facade 會將其轉成一般訪客可讀的 HTTP 503，不把 provider 診斷文字當成回答。
+健康檢查與入社／社課直接回答不代表模型可用；還要以 plist `ALLOWED_ORIGINS` 中的 Origin 呼叫 `/ask`，例如問「請用一句話說明竹韻這個社團的特色。」並確認收到實質回答。新版 Hermes 可能以 HTTP 200 搭配 `finish_reason: error` 或 `hermes.failed` 回傳失敗；facade 會將其轉成一般訪客可讀的 HTTP 503，不把 provider 診斷文字當成回答。
 
 ## 公開入口
 
@@ -85,5 +81,4 @@ tailscale funnel status
 tailscale funnel reset
 launchctl bootout "gui/$(id -u)/club.nycu.harmonica.website-agent"
 launchctl bootout "gui/$(id -u)/club.nycu.harmonica.website-hermes"
-launchctl bootout "gui/$(id -u)/club.nycu.harmonica.website-ollama"
 ```
