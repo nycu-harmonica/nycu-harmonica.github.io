@@ -316,6 +316,7 @@
 
 .concert-show__date {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
@@ -332,9 +333,10 @@
   font-variant-numeric: lining-nums;
 }
 .concert-show__date i { font-style: normal; color: var(--rose); margin-inline: 0.02em; }
-.concert-show__date time span { font-size: 14px; letter-spacing: 0.12em; color: var(--ink-soft); }
+.concert-show__date time span { font-size: 14px; letter-spacing: 0.12em; color: var(--ink-soft); white-space: nowrap; }
 .concert-show__act {
   order: 2;
+  white-space: nowrap;
   padding: 3px 12px;
   border-radius: 999px;
   background: var(--ink);
@@ -378,7 +380,7 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.concert-show__meta dd { font-size: 17px; font-weight: 700; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
+.concert-show__meta dd { font-size: 17px; font-weight: 700; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; word-break: keep-all; overflow-wrap: anywhere; }
 
 .concert-show__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .concert-show__actions a {
@@ -424,7 +426,7 @@
   .concert-show__date b { font-size: 62px; }
   .concert-show__act { order: 0; }
   .concert-show__body { padding: 34px 36px; }
-  .concert-show__meta { grid-auto-flow: column; justify-content: start; gap: 28px; }
+  .concert-show__meta { display: flex; flex-wrap: wrap; gap: 6px 28px; }
 }
 
 /* ---------- 場次分頁與曲目 ---------- */
