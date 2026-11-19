@@ -638,6 +638,9 @@
 .concert-staff__sponsors a:hover strong { text-decoration: underline; text-underline-offset: 5px; }
 .concert-staff__sponsors li span { font-size: 12px; letter-spacing: 0.16em; color: var(--gold); }
 .concert-staff__thanks { margin-top: 48px; }
+.concert-staff__thanks ul.concert-staff__thanks-orgs { display: grid; gap: 10px; margin-top: 16px; }
+.concert-staff__thanks-orgs li { font-size: inherit; letter-spacing: 0; }
+.concert-staff__thanks-orgs + p { margin-top: 22px; }
 .concert-staff__thanks p { margin-top: 12px; font-size: 13px; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.72); }
 .concert-staff__thanks ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; }
 .concert-staff__thanks li { font-size: 16px; letter-spacing: 0.08em; }
@@ -657,7 +660,7 @@
   .concert-staff { padding: 12px 0 130px; }
   .concert-staff__groups,
   .concert-staff__clubs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
-  .concert-staff__shows { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
+  .concert-staff__shows { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 36px; }
   .concert-staff__roles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 

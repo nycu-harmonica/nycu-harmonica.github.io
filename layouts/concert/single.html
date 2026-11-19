@@ -241,6 +241,13 @@
       {{- with .thanks }}
       <section class="concert-staff__thanks">
         <h3>{{ .title }}</h3>
+        {{- with .orgs }}
+        <ul class="concert-staff__thanks-orgs">
+          {{- range . }}
+          <li><strong>{{ . }}</strong></li>
+          {{- end }}
+        </ul>
+        {{- end }}
         {{ with .note }}<p>{{ . }}</p>{{ end }}
         <ul>
           {{- range .names }}

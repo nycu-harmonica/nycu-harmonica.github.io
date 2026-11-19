@@ -44,7 +44,7 @@ def collect(data: dict) -> dict[str, str]:
     serif += "".join(c["name"] + "".join(p["name"] for p in c["people"]) for c in officers.get("clubs", []))
     serif += credits.get("members", {}).get("title", "")
     serif += credits.get("production", {}).get("title", "")
-    serif += credits.get("thanks", {}).get("title", "")
+    serif += credits.get("thanks", {}).get("title", "") + "".join(credits.get("thanks", {}).get("orgs", []))
     serif += "".join(s["name"] for s in data.get("sponsors", []))
 
     return {
