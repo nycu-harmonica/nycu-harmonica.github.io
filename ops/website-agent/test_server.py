@@ -398,12 +398,19 @@ class ProfileConfigTests(unittest.TestCase):
 
         config = yaml.safe_load((Path(__file__).parent / "hermes-config.yaml").read_text())
         service = install.ollama_service("/test/ollama")["EnvironmentVariables"]
+        # Primary route: the local AI gateway's sky-fast alias.
+        gateway = config["providers"]["ai-gateway-sky-fast"]
+        self.assertEqual(config["model"]["default"], "sky-fast")
+        self.assertEqual(config["model"]["provider"], "custom:ai-gateway-sky-fast")
+        self.assertEqual(gateway["api"], "http://127.0.0.1:8317/v1")
+        self.assertEqual(gateway["key_env"], "AI_GATEWAY_API_KEY")
+        self.assertEqual(gateway["extra_body"]["max_tokens"], 250)
+        self.assertGreaterEqual(config["model"]["context_length"], 64000)
+        # Retained (unused) local route stays consistent with the Ollama service.
         provider = config["providers"]["ollama-qwen35-local"]
-        self.assertEqual(config["model"]["default"], install.LOCAL_MODEL)
-        self.assertEqual(config["model"]["provider"], "custom:ollama-qwen35-local")
+        self.assertEqual(provider["default_model"], install.LOCAL_MODEL)
         self.assertEqual(provider["api"], "http://" + service["OLLAMA_HOST"] + "/v1")
-        self.assertEqual(config["model"]["context_length"], int(service["OLLAMA_CONTEXT_LENGTH"]))
-        self.assertEqual(config["model"]["ollama_num_ctx"], int(service["OLLAMA_CONTEXT_LENGTH"]))
+        self.assertEqual(provider["context_length"], int(service["OLLAMA_CONTEXT_LENGTH"]))
         self.assertEqual(config["agent"]["reasoning_effort"], "none")
         self.assertEqual(config["agent"]["auto_recovery_cycles"], 0)
         self.assertEqual(provider["extra_body"]["max_tokens"], 250)

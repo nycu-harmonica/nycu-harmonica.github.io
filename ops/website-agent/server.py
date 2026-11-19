@@ -20,6 +20,7 @@ import re
 import threading
 import time
 import tomllib
+import uuid
 from typing import Any
 from urllib import error, parse, request
 from zoneinfo import ZoneInfo
@@ -643,6 +644,11 @@ class HermesClient:
                 "Authorization": "Bearer " + self._api_key(),
                 "Content-Type": "application/json",
                 "User-Agent": "BambooWebsiteFacade/1.0",
+                # One fresh Hermes session per public request. Without it Hermes
+                # derives the session from the message text, so every visitor
+                # asking the same thing shares one session, and a single failed
+                # turn pauses it for everyone (409 unknown_execution).
+                "X-Hermes-Session-Id": "web-" + uuid.uuid4().hex,
             },
         )
         with request.urlopen(req, timeout=self.settings.request_timeout_seconds) as response:

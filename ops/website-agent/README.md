@@ -3,13 +3,15 @@
 官網仍是完整的 Hugo + GitHub Pages 靜態網站。只有訪客送出問題時，瀏覽器才呼叫一個獨立 HTTPS endpoint：
 
 ```text
-GitHub Pages -> public facade /ask -> localhost Hermes API -> website-only Ollama qwen3.5:9b
+GitHub Pages -> public facade /ask -> localhost Hermes API -> local AI gateway (127.0.0.1:8317) `sky-fast`
 ```
 
 安全邊界：
 
 - `website` 是獨立 Hermes profile，不共用 Bamboo Discord session 或工具。
-- 主模型是既有本機 `qwen3.5:9b`，使用 `custom:ollama-qwen35-local`、`reasoning_effort: none` 與 250-token 輸出上限。上限同時放在 provider 的 `extra_body.max_tokens`，因為目前 Hermes gateway 不會轉傳 facade 的 `max_tokens`。
+- 主模型是本機 AI gateway（CLIProxyAPI，`127.0.0.1:8317`）的 `sky-fast` 別名，使用 `custom:ai-gateway-sky-fast` 與 250-token 輸出上限；別名對應的實際模型由 `~/Projects/ai-gateway/model-policy.json` 管理。Hermes profile `.env` 需要 `AI_GATEWAY_API_KEY`（`~/.config/ai-gateway/clients.env` 的 `harmonica` client key，不進 repo）。上限同時放在 provider 的 `extra_body.max_tokens`，因為目前 Hermes gateway 不會轉傳 facade 的 `max_tokens`。
+- 2026-11-20 起改用 `sky-fast`：本機 `qwen3.5:9b` 在主機負載高時會超過 55 秒逾時。以下 Ollama 說明保留為舊路線紀錄，`ollama-qwen35-local` provider 仍留在設定中但未使用。
+- facade 每次請求都送新的 `X-Hermes-Session-Id`。否則 Hermes 依訊息內容推導 session，相同問題的訪客會共用 session，一次失敗就讓該 session 被暫停（HTTP 409），之後同一句問題永遠失敗。
 - 新版 Hermes 要求至少 64,000-token context。網站專用 Ollama 在 `127.0.0.1:11435` 真正配置 65,536 context、Flash Attention、Q4 KV cache、單一模型／單一並行槽；不更改原本 `11434` 的 Ollama 設定。模型閒置 30 秒後卸載，避免長期占用這台 16 GB 主機的記憶體。
 - `OLLAMA_CONTEXT_LENGTH=65536` 必須存在於網站 Ollama LaunchAgent；只改 Hermes 的 `context_length` 或 request `options.num_ctx` 不足，Ollama 的 OpenAI 相容 API 會忽略後者。模型檔標示的 262,144 是支援上限，不是實際配置。
 - `ai-kot-gg-luna` 因既有憑證回傳 401 而保留但停用，`fallback_providers` 為空；不再重試該遠端或取得其他 profile 的憑證。本機失敗仍回傳 HTTP 503 `agent_unavailable`，公開資料直接回答仍可使用。
