@@ -131,6 +131,23 @@ body{font-family:"Noto Sans TC",sans-serif;color:#fff;-webkit-font-smoothing:ant
 #f .card p{font-size:28px;font-weight:500;color:var(--ink-soft);margin-top:6px;line-height:1.45}
 #f .foot{position:absolute;left:110px;right:110px;bottom:52px;display:flex;justify-content:space-between;align-items:center;font-size:32px;font-weight:700}
 .nw{white-space:nowrap}
+
+/* ---------- G 曲目文字雲 ---------- */
+#g .art{right:-40px}
+#g .head{position:absolute;left:110px;top:64px;display:flex;align-items:baseline;gap:36px}
+#g .head h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:76px;line-height:1;text-shadow:0 6px 0 rgba(30,26,50,.3)}
+#g .head h1 em{font-style:normal;color:#ffe2a8}
+#g .brand{position:absolute;right:70px;top:56px}
+#g .brand .title{font-size:84px}
+#g .cloud{position:absolute;inset:0}
+#g .w{position:absolute;white-space:nowrap;font-weight:900;line-height:1.08;text-shadow:0 3px 0 rgba(30,26,50,.22),0 6px 22px rgba(30,26,50,.35)}
+#g .w.serif{font-family:"Noto Serif TC",serif}
+#g .w.v{writing-mode:vertical-rl;letter-spacing:.06em}
+#g .w.gold{background:linear-gradient(100deg,#d9ab5f,#f6e7c8 60%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 4px 0 rgba(44,39,69,.3)) drop-shadow(0 10px 24px rgba(44,39,69,.35))}
+#g .w.gold.deep{background-image:linear-gradient(100deg,#8a5a1c,#b9822f 55%,#d9ab5f)}
+#g .w.ink{text-shadow:0 2px 14px rgba(255,248,236,.7)}
+#g .foot{position:absolute;left:110px;bottom:40px;font-size:28px;font-weight:700;color:var(--ink)}
+#g .foot b{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -249,9 +266,65 @@ body{font-family:"Noto Sans TC",sans-serif;color:#fff;-webkit-font-smoothing:ant
   <div class="foot"><span>三種口琴一起合奏，12/4 演藝廳現場聽</span><span class="chip" style="font-size:32px">12/4 (五) 18:30・免費入場</span></div>
 </section>
 
+<!-- G：三場曲目文字雲（字越大＝越多場演出） -->
+<section class="slide" id="g">
+  <img class="art right" src="../../static/images/1151/artwork.webp" alt="">
+  <div class="glow"></div>
+  <div class="head"><h1>三場<em>曲目</em>一次看</h1></div>
+  <div class="brand"><div class="title">竹夢初聲</div></div>
+  <div class="cloud"></div>
+  <div class="foot">11/24 小木屋・12/4 演藝廳・12/8 清大湖畔一練　<b>字越大，越多場聽得到</b></div>
+</section>
+
 <script>
 const id=(location.hash||'#a').slice(1);
 document.getElementById(id).classList.add('on');
+// 文字雲：權重＝出現場次（來源 data/concert1151.yaml，不含「敬請期待」）
+if(id==='g'){
+  const songs=[
+    ['海闊天空',3],['Merry Christmas,\nMr. Lawrence',3],
+    ['萬水千山縱橫',2],['狂暴之海',2],['加勒比海盜',2],['Ashes on Fire',2],
+    ['宮崎駿組曲',1],['情熱大陸',1],['Intermezzo Giocoso',1],['屋頂上的提琴手',1],['沙士散拍',1],
+    ['名偵探柯南',1],['火之墨西哥',1],['霍爾的移動城堡',1],['出埃及記',1],['勇者',1],
+    ['有一種悲傷',1],['獨家記憶',1],['Proud of You',1],['青鳥',1],['Summer',1],
+    ['光陰的故事',1],["Saria's Song",1],['The Spectre',1],['櫻桃小丸子',1],['Bach Duet No. 4',1],
+  ];
+  const vertical=new Set(['勇者','青鳥','出埃及記','情熱大陸','獨家記憶']);
+  const palette=['#ffffff','#ffe2a8','#ffd6dd','#e9e4ff','#fff3dc'];
+  const dark=['#2c2745','#6b2f4c','#3f3a66','#7a4a2a','#4b4466'];
+  let seed=11; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const box={x0:100,y0:175,x1:1250,y1:975}, cx=670, cy=570, pad=10; const missing=[];
+  const cloud=document.querySelector('#g .cloud'); const placed=[];
+  const hit=r=>placed.some(p=>!(r.x1+pad<p.x0||r.x0>p.x1+pad||r.y1+pad<p.y0||r.y0>p.y1+pad));
+  document.fonts.ready.then(()=>{
+    songs.forEach(([t,w],i)=>{
+      const el=document.createElement('div');
+      el.className='w';
+      el.innerHTML=t.split('\n').join('<br>');
+      const cjk=/[\u4e00-\u9fff]/.test(t);
+      if(cjk) el.classList.add('serif');
+      if(vertical.has(t)) el.classList.add('v');
+      el.style.fontSize=(w===3?(cjk?140:76):w===2?66:38+Math.round(rnd()*12))+'px';
+      if(w===3) el.classList.add('gold');
+      if(t.includes('\n')) el.style.textAlign='center';
+      cloud.appendChild(el);
+      const W=el.offsetWidth,H=el.offsetHeight;
+      for(let k=0;k<6000;k++){
+        const a=k*0.13, r=2.2*a;
+        const x=cx+r*Math.cos(a)*1.55-W/2, y=cy+r*Math.sin(a)-H/2;
+        const R={x0:x,y0:y,x1:x+W,y1:y+H};
+        if(R.x0<box.x0||R.y0<box.y0||R.x1>box.x1||R.y1>box.y1) continue;
+        if(hit(R)) continue;
+        placed.push(R); el.style.left=x+'px'; el.style.top=y+'px';
+        if(w===3 && (y+H/2)>660) el.classList.add('deep');
+        if(w<3){ const low=(y+H/2)>660; const pal=low?dark:palette; el.style.color=pal[i%pal.length]; if(low) el.classList.add('ink'); }
+        return;
+      }
+      el.remove(); missing.push(t); document.title='MISSING '+missing.join('|');
+    });
+  });
+}
+
 </script>
 </body>
 </html>

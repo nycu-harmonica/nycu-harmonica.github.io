@@ -10,13 +10,14 @@
 | `jpg/1151204竹夢初聲三種口琴介紹.jpg` | 半音階／低音／和弦口琴介紹 | 115/12/04 |
 | `jpg/1151208竹夢初聲清大場.jpg` | 12/8 清大湖畔一練 | 115/12/08 |
 | `jpg/1151208竹夢初聲聯合成發三場總覽.jpg` | 三場總覽（含 QR Code） | 115/12/08 |
-| `1151208竹夢初聲輪播.mp4` | 以上 6 張輪播，31 秒（若佈告欄可播影片） | 115/12/08 |
+| `jpg/1151208竹夢初聲三場曲目文字雲.jpg` | 三場 26 首曲目文字雲（字越大＝越多場演出） | 115/12/08 |
+| `1151208竹夢初聲輪播.mp4` | 以上 7 張輪播，37 秒（若佈告欄可播影片） | 115/12/08 |
 
 QR Code 指向 <https://harmonica.nycu.club/1151/>。
 
 ## 重新產生
 
-改 `slides.html` 後，用 Chrome headless 以 1920×1080 截圖 `slides.html#a` 到 `#f`，再以 `sips` 轉 JPG 並設 120 dpi（指令見 commit 紀錄）。
+改 `slides.html` 後，用 Chrome headless 以 1920×1080 截圖 `slides.html#a` 到 `#g`，再以 `sips` 轉 JPG 並設 120 dpi（指令見 commit 紀錄）。
 
 ## 申請信（寄至 wanglangben@yahoo.com.tw）
 
