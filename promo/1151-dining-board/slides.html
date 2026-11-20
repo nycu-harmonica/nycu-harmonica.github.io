@@ -134,6 +134,7 @@ body{font-family:"Noto Sans TC",sans-serif;color:#fff;-webkit-font-smoothing:ant
 
 /* ---------- G 曲目文字雲 ---------- */
 #g .art{right:-40px}
+#g .scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(34,30,60,.86) 0,rgba(34,30,60,.78) 58%,rgba(34,30,60,0) 74%)}
 #g .head{position:absolute;left:110px;top:64px;display:flex;align-items:baseline;gap:36px}
 #g .head h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:76px;line-height:1;text-shadow:0 6px 0 rgba(30,26,50,.3)}
 #g .head h1 em{font-style:normal;color:#ffe2a8}
@@ -143,11 +144,9 @@ body{font-family:"Noto Sans TC",sans-serif;color:#fff;-webkit-font-smoothing:ant
 #g .w{position:absolute;white-space:nowrap;font-weight:900;line-height:1.08;text-shadow:0 3px 0 rgba(30,26,50,.22),0 6px 22px rgba(30,26,50,.35)}
 #g .w.serif{font-family:"Noto Serif TC",serif}
 #g .w.v{writing-mode:vertical-rl;letter-spacing:.06em}
-#g .w.gold{background:linear-gradient(100deg,#d9ab5f,#f6e7c8 60%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 4px 0 rgba(44,39,69,.3)) drop-shadow(0 10px 24px rgba(44,39,69,.35))}
-#g .w.gold.deep{background-image:linear-gradient(100deg,#8a5a1c,#b9822f 55%,#d9ab5f)}
-#g .w.ink{text-shadow:0 2px 14px rgba(255,248,236,.7)}
-#g .foot{position:absolute;left:110px;bottom:40px;font-size:28px;font-weight:700;color:var(--ink)}
-#g .foot b{color:var(--accent)}
+#g .w.gold{color:#ffd98a}
+#g .foot{position:absolute;left:110px;bottom:40px;font-size:28px;font-weight:700;color:rgba(255,255,255,.85)}
+#g .foot b{color:#ffd98a}
 </style>
 </head>
 <body>
@@ -268,9 +267,10 @@ body{font-family:"Noto Sans TC",sans-serif;color:#fff;-webkit-font-smoothing:ant
 
 <!-- G：三場曲目文字雲（字越大＝越多場演出） -->
 <section class="slide" id="g">
+  <div class="scrim"></div>
   <img class="art right" src="../../static/images/1151/artwork.webp" alt="">
   <div class="glow"></div>
-  <div class="head"><h1>三場<em>曲目</em>一次看</h1></div>
+  <div class="head"><h1>演出<em>曲目</em></h1></div>
   <div class="brand"><div class="title">竹夢初聲</div></div>
   <div class="cloud"></div>
   <div class="foot">11/24 小木屋・12/4 演藝廳・12/8 清大湖畔一練　<b>字越大，越多場聽得到</b></div>
@@ -290,8 +290,6 @@ if(id==='g'){
     ['光陰的故事',1],["Saria's Song",1],['The Spectre',1],['櫻桃小丸子',1],['Bach Duet No. 4',1],
   ];
   const vertical=new Set(['勇者','青鳥','出埃及記','情熱大陸','獨家記憶']);
-  const palette=['#ffffff','#ffe2a8','#ffd6dd','#e9e4ff','#fff3dc'];
-  const dark=['#2c2745','#6b2f4c','#3f3a66','#7a4a2a','#4b4466'];
   let seed=11; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
   const box={x0:100,y0:175,x1:1250,y1:975}, cx=670, cy=570, pad=10; const missing=[];
   const cloud=document.querySelector('#g .cloud'); const placed=[];
@@ -316,8 +314,7 @@ if(id==='g'){
         if(R.x0<box.x0||R.y0<box.y0||R.x1>box.x1||R.y1>box.y1) continue;
         if(hit(R)) continue;
         placed.push(R); el.style.left=x+'px'; el.style.top=y+'px';
-        if(w===3 && (y+H/2)>660) el.classList.add('deep');
-        if(w<3){ const low=(y+H/2)>660; const pal=low?dark:palette; el.style.color=pal[i%pal.length]; if(low) el.classList.add('ink'); }
+        el.style.color = w===3 ? '' : w===2 ? '#ffffff' : 'rgba(255,255,255,.86)';
         return;
       }
       el.remove(); missing.push(t); document.title='MISSING '+missing.join('|');
