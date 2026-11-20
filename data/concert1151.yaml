@@ -52,7 +52,7 @@ events:
       - { role: 音控, names: [李明哲, 洪軾凱, 羅瑋翔] }
       - { role: 宣傳, names: [王俊閔, 李欣螢] }
       - { role: 工作人員, names: [施禹平, 黃靖恩] }
-    # 曲目順序與演出人員取自「2026 竹韻 × 清大聯合成發｜曲目表」的「11/24 交大小木屋快閃」分頁。
+    # 演出人員取自「2026 竹韻 × 清大聯合成發｜曲目表」的「11/24 交大小木屋快閃」分頁；曲序依快閃細流（2026-11-20 版，第 5、6 首對調）。
     # 半音階依 Ch.1–Ch.4 順序；低音 = DB。
     program:
       - title: 萬水千山縱橫
@@ -75,14 +75,14 @@ events:
           - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
           - { part: 低音, names: [李明哲] }
           - { part: 和弦, names: [羅瑋翔] }
-      - title: Ashes on Fire
-        parts:
-          - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
-          - { part: 低音, names: [李明哲] }
-          - { part: 和弦, names: [羅瑋翔] }
       - title: Merry Christmas, Mr. Lawrence
         parts:
           - { part: 半音階, names: [蔡培婷, 廖傑克, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
+      - title: Ashes on The Fire
+        parts:
+          - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
           - { part: 低音, names: [李明哲] }
           - { part: 和弦, names: [羅瑋翔] }
       - title: 海闊天空
@@ -126,7 +126,7 @@ events:
           - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
           - { part: 低音, names: [李明哲] }
           - { part: 和弦, names: [羅瑋翔] }
-      - title: Ashes on Fire
+      - title: Ashes on The Fire
         parts:
           - { part: 半音階, names: [洪軾凱, 廖傑克, 翁詠筑] }
           - { part: 低音, names: [李明哲] }
