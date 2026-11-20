@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<title>竹夢初聲 佈告欄</title>
+<!-- 餐廳電子佈告欄 6 頁。以 1280×720 CSS 尺寸排版、1.5 倍輸出成 1920×1080；
+     視覺沿用 /1151/ 寬螢幕首屏（天空漸層＋右側主視覺＋左側夜色），字放大、字數精簡，給遠距離觀看。 -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Noto+Serif+TC:wght@700;900&display=block" rel="stylesheet">
+<style>
+@font-face{font-family:"Concert Title";src:url("../../static/fonts/1151/concert-title.woff2") format("woff2");font-weight:900}
+:root{
+  --night:#1d2046; --night-rgb:29,32,70; --cream:#fffaf1; --gold:#f8d9a3;
+  --sky:linear-gradient(to bottom,#626d8d 0%,#606c8d 5%,#6f728e 10%,#7e798f 15%,#8e7f91 20%,#9d8692 25%,#ac8c92 30%,#ba9294 35%,#ca9995 40%,#da9f96 45%,#e6a797 50%,#eab199 55%,#efbc9c 60%,#eec39c 65%,#f3cd9c 70%,#f4d49a 75%,#fce5a5 80%,#fce4a4 85%,#f8d9a3 90%,#f5cea1 95%,#f1c49e 100%);
+  --serif:"Noto Serif TC",serif;
+  --title:"Concert Title","Noto Serif TC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1280px;height:720px;overflow:hidden;background:var(--night)}
+body{font-family:"Noto Sans TC",sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;isolation:isolate;background:var(--night)}
+.slide.on{display:block}
+
+.art{position:absolute;inset:0;z-index:-1;background:var(--sky)}
+.art img{position:absolute;top:0;right:19.2px;height:720px;width:auto;
+  -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%);
+          mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%)}
+.art::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to right,var(--night) 0%,rgba(var(--night-rgb),.92) 26%,rgba(var(--night-rgb),.5) 46%,rgba(var(--night-rgb),0) 64%)}
+.art.deep::after{background:linear-gradient(to right,var(--night) 0%,rgba(var(--night-rgb),.94) 44%,rgba(var(--night-rgb),.6) 52%,rgba(var(--night-rgb),0) 59%)}
+
+.title{font-family:var(--title);font-weight:900;line-height:1.1;letter-spacing:.02em;
+  background:linear-gradient(100deg,#d6a35c 0%,#e9c58f 34%,#f6e3c2 66%,#fffaf0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(.035em .045em 0 rgba(26,24,52,.85))}
+.pill{display:inline-block;padding:8px 26px;border:2px solid rgba(255,255,255,.75);border-radius:999px;font-size:26px;font-weight:700;letter-spacing:.14em}
+.copy{position:absolute;left:77px;top:0;bottom:0;width:660px;display:flex;flex-direction:column;justify-content:center}
+
+/* ---------- 共用：兩社 logo ---------- */
+.hosts{display:flex;gap:30px;align-items:center}
+.hosts div{display:flex;align-items:center;gap:12px;font-size:24px;font-weight:700;letter-spacing:.04em}
+.hosts img{width:62px;height:62px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid rgba(255,255,255,.85)}
+
+/* ---------- 1 首頁 ---------- */
+#s1 .title{font-size:150px}
+#s1 .kicker{margin-top:22px;font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.55}
+#s1 .pill{margin-top:34px;align-self:flex-start}
+#s1 .hosts{position:absolute;left:77px;bottom:40px}
+
+/* ---------- 2 三場演出 ---------- */
+#s2 .head{position:absolute;left:77px;top:40px;width:680px;display:flex;align-items:center;justify-content:space-between}
+#s2 .head .title{font-size:52px}
+#s2 .head .pill{font-size:22px;padding:6px 20px}
+#s2 .list{position:absolute;left:77px;top:136px;width:680px;display:flex;flex-direction:column;gap:18px}
+#s2 .card{display:grid;grid-template-columns:272px 1fr;align-items:center;column-gap:26px;padding:22px 30px;border-radius:22px;
+  background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.22);backdrop-filter:blur(2px)}
+#s2 .act{grid-column:1/-1;font-size:18px;font-weight:700;letter-spacing:.3em;color:var(--gold);margin-bottom:4px}
+#s2 .date{font-family:var(--serif);font-weight:900;font-size:72px;line-height:1;white-space:nowrap}
+#s2 .date i{font-style:normal;color:var(--gold)}
+#s2 .date small{font-size:26px;margin-left:8px;font-weight:700}
+#s2 .where b{display:block;white-space:nowrap;font-family:var(--serif);font-weight:900;font-size:36px;line-height:1.2;color:var(--cream)}
+#s2 .where span{display:block;margin-top:6px;font-size:28px;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+
+/* ---------- 3 演奏曲目文字雲 ---------- */
+#s3 h2{position:absolute;left:77px;top:44px;font-family:var(--serif);font-weight:900;font-size:56px;line-height:1}
+#s3 h2 em{font-style:normal;color:var(--gold)}
+#s3 .cloud{position:absolute;inset:0}
+#s3 .w{position:absolute;white-space:nowrap;font-weight:900;line-height:1.08;text-shadow:0 2px 0 rgba(20,22,50,.25),0 4px 14px rgba(20,22,50,.4)}
+#s3 .w.serif{font-family:var(--serif)}
+#s3 .w.v{writing-mode:vertical-rl;letter-spacing:.06em}
+
+/* ---------- 4 QR ---------- */
+#s4 .main{position:absolute;left:77px;top:76px;width:700px;display:flex;align-items:center;gap:44px}
+#s4 .qr{flex:none;background:#fff;border-radius:24px;padding:18px;box-shadow:0 18px 50px rgba(0,0,0,.35);text-align:center;color:var(--night)}
+#s4 .qr img{display:block;width:300px;height:300px;image-rendering:pixelated}
+#s4 .qr span{display:block;margin-top:8px;font-size:18px;font-weight:900;letter-spacing:.08em}
+#s4 .title{font-size:46px}
+#s4 h2{margin-top:14px;font-family:var(--serif);font-weight:900;font-size:50px;line-height:1.25}
+#s4 h2 em{font-style:normal;color:var(--gold)}
+#s4 ul{margin-top:20px;list-style:none;display:flex;flex-direction:column;gap:10px}
+#s4 li{font-size:25px;font-weight:700;display:flex;align-items:center;gap:12px}
+#s4 li::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--gold);flex:none}
+#s4 .bottom{position:absolute;left:77px;bottom:44px;width:700px;padding-top:26px;border-top:1.5px solid rgba(255,255,255,.22)}
+#s4 .bottom p{font-size:16px;font-weight:700;letter-spacing:.3em;color:var(--gold);margin-bottom:14px}
+#s4 .hosts{gap:36px}
+#s4 .hosts img{width:72px;height:72px}
+#s4 .hosts div{font-size:22px}
+#s4 .hosts small{display:block;font-size:16px;font-weight:500;opacity:.8;letter-spacing:.02em}
+</style>
+</head>
+<body>
+
+<!-- 1：首頁（同 /1151/ 首屏） -->
+<section class="slide" id="s1">
+  <div class="art"><img src="../../static/images/1151/artwork.webp" alt=""></div>
+  <div class="copy">
+    <div class="title">竹夢初聲</div>
+    <div class="kicker">陽明交大竹韻口琴社 × 清華大學口琴社<br>115 學年度第一學期聯合成果發表音樂會</div>
+    <span class="pill">免費入場</span>
+  </div>
+  <div class="hosts">
+    <div><img src="../../static/images/bamboo-logo.webp" alt="">竹韻口琴社</div>
+    <div><img src="../../static/images/1151/ig-nthu.webp" alt="">清大口琴社</div>
+  </div>
+</section>
+
+<!-- 2：三場演出 -->
+<section class="slide" id="s2">
+  <div class="art deep"><img src="../../static/images/1151/artwork.webp" alt=""></div>
+  <div class="head"><div class="title">竹夢初聲</div><span class="pill">三場皆免費入場</span></div>
+  <div class="list">
+    <div class="card"><div class="act">第一場・口琴快閃</div><div class="date">11<i>.</i>24<small>(二)</small></div><div class="where"><b>交大小木屋前廣場</b><span>17:00–18:00</span></div></div>
+    <div class="card"><div class="act">第二場・陽明交大場</div><div class="date">12<i>.</i>04<small>(五)</small></div><div class="where"><b>活動中心演藝廳</b><span>18:30–21:20</span></div></div>
+    <div class="card"><div class="act">第三場・清大場</div><div class="date">12<i>.</i>08<small>(二)</small></div><div class="where"><b>清大湖畔一練</b><span>19:00–21:00</span></div></div>
+  </div>
+</section>
+
+<!-- 3：演奏曲目文字雲（字越大＝越多場演出） -->
+<section class="slide" id="s3">
+  <div class="art deep"><img src="../../static/images/1151/artwork.webp" alt=""></div>
+  <h2>演奏<em>曲目</em></h2>
+  <div class="cloud"></div>
+</section>
+
+<!-- 4：QR Code＋兩社 logo -->
+<section class="slide" id="s4">
+  <div class="art deep"><img src="../../static/images/1151/artwork.webp" alt=""></div>
+  <div class="main">
+    <div class="qr"><img src="qr.png" alt=""><span>harmonica.nycu.club/1151</span></div>
+    <div>
+      <div class="title">竹夢初聲</div>
+      <h2>掃描看<br><em>完整節目</em></h2>
+      <ul>
+        <li>三場時間與地點</li>
+        <li>完整曲目與演出者</li>
+        <li>一鍵加入行事曆</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bottom">
+    <p>共同主辦</p>
+    <div class="hosts">
+      <div><img src="../../static/images/bamboo-logo.webp" alt=""><span>竹韻口琴社<small>@nycu_harmonica</small></span></div>
+      <div><img src="../../static/images/1151/ig-nthu.webp" alt=""><span>清大口琴社<small>@nthu_harmonica_club</small></span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const id=(location.hash||'#s1').slice(1);
+document.getElementById(id).classList.add('on');
+// 演奏曲目：權重＝出現場次（來源 data/concert1151.yaml）。只挑辨識度高的曲目，字才放得大。
+if(id==='s3'){
+  const songs=[
+    ['海闊天空',3],['Merry Christmas,\nMr. Lawrence',3],
+    ['萬水千山縱橫',2],['加勒比海盜',2],['狂暴之海',2],['Ashes on The Fire',2],
+    ['宮崎駿組曲',1],['名偵探柯南',1],['情熱大陸',1],
+    ['櫻桃小丸子',1],['光陰的故事',1],['出埃及記',1],['青鳥',1],
+    ['霍爾的移動城堡',1],['屋頂上的提琴手',1],['火之墨西哥',1],['沙士散拍',1],['有一種悲傷',1],['勇者',1],
+  ];
+  const vertical=new Set(['青鳥','出埃及記','勇者']);
+  let seed=7; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const box={x0:60,y0:120,x1:745,y1:705}, cx=400, cy=410, pad=12; const missing=[];
+  const cloud=document.querySelector('#s3 .cloud'); const placed=[];
+  const hit=r=>placed.some(p=>!(r.x1+pad<p.x0||r.x0>p.x1+pad||r.y1+pad<p.y0||r.y0>p.y1+pad));
+  const all=songs.map(x=>x[0]).join('');
+  Promise.all([
+    document.fonts.load('900 90px "Noto Serif TC"',all),
+    document.fonts.load('900 50px "Noto Sans TC"',all),
+  ]).then(()=>document.fonts.ready).then(()=>{
+    songs.forEach(([t,w])=>{
+      const el=document.createElement('div');
+      el.className='w';
+      el.innerHTML=t.split('\n').join('<br>');
+      const cjk=/[一-鿿]/.test(t);
+      if(cjk) el.classList.add('serif');
+      if(vertical.has(t)) el.classList.add('v');
+      el.style.fontSize=(w===3?(cjk?78:46):w===2?44:34+Math.round(rnd()*4))+'px';
+      el.style.color = w===3 ? '#ffd98a' : '#ffffff';
+      if(t.includes('\n')) el.style.textAlign='center';
+      cloud.appendChild(el);
+      const W=el.offsetWidth,H=el.offsetHeight;
+      for(let k=0;k<9000;k++){
+        const a=k*0.12, r=1.4*a;
+        const x=cx+r*Math.cos(a)*1.9-W/2, y=cy+r*Math.sin(a)-H/2;
+        const R={x0:x,y0:y,x1:x+W,y1:y+H};
+        if(R.x0<box.x0||R.y0<box.y0||R.x1>box.x1||R.y1>box.y1) continue;
+        if(hit(R)) continue;
+        placed.push(R); el.style.left=x+'px'; el.style.top=y+'px';
+        return;
+      }
+      el.remove(); missing.push(t); document.title='MISSING '+missing.join('|');
+    });
+  });
+}
+</script>
+</body>
+</html>

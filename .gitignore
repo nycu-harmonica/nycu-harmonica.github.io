@@ -15,3 +15,4 @@ promo/*/out/
 
 # 問答服務本機執行時的每日用量紀錄
 ops/website-agent/daily-usage.json*
+promo/*/out2/
