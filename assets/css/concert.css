@@ -359,6 +359,28 @@
   letter-spacing: 0.08em;
 }
 .concert-show__status[hidden] { display: none; }
+.concert-show__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+
+.concert-show__stamp {
+  display: inline-block;
+  padding: 4px 8px 5px;
+  border: 4px double currentColor;
+  border-radius: 4px;
+  color: #a11d26;
+  font-size: clamp(17px, 4vw, 25px);
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: 0.13em;
+  text-indent: 0.13em;
+  white-space: nowrap;
+  transform: rotate(-8deg);
+}
+
 .concert-show h3 {
   font-family: var(--serif);
   font-size: 30px;
@@ -455,6 +477,7 @@
 .concert-tab:hover { background: rgba(255, 250, 241, 0.5); text-decoration: none; }
 .concert-tab b { font-family: var(--serif); font-size: 22px; line-height: 1.15; font-variant-numeric: lining-nums; }
 .concert-tab span { font-size: clamp(10.5px, 3.2vw, 12.5px); letter-spacing: 0; line-height: 1.35; white-space: nowrap; }
+.concert-tab .concert-tab__cancellation { color: #8c1820; font-weight: 700; }
 .concert-tab[aria-selected="true"] { background: var(--cream); box-shadow: 0 6px 18px rgba(52, 38, 70, 0.16); }
 .concert-tab[aria-selected="true"] b { color: var(--rose); }
 .concert-page .concert-tab:focus-visible { border-radius: 14px; }

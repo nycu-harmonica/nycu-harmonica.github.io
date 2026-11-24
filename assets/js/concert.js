@@ -16,6 +16,7 @@
     var nextMarked = false;
     var shows = document.querySelectorAll(".concert-show");
     Array.prototype.forEach.call(shows, function (show) {
+      if (show.hasAttribute("data-cancelled")) return;
       var start = Date.parse(show.getAttribute("data-start"));
       var end = Date.parse(show.getAttribute("data-end"));
       var badge = show.querySelector(".concert-show__status");

@@ -5,12 +5,14 @@
 {{- range $concert.hosts }}{{ $organizers = $organizers | append (dict "@type" "Organization" "name" .full "url" .url) }}{{ end }}
 {{- $events := slice }}
 {{- range $concert.events }}
+  {{- $status := "https://schema.org/EventScheduled" }}
+  {{- if .cancellation }}{{ $status = "https://schema.org/EventCancelled" }}{{ end }}
   {{- $event := dict
     "@type" "MusicEvent"
     "name" (printf "%s｜%s" $concert.title .title)
     "startDate" (printf "%sT%s:00+08:00" .date .start)
     "endDate" (printf "%sT%s:00+08:00" .date .end)
-    "eventStatus" "https://schema.org/EventScheduled"
+    "eventStatus" $status
     "eventAttendanceMode" "https://schema.org/OfflineEventAttendanceMode"
     "isAccessibleForFree" ($concert.free | default false)
     "url" $page.Permalink
@@ -58,7 +60,7 @@
       <div class="concert-tabs" role="tablist" aria-label="選擇場次">
         {{- range $i, $e := $concert.events }}
         {{- $start := time.AsTime (printf "%sT%s:00+08:00" .date .start) }}
-        <a class="concert-tab" role="tab" id="tab-{{ .id }}" href="#show-{{ .id }}" aria-controls="panel-{{ .id }}" aria-selected="{{ if eq $i 0 }}true{{ else }}false{{ end }}" tabindex="{{ if eq $i 0 }}0{{ else }}-1{{ end }}"><b>{{ $start.Format "1.02" }}</b><span>{{ .title }}</span></a>
+        <a class="concert-tab" role="tab" id="tab-{{ .id }}" href="#show-{{ .id }}" aria-controls="panel-{{ .id }}" aria-selected="{{ if eq $i 0 }}true{{ else }}false{{ end }}" tabindex="{{ if eq $i 0 }}0{{ else }}-1{{ end }}"><b>{{ $start.Format "1.02" }}</b><span>{{ .title }}</span>{{ with .cancellation }}<span class="concert-tab__cancellation">{{ . }}</span>{{ end }}</a>
         {{- end }}
       </div>
       {{- range $i, $e := $concert.events }}
@@ -68,14 +70,21 @@
         {{- $summary := printf "%s｜%s" $concert.title .title }}
         {{- $details := printf "%s共同主辦。活動頁：%s" (delimit (apply $concert.hosts "index" "." "full") " × ") $permalink }}
         {{- $gcal := printf "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s/%s&location=%s&details=%s" (urlquery $summary) ($start.UTC.Format "20060102T150405Z") ($end.UTC.Format "20060102T150405Z") (urlquery (printf "%s（%s）" .location .address)) (urlquery $details) }}
-        <div class="concert-show" id="show-{{ .id }}" data-start="{{ $start.Format "2006-01-02T15:04:05-07:00" }}" data-end="{{ $end.Format "2006-01-02T15:04:05-07:00" }}">
+        <div class="concert-show"{{ if .cancellation }} data-cancelled{{ end }} id="show-{{ .id }}" data-start="{{ $start.Format "2006-01-02T15:04:05-07:00" }}" data-end="{{ $end.Format "2006-01-02T15:04:05-07:00" }}">
           <div class="concert-show__date">
             <span class="concert-show__act">{{ .act }}</span>
             <time datetime="{{ .date }}"><b>{{ $start.Format "1" }}<i>.</i>{{ $start.Format "02" }}</b><span>星期{{ .weekday }}</span></time>
           </div>
           <div class="concert-show__body">
+            {{- if not .cancellation }}
             <p class="concert-show__status" hidden></p>
-            <h3>{{ .title }}</h3>
+            {{- end }}
+            <div class="concert-show__heading">
+              <h3>{{ .title }}</h3>
+              {{- with .cancellation }}
+              <span class="concert-show__stamp">{{ . }}</span>
+              {{- end }}
+            </div>
             <dl class="concert-show__meta">
               <div>
                 <dt><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="sr-only">時間</span></dt>
@@ -92,11 +101,13 @@
                 <dd>{{ .location }}</dd>
               </div>
             </dl>
+            {{- if not .cancellation }}
             <ul class="concert-show__actions" aria-label="{{ .title }}的地圖與行事曆">
               <li><a class="is-primary" href="{{ with .map_url }}{{ . }}{{ else }}https://www.google.com/maps/search/?api=1&amp;query={{ .map | urlquery }}{{ end }}" target="_blank" rel="noopener">地圖導航</a></li>
               <li><a href="{{ $gcal }}" target="_blank" rel="noopener">加入 Google 日曆</a></li>
               <li><a href="{{ printf "1151/%s.ics" .id | relURL }}" download>下載行事曆檔</a></li>
             </ul>
+            {{- end }}
           </div>
         </div>
         {{- $unordered := .program_unordered }}
