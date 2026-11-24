@@ -187,6 +187,11 @@ events:
           - { part: 半音階, names: [洪軾凱] }
           - { part: 低音, names: [陳昕渝] }
           - { part: 和弦, names: [吳冠廷] }
+      - title: Oblivion
+        parts:
+          - { part: 半音階, names: [洪軾凱, 白柏毅, 廖傑克, 蔡培婷, 翁詠筑] }
+          - { part: 低音, names: [李明哲] }
+          - { part: 和弦, names: [羅瑋翔] }
       - { title: 敬請期待, pending: true }
       - title: 海闊天空
         finale: true
